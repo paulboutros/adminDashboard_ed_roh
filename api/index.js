@@ -2,21 +2,62 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors'); // Import the cors middleware
+const dotenv = require('dotenv');
+dotenv.config(); // Load environment variables from .env file
 //app.use(express.static('public'))
 // Use path.join() to create the correct path to the "public" folder
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use(cors());
 const {MongoClient} = require('mongodb');
-
+const uri = process.env.MONGO_URL ;//"mongodb+srv://gfulpak:(pX_19081908)@cluster0.xrarco9.mongodb.net/?retryWrites=true&w=majority";
+    const client = new MongoClient(uri);
 
 async function main() {
-    
+
+   
+      
+ 
+    try {
+        // Connect to the MongoDB cluster
+        await client.connect();
+ 
+        // Make the appropriate DB calls
+        await  listDatabases(client);
+ 
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await client.close();
+    }
   
 }
 main().catch(console.error);
 // added from an other tutorial
+
+async function listDatabases(client){
+   const databasesList = await client.db().admin().listDatabases();
  
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+
+    return listDatabases;
+};
+ 
+
+// Define a route that returns the list of databases
+app.get('/databases', async (req, res) => {
+    try { 
+      await client.connect();
+      const databases = await listDatabases( client);
+
+
+      res.json({ databases });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred while fetching databases.' });
+    }
+  });
 
 
 
@@ -40,4 +81,25 @@ app.listen(process.env.PORT || 3000);
 
 module.exports = app;
 
+
+/*
+
+import { MongoClient } from "mongodb";
+
+const connectionString = process.env.ATLAS_URI || "";
+   
+   const client = new MongoClient(connectionString);
+    console.log(  `client    = ${  client   }  `  );
  
+
+let conn;
+try {
+    conn = await client.connect();
+} catch(e) {
+    console.error(e);
+}
+
+  let db = conn.db("sample_training");
+
+export default db;
+*/
