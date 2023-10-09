@@ -11,7 +11,7 @@ import Form from "./scenes/form/index.jsx";
 import Line from "./scenes/line/index.jsx";
 import Pie from "./scenes/pie/index.jsx";
 import FAQ from "./scenes/faq/index.jsx";
- import Geography from "./scenes/geography/index.jsx";
+import Geography from "./scenes/geography/index.jsx";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
 import Calendar from "./scenes/calendar/calendar.jsx";
