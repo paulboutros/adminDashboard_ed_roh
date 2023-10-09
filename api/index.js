@@ -28,7 +28,7 @@ app.use(cors());
  
 
  
-   app.get('/list', async (req, response) => {
+   app.get('api/list', async (req, response) => {
      
   try {
     //const mongoClient = await ( new MongoClient(uri, options)).connect();
