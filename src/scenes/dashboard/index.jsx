@@ -8,7 +8,10 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart";
+import GeographyChart from "../../components/GeographyChart"; 
+import GridAllLayer from "../../components/GridAllLayer";  
+import GridDiscord from "../../components/GridDiscord";  
+import GridTwitter from "../../components/GridTwitter";  
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
@@ -143,7 +146,7 @@ const Dashboard = () => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-                Revenue Generated
+                Revenue distributed
               </Typography>
               <Typography
                 variant="h3"
@@ -238,7 +241,7 @@ const Dashboard = () => {
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
-              $48,352 revenue generated
+              $48,352 revenue distributed
             </Typography>
             <Typography>Includes extra misc expenditures and costs</Typography>
           </Box>
@@ -275,6 +278,40 @@ const Dashboard = () => {
           <Box height="200px">
             <GeographyChart isDashboard={true} />
           </Box>
+        </Box>
+
+         {/* ROW 4 */}
+         <Box
+          gridColumn="span 4"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
+         >
+          <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
+           Twitter Board
+          </Typography>
+           
+            <GridTwitter isDashboard={true}  sx={{ marginBottom: "15px" }} />
+           
+        </Box>
+         
+        <Box
+          gridColumn="span 4"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
+         >
+          <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
+           Discord Board
+          </Typography>
+          <Box height="50px">
+            <GridDiscord isDashboard={true}  sx={{ marginBottom: "15px" }} />
+          </Box>
+        </Box>
+
+        <Box
+          gridColumn="span 4"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
+         >
+          <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
+           Layer Board
+          </Typography>
+           
+            <GridAllLayer isDashboard={true}  sx={{ marginBottom: "15px" }} />
+           
         </Box>
       </Box>
     </Box>

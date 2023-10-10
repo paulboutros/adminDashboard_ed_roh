@@ -5,7 +5,7 @@ import Sidebar from "./scenes/global/Sidebar.jsx";
 import Dashboard from "./scenes/dashboard/index.jsx";
 import Team from "./scenes/team/index.jsx";
 import Invoices from "./scenes/invoices/index.jsx";
-import Contacts from "./scenes/contacts/index.jsx";
+import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import Bar from "./scenes/bar/index.jsx";
 import Form from "./scenes/form/index.jsx";
 import Line from "./scenes/line/index.jsx";
@@ -31,7 +31,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />
-              <Route path="/contacts" element={<Contacts />} />
+              <Route path="/allLayerGrid" element={<AllLayerGrid />} />
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />

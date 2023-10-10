@@ -23,6 +23,16 @@ const app = express();
 // Serve static files (React app)
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+app.get('/', (req, res) => res.send('Home Page Route'));
+
+app.get('/about', (req, res) => res.send('About Page Route'));
+
+app.get('/portfolio', (req, res) => res.send('Portfolio Page Route'));
+ 
+
+
+
+
 app.use(cors());
  
    app.get('api/list', async (req, response) => {
@@ -54,7 +64,7 @@ app.get('/about', (req, res) => res.send('About Page Route'));
 
 app.get('/portfolio', (req, res) => res.send('Portfolio Page Route'));
 
-app.get('/contact', (req, res) => res.send('Contact Page Route'));
+ 
 // end of adding
  
 
