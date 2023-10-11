@@ -7,6 +7,9 @@ import { tokens } from "../theme";
 
 import { useTheme } from "@mui/material";
 
+ //import dotenv from "dotenv";
+// dotenv.config();
+
 const ContactGrid = ( { isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -18,8 +21,15 @@ const ContactGrid = ( { isDashboard = false }  ) => {
 const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 useEffect(()=>{
   (async ()=> {
-    const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
-   //const result  = await fetch("/api/findUsersWithNonZeroProperties");
+
+   // const API_URL = process.env.API_URL;
+  //  console.log("🚀 ~ file: GridAllLayer.jsx:25 ~ process:", process)
+
+    
+    // https://express-to-vercel-main-fawn.vercel.app/getData
+   // const endpoint =  API_URL + "getData";
+     const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
+     
    const resultsJson = await result.json();
     
    

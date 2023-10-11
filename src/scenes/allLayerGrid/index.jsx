@@ -1,13 +1,15 @@
 import {useEffect, useState} from "react";
 
 import { Box } from "@mui/material";
- 
- 
-  
+//import dotenv from "dotenv";
+
 import ContactGrid from "../../components/GridAllLayer";
 import Header from "../../components/Header";
  
-
+ 
+ 
+  
+//const API_URL = process.env.API_URL;
 const Contacts = () => {
  
    
@@ -19,12 +21,15 @@ const Contacts = () => {
 const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 useEffect(()=>{
   (async ()=> {
-    const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
-   //const result  = await fetch("/api/findUsersWithNonZeroProperties");
-   const resultsJson = await result.json();
+  
+      //const getData_enpPoint = API_URL + "getData";
+      const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
+     //const result  = await fetch("/api/findUsersWithNonZeroProperties");
+     const resultsJson = await result.json();
     
    
-   setRowData(resultsJson );
+     setRowData(resultsJson );
+
 console.log( "data   = "  + data);
    })();
 
