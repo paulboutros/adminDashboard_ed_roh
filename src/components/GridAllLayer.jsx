@@ -6,9 +6,7 @@ import { tokens } from "../theme";
   
 
 import { useTheme } from "@mui/material";
-
- //import dotenv from "dotenv";
-// dotenv.config();
+import DataFetchingComponent from '../data/DataFetchingComponent';
 
 const ContactGrid = ( { isDashboard = false }  ) => {
   const theme = useTheme();
@@ -22,13 +20,15 @@ const [data, setRowData] = useState(); // Set rowData to Array of Objects, one O
 useEffect(()=>{
   (async ()=> {
 
-   // const API_URL = process.env.API_URL;
+     
   //  console.log("🚀 ~ file: GridAllLayer.jsx:25 ~ process:", process)
 
-    
+  //REACT_APP_API_URL="http://localhost:2000/getData"
     // https://express-to-vercel-main-fawn.vercel.app/getData
-   // const endpoint =  API_URL + "getData";
-     const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
+    const endpoint = `${process.env.REACT_APP_API_URL}getData`;
+
+    const result  = await fetch(endpoint);
+    // const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
      
    const resultsJson = await result.json();
     

@@ -19,7 +19,7 @@ const GridTwitter = ( { isDashboard = false }  ) => {
 const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 useEffect(()=>{
   (async ()=> {
-   // const getData_enpPoint = API_URL + "getData";
+    //const getData_enpPoint = API_URL + "getData";
     //const result  = await fetch("/api/getData");
     const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
