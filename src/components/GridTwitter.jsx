@@ -20,8 +20,8 @@ const [data, setRowData] = useState(); // Set rowData to Array of Objects, one O
 useEffect(()=>{
   (async ()=> {
     //const getData_enpPoint = API_URL + "getData";
-    //const result  = await fetch("/api/getData");
-    const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
+    const endpoint = `${process.env.REACT_APP_API_URL}getData`; // make it specific (filter to twitter fields)
+    const result  = await fetch(endpoint);
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
    const resultsJson = await result.json();
     

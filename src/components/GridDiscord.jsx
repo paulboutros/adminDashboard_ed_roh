@@ -18,7 +18,9 @@ const DiscordGrid = ( { isDashboard = false }  ) => {
 const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 useEffect(()=>{
   (async ()=> {
-    const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
+    const endpoint = `${process.env.REACT_APP_API_URL}getData`; // make it specific (filter to discord fields)
+    const result  = await fetch(endpoint);
+    
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
    const resultsJson = await result.json();
     

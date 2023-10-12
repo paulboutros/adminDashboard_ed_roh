@@ -6,6 +6,8 @@ import Dashboard from "./scenes/dashboard/index.jsx";
 import Team from "./scenes/team/index.jsx";
 import Invoices from "./scenes/invoices/index.jsx";
 import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
+import AllLayerImage from "./scenes/allLayerImage/index.jsx";
+ 
 import Bar from "./scenes/bar/index.jsx";
 import Form from "./scenes/form/index.jsx";
 import Line from "./scenes/line/index.jsx";
@@ -32,6 +34,8 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />
+              <Route path="/allLayerImage" element={<AllLayerImage />} />
+              
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />
@@ -40,6 +44,7 @@ function App() {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/geography" element={<Geography />} />
+              
             </Routes>
           </main>
         </div>

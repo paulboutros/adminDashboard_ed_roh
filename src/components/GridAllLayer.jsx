@@ -6,7 +6,7 @@ import { tokens } from "../theme";
   
 
 import { useTheme } from "@mui/material";
-import DataFetchingComponent from '../data/DataFetchingComponent';
+ 
 
 const ContactGrid = ( { isDashboard = false }  ) => {
   const theme = useTheme();
@@ -44,12 +44,10 @@ useEffect(() => {
 }, [data]);
  
 
+ 
 
 
-
-
-
-const columns = [
+const columns  = [
 //  { field: "_id", headerName: "ID", flex: 0.5 },
   {
     field: "wallet",
@@ -226,3 +224,4 @@ const columns = [
 };
 
 export default ContactGrid;
+

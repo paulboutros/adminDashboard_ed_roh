@@ -10,6 +10,7 @@ import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
 import GeographyChart from "../../components/GeographyChart"; 
 import GridAllLayer from "../../components/GridAllLayer";  
+import GridImage from "../../components/GridImage";  
 import GridDiscord from "../../components/GridDiscord";  
 import GridTwitter from "../../components/GridTwitter";  
 import BarChart from "../../components/BarChart";
@@ -313,6 +314,22 @@ const Dashboard = () => {
             <GridAllLayer isDashboard={true}  sx={{ marginBottom: "15px" }} />
            
         </Box>
+
+
+         {/* ROW 5 */}
+         
+
+        <Box
+          gridColumn="span 12"  gridRow="span 6"  backgroundColor={colors.primary[400]}  padding="30px"
+         >
+          <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
+           Layer Board
+          </Typography>
+           
+            <GridImage isDashboard={true}  sx={{ marginBottom: "15px" }} />
+           
+        </Box>
+
       </Box>
     </Box>
   );
