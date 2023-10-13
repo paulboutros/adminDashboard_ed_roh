@@ -13,18 +13,13 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';//@mui/lab/Toggl
 
 
 import { useTheme } from "@mui/material";
-const images = [
-  '/img/1.png', '/img/1.png','/img/1.png',
-  '/img/2.png',
-  '/img/3.png','/img/4.png','/img/5.png','/img/6.png','/img/7.png','/img/8.png','/img/9.png','/img/10.png',
-  // Add more image URLs here
-];
+ 
 
 const LayerGrid = ( { isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
    
-const [selectedCategories, setSelectedCategories] = useState([]); // State to track selected categories
+const [selectedCategories, setSelectedCategories] = useState(["he","sh"]); // State to track selected categories
  // Function to toggle the selected category
  const toggleCategory = (category) => {
  

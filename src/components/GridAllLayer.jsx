@@ -200,7 +200,7 @@ const columns  = [
       >
 
       {data ? (
-       <Box m="40px 0 0 0" height= {_height} > 
+       <Box m="40px 0 0 0" height= {_height} style={{ width: '101%' }} > 
         <DataGrid
           rows={data}
           columns={columns}

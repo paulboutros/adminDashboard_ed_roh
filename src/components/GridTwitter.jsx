@@ -20,7 +20,7 @@ const [data, setRowData] = useState(); // Set rowData to Array of Objects, one O
 useEffect(()=>{
   (async ()=> {
     //const getData_enpPoint = API_URL + "getData";
-    const endpoint = `${process.env.REACT_APP_API_URL}getData`; // make it specific (filter to twitter fields)
+    const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=twitter&limit=${10}`; // make it specific (filter to twitter fields)
     const result  = await fetch(endpoint);
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
    const resultsJson = await result.json();
@@ -52,28 +52,22 @@ const columns = [
     
   } ,
   {
-    field: "twitter_like",
+    field: "like",
     headerName: "likes",
     flex: 1,
     cellClassName: "name-column--cell",
     
   } ,
   {
-    field: "twitter_retweet",
+    field: "retweet",
     headerName: "retweets",  // we could fetch impression per retweet
     flex: 1,
     cellClassName: "name-column--cell",
     
   } ,
+  
   {
-    field: "fake_invite",  
-    headerName: "Fake Invite",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  } , 
-  {
-    field: "twitterScore",   
+    field: "total",   
     headerName: "Twitter Score",
     flex: 1,
     cellClassName: "name-column--cell",
@@ -162,8 +156,10 @@ const columns = [
       >
 
       {data ? (
-       <Box m="40px 0 0 0" height= {_height} > 
+         <Box m="40px 0 0 0" height= {_height}   style={{ width: '101%' }} > 
+          
         <DataGrid
+          
           rows={data}
           columns={columns}
           // components={{ Toolbar: GridToolbar }}
@@ -179,7 +175,7 @@ const columns = [
     ) : (
       <div>Loading...</div> // You can replace this with a loading spinner or message
     )}
-
+      
     </Box>
     </Box>
   );

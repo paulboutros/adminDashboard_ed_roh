@@ -18,15 +18,18 @@ const DiscordGrid = ( { isDashboard = false }  ) => {
 const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 useEffect(()=>{
   (async ()=> {
-    const endpoint = `${process.env.REACT_APP_API_URL}getData`; // make it specific (filter to discord fields)
+    const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=discord&limit=${10}`; // make it specific (filter to discord fields)
     const result  = await fetch(endpoint);
     
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
-   const resultsJson = await result.json();
+    const resultsJson = await result.json();
     
    
+
+
+
    setRowData(resultsJson );
-console.log( "data   = "  + data);
+console.log( "getDiscordData   = "  + data);
    })();
 
 }, [ ]);
@@ -44,7 +47,7 @@ useEffect(() => {
 const columns = [
 //  { field: "_id", headerName: "ID", flex: 0.5 },
   {
-    field: "wallet",
+    field: "walletShort",
     headerName: "Wallet",
     flex: 1,
     cellClassName: "name-column--cell",
@@ -172,7 +175,7 @@ const columns = [
       >
 
       {data ? (
-       <Box m="40px 0 0 0" height= {_height} > 
+       <Box m="40px 0 0 0" height= {_height} style={{ width: '101%' }} > 
         <DataGrid
           rows={data}
           columns={columns}
