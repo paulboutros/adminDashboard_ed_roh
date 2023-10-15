@@ -33,7 +33,7 @@ const [selectedCategories, setSelectedCategories] = useState(["he","sh"]); // St
     setSelectedCategories([...selectedCategories, category]);
   }
 
-  console.log("category  =" +  category   +  "selectedCategories  "  + selectedCategories); // This will log the updated value of data
+ // console.log("category  =" +  category   +  "selectedCategories  "  + selectedCategories); // This will log the updated value of data
 
 };
 
@@ -42,17 +42,14 @@ const [selectedCategories, setSelectedCategories] = useState(["he","sh"]); // St
 const [dataMap, setDataMap] = useState({}); 
 const [data, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
-// useEffect(()=>{
-//   (async ()=> {
-     
-//     const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=he`;
-//      const result  = await fetch(endpoint);
-//     const resultsJson = await result.json();
-//     setData(resultsJson );
  
-//    })();
+useEffect(() => {
+  selectedCategories.forEach((category) => {
+    fetchCategoryData(category,true);
+  });
+}, []);
 
-// }, [ ]);
+
 const fetchCategoryData = async (category, adding = true) => {
   if (adding) {
     try {
