@@ -1,3 +1,4 @@
+ 
 import { Box, IconButton, useTheme  , Button } from "@mui/material";
 import { useContext ,useEffect, useState } from "react";
 import { ColorModeContext, tokens } from "../../theme";
@@ -11,9 +12,10 @@ import SearchIcon from "@mui/icons-material/Search";
 
  import { getUserMe  } from "../../data/API.js";
 
-
-const YOUROAUTH2URL="https://discord.com/api/oauth2/authorize?client_id=1155438635966017556&redirect_uri=http%3A%2F%2Flocalhost%3A2000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20email";
-
+ const REACT_APP_YOUROAUTH2URL = process.env.REACT_APP_YOUROAUTH2URL;//// process.env.REACT_APP_YOUROAUTH2URL;
+  
+ //"https://discord.com/api/oauth2/authorize?client_id=1155438635966017556&redirect_uri=http%3A%2F%2Flocalhost%3A2000%2Fapi%2Fauth%2Fcallback%2Fdiscord&response_type=code&scope=identify%20email";
+ //console.log(" discord url >>> " + process.env.REACT_APP_YOUROAUTH2URL)
 
 const Topbar = () => {
   const theme = useTheme();
@@ -80,7 +82,7 @@ const Topbar = () => {
               variant="contained"
               color="primary"
               component="a"
-              href={YOUROAUTH2URL}
+              href={ REACT_APP_YOUROAUTH2URL}
               target="_blank"
               rel="noopener"
             >
@@ -93,12 +95,4 @@ const Topbar = () => {
 };
 
 export default Topbar;
-
-async  function handleLoginClick(){
-  const discordOAuth2URL = process.env.YOUROAUTH2URL;
-
-  // Open the URL in a new window or tab
-  window.open(discordOAuth2URL, '_blank');
-
-
-}
+ 

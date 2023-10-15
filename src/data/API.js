@@ -1,5 +1,5 @@
 
-import axios from "axios";
+//import axios from "axios";
 
 export async function  authorize   () {
   //const getData_enpPoint = API_URL + "getData";
@@ -51,6 +51,11 @@ export async function  getUserMe   () {
 } 
 
 export async function  globalData   () {
+
+
+    
+
+
     //const getData_enpPoint = API_URL + "getData";
     const endpoint = `${process.env.REACT_APP_API_URL}globalData`; // make it specific (filter to twitter fields)
     const result  = await fetch(endpoint);
