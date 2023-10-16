@@ -15,6 +15,10 @@ export async function  getUserMe   () {
 
 
   const endpoint = `${process.env.REACT_APP_API_URL}user/me`; // make it specific (filter to twitter fields)
+
+  console.log("process.env.REACT_APP_API_URL = " +  process.env.REACT_APP_API_URL );
+  console.log("user me endpoint = " +  endpoint );
+
   try {
     const response = await fetch(endpoint, {
       method: 'GET',
