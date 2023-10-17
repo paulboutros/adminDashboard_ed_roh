@@ -1,6 +1,6 @@
  
 import { Box, IconButton, useTheme  , Button } from "@mui/material";
-import { useContext ,useEffect, useState } from "react";
+import { useContext} from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -10,7 +10,9 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 
- import { getUserMe  } from "../../data/API.js";
+ //import { getUserMe  } from "../../data/API.js";
+
+ import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
 
  const REACT_APP_YOUROAUTH2URL = process.env.REACT_APP_YOUROAUTH2URL;//// process.env.REACT_APP_YOUROAUTH2URL;
   
@@ -22,16 +24,18 @@ const Topbar = () => {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  
+  const { user } = useUserContext();
+
+
+
+    /*
    const[user, SetUser ]= useState(null);
+
 
     async function getMe(){
 
       const response = await getUserMe();
- 
-
-
-       
+  
       SetUser(response);
 
     }
@@ -39,7 +43,7 @@ const Topbar = () => {
       getMe();
     
     }, [ ]);
-
+*/
 
 
   

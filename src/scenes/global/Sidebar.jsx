@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect  } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -15,11 +15,19 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+//import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+
+//provider
+import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+
+let avatarURL="";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  
+  
   return (
     <MenuItem
       active={selected === title}
@@ -40,6 +48,27 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+
+  const { user } = useUserContext();
+
+  useEffect(() => {
+    // This effect will run when the user object changes
+    // You can check if the user object is not null and perform actions accordingly
+    /*
+    if (user) {
+     
+        avatarURL = user.avatar.startsWith('a_') // Check if it's a GIF avatar
+  ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.gif`
+  : `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+ 
+    }
+  */
+
+  }, [user]); // This effect will re-run when the 'user' value changes
+
+
+
+
 
   return (
     <Box
@@ -107,7 +136,8 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Ed Roh
+                   {user ?   <div>  {user.discord} </div>  : <div> Guest </div> }
+                
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   VP Fancy Admin

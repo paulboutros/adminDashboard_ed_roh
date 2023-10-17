@@ -14,8 +14,12 @@ import Line from "./scenes/line/index.jsx";
 import Pie from "./scenes/pie/index.jsx";
 import FAQ from "./scenes/faq/index.jsx";
 import Geography from "./scenes/geography/index.jsx";
+
+// provider
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
+import { UserProvider } from './context/UserContext.js';
+
 import Calendar from "./scenes/calendar/calendar.jsx";
 
 function App() {
@@ -23,7 +27,9 @@ function App() {
   const [isSidebar, setIsSidebar] = useState(true);
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
+
+    <UserProvider>
+     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
@@ -49,7 +55,9 @@ function App() {
           </main>
         </div>
       </ThemeProvider>
-    </ColorModeContext.Provider>
+     </ColorModeContext.Provider>
+    </UserProvider>
+
   );
 }
 
