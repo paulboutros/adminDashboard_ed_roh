@@ -10,7 +10,7 @@ import Invoices from "./scenes/invoices/index.jsx";
 import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import AllLayerImage from "./scenes/allLayerImage/index.jsx";
  
-import Bar from "./scenes/bar/index.jsx";
+import Bar from  "./scenes/bar/index.jsx";
 import Form from "./scenes/form/index.jsx";
 import Line from "./scenes/line/index.jsx";
 import Pie from "./scenes/pie/index.jsx";

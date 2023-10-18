@@ -64,10 +64,9 @@ const BarChartHoriz = ({ isDashboard = false }) => {
       const limit = !isDashboard?10:8;
        //const getData_enpPoint = API_URL + "getData";
        const endpoint_disc =
-        `${process.env.REACT_APP_API_URL}getSocialData?source=twitter&source=discord&limit=${limit}`; // make it specific (filter to twitter fields)
+       `${process.env.REACT_APP_API_URL}getSocialData?source=twitter&source=discord&limit=${limit}`; // make it specific (filter to twitter fields)
        const result_disc  = await fetch(endpoint_disc);
-        
-      const discord_json = await result_disc.json();
+       const discord_json = await result_disc.json();
        
  
       

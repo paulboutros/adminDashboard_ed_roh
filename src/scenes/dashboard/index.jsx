@@ -61,7 +61,7 @@ const Dashboard = () => {
 
 
   return (
-    // maxHeight should be  100 - the height of the top bar
+    // maxHeight should be  100 - the height of the top bar so area scroll without side or top bar
     <Box m="20px" maxHeight="calc(88vh)" overflow="auto" >
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">

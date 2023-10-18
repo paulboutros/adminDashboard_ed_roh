@@ -14,9 +14,9 @@ const AllLayerImage = () => {
   
 
  return (
-   <Box m="20px">
+  <Box m="20px" maxHeight="calc(75vh)" >
      <Header title="All Layer image" subtitle="Image for all NFT Layers" />
-     <Box m="40px 0 0 0" height="75vh">
+     <Box m="40px 0 0 0" height="73vh"  overflow="auto">
    
        <GridImage/>
      </Box>

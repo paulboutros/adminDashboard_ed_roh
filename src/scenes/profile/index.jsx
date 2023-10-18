@@ -41,19 +41,20 @@ const Profile =  () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
- let mockTransactionsX =[];
-   
+    
   const [glData, setGlobalData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  useEffect(()=>{
-    (async ()=> {
-     const resultsJson= await globalData();
+
+ async function GetData(){
+
+
+  const resultsJson= await globalData();
       setGlobalData(resultsJson );
 
-       
-  
-     })();
+ }
 
-  
+  useEffect(()=>{
+     if (!user)return;
+    GetData();
   }, [ user ]);
    
 

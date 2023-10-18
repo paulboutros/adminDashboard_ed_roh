@@ -14,7 +14,7 @@ const AllLayer = () => {
    
 
   return (
-    <Box m="20px">
+    <Box m="20px" >
       <Header title="All Layer Board" subtitle="Data and Score for all NFT Layers" />
       <Box m="40px 0 0 0" height="75vh">
     
