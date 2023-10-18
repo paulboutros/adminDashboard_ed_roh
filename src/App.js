@@ -4,6 +4,8 @@ import Topbar from "./scenes/global/Topbar.jsx";
 import Sidebar from "./scenes/global/Sidebar.jsx";
 import Dashboard from "./scenes/dashboard/index.jsx";
 import Team from "./scenes/team/index.jsx";
+
+import Profile from "./scenes/profile/index.jsx";
 import Invoices from "./scenes/invoices/index.jsx";
 import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import AllLayerImage from "./scenes/allLayerImage/index.jsx";
@@ -37,8 +39,10 @@ function App() {
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
+              
               <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
+              <Route path="/profile" element={<Profile/>} />
+              <Route path="/team" element={<Team/>} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />
               <Route path="/allLayerImage" element={<AllLayerImage />} />
               

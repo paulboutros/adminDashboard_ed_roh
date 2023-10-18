@@ -161,6 +161,12 @@ export const themeSettings = (mode) => {
               default: "#fcfcfc",
             },
           }),
+
+          tooltip: {
+            container: {
+              color: "#999", // Change this to the desired tooltip text color
+            },
+          },
     },
     typography: {
       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),

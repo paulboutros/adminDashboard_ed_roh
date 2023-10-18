@@ -1,8 +1,17 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+ 
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
+ 
+//import BarChart from "../../components/BarChart";
+import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+//import { tokens } from "../../theme";
+ 
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+
 import EmailIcon from "@mui/icons-material/Email";
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+
+
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
@@ -10,57 +19,47 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 //import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart"; 
+ 
 import GridAllLayer from "../../components/GridAllLayer";  
 import GridImage from "../../components/GridImage";  
 import GridDiscord from "../../components/GridDiscord";  
 import GridTwitter from "../../components/GridTwitter";  
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
+import StatBoxEarn from "../../components/StatBoxEarn";
+
+
 import ProgressCircle from "../../components/ProgressCircle";
 import {useEffect, useState} from "react";
-import { globalData , bestEarner } from "../../data/API.js";
+import { globalData , bestEarner , userEarning } from "../../data/API.js";
 
 
+const Profile =  () => {
 
-const Dashboard = () => {
+  const { user } = useUserContext();
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
  let mockTransactionsX =[];
-  const [earnerData, setearnerData] = useState(); // Set rowData to Array of Objects, one Object per Row
+   
   const [glData, setGlobalData] = useState(); // Set rowData to Array of Objects, one Object per Row
-   useEffect(()=>{
-     (async ()=> {
-      const resultsJson= await globalData();
-      
-       setGlobalData(resultsJson );
+  useEffect(()=>{
+    (async ()=> {
+     const resultsJson= await globalData();
+      setGlobalData(resultsJson );
 
-       const earner_resultsJson= await bestEarner();
-      
-       setearnerData(earner_resultsJson );
+       
+  
+     })();
 
-/*
- txId: "01e4dsa",
-    user: "johndoe",
-    date: "2021-09-01",
-    cost: "43.95",
-
-*/
-
-
+  
+  }, [ user ]);
    
-      })();
-   
-   }, [ ]);
-
-
-
-
-
-
 
   return (
+    <div>
+      {user && glData && glData.length > 0 ? ( 
     // maxHeight should be  100 - the height of the top bar
     <Box m="20px" maxHeight="calc(88vh)" overflow="auto" >
       {/* HEADER */}
@@ -92,41 +91,59 @@ const Dashboard = () => {
       >
         {/* ROW 1 */}
         <Box
-          gridColumn="span 3"
+          gridColumn="span 6"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title={glData && glData.length > 0 ? glData[0].all_invites_sent : "Default Value"}
-            subtitle="invite Sent"
-            progress="0.75"
-            increase="+14%"
-            icon={
-              <EmailIcon
+          <StatBoxEarn   //  bestInviteScore
+             title   = {  user.scoreData.discord.invite_use }// {  user.scoreData.invite_use }
+            title2  = {   user.scoreData.discord.earning   }
+            
+            subtitle="invite Use"
+            subtitle2= "earns"
+            progress=  { calculatePercentage( user.scoreData.discord.invite_use  ,  glData[0].all_invites_used   )}
+            increase={`${(calculatePercentage( user.scoreData.discord.invite_use  ,  glData[0].all_invites_used   ) * 100).toFixed(2)}%`}
+            icon1={
+              <PersonAddIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
+            icon2={
+              <MonetizationOnIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+            
           />
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn="span 6"
           backgroundColor={colors.primary[400]}
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title={glData && glData.length > 0 ? glData[0].all_retweets : "Default Value"}
-            subtitle="All Retweets" all_retweets
-            progress="0.50"
-            increase="+21%"
-            icon={
-              <PointOfSaleIcon
+             <StatBoxEarn   //  bestInviteScore
+             title   = {  user.scoreData.twitter.retweet }// {  user.scoreData.invite_use }
+            title2  = {   user.scoreData.twitter.earning   }
+            
+            subtitle="Retweet"
+            subtitle2= "earns"
+            progress=  { calculatePercentage( user.scoreData.twitter.retweet  ,  glData[0].all_retweets   )}
+            increase={`${(calculatePercentage( user.scoreData.discord.invite_use  ,  glData[0].all_invites_used   ) * 100).toFixed(2)}%`}
+            icon1={
+              <PersonAddIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
+            icon2={
+              <MonetizationOnIcon
+                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+              />
+            }
+            
           />
         </Box>
         <Box
@@ -139,7 +156,7 @@ const Dashboard = () => {
           <StatBox
            title={glData && glData.length > 0 ? glData[0].all_invites_used : "Default Value"}
 
-            subtitle="New members"
+            subtitle="Invite used"
             progress="0.30"
             increase="+5%"
             icon={
@@ -213,70 +230,7 @@ const Dashboard = () => {
           </Box>
         </Box>
 
-
-
-        
-        {earnerData && earnerData.length > 0 ? (
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          overflow="auto"
-        >
-
-            
-            <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            borderBottom={`4px solid ${colors.primary[500]}`}
-            colors={colors.grey[100]}
-            p="15px"
-          >
-            <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-              Highest Earners
-            </Typography>
-           
-            </Box>
-           
-           
-              {earnerData.map((transaction, i) => (
-                 <Box
-                key={`${transaction.walletShort}-${i}`}
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                borderBottom={`4px solid ${colors.primary[500]}`}
-                p="15px"
-              >
-                <Box>
-                  <Typography
-                    color={colors.greenAccent[500]}
-                    variant="h5"
-                    fontWeight="600"
-                  >
-                    {transaction.walletShort}
-                  </Typography>
-                  <Typography color={colors.grey[100]}>
-                    {transaction.discord}   
-                    {/* scoreShare */}
-                  </Typography>
-                </Box>
-                <Box color={colors.grey[100]}>{transaction.date}</Box>
-                <Box
-                  backgroundColor={colors.greenAccent[500]}
-                  p="5px 10px"
-                  borderRadius="4px"
-                >
-                  ${transaction.earning}
-                </Box>
-                 </Box>
-                ))}
-
-
-            </Box>
-            ) : (  <div>Loading...</div>  )}
-            
+ 
          
           
         {/* ROW 3 */}
@@ -394,7 +348,26 @@ const Dashboard = () => {
 
       </Box>
     </Box>
+
+      ) : (
+        <div>User is not defined.</div>
+      )}
+</div>
+
   );
 };
 
-export default Dashboard;
+export default Profile;
+
+
+
+function earningFromDiscord(A, B) {
+  if ( A === 0)  return 0;
+  
+    return (A / B) ;//  * 100;
+  }
+function calculatePercentage(A, B) {
+if ( A === 0)  return 0;
+
+  return (A / B) ;//  * 100;
+}

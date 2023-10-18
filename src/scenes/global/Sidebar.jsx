@@ -20,7 +20,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 //provider
 import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
 
-let avatarURL="";
+let avatarURL="../../assets/user.png"; // add default avatar here
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -51,18 +51,28 @@ const Sidebar = () => {
 
   const { user } = useUserContext();
 
+ function getAvatar(){
+
+  console.log(JSON.stringify(  user, null, 2));
+  const discordData =  user.discordUserData;
+//console.log( ">>>>>>>>      user  "    +  user );
+
+  avatarURL = discordData.avatar.startsWith('a_') // Check if it's a GIF avatar
+  ? `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.gif`
+  : `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.png`;
+// https://cdn.discordapp.com/avatars/423608837900206091/898e806d7c5218f62b06ec3b57c6aba1.png
+    return avatarURL;
+ }
+
   useEffect(() => {
     // This effect will run when the user object changes
     // You can check if the user object is not null and perform actions accordingly
-    /*
-    if (user) {
      
-        avatarURL = user.avatar.startsWith('a_') // Check if it's a GIF avatar
-  ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.gif`
-  : `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
- 
+     
+    if (user) {
+      
     }
-  */
+   
 
   }, [user]); // This effect will re-run when the 'user' value changes
 
@@ -125,7 +135,7 @@ const Sidebar = () => {
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={`../../assets/user.png`}
+                  src=  {user ?   getAvatar()  : avatarURL  } 
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
@@ -146,7 +156,13 @@ const Sidebar = () => {
             </Box>
           )}
 
+
+ 
+    
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+
+               
+
             <Item
               title="Dashboard"
               to="/"
@@ -154,6 +170,16 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+            <Item
+              title="Profile"
+              to="profile"//  "/userProfile"
+              icon={<BarChartOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+           
+
 
             <Typography
               variant="h6"
