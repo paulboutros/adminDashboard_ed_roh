@@ -8,7 +8,7 @@ import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
 //dotenv.config();
 //const API_URL = process.env.API_URL;
-const GridTwitter = ( { isDashboard = false }  ) => {
+const GridTwitter = ( { _height ,  _margin , isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -27,13 +27,13 @@ useEffect(()=>{
     
    
    setRowData(resultsJson );
-console.log( "data   = "  + data);
+//console.log( "data   = "  + data);
    })();
 
 }, [ ]);
 
 useEffect(() => {
-  console.log("data =", data); // This will log the updated value of data
+  //console.log("data =", data); // This will log the updated value of data
 }, [data]);
  
 
@@ -68,12 +68,22 @@ const columns = [
   
   {
     field: "total",   
-    headerName: "Twitter Score",
+    headerName: "Total",
     flex: 1,
     cellClassName: "name-column--cell",
     
   } , 
+  {
+    field: "scoreShareAbsolute",   
+    headerName: "Score Share",
+    flex: 1,
+    cellClassName: "name-column--cell" 
+    
+    
+  } , 
   
+  
+
   {
     field: "discord",
     headerName: "Discord",
@@ -84,7 +94,7 @@ const columns = [
 ];
  
  
-  const _height = isDashboard ? 220: 340 ;//  "25vh": "75vh" ;
+ // const _height = isDashboard ? 220: 340 ;//  "25vh": "75vh" ;
   const _rowHeight = isDashboard ?  20: 40 ;
   const _headerHeight = isDashboard ?  20: 40 ;
   const _footerHeight = isDashboard ?  20: 40 ;
@@ -156,7 +166,8 @@ const columns = [
       >
 
       {data ? (
-         <Box m="40px 0 0 0" height= {_height}   style={{ width: '101%' }} > 
+       
+         <Box m= {_margin}  height= {_height}   style={{ width: '101%' }} > 
           
         <DataGrid
           
@@ -182,3 +193,7 @@ const columns = [
 };
 
 export default GridTwitter;
+
+
+ 
+ 

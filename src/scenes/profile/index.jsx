@@ -19,6 +19,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 //import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
+import PieChart from "../../components/PieChart";
  
 import GridAllLayer from "../../components/GridAllLayer";  
 import GridImage from "../../components/GridImage";  
@@ -250,7 +251,7 @@ const Profile =  () => {
             alignItems="center"
             mt="25px"
           >
-            <ProgressCircle size="125" />
+            {/* <ProgressCircle size="125" /> */}
             <Typography
               variant="h5"
               color={colors.greenAccent[500]}
@@ -299,38 +300,7 @@ const Profile =  () => {
         </Box> */}
 
          {/* ROW 4 */}
-         <Box
-          gridColumn="span 6"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
-         >
-          <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
-           Twitter Board
-          </Typography>
-           
-            <GridTwitter  isDashboard={true}  sx={{  marginBottom: "15px" }} />
-           
-        </Box>
-         
-        <Box
-          gridColumn="span 6"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
-         >
-          <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
-           Discord Board
-          </Typography>
-          <Box height="50px">
-            <GridDiscord isDashboard={true}  sx={{ marginBottom: "15px" }} />
-          </Box>
-        </Box>
-
-        <Box
-          gridColumn="span 12"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
-         >
-          <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
-           Layer Board
-          </Typography>
-           
-            <GridAllLayer isDashboard={true}  sx={{ marginBottom: "15px" }} />
-           
-        </Box>
+        
 
 
          {/* ROW 5 */}
@@ -343,7 +313,10 @@ const Profile =  () => {
            Layer Board
           </Typography>
            
-            <GridImage isDashboard={true}  sx={{ marginBottom: "15px" }} />
+            <GridImage  
+              queryId= {`&userId=${user.ID}&limit=1`}
+             sx={{ marginBottom: "15px" }} 
+             />
            
         </Box>
 

@@ -8,18 +8,25 @@ import CardMedia from '@mui/material/CardMedia'; // Update this import
 import ImageCard from "./ImageCard";
 import { tokens } from "../theme";
   
+import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
+
+
  import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';//@mui/lab/ToggleButtonGroup';
 
 
 import { useTheme } from "@mui/material";
  
-
-const LayerGrid = ( { isDashboard = false }  ) => {
+ let i =0;
+const LayerGrid = ( {queryId ="", isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const { user } = useUserContext();
    
-const [selectedCategories, setSelectedCategories] = useState(["he","sh"]); // State to track selected categories
+const [selectedCategories, setSelectedCategories] =   useState(["he","sh"]); // State to track selected categories
+
+//toggleCategory("he")
  // Function to toggle the selected category
  const toggleCategory = (category) => {
  
@@ -42,19 +49,56 @@ const [selectedCategories, setSelectedCategories] = useState(["he","sh"]); // St
 const [dataMap, setDataMap] = useState({}); 
 const [data, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
+//const [queryId, setQueryId] = useState("&userId=423608837900206091&limit=1");
+ 
+
+
+useEffect(() => {
+  // in this case we would be on the profile page
+ 
+  if (!isDashboard){
+    
+      if (!user) {
+
+        console.log("queryId: USER == null     "   );
+       // setQueryId(""); // Use setQueryId to update the value
+      } else {
+        console.log("queryId: USER condition     "   );
+      //  setQueryId("&userId=423608837900206091&limit=1"); // Use setQueryId to update the value
+      }
+     
+     
+  } 
+  //console.log("isDashboard =", isDashboard  , "user    = " , user); // This will log the updated value of data
+  
+ // setQueryId("&userId=423608837900206091"); // Use setQueryId to update the value
+ 
+}, [user , isDashboard]);
+
+// !warning.  useState is asynchronous .. queryId changes will take effect on next render (also to rendering batching reason)
+
  
 useEffect(() => {
+
+  
+  
   selectedCategories.forEach((category) => {
     fetchCategoryData(category,true);
   });
-}, []);
+}, [queryId  ,isDashboard ]);
+ 
+ 
 
 
-const fetchCategoryData = async (category, adding = true) => {
+
+const fetchCategoryData = async (category , adding = true) => {
+   //"&userId=423608837900206091";
+   console.log("fetchCategoryData: queryId  >>>>>>>>>>>   " +  queryId   +  "  i  "   +  i  + "adding  " +  adding);
+    i++;
   if (adding) {
     try {
       // Fetch data for the category
-      const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}`;
+       const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}${queryId}`;
       const result = await fetch(endpoint);
       const resultsJson = await result.json();
 
@@ -92,15 +136,7 @@ useEffect(() => {
 }, [dataMap]);
 
 
-
-
-
-useEffect(() => {
-  //console.log("selectedCategories =", selectedCategories); // This will log the updated value of data
-  console.log("data =", data); // This will log the updated value of data
-
-
-}, [data]);
+ 
  
  //MuiCardMedia-root MuiCardMedia-media MuiCardMedia-img
  
@@ -116,7 +152,7 @@ useEffect(() => {
              // exclusive // This makes it work like radio buttons
               onChange={(_, newCategories) => {
                 if (newCategories !== null) {
-                   setSelectedCategories(newCategories);
+                   setSelectedCategories(newCategories); 
                 }
               }}
               aria-label="Categories"
@@ -157,8 +193,8 @@ useEffect(() => {
                   <Card>
                     <ImageCard
                       image={`/${category}/${getNumber(obj.layerName)}.png`}
-                      title={`Name ${obj.layerName}`}
-                      extraInfo={`owner ${obj.walletshort}`}
+                      title={`${obj.layerName}`}
+                      extraInfo={`owner ${obj.wallet}`}
                     />
                   </Card>
                 </Grid>
@@ -186,9 +222,4 @@ export default LayerGrid;
   const lastTwoDigits = parseInt(input.slice(-2), 10)
    return lastTwoDigits;
  }
-const layerToInt = new Map([
-  ["he01", 8],["he02", 7],["he03", 6],["he04", 5],["he05", 4],["he06", 3],["he07", 2],["he08", 1],
-  
-  ["he09", 10],["he10", 9]
-]);
-
+ 

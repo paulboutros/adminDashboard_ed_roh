@@ -29,13 +29,13 @@ useEffect(()=>{
 
 
    setRowData(resultsJson );
-console.log( "getDiscordData   = "  + data);
+ 
    })();
 
 }, [ ]);
 
 useEffect(() => {
-  console.log("data =", data); // This will log the updated value of data
+  
 }, [data]);
  
 
@@ -75,12 +75,21 @@ const columns = [
     
   } , 
   {
-    field: "discord_score",   
+    field: "total",   
     headerName: "Discord Score",
     flex: 1,
     cellClassName: "name-column--cell",
     
   } , 
+  {
+    field: "scoreShareAbsolute",   
+    headerName: "Score share",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    
+  } , 
+
+  
   
   {
     field: "discord",

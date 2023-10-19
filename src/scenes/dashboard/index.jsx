@@ -39,15 +39,7 @@ const Dashboard = () => {
        const earner_resultsJson= await bestEarner();
       
        setearnerData(earner_resultsJson );
-
-/*
- txId: "01e4dsa",
-    user: "johndoe",
-    date: "2021-09-01",
-    cost: "43.95",
-
-*/
-
+ 
 
    
       })();
@@ -61,7 +53,7 @@ const Dashboard = () => {
 
 
   return (
-    // maxHeight should be  100 - the height of the top bar so area scroll without side or top bar
+    // maxHeight should be  100 - the height of the top bar so area scroll without side or
     <Box m="20px" maxHeight="calc(88vh)" overflow="auto" >
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -351,7 +343,7 @@ const Dashboard = () => {
            Twitter Board
           </Typography>
            
-            <GridTwitter  isDashboard={true}  sx={{  marginBottom: "15px" }} />
+            <GridTwitter  _height={220} _margin={"0px 0 0 0"}  isDashboard={true}  sx={{  marginBottom: "15px" }} />
            
         </Box>
          

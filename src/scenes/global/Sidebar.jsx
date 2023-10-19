@@ -53,7 +53,7 @@ const Sidebar = () => {
 
  function getAvatar(){
 
-  console.log(JSON.stringify(  user, null, 2));
+ // console.log(JSON.stringify(  user, null, 2));
   const discordData =  user.discordUserData;
 //console.log( ">>>>>>>>      user  "    +  user );
 
@@ -174,7 +174,7 @@ const Sidebar = () => {
             <Item
               title="Profile"
               to="profile"//  "/userProfile"
-              icon={<BarChartOutlinedIcon />}
+              icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -204,7 +204,7 @@ const Sidebar = () => {
             />
             <Item
               title="Twitter Board"
-              to="/invoices"
+              to="/twitterBoard"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -224,20 +224,20 @@ const Sidebar = () => {
             >
               Pages
             </Typography>
-            <Item
-              title="Profile Form"
+            {/* <Item
+              title="Profile"
               to="/form"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
-            <Item
+            /> */}
+            {/* <Item
               title="Calendar"
               to="/calendar"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="FAQ Page"
               to="/faq"
@@ -260,13 +260,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Pie Chart"
               to="/pie"
               icon={<PieChartOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Line Chart"
               to="/line"

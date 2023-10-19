@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 
 import GridImage from "../../components/GridImage";
 import Header from "../../components/Header";
-
+import ImageComposer from "../../components/ImageComposer";
 
 
  
@@ -18,6 +18,7 @@ const AllLayerImage = () => {
      <Header title="All Layer image" subtitle="Image for all NFT Layers" />
      <Box m="40px 0 0 0" height="73vh"  overflow="auto">
    
+      <ImageComposer/> 
        <GridImage/>
      </Box>
    </Box>
@@ -25,3 +26,5 @@ const AllLayerImage = () => {
 };
 
 export default AllLayerImage;
+
+

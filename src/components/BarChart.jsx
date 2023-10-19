@@ -71,7 +71,7 @@ const BarChartHoriz = ({ isDashboard = false }) => {
  
       
       setRowData(discord_json );
-   console.log( "data   = "  + data);
+  
       })();
    
    }, [ ]);

@@ -6,7 +6,7 @@ import Dashboard from "./scenes/dashboard/index.jsx";
 import Team from "./scenes/team/index.jsx";
 
 import Profile from "./scenes/profile/index.jsx";
-import Invoices from "./scenes/invoices/index.jsx";
+import TwitterBoard from "./scenes/twitterBoard/index.jsx";
 import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import AllLayerImage from "./scenes/allLayerImage/index.jsx";
  
@@ -46,7 +46,7 @@ function App() {
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />
               <Route path="/allLayerImage" element={<AllLayerImage />} />
               
-              <Route path="/invoices" element={<Invoices />} />
+              <Route path="/twitterBoard" element={<TwitterBoard />} />
               <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />
               <Route path="/pie" element={<Pie />} />
