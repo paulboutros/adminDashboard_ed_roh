@@ -1,15 +1,16 @@
 import   { useEffect , useState } from 'react';
 
-import {Grid, Box, Button, IconButton, Typography, useTheme } from "@mui/material";
- 
+import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
+import CardMedia from '@mui/material/CardMedia';
+
 
 import { tokens } from "../theme";
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
  
-
+import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
  
- 
+import Card from '@mui/material/Card';  
 import Header from "./Header";
 import LineChart from "./LineChart";
  
@@ -22,7 +23,7 @@ import BarChart from "./BarChart";
 import ProgressCircle from "./ProgressCircle";
  
 
-
+import {getBackgroundColor} from "../Utils/utils.js"
 
 
 
@@ -69,23 +70,85 @@ const imageDataset = {
       ]  
   };
 
-
+  function getNumber( input){
+    //const input = "he09";
+    const lastTwoDigits = parseInt(input.slice(-2), 10)
+     return lastTwoDigits;
+   }
  
-  const AppCompo = () => {
+  const AppCompo = (  {queryId }  ) => {
+ 
+    const [dataMap, setDataMap] = useState({}); 
+    const [data, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
+    const fetchCategoryData = async (category  ) => {
+    
+     
+   
+        try {
+          // Fetch data for the category
+           const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}${queryId}`;
+          const result = await fetch(endpoint);
+          const resultsJson = await result.json();
+     
+          console.log(JSON.stringify(resultsJson, null, 2));
 
+          // Add or update the category data in dataMap
+          setDataMap((prevDataMap) => ({
+            ...prevDataMap, // Spread the existing data
+            [category]: resultsJson, // Add or update the category with the new value
+          }));
+
+
+        } catch (error) {
+          console.error(`Error fetching data for ${category}: ${error}`);
+        }
+        
+       
+     };
+
+
+    useEffect(() => {
+        
+        fetchCategoryData("he");  fetchCategoryData("we"); fetchCategoryData("sh"); 
+    }, [ ]);
+     
+      useEffect(() => {
+  const flatDataArray = Object.values(dataMap).reduce((accumulator, categoryData) => {
+    // Use the spread operator to merge the category data arrays into the accumulator
+    return [...accumulator, ...categoryData];
+  }, []);
+
+  // Now, flatDataArray contains all data from all selected categories
+  setData(flatDataArray);
+}, [dataMap]); 
+
+      
+  const debugMode = false;
+
+    const { user } = useUserContext();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    const legendItems = [
+        { color: colors.blueAccent[400], label: 'Label 1' },
+        { color: colors.blueAccent[500], label: 'Label 2' },
+        { color: colors.greenAccent[400], label: 'Label 3' },
+        { color: colors.greenAccent[500], label: 'Label 4' }
+        // Add more legend items as needed
+      ];
+
+
 
     const [selectedImages, setSelectedImages] = useState({
       
      forearn: 'layersForCharacterCompo/fa/1.png', // Example image paths
-     body: 'layersForCharacterCompo/bo/1.png', // Example image paths
-     belt: 'layersForCharacterCompo/be/1.png',  // Example image paths
-     weapon: 'layersForCharacterCompo/we/1.png', // Example image paths
+     bo: 'layersForCharacterCompo/bo/1.png', // Example image paths
+     be: 'layersForCharacterCompo/be/1.png',  // Example image paths
+     we: 'layersForCharacterCompo/we/1.png', // Example image paths
      
      collar: 'layersForCharacterCompo/co/1.png', // Example image paths
-     head: 'layersForCharacterCompo/he/1.png', // Example image paths
-     shield: 'layersForCharacterCompo/sh/1.png'  // Example image paths
+     he: 'layersForCharacterCompo/he/1.png', // Example image paths
+     sh: 'layersForCharacterCompo/sh/1.png'  // Example image paths
      
 
     });
@@ -96,108 +159,92 @@ const imageDataset = {
     //     <ImageSelector imageDataset={imageDataset} onSelectImage={setSelectedImages}  selectedImages={selectedImages}  />
        
     //   </div>
-    <Box m="20px" maxHeight="calc(88vh)" overflow="auto" >
+    <Box m="20px" >
     {/* HEADER */}
     <Box display="flex" justifyContent="space-between" alignItems="center">
-      <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-
-      <Box>
-        <Button
-          sx={{
-            backgroundColor: colors.blueAccent[700],
-            color: colors.grey[100],
-            fontSize: "14px",
-            fontWeight: "bold",
-            padding: "10px 20px",
-          }}
-        >
-          <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-          Download Reports
-        </Button>
-      </Box>
+      
     </Box>
 
     {/* GRID & CHARTS */}
-    <Box
-      display="grid"
-      gridTemplateColumns="repeat(12, 1fr)"
-      gridAutoRows="140px"
-      gap="20px"
-    >
-      {/* ROW 1 */}
+    <Box  display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
+     
       
-       
+        <Box gridColumn="span 8" gridRow="span 4"  backgroundColor={colors.primary[400]}>
+         
+       {/* add color to set you grid element if needed  backgroundColor={colors.primary[200]}  */}
+        <Box  display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
+     
+            <Box gridColumn="span 8" gridRow="span 1"   >
 
-      {/* ROW 2 */}
-      <Box
-        gridColumn="span 8"
-        gridRow="span 4"
-        backgroundColor={colors.primary[400]}
-      >
-        <Box
-          mt="25px"
-          p="0 30px"
-          display="flex "
-          justifyContent="space-between"
-          alignItems="center"
-        >
+            <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
+            <Typography variant="h5"fontWeight="600" color={colors.grey[100]}>  NFT Composer </Typography>
 
+             
+               </Box>
+ 
+            </Box>
 
-          <Box>
-            <Typography
-              variant="h5"
-              fontWeight="600"
-              color={colors.grey[100]}
-            >
-              NFT Composer
-            </Typography>
-            <Typography
-              variant="h3"
-              fontWeight="bold"
-              color={colors.greenAccent[500]}
-            >
-              
-            </Typography>
-          </Box>
-          <Box>
-          <Button variant="outlined"
-           sx={{ typography: 'h3' , color: colors.greenAccent[500] }}
-           style={{
-            color: colors.greenAccent[500],
-            borderColor: colors.greenAccent[500], // Set border color
-            height: "30px",
-            textTransform: 'none', // Prevent text from being transformed to uppercase
-          }}
-           
-           >Mint</Button>
-            <IconButton>
-              <DownloadOutlinedIcon
-                sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-              />
-            </IconButton>
-            <CustomLegend/> 
+          
+            <Box gridColumn="span 4" gridRow="span 1"    >
+            <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >
+          
+
+               <Button variant="outlined" sx={{ typography: 'h5' , color: colors.greenAccent[500] }}
+                    style={{
+                        color: colors.greenAccent[500],
+                        borderColor: colors.greenAccent[500], // Set border color
+                        height: "25px",borderWidth: '2px',
+                        textTransform: 'none', // Prevent text from being transformed to uppercase
+                    }} >Mint
+          
+            </Button>
+             <IconButton> <DownloadOutlinedIcon sx={{ fontSize: "26px", color: colors.greenAccent[500] }}/></IconButton>
             
-          </Box>
-        </Box>
-        <Box height="250px" m="-20px 0 0 0">
+               </Box>
+           </Box>
+
+            <Box gridColumn="span 8" gridRow="span 8" >
+
+            <Box sx={{marginTop:-5,marginLeft:-3,   position: 'relative'    }} >
+                 <ImageComposer   images={selectedImages} />  
+                  
+                 </Box>  
+             </Box>
+
+            <Box gridColumn="span 2" gridRow="span 6" style={debugMode ? { backgroundColor: colors.primary[100] } : {}} > </Box>
+            <Box gridColumn="span 2" gridRow="span 6" style={debugMode ? { backgroundColor: colors.primary[200] } : {}} > </Box>
+            <Box gridColumn="span 2" gridRow="span 2" style={debugMode ? { backgroundColor: colors.primary[300] } : {}} > </Box>
+            <Box gridColumn="span 2" gridRow="span 2"  >
+                <CustomLegend legendItems={legendItems} />
+            </Box>
+
+       </Box>
+       </Box>
+
+      
 
 
-          {/* <LineChart isDashboard={true} /> */}
-          <ImageComposer images={selectedImages} />
 
 
-        </Box>
-      </Box>
+
+
+
+
+
+
+
+
+
 
 
 
        
-       
+      
         
       {/* ROW 3 */}
       <Box
         gridColumn="span 4"
-        gridRow="span 2"
+        gridRow="span 4"
         backgroundColor={colors.primary[400]}
         p="30px"
       >
@@ -210,60 +257,20 @@ const imageDataset = {
           alignItems="center"
           mt="25px"
         >
-           <ImageSelector imageDataset={imageDataset} onSelectImage={setSelectedImages}  selectedImages={selectedImages}  />
-       
+            {data ? (
+           <ImageSelector imageDataset={dataMap} onSelectImage={setSelectedImages}  selectedImages={selectedImages} data={data} />
+           ) : (
+            <div>Loading...</div> // You can replace this with a loading spinner or message
+             )}
+
+
           {/* <ProgressCircle size="125" /> */}
-          <Typography
-            variant="h5"
-            color={colors.greenAccent[500]}
-            sx={{ mt: "15px" }}
-          >
-            $254 claimed
-          </Typography>
-          <Typography>Includes extra misc expenditures and costs</Typography>
+           
         </Box>
       </Box>
-      <Box
-        gridColumn="span 8"
-        gridRow="span 2"
-        backgroundColor={colors.primary[400]}
-        overflow="auto" // overflowY
-      >
-        <Typography
-          variant="h5"
-          fontWeight="600"
-          sx={{ padding: "30px 30px 0 30px" }}
-        >
-          Social Scores
-        </Typography>
-        <Box height="150px" mt="10px">
-          <BarChart isDashboard={true} />
-        </Box>
-      </Box>
+       
 
  
-       {/* ROW 4 */}
-       <Box
-        gridColumn="span 6"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
-       >
-        <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
-         Twitter Board
-        </Typography>
-         
-          <GridTwitter  _height={220} _margin={"0px 0 0 0"}  isDashboard={true}  sx={{  marginBottom: "15px" }} />
-         
-      </Box>
-       
-      <Box
-        gridColumn="span 6"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
-       >
-        <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
-         Discord Board
-        </Typography>
-        <Box height="50px">
-          <GridDiscord isDashboard={true}  sx={{ marginBottom: "15px" }} />
-        </Box>
-      </Box>
 
       <Box
         gridColumn="span 12"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
@@ -280,24 +287,11 @@ const imageDataset = {
        {/* ROW 5 */}
        
 
-      <Box
-        gridColumn="span 12"  gridRow="span 6"  backgroundColor={colors.primary[400]}  padding="30px"
-       >
-        <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
-         Layer Board
-        </Typography>
-         
-          <GridImage isDashboard={true}  sx={{ marginBottom: "15px" }} />
-         
-      </Box>
+      
 
     </Box>
   </Box>
-
-
-
-
-
+ 
 
     );
   };
@@ -310,7 +304,7 @@ const imageDataset = {
 
   const ImageComposer = ({ images }) => {
     return (
-      <div style={{ position: 'relative', width: '600px', height: '600px' }}>
+      <div style={{  position: 'relative', width: '600px', height: '600px' }}>
         {Object.values(images).map((image, index) => (
 
 
@@ -334,18 +328,20 @@ const imageDataset = {
     );
 };
  
-const ImageSelector = ({ imageDataset, onSelectImage, selectedImages }) => {
+const ImageSelector = ({ imageDataset, onSelectImage, selectedImages  ,  data }) => {
+   const _layerSelectorScrollareaHeight =520;
 
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    useEffect(()=>{
+       useEffect(()=>{
         
-        console.log("selectedImages = " + JSON.stringify(selectedImages));
+        console.log(">>    selectedImages = " + JSON.stringify(selectedImages));
       }, [ selectedImages ]);
     
     
-const handleImageSelect = (category, image) => {
-   
+       const handleImageSelect = (category, image   ) => {
+
+
+        console.log(">>>>>>>>>..   image     = " +  image  );
+ 
     /*
       onSelectImage((prevSelectedImages) => ({
  
@@ -360,74 +356,107 @@ const handleImageSelect = (category, image) => {
         throw new Error(`Category '${category}' does not exist in selectedImages.`);
       }
        // Update the value associated with the 'category' key
-      updatedSelectedImages[category] = "layersForCharacterCompo/" + image.src;
+      updatedSelectedImages[category] = "layersForCharacterCompo/" + image ;//.src;
     
 
       console.log("onSelectImage  CATEGO  = " + JSON.stringify(selectedImages));
       // Set the updated state using onSelectImage
       onSelectImage(updatedSelectedImages);
 
- 
+
+
 
     };
-    const customBorderColor = colors.blueAccent[700];
-    const customBorderWidth = colors.greenAccent[500];
-    const customOutlineColor =  colors.grey[500];
+  
     return (
-     
-        <Box>
-        {Object.entries(imageDataset).map(([category, images]) => (
-          <Box key={category} mb={2}>
-            <Typography variant="h6">{category}</Typography>
-            <Grid container spacing={2}>
-              {images.map((image) => (
-                <Grid item xs={12} sm={6} md={4} key={image.id}>
-                  <Box
-                    sx={{
-                      border: `${customBorderWidth} solid ${customBorderColor}`,
-                      borderRadius: "16px",
-                      cursor: 'pointer',
-                      "&:hover": {
-                        borderColor: customOutlineColor,
-                      },
-                    }}
-                  >
-                    <img
-                      src={image.src}
-                      alt={image.id}
-                      onClick={() => handleImageSelect(category, image)}
-                      style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                      }}
-                    />
-                  </Box>
+       
+        <Box maxHeight="calc(75vh)"  overflow="auto" >
+         
+
+{data ? (
+
+
+
+
+     <Box m="0 0 0 0" height= {_layerSelectorScrollareaHeight} > 
+         <Grid container spacing={2}  >
+         {Object.keys(imageDataset).map((category) => (
+
+              
+               imageDataset[category].map((obj, index) => (
+                
+                <Grid item xs={12} sm={6} md={4} key={index} >
+                   <Card
+              sx={{
+                position: 'relative',
+                border: colors.grey[500],
+                backgroundColor: 'transparent',
+              }}
+            >
+              <CardMedia
+                component="img"
+                src={`/${category}/${getNumber(obj.layerName)}.png`}
+                alt={index}
+                onClick={() =>
+                  handleImageSelect(category, `${category}/${getNumber(obj.layerName)}.png`)
+                }
+                style={{
+                  cursor: 'pointer',
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            </Card>
                 </Grid>
-              ))}
-            </Grid>
-          </Box>
-        ))}
-        <Button variant="contained" color="primary" onClick={() => onSelectImage(selectedImages)}>
+              ))
+            ))
+        }
+
+    </Grid>
+       </Box>
+
+
+
+
+
+
+
+
+) : (
+    <div>Loading...</div> // You can replace this with a loading spinner or message
+  )}
+
+
+
+
+
+        
+        {/* <Button variant="contained" color="primary" onClick={() => onSelectImage(selectedImages)}>
           Compose
-        </Button>
+        </Button> */}
       </Box>
 
 
     );
   };
+                      
+                                    
 
-
-  const CustomLegend = () => (
+  const CustomLegend = ({ legendItems     }) => (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Box sx={{ width: 10, height: 10, backgroundColor: "blue" }}></Box>
-        <span>: Label 1</span>
-      </Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Box sx={{ width: 10, height: 10, backgroundColor: "red" }}></Box>
-        <span>: Label 2</span>
-      </Box>
-      {/* Add more legend items as needed */}
+       {legendItems.map((item, index) => (
+    <Box
+      key={index}
+      sx={{ marginLeft: '20px' }}
+      display="flex"
+      justifyContent="flex-start"
+      alignItems="center"
+      height="100%"
+    >
+      <Box sx={{ width: 15, height: 10, backgroundColor: item.color }}></Box>
+      <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {item.label} </Typography>
+    </Box>
+  ))}
     </Box>
   );
   

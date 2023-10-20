@@ -2,10 +2,12 @@ import {useEffect, useState} from "react";
 
 import { Box } from "@mui/material";
 
-import Grid from '@mui/material/Grid';          // Update this import
-import Card from '@mui/material/Card';          // Update this import
-import CardMedia from '@mui/material/CardMedia'; // Update this import
+import Grid from '@mui/material/Grid';          
+import Card from '@mui/material/Card';          
 import ImageCard from "./ImageCard";
+
+import CardMedia from '@mui/material/CardMedia'; // Update this import
+
 import { tokens } from "../theme";
   
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
@@ -18,7 +20,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';//@mui/lab/Toggl
 import { useTheme } from "@mui/material";
  
  let i =0;
-const LayerGrid = ( {queryId ="", isDashboard = false }  ) => {
+const GridImage = ( {queryId ="", isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -55,23 +57,7 @@ const [data, setData] = useState(); // Set rowData to Array of Objects, one Obje
 
 useEffect(() => {
   // in this case we would be on the profile page
- 
-  if (!isDashboard){
-    
-      if (!user) {
-
-        console.log("queryId: USER == null     "   );
-       // setQueryId(""); // Use setQueryId to update the value
-      } else {
-        console.log("queryId: USER condition     "   );
-      //  setQueryId("&userId=423608837900206091&limit=1"); // Use setQueryId to update the value
-      }
-     
-     
-  } 
-  //console.log("isDashboard =", isDashboard  , "user    = " , user); // This will log the updated value of data
   
- // setQueryId("&userId=423608837900206091"); // Use setQueryId to update the value
  
 }, [user , isDashboard]);
 
@@ -92,7 +78,7 @@ useEffect(() => {
 
 
 const fetchCategoryData = async (category , adding = true) => {
-   //"&userId=423608837900206091";
+    
    console.log("fetchCategoryData: queryId  >>>>>>>>>>>   " +  queryId   +  "  i  "   +  i  + "adding  " +  adding);
     i++;
   if (adding) {
@@ -212,11 +198,11 @@ useEffect(() => {
   );
 };
 
-export default LayerGrid;
+export default GridImage;
 
  
 // number/int would be the token ID
-
+// should be utility function
  function getNumber( input){
   //const input = "he09";
   const lastTwoDigits = parseInt(input.slice(-2), 10)

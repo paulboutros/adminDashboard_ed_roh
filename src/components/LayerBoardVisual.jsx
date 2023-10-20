@@ -4,7 +4,7 @@
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
- 
+//import {  Avatar, Tooltip } from "@mui/core";
 
 
 import {useEffect, useState} from "react";
@@ -24,28 +24,61 @@ const DiscordGrid = ( { isDashboard = false }  ) => {
 
 //==========================================================================
 // pb added to fetch data
-const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+ 
+// pb added to fetch data
+//const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+
+const [userData, setUserData] = useState( );
+const [groupedLayers, set_groupedLayers] = useState( );
+
+ 
 useEffect(()=>{
   (async ()=> {
-    const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=discord&limit=${10}`; // make it specific (filter to discord fields)
+
+     
+  
+    const endpoint = `${process.env.REACT_APP_API_URL}getLayersFull`;
+
     const result  = await fetch(endpoint);
+    // const result  = await fetch("https://express-to-vercel-main-fawn.vercel.app/getData");
+     
+   const resultsJson = await result.json();
+  
     
-   //const result  = await fetch("/api/findUsersWithNonZeroProperties");
-    const resultsJson = await result.json();
-    
-   
+   setUserData(resultsJson );
+
+   //const groupedLayers = userData.map((user) => {
+     const _groupedLayers = resultsJson.map((user) => {
+    return {
+      id: user.id,
+      discord: user.discord,
+      wallet: user.wallet,
+      layers: Object.keys(user.layers).map((category) => {
+        return user.layers[category].map((layerId) => ({
+          category: category,
+          layerId: layerId,
+          imageURL: `${category}/${layerId}.png`,
+        }));
+      }),
+    };
+  });
+  set_groupedLayers(_groupedLayers);
+
+  console.log(JSON.stringify(_groupedLayers, null, 2));
 
 
-
-   setRowData(resultsJson );
  
    })();
 
 }, [ ]);
 
 useEffect(() => {
+   
+}, [userData]);
+ 
+
+
   
-}, [data]);
  
 
 const legendItems = [
@@ -97,10 +130,15 @@ const columns = [
  */
   
 {
-  field: "discord",
+    field: "layers",
   headerName: "Access Level",
-  flex: 1,
-  renderCell: ({ row: { access } }) => {
+  flex: 5,
+   // renderCell: (params) => <UserLayers layers={params.value} />,
+
+
+  
+    //  renderCell: ({ row: { layers } }) => {
+        renderCell: ( layers ) => {
     return (
       <Box
         width="60%"
@@ -109,25 +147,23 @@ const columns = [
         display="flex"
         justifyContent="center"
         backgroundColor={
-          access === "admin"
-            ? colors.greenAccent[600]
-            : access === "manager"
-            ? colors.greenAccent[700]
-            : colors.greenAccent[700]
+           
+            colors.greenAccent[600]
+            
         }
         borderRadius="4px"
       >
-
-       <LockOpenOutlinedIcon />
-        {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-        {access === "manager" && <SecurityOutlinedIcon />}
-        {access === "user" && <LockOpenOutlinedIcon />}
-        <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-          {access}
-        </Typography>
+       
+     <UserLayers layers={layers.value} /> 
+  
+     <CustomLegend legendItems={legendItems}   layers={layers.value}     />
+       
       </Box>
     );
   },
+ 
+
+
 },
 
 
@@ -276,11 +312,12 @@ const columns = [
         }}
       >
 
-      {data ? (
+      {userData ? (
        <Box m="40px 0 0 0" height= {_height} style={{ width: '101%' }} > 
         <DataGrid
-          rows={data}
-          columns={columns}
+        //   rows={userData} columns={columns}
+         
+          rows={groupedLayers} columns={columns}  
           // components={{ Toolbar: GridToolbar }}
           {...(!isDashboard && { components: { Toolbar: GridToolbar } })}
           rowHeight={_rowHeight} // Set the row height to 40 pixels
@@ -303,6 +340,44 @@ const columns = [
 export default DiscordGrid;
 
 
+
+const UserLayers = ({ layers }) => {
+    return (
+        
+         
+        <Box>
+        {layers.map((item, index) => (
+     <Box
+       
+     >
+       <Box sx={{ width: 10, height: 50, backgroundColor: item.color }}></Box>
+      
+          <img
+              key={index}
+              src= "he/1.png"
+              alt={`Layer ${index + 1}`}
+              style={{
+                // position: 'absolute',
+                  top: 0,
+                // left: 0,
+                 width: '50%',
+                 height: '50%',
+              }}
+            />
+       
+
+        
+        
+       <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {layers[0].imageURL} </Typography>
+     </Box>
+   ))}
+     </Box>
+    );
+  };
+
+
+
+
 function MyComponent() {
   return (
      <Grid container spacing={2}>
@@ -319,7 +394,7 @@ function MyComponent() {
 
 
 
-const CustomLegend = ({ legendItems     }) => (
+const CustomLegend = ({ legendItems  ,layers    }) => (
   <Box>
      {legendItems.map((item, index) => (
   <Box
@@ -331,7 +406,10 @@ const CustomLegend = ({ legendItems     }) => (
     height="100%"
   >
     <Box sx={{ width: 15, height: 10, backgroundColor: item.color }}></Box>
-    <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {item.label} </Typography>
+
+     
+     {/* <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {item.label} </Typography> */}
+    <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {layers[0][0].imageURL} </Typography>
   </Box>
 ))}
   </Box>

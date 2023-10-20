@@ -21,10 +21,7 @@ useEffect(()=>{
   (async ()=> {
 
      
-  //  console.log("🚀 ~ file: GridAllLayer.jsx:25 ~ process:", process)
-
-  //REACT_APP_API_URL="http://localhost:2000/getData"
-    // https://express-to-vercel-main-fawn.vercel.app/getData
+  
     const endpoint = `${process.env.REACT_APP_API_URL}getData`;
 
     const result  = await fetch(endpoint);
