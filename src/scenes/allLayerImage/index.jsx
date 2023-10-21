@@ -28,15 +28,15 @@ const AllLayerImage = () => {
 
  return (
   <Box m="20px" maxHeight="calc(85vh)"  overflow="auto"  >  
-     <Header title="All Layer image" subtitle="Image for all NFT Layers" />
-     {/* <Box m="40px 0 0 0" height="73vh"  overflow="auto"> */}
-     <Box m="40px 0 0 0"   >
+     {/* <Header title="All Layer image" subtitle="Image for all NFT Layers" /> */}
+     
+     <Box   >
     
-     {user ? ( 
-      <ImageComposer  queryId= {`&userId=${user.ID}&limit=1`}   /> 
-      ) : (
-        <div>User is not defined.</div>
-      )}
+     {/* {user ? ( <ImageComposer  queryId= {`&userId=${user.ID}&limit=1`}/>  ) : ( <div>User is not defined.</div> )} */}
+     <ImageComposer/>
+      
+       
+      
  
        <GridImage/>
      </Box>

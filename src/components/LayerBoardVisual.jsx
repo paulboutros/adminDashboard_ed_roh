@@ -14,7 +14,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import Grid from '@mui/material/Grid';
 
- 
+
 
 const DiscordGrid = ( { isDashboard = false }  ) => {
   const theme = useTheme();
@@ -80,7 +80,7 @@ useEffect(() => {
 
   
  
-
+const debugMode = true; 
 const legendItems = [
   { color: colors.blueAccent[400], label: 'Label 1' },
   { color: colors.blueAccent[500], label: 'Label 2' },
@@ -132,34 +132,57 @@ const columns = [
 {
     field: "layers",
   headerName: "Access Level",
-  flex: 5,
+  flex: 10,
    // renderCell: (params) => <UserLayers layers={params.value} />,
 
 
   
     //  renderCell: ({ row: { layers } }) => {
-        renderCell: ( layers ) => {
-    return (
-      <Box
-        width="60%"
-        m="0 auto"
-        p="5px"
-        display="flex"
-        justifyContent="center"
-        backgroundColor={
-           
-            colors.greenAccent[600]
-            
-        }
-        borderRadius="4px"
-      >
+    renderCell: ( params ) => {
+            return (
+           <Box   sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%"   >
+     
+     {/* <Box  display="grid" gridTemplateColumns="repeat(3, 1fr)" gridAutoRows="60px" gap="0">
+     
+        <Box gridColumn="span 4" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.primary[100] } : {}}   > </Box>
+        <Box gridColumn="span 4" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.primary[300] } : {}}   > </Box>
+        <Box gridColumn="span 4" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.primary[500] } : {}}   > </Box>
+     </Box> */}
+
+        {/* <RenderCell_1 debugMode={debugMode} colors={colors}  />; */}
+        
+        {/* <Typography >  {"lAAA"} </Typography>
+        <Typography >  {params.value.length} </Typography>  */}
        
-     <UserLayers layers={layers.value} /> 
+         
+        {params.value[0].length > 0 ? (
+  <Grid container spacing={0} className="image-grid"  width= '50%'  >
+    {params.value[0].map((item, index) => (
+      <Grid item xs={2}  key={index}>
+        
+        <img
+          src={item.imageURL}
+          alt={`Layer ${index + 1}`}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        />
+      </Grid>
+    ))}
+  </Grid>
+) : null}
+
+        {/* <UserLayers layers={layers.value}/> */}
+     {/* <UserLayers layers={layers.value} /> 
   
-     <CustomLegend legendItems={legendItems}   layers={layers.value}     />
+     <CustomLegend legendItems={legendItems}   layers={layers.value}     /> */}
        
       </Box>
     );
+
+
+    
   },
  
 
@@ -167,7 +190,7 @@ const columns = [
 },
 
 
-
+/*
   {
     field: "walletShort",
     headerName: "Wallet",
@@ -214,18 +237,18 @@ const columns = [
     flex: 1,
     cellClassName: "name-column--cell",
     
-  }  
+  }  ,
 
-  
-  /*
+  */
+ 
   {
     field: "discord",
     headerName: "Discord",
-    flex: 1,
+    flex: 4,
     cellClassName: "name-column--cell",
     
   } 
-*/
+ 
 
 ];
  
@@ -320,7 +343,7 @@ const columns = [
           rows={groupedLayers} columns={columns}  
           // components={{ Toolbar: GridToolbar }}
           {...(!isDashboard && { components: { Toolbar: GridToolbar } })}
-          rowHeight={_rowHeight} // Set the row height to 40 pixels
+          rowHeight={60}  // Set the row height to 40 pixels {_rowHeight}
            headerHeight={_headerHeight}   
            footerHeight={_footerHeight}   
           
@@ -339,7 +362,38 @@ const columns = [
 
 export default DiscordGrid;
 
+const RenderCell_1 = ({ debugMode , colors }) => {
+     return (
+ 
+        <Box  display="grid" gridTemplateColumns="repeat(3, 1fr)" gridAutoRows="60px" gap="0">
+     
+        <Box gridColumn="span 4" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.primary[500] } : {}}   > </Box>
+        <Box gridColumn="span 2" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.redAccent[300] } : {}}   > </Box>
 
+     <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
+
+     <img
+              key={0}
+              src= "he/1.png"
+              alt={`Layer ${1 + 1}`}
+              style={{
+                // position: 'absolute',
+                  top: 0,
+                // left: 0,
+                 width: '30%',
+                 height: '30%',
+              }}
+            />
+       
+
+     </Box>  
+   </Box> 
+
+
+
+    )
+
+}
 
 const UserLayers = ({ layers }) => {
     return (
@@ -350,11 +404,11 @@ const UserLayers = ({ layers }) => {
      <Box
        
      >
-       <Box sx={{ width: 10, height: 50, backgroundColor: item.color }}></Box>
-      
+        
+       <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>  {item.imageURL} </Typography>
           <img
               key={index}
-              src= "he/1.png"
+              src= {item.imageURL}
               alt={`Layer ${index + 1}`}
               style={{
                 // position: 'absolute',
@@ -368,7 +422,7 @@ const UserLayers = ({ layers }) => {
 
         
         
-       <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {layers[0].imageURL} </Typography>
+    
      </Box>
    ))}
      </Box>

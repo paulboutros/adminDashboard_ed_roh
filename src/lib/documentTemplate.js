@@ -1,10 +1,5 @@
-//import { Module } from "module";
-  
-// what a freshly created user should look like
-//export const newUserDocument = 
-
-  
-  
+ 
+  /*
 
    export const newUserDocumentTemplate ={
 
@@ -39,4 +34,4 @@
   }
    
 
- 
+ */

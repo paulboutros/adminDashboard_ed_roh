@@ -1,6 +1,6 @@
 
 //import axios from "axios";
-
+import axios from "axios";
 export async function  authorize   () {
   //const getData_enpPoint = API_URL + "getData";
   const endpoint = `${process.env.REACT_APP_API_URL}authorize`; // make it specific (filter to twitter fields)
@@ -10,7 +10,7 @@ export async function  authorize   () {
   
    return resultsJson;
 } 
-
+let tempClickAmount = 0;
 export async function  getUserMe   () {
 
 
@@ -97,4 +97,69 @@ export async function  getData   () {
     
      return resultsJson;
    } 
+
+    // send click data
+   export async function  sendTracking(user , category, image  ) {
+    //const getData_enpPoint = API_URL + "getData";
+     
+
+
+    let  userID;
+    let userType;
+
+    if ( user ){
+        userID = user.ID ;
+        userType = "authenticated";
+    }else{
+      userID = "";
+      userType = "guest";
+    }
+     
+
+
+   const dataToSend= { 
+      ID: userID ,
+      userType : userType,
+      oneClick: 
+        {
+          layer:{ category, image }, // for example:  he , 4 "he04"
+          button: "Button react app ",
+          pageSource: "composittion",
+          time: "2023-10-16 14:30:15" 
+        }
+      
+    }
+ 
+
+  console.log("tempClickAmount  "    +  tempClickAmount  )  
+  if ( user ){
+  //REACT_APP_YOUROAUTH2URL
+ 
+  }else{
+      console.log("   tempClickAmount   ==   "   +  tempClickAmount);
+     if (  tempClickAmount  > 10 ){
+      tempClickAmount = 0;
+      const url = process.env.REACT_APP_YOUROAUTH2URL;
+      window.open(url, '_blank'); // Opens in a new tab or window
+
+     } 
+  }
+
+
+    const endpoint = `${process.env.REACT_APP_API_URL}sendTracking`; // make it specific (filter to twitter fields)
+     const result = await axios.post(endpoint, dataToSend);
+ 
+     tempClickAmount++;
+   // axios use result.data   instead of just ersult
+    // console.log("result"   , result.data);
+   //const resultsJson = await result.data;
+    
+     //return resultsJson;
+   } 
+
+
+ 
+
+
+
  

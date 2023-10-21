@@ -3,7 +3,9 @@ import   { useEffect , useState } from 'react';
 import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
 import CardMedia from '@mui/material/CardMedia';
 
+//import API from "../data/API"
 
+import {sendTracking} from "../data/API"
 import { tokens } from "../theme";
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -11,22 +13,11 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
  
 import Card from '@mui/material/Card';  
-import Header from "./Header";
-import LineChart from "./LineChart";
+ 
  
 import GridAllLayer from "./GridAllLayer";  
-import GridImage from "./GridImage";  
-import GridDiscord from "./GridDiscord";  
-import GridTwitter from "./GridTwitter";  
-import BarChart from "./BarChart";
  
-import ProgressCircle from "./ProgressCircle";
  
-
-import {getBackgroundColor} from "../Utils/utils.js"
-
-
-
 
 // loads images in dataset
 
@@ -76,10 +67,11 @@ const imageDataset = {
      return lastTwoDigits;
    }
  
-  const AppCompo = (  {queryId }  ) => {
+  const LayerSelector = (  {queryId="" }  ) => {
  
     const [dataMap, setDataMap] = useState({}); 
     const [data, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
+
     const fetchCategoryData = async (category  ) => {
     
      
@@ -154,11 +146,7 @@ const imageDataset = {
     });
   
     return (
-    //   <div>
-    //    
-    //     <ImageSelector imageDataset={imageDataset} onSelectImage={setSelectedImages}  selectedImages={selectedImages}  />
-       
-    //   </div>
+    
     <Box m="20px" >
     {/* HEADER */}
     <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -189,7 +177,17 @@ const imageDataset = {
             <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >
           
 
-               <Button variant="outlined" sx={{ typography: 'h5' , color: colors.greenAccent[500] }}
+              <Button variant="outlined"// sx={{ typography: 'h5' , color: "#65582B" }}
+                    style={{
+                        color:  "#b4a770",
+                        borderColor:  "#f0c435", // Set border color
+                        height: "25px",borderWidth: '2px',
+                        textTransform: 'none', // Prevent text from being transformed to uppercase
+                    }} > $50
+          
+               </Button>   
+
+               <Button variant="outlined" //sx={{ typography: 'h5' , color: colors.greenAccent[500] }}
                     style={{
                         color: colors.greenAccent[500],
                         borderColor: colors.greenAccent[500], // Set border color
@@ -197,7 +195,11 @@ const imageDataset = {
                         textTransform: 'none', // Prevent text from being transformed to uppercase
                     }} >Mint
           
-            </Button>
+               </Button>
+               
+ 
+
+
              <IconButton> <DownloadOutlinedIcon sx={{ fontSize: "26px", color: colors.greenAccent[500] }}/></IconButton>
             
                </Box>
@@ -221,25 +223,7 @@ const imageDataset = {
        </Box>
        </Box>
 
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        
-      
         
       {/* ROW 3 */}
       <Box
@@ -258,6 +242,10 @@ const imageDataset = {
           mt="25px"
         >
             {data ? (
+
+                
+     
+
            <ImageSelector imageDataset={dataMap} onSelectImage={setSelectedImages}  selectedImages={selectedImages} data={data} />
            ) : (
             <div>Loading...</div> // You can replace this with a loading spinner or message
@@ -296,7 +284,7 @@ const imageDataset = {
     );
   };
   
-  export default AppCompo;
+  export default LayerSelector;
 
 
 
@@ -329,27 +317,30 @@ const imageDataset = {
 };
  
 const ImageSelector = ({ imageDataset, onSelectImage, selectedImages  ,  data }) => {
+
+     const { user } = useUserContext();
+
    const _layerSelectorScrollareaHeight =520;
+
+    
+
+    
+
 
        useEffect(()=>{
         
-        console.log(">>    selectedImages = " + JSON.stringify(selectedImages));
+      //  console.log(">>    selectedImages = " + JSON.stringify(selectedImages));
       }, [ selectedImages ]);
     
     
        const handleImageSelect = (category, image   ) => {
 
 
-        console.log(">>>>>>>>>..   image     = " +  image  );
+         
  
-    /*
-      onSelectImage((prevSelectedImages) => ({
- 
-        ...prevSelectedImages,
-        [category]: "layersForCharacterCompo/"+image.src, // Assuming 'image' is an object with a 'url' property
-  
-      }));
- */
+        sendTracking(user , category, image);
+
+
       const updatedSelectedImages = { ...selectedImages };
 
       if (!updatedSelectedImages.hasOwnProperty(category)) {

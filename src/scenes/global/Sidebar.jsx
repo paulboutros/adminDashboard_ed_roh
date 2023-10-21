@@ -175,7 +175,7 @@ const Sidebar = () => {
                
 
             <Item
-              title="Dashboard"
+              title="NFT Composer"
               to="/"
               icon={<HomeOutlinedIcon />}
               selected={selected}
@@ -197,7 +197,7 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Data
+              Social Contest
             </Typography>
             <Item
               title="Discord Board"
@@ -206,13 +206,15 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+
+          
+            {/* <Item
               title="Layer Board"
               to="/AllLayerGrid"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Twitter Board"
               to="/twitterBoard"
@@ -220,13 +222,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Layer image"
-              to="/allLayerImage"
-              icon={<ReceiptOutlinedIcon />}
+            {/* <Item
+              title="Dashboard"
+              to="/dashboard"
+              icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Typography
               variant="h6"
@@ -257,7 +259,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-            <Typography
+            {/* <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
@@ -270,7 +272,9 @@ const Sidebar = () => {
               icon={<BarChartOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
+
+
             {/* <Item
               title="Pie Chart"
               to="/pie"
@@ -278,13 +282,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             /> */}
-            <Item
+
+            {/* <Item
               title="Line Chart"
               to="/line"
               icon={<TimelineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             {/* <Item
               title="Geography Chart"
               to="/geography"

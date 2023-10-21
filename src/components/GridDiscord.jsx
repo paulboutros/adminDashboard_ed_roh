@@ -21,10 +21,12 @@ const DiscordGrid = ( { isDashboard = false }  ) => {
   const colors = tokens(theme.palette.mode);
 
 
-
+   
 //==========================================================================
 // pb added to fetch data
 const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Objects, one Object per Row
+
 useEffect(()=>{
   (async ()=> {
     const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=discord&limit=${10}`; // make it specific (filter to discord fields)
@@ -33,8 +35,15 @@ useEffect(()=>{
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
     const resultsJson = await result.json();
     
-   
+    const temp = resultsJson.map((item) => ({
 
+      discord: item.discord,
+      id: item.id,
+      data: { ...item },
+    }));
+    temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
+
+      setNewDataList(temp);
 
 
    setRowData(resultsJson );
@@ -59,42 +68,8 @@ const legendItems = [
 
 
 
-
-const columns = [
-//  { field: "_id", headerName: "ID", flex: 0.5 },
 /*
-{
-  field: "Access",
-  headerName: "Access Level",
-  flex: 1,
-  renderCell: ({ row: { access } }) => {
-    return (
-      <Box
-        width="60%"
-        m="0 auto"
-        p="5px"
-        display="flex"
-        justifyContent="center"
-        backgroundColor={
-          access === "admin"
-            ? colors.greenAccent[600]
-            : access === "manager"
-            ? colors.greenAccent[700]
-            : colors.greenAccent[700]
-        }
-        borderRadius="4px"
-      >
-        {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-        {access === "manager" && <SecurityOutlinedIcon />}
-        {access === "user" && <LockOpenOutlinedIcon />}
-        <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-          {access}
-        </Typography>
-      </Box>
-    );
-  },
-},
- */
+const columns = [
   
 {
   field: "discord",
@@ -181,7 +156,7 @@ const columns = [
   }  
 
   
-  /*
+   
   {
     field: "discord",
     headerName: "Discord",
@@ -189,10 +164,105 @@ const columns = [
     cellClassName: "name-column--cell",
     
   } 
-*/
+ 
 
 ];
+ */
+
+
+
+const columns = [
  
+  {
+    field: "discord",
+    headerName: "Discord",
+    flex: 5,
+    cellClassName: "name-column--cell",
+    
+  } ,
+  {
+    field: "data",
+    headerName: "Access Level",
+    flex: 15,
+    renderCell: (params) => {
+      return (
+        <Box>
+         
+        {/* <Typography >  {params.value.id} </Typography>    */}
+           
+         <RenderCellA debugMode ={true}   colors={colors}  data={params.value}  /> 
+  
+        
+        </Box>
+      );
+    },
+  },
+  
+  
+  
+    {
+      field: "walletShort",
+      headerName: "Wallet",
+      flex: 1,
+      cellClassName: "name-column--cell" 
+      
+  
+      
+    } ,
+    {
+      field: "invite_code",
+      headerName: "Invite Code",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      
+    } ,
+  
+  
+    {
+      field: "invite_use",
+      headerName: "Invite Use",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      
+    } ,
+  
+    {
+      field: "fake_invite",  
+      headerName: "Fake Invite",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      
+    } , 
+    {
+      field: "total",   
+      headerName: "Discord Score",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      
+    } , 
+    {
+      field: "scoreShareAbsolute",   
+      headerName: "Score share",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      
+    }  
+  
+    
+    /*
+    {
+      field: "discord",
+      headerName: "Discord",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      
+    } 
+  */
+  
+  ];
+
+
+
  
   const _height = isDashboard ? 220: 340 ;//  "25vh": "75vh" ;
   const _rowHeight = isDashboard ?  20: 40 ;
@@ -276,10 +346,10 @@ const columns = [
         }}
       >
 
-      {data ? (
+      {newDataList ? (
        <Box m="40px 0 0 0" height= {_height} style={{ width: '101%' }} > 
         <DataGrid
-          rows={data}
+          rows={newDataList}
           columns={columns}
           // components={{ Toolbar: GridToolbar }}
           {...(!isDashboard && { components: { Toolbar: GridToolbar } })}
@@ -302,6 +372,82 @@ const columns = [
 
 export default DiscordGrid;
 
+const RenderCellA = ({ debugMode , colors , data }) => {
+  return (
+
+     <Box  display="grid" gridTemplateColumns="repeat(3, 1fr)" gridAutoRows="60px" gap="0">
+  
+     {/* <Box gridColumn="span 4" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.primary[500] } : {}}   > </Box>
+     <Box gridColumn="span 2" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.redAccent[300] } : {}}   > </Box> */}
+
+ <Box
+    key={0}
+    sx={{ marginLeft: '20px' }}
+    display="flex"
+    justifyContent="flex-start"
+    alignItems="center"
+    height="100%"
+  >
+    {/* <Box sx={{ width: data.invite_use * 30 , height: 10, backgroundColor:    colors.greenAccent[600]  }}>
+
+      
+    <Typography  display="flex" justifyContent="flex-end" alignItems="center" height="100%"  >
+      {data.invite_use}
+    </Typography>
+
+
+    </Box> */}
+
+<Box sx={{ width: data.invite_use * 30, height: 10, backgroundColor: colors.greenAccent[600] }}></Box>
+<Box
+  sx={{
+    width: (data.invite_use + 10) * 30, // Adjust the width difference
+    height: 10,
+    backgroundColor:   colors.blueAccent[600],
+   
+    top: 0, // Position it at the same level as the background bar
+    left: 10 * 30, // Offset it by the width of the background bar
+  }}
+></Box>
+
+
+
+
+
+
+
+    </Box>
+
+
+
+
+
+  
+
+  {/* <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" > */}
+
+  {/* <img
+           key={0}
+           src= "he/1.png"
+           alt={`Layer ${1 + 1}`}
+           style={{
+             // position: 'absolute',
+               top: 0,
+             // left: 0,
+              width: '30%',
+              height: '30%',
+           }}
+         /> */}
+    
+
+  {/* </Box>   */}
+</Box> 
+
+
+
+ )
+
+}
 
 function MyComponent() {
   return (

@@ -40,7 +40,10 @@ function App() {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               
-              <Route path="/" element={<Dashboard />} />
+              {/* <Route path="/" element={<Dashboard />} /> */}
+              <Route path="/" element={<AllLayerImage />} />
+
+              
               <Route path="/profile" element={<Profile/>} />
               <Route path="/team" element={<Team/>} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />

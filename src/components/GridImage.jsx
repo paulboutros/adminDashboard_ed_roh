@@ -51,9 +51,7 @@ const [selectedCategories, setSelectedCategories] =   useState(["he","sh"]); // 
 const [dataMap, setDataMap] = useState({}); 
 const [data, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
-//const [queryId, setQueryId] = useState("&userId=423608837900206091&limit=1");
  
-
 
 useEffect(() => {
   // in this case we would be on the profile page

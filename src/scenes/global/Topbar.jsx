@@ -1,6 +1,6 @@
  
 import { Box, IconButton, useTheme  , Button } from "@mui/material";
-import { useContext} from "react";
+import { useContext ,  useEffect } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -26,24 +26,11 @@ const Topbar = () => {
 
   const { user } = useUserContext();
 
+   
+ 
 
-
-    /*
-   const[user, SetUser ]= useState(null);
-
-
-    async function getMe(){
-
-      const response = await getUserMe();
-  
-      SetUser(response);
-
-    }
-    useEffect(()=>{
-      getMe();
-    
-    }, [ ]);
-*/
+   
+ 
 
 
   
