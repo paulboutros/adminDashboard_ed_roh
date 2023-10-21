@@ -178,7 +178,7 @@ useEffect(() => {
                     <ImageCard
                       image={`/${category}/${getNumber(obj.layerName)}.png`}
                       title={`${obj.layerName}`}
-                      extraInfo={`owner ${obj.wallet}`}
+                      extraInfo={`owner ${obj.walletshort}`}
                     />
                   </Card>
                 </Grid>

@@ -99,7 +99,7 @@ export async function  getData   () {
    } 
 
     // send click data
-   export async function  sendTracking(user , category, image  ) {
+   export async function  sendTracking(user , category, image, _button,  _pageSource   ) {
     //const getData_enpPoint = API_URL + "getData";
      
 
@@ -123,15 +123,15 @@ export async function  getData   () {
       oneClick: 
         {
           layer:{ category, image }, // for example:  he , 4 "he04"
-          button: "Button react app ",
-          pageSource: "composittion",
-          time: "2023-10-16 14:30:15" 
+          button: _button ,
+          pageSource:  _pageSource ,
+          time: new Date() 
         }
       
     }
  
 
-  console.log("tempClickAmount  "    +  tempClickAmount  )  
+  console.log("tempClickAmount  "    +  tempClickAmount    +  "      ", JSON.stringify(dataToSend, null, 2)        )  
   if ( user ){
   //REACT_APP_YOUROAUTH2URL
  

@@ -1,23 +1,25 @@
 import   { useEffect , useState } from 'react';
 
 import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
-import CardMedia from '@mui/material/CardMedia';
+
 
 //import API from "../data/API"
 
 import {sendTracking} from "../data/API"
-import { tokens } from "../theme";
+
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
  
+import { tokens } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
  
+import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';  
  
  
 import GridAllLayer from "./GridAllLayer";  
  
- 
+ import PopupButton  from "./popup"
 
 // loads images in dataset
 
@@ -82,7 +84,7 @@ const imageDataset = {
           const result = await fetch(endpoint);
           const resultsJson = await result.json();
      
-          console.log(JSON.stringify(resultsJson, null, 2));
+        //   console.log(JSON.stringify(resultsJson, null, 2));
 
           // Add or update the category data in dataMap
           setDataMap((prevDataMap) => ({
@@ -171,21 +173,58 @@ const imageDataset = {
                </Box>
  
             </Box>
-
+    
+            {/* sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          }, */}
           
             <Box gridColumn="span 4" gridRow="span 1"    >
             <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >
           
 
-              <Button variant="outlined"// sx={{ typography: 'h5' , color: "#65582B" }}
+               
+               {/*if you lock a combinasion, you still need to own the layer to claim, but only you can claim */}
+               <Button variant="outlined" 
                     style={{
                         color:  "#b4a770",
                         borderColor:  "#f0c435", // Set border color
                         height: "25px",borderWidth: '2px',
                         textTransform: 'none', // Prevent text from being transformed to uppercase
-                    }} > $50
+                    }} 
+                     
+                    >LOCK
+            
+               </Button >
+               <PopupButton
+                        text="Claim $50" // Pass the text as a prop
+                        style={{
+                            color: '#b4a770',
+                            borderColor: '#f0c435',
+                            height: '25px',
+                            width: '100px',
+                            borderWidth: '2px',
+                            textTransform: 'none',
+                            // Add any other custom styles here
+                    }}
+                    selectedImages ={ selectedImages}
+                     
+                  
+                   
+                  />
+                
+
+
+                {/*save it as a remider, if you think you will soon be able to get all the layer to claim it*/}
+               <Button variant="outlined"// sx={{ typography: 'h5' , color: "#65582B" }}
+                    style={{
+                        color:  "#b4a770",
+                        borderColor:  "#f0c435", // Set border color
+                        height: "25px",borderWidth: '2px',
+                        textTransform: 'none', // Prevent text from being transformed to uppercase
+                    }} >SAVE
           
-               </Button>   
+               </Button> 
 
                <Button variant="outlined" //sx={{ typography: 'h5' , color: colors.greenAccent[500] }}
                     style={{
@@ -259,7 +298,7 @@ const imageDataset = {
        
 
  
-
+{/* 
       <Box
         gridColumn="span 12"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
        >
@@ -269,7 +308,7 @@ const imageDataset = {
          
           <GridAllLayer isDashboard={true}  sx={{ marginBottom: "15px" }} />
          
-      </Box>
+      </Box> */}
 
 
        {/* ROW 5 */}
@@ -337,8 +376,8 @@ const ImageSelector = ({ imageDataset, onSelectImage, selectedImages  ,  data })
 
 
          
- 
-        sendTracking(user , category, image);
+        
+        sendTracking(user , category, image, "setSelectedImages" ,  "ImageComposer " );
 
 
       const updatedSelectedImages = { ...selectedImages };

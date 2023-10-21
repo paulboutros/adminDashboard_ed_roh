@@ -15,7 +15,8 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-//import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+ 
+import {sendTracking} from "../../data/API"
 
 //provider
 import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
@@ -27,7 +28,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  
+  const { user } = useUserContext();
   
   return (
     <MenuItem
@@ -35,7 +36,10 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       style={{
         color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)}
+      onClick={() =>{
+         setSelected(title)
+         sendTracking(user , "N/A", "N/A" , title ,  "Side Bar " ) 
+        }}
       icon={icon}
     >
       <Typography>{title}</Typography>
@@ -161,7 +165,7 @@ const Sidebar = () => {
                 
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  {/* VP Fancy Admin */}
                 </Typography>
               </Box>
             </Box>

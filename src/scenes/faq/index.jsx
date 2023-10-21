@@ -17,26 +17,32 @@ const FAQ = () => {
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography color={colors.greenAccent[500]} variant="h5">
-            An Important Question
+            How can I claim a character combo reward
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            To claim a combo reward, you simply need to own the set of layers the character is made of.
+
           </Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography color={colors.greenAccent[500]} variant="h5">
-            Another Important Question
+            How can I get layers?
+           There is free and paid options to get layers:
+           - free - you particiape to the give away and you will recieve one or more layers randomly choosen by the
+           app algorithm
+           - free, an other member can transfert one to you
+           - prenium - see the set of plan, to recieve X amount of layers per week
+           - prenium - buy it from an other member
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            How get my free layers and get all the benefit of the giveaway.
+            
           </Typography>
         </AccordionDetails>
       </Accordion>
