@@ -205,7 +205,7 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Discord Board"
-              to="/team"
+              to="/discordBoard"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

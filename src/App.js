@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar.jsx";
 import Sidebar from "./scenes/global/Sidebar.jsx";
 import Dashboard from "./scenes/dashboard/index.jsx";
-import Team from "./scenes/team/index.jsx";
+import DiscordBoard from "./scenes/discordBoard/index.jsx";
 
 import Profile from "./scenes/profile/index.jsx";
 import TwitterBoard from "./scenes/twitterBoard/index.jsx";
@@ -45,7 +45,7 @@ function App() {
 
               
               <Route path="/profile" element={<Profile/>} />
-              <Route path="/team" element={<Team/>} />
+              <Route path="/discordBoard" element={<DiscordBoard/>} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />
               <Route path="/allLayerImage" element={<AllLayerImage />} />
               

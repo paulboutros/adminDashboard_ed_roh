@@ -9,7 +9,7 @@ import Header from "../../components/Header";
 
 import GridDiscord from "../../components/GridDiscord";
 
-const Team = () => {
+const DiscordBoard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
@@ -81,4 +81,4 @@ const Team = () => {
   );
 };
 
-export default Team;
+export default DiscordBoard;
