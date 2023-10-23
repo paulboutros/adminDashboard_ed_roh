@@ -3,7 +3,8 @@
  import FavoriteIcon from '@mui/icons-material/Favorite';
  
 import StatBox from "./StatBox";
-
+import StatBoxDiscord from "./StatBoxDiscord";
+import CustomLegend from "./Legend"
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 
@@ -14,13 +15,38 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../theme";
 import Grid from '@mui/material/Grid';
 
+import ProgressBar from 'react-bootstrap/ProgressBar';
+
 const debugMode = true;
-const barScaleFactor = 20;
+ 
+const grid_gap ="20px";
+
+const box_horiz_align =
+
+{display: 'flex', 
+  justifyContent: 'flex-start',
+   alignItems: 'center',
+    height: '100%',
+    
+  }
+  const box_vertical_align = {
+    display: 'flex', // Create a flex container
+    flexDirection: 'column', // Stack child elements vertically
+  };
+
+
+
 const DiscordGrid = ( { isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-
+  const legendItems = [
+    { color: colors.blueAccent[400], label: 'Label 1' },
+    { color: colors.blueAccent[500], label: 'Label 2' },
+    { color: colors.greenAccent[400], label: 'Label 3' },
+    { color: colors.greenAccent[500], label: 'Label 4' }
+    // Add more legend items as needed
+  ];
    
 //==========================================================================
 // pb added to fetch data
@@ -55,113 +81,7 @@ useEffect(()=>{
 useEffect(() => {
   
 }, [data]);
- 
- 
-
-
-/*
-const columns = [
   
-{
-  field: "discord",
-  headerName: "Access Level",
-  flex: 1,
-  renderCell: ({ row: { access } }) => {
-    return (
-      <Box
-        width="60%"
-        m="0 auto"
-        p="5px"
-        display="flex"
-        justifyContent="center"
-        backgroundColor={
-          access === "admin"
-            ? colors.greenAccent[600]
-            : access === "manager"
-            ? colors.greenAccent[700]
-            : colors.greenAccent[700]
-        }
-        borderRadius="4px"
-      >
-
-       <LockOpenOutlinedIcon />
-        {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-        {access === "manager" && <SecurityOutlinedIcon />}
-        {access === "user" && <LockOpenOutlinedIcon />}
-        <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-          {access}
-        </Typography>
-      </Box>
-    );
-  },
-},
-
-
-
-  {
-    field: "walletShort",
-    headerName: "Wallet",
-    flex: 1,
-    cellClassName: "name-column--cell" 
-    
-
-    
-  } ,
-  {
-    field: "invite_code",
-    headerName: "Invite Code",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  } ,
-
-
-  {
-    field: "invite_use",
-    headerName: "Invite Use",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  } ,
-
-  {
-    field: "fake_invite",  
-    headerName: "Fake Invite",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  } , 
-  {
-    field: "total",   
-    headerName: "Discord Score",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  } , 
-  {
-    field: "scoreShareAbsolute",   
-    headerName: "Score share",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  }  
-
-  
-   
-  {
-    field: "discord",
-    headerName: "Discord",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  } 
- 
-
-];
- */
-
-
-
 const columns = [
  
   {
@@ -248,11 +168,10 @@ const columns = [
   const _footerHeight = isDashboard ?  20: 40 ;
   return (
     <Box  >
-      <FavoriteIcon
-            sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-          />
-        <OneBar data={20} text ={"REWARD PRIZE POOL"}  colors ={ colors.greenAccent[600] } />
+      
+        {/* <OneBar useCursor={true} data={20} text ={"REWARD PRIZE POOL"}  colors ={ colors.greenAccent[600] } /> */}
          <PoolRewardInfo/> 
+         {/* <CustomLegend legendItems={legendItems} orientation="horizontal" />     */}
         <Box
         
         sx={{
@@ -266,6 +185,7 @@ const columns = [
             color: colors.greenAccent[300],
           },
           "& .MuiDataGrid-columnHeaders": {
+             
             backgroundColor: colors.blueAccent[700],
             borderBottom: "none",
           },
@@ -330,7 +250,7 @@ const columns = [
       >
 
       {newDataList ? (
-       <Box m="40px 0 0 0" height= {_height} style={{ width: '101%' }} > 
+       <Box m= {` ${grid_gap}  0 0 0 `} height= {_height} style={{ width: '101%' }} > 
         <DataGrid
           rows={newDataList}
           columns={columns}
@@ -363,61 +283,51 @@ const columns = [
 
 export default DiscordGrid;
 
+function GetLegendColor(  type){    
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+    if (type === "message"){
+
+      return colors.grey[500];
+    }
+
+     return  null;
+
+}
+
 const RenderCellA = ({ debugMode , colors , data }) => {
   return (
 
-     <Box  display="grid" gridTemplateColumns="repeat(3, 1fr)" gridAutoRows="60px" gap="0">
-  
-     {/* <Box gridColumn="span 4" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.primary[500] } : {}}   > </Box>
-     <Box gridColumn="span 2" gridRow="span 1"   style={debugMode ? { backgroundColor: colors.redAccent[300] } : {}}   > </Box> */}
+     
 
- <Box
-    key={0}
-    sx={{ marginLeft: '20px' }}
+   <Box
+    
+  
+  >
+       <Box
+    // key={0}
+    sx={{ marginLeft: '5px' }}
     display="flex"
    
     alignItems="center"
     height="100%"
+  
   >
-    
-
-  {/* invite sent */}
-     <OneBar data={data.invite_use} text ={"invite used"}  colors ={ colors.greenAccent[600] } />
-     <OneBar data={data.invite_sent} text ={"invite sent"}  colors ={ colors.blueAccent[600] }  minus={data.invite_use} />
+  
+     <OneBar data={data.invite_use} text ={"used"}  colors ={ colors.greenAccent[600] } />
+     <OneBar data={data.invite_sent} text ={""}  colors ={ colors.blueAccent[600] }  minus={data.invite_use} />
      
-{/* invite sent END */}
-
-
-
-
-
+     </Box>
+  
+     <Box  sx={{ marginLeft: '5px' }}>
+    
+     <OneBar data={data.message} text ={""}  colors ={  GetLegendColor("message")  } />
+     </Box>
 
     </Box>
-
-
-
-
-
-  
-
-  {/* <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" > */}
-
-  {/* <img
-           key={0}
-           src= "he/1.png"
-           alt={`Layer ${1 + 1}`}
-           style={{
-             // position: 'absolute',
-               top: 0,
-             // left: 0,
-              width: '30%',
-              height: '30%',
-           }}
-         /> */}
     
-
-  {/* </Box>   */}
-</Box> 
+ 
 
 
 
@@ -425,7 +335,7 @@ const RenderCellA = ({ debugMode , colors , data }) => {
 
 }
 
-function OneBar( {data , text,  colors , minus = 0}) {
+function OneBar( {data , text,  colors , minus = 0, useCursor = false , barScaleFactor  = 20}) { 
   return (
 
     <div> 
@@ -434,7 +344,7 @@ function OneBar( {data , text,  colors , minus = 0}) {
     sx={{  width: (data - minus ) * barScaleFactor,   height: 10,  backgroundColor:   colors,
 
 top: 0, // Position it at the same level as the background bar
-left: 30, // Offset it by the width of the background bar
+left: 0, // Offset it by the width of the background bar
    }}
 
 >
@@ -443,40 +353,68 @@ left: 30, // Offset it by the width of the background bar
 {data <= 3 ? "" : `${text}`}  {data}
 </Typography>
 
+
+
+ 
+{data > 3 && useCursor ? (
+
+    
+            <div
+              style={{
+                position: 'relative',
+                top: -25,
+                
+                left: (data - minus ) * barScaleFactor     - 10,
+                width: 10,
+                height: 10,
+                // backgroundColor: 'red',
+              }}
+            >
+                 
+                {/* <FavoriteIcon   sx={{ color:  colors, fontSize: "26px" }} /> */}
+                <FavoriteIcon   sx={{ color:  colors, fontSize: "15px" }} /> 
+          
+
+
+
+
+
+              {/* You can place an icon or text here */}
+            </div>
+          ) : null}
+  
+
+
 </Box>
 </div>
   );
 }
 
 
-
-const CustomLegend = ({ legendItems     }) => (
-  <Box>
-     {legendItems.map((item, index) => (
-  <Box
-    key={index}
-    sx={{ marginLeft: '20px' }}
-    display="flex"
-    justifyContent="flex-start"
-    alignItems="center"
-    height="100%"
-  >
-    <Box sx={{ width: 15, height: 10, backgroundColor: item.color }}></Box>
-    <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {item.label} </Typography>
-  </Box>
-))}
-  </Box>
-);
+ 
 
 
 function PoolRewardInfo() {
+
+  
+  
+  
+   
+
 
   const { user } = useUserContext();
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const legendItems = [ 
+    { color:  GetLegendColor("message") , label:  'messages' },
     
+   { color: colors.blueAccent[500], label: 'sent Invites' },
+   { color: colors.greenAccent[400], label: 'Used Invites' } 
+   
+   // Add more legend items as needed
+ ];
   const [glData, setGlobalData] = useState(); // Set rowData to Array of Objects, one Object per Row
   async function GetData(){
 
@@ -487,9 +425,9 @@ function PoolRewardInfo() {
    }
   
     useEffect(()=>{
-       if (!user)return;
+       //if (!user)return;
       GetData();
-    }, [ user ]);
+    }, [   ]);
 
  
   return (
@@ -498,20 +436,20 @@ function PoolRewardInfo() {
     display="grid"
     gridTemplateColumns="repeat(12, 1fr)"
     gridAutoRows="60px"
-    gap="20px"
+    gap= {grid_gap}  
   >
     {/* ROW 1 */}
     
     
     <Box
-      gridColumn="span 3"
+      gridColumn="span 4"
       gridRow="span 2"
       backgroundColor={colors.primary[400]}
       display="flex"
       alignItems="center"
       justifyContent="center"
     >
-      <StatBox
+      <StatBoxDiscord
        title={glData && glData.length > 0 ? glData[0].all_invites_used : "Default Value"}
 
         subtitle="total Invite used"
@@ -522,12 +460,16 @@ function PoolRewardInfo() {
             sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
           />
         }
+        discordLegend ={
+
+          <CustomLegend legendItems={legendItems}   />    
+        }
       />
     </Box>
 
      {/* Reward pool begin */}
     <Box
-      gridColumn="span 3"
+      gridColumn="span 2"
       gridRow="span 2"
       backgroundColor={colors.primary[400]}
     >
@@ -539,22 +481,52 @@ function PoolRewardInfo() {
         alignItems="center"
       >
         <Box>
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            color={colors.grey[100]}
-          >
+          <Typography   variant="h5"  fontWeight="600"  color={colors.grey[100]}  >
+          
             Reward Pool
           </Typography>
-          <Typography
-            variant="h3"
-            fontWeight="bold"
-            color={colors.greenAccent[500]}
-          >
-             {/* {glData && glData.length > 0 ?glData[0].all_retweets : "Default Value"} */}
-             {glData && glData.length > 0 ? `$${glData[0].reward_pool}` : "Default Value"}
-              
+          <Typography  variant="h3"  fontWeight="bold"  color={colors.greenAccent[500]}  >
+
+           $1000    
+           {/* {glData && glData.length > 0 ? `$${glData[0].reward_pool}` : "Default Value"} */}
+             
           </Typography>
+           
+      {/* box just for space */}
+          <Box height="5px" /> 
+
+ 
+
+          {/* <Box sx={ box_horiz_align  } >
+            
+         
+          <Box   sx={ box_vertical_align }  >
+              
+              <Typography variant="h5"  >
+              1st
+              </Typography>
+              <Typography variant="h5" sx={{ color: colors.greenAccent[500] }}>
+              $500         
+              </Typography>
+
+         </Box>
+
+         <Box   sx={ box_vertical_align }  >
+              
+              <Typography variant="h5"  >
+              1st
+              </Typography>
+              <Typography variant="h5" sx={{ color: colors.greenAccent[500] }}>
+              $500
+              </Typography>
+              
+         </Box>
+
+          
+ 
+          </Box> */}
+  
+
         </Box>
         
       </Box>
@@ -586,7 +558,7 @@ function PoolRewardInfo() {
             fontWeight="600"
             color={colors.grey[100]}
           >
-            Smart Contract #
+            Smart Contract # (Mock Data)
           </Typography>
           <Typography
             variant="h3"
@@ -594,7 +566,7 @@ function PoolRewardInfo() {
             color={colors.greenAccent[500]}
           >
              {/* {glData && glData.length > 0 ?glData[0].all_retweets : "Default Value"} */}
-             {"x0f7875515455545445454 (Mock Data)"  }
+             {"0x4eba90B4124DA7240C7Cd36A9EFE7Ff9F81Cf601"  }
               
           </Typography>
         </Box>
@@ -605,7 +577,45 @@ function PoolRewardInfo() {
       </Box>
     </Box>
 
-    
+     {/* legend */}
+     {/* <Box
+      gridColumn="span 12"
+      gridRow="span 0.5"
+      backgroundColor={colors.primary[400]}
+    >
+      <Box
+        mt="25px"
+        p="0 30px"
+        display="flex "
+        justifyContent="space-between"
+        alignItems="center"
+      >
+
+       
+        <Box sx={ box_horiz_align  }>
+          <Typography    
+            variant="h5"
+            fontWeight="600"
+            color={colors.grey[100]}
+          >
+          
+          </Typography>
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            color={colors.greenAccent[500]}
+          >
+            
+             <CustomLegend legendItems={legendItems} orientation="horizontal" />    
+              
+          </Typography>
+        </Box>
+        
+      </Box>
+      <Box height="250px" m="-20px 0 0 0">
+        
+      </Box>
+    </Box> */}
     
   </Box>
 
@@ -652,3 +662,14 @@ const RewardBox = ({ title, subtitle, icon, progress, increase }) => {
     </Box>
   );
 };
+
+
+function StackedExample() {
+  return (
+    <ProgressBar>
+      <ProgressBar striped variant="success" now={35} key={1} />
+      <ProgressBar variant="warning" now={20} key={2} />
+      <ProgressBar striped variant="danger" now={10} key={3} />
+    </ProgressBar>
+  );
+}

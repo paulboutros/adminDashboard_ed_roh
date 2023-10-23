@@ -2,7 +2,7 @@ import   { useEffect , useState } from 'react';
 
 import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
 
-
+import CustomLegend from "./Legend"
 //import API from "../data/API"
 
 import {sendTracking} from "../data/API"
@@ -119,7 +119,7 @@ const imageDataset = {
       
   const debugMode = false;
 
-    const { user } = useUserContext();
+    
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -246,7 +246,7 @@ const imageDataset = {
 
             <Box gridColumn="span 8" gridRow="span 8" >
 
-            <Box sx={{marginTop:-5,marginLeft:-3,   position: 'relative'    }} >
+            <Box  >
                  <ImageComposer   images={selectedImages} />  
                   
                  </Box>  
@@ -328,10 +328,10 @@ const imageDataset = {
 
 
 
-
+// warning (check element on chrome to make sure it does not overlap the top-right button)
   const ImageComposer = ({ images }) => {
     return (
-      <div style={{  position: 'relative', width: '600px', height: '600px' }}>
+      <Box style={{  position: 'relative', width: '580px', height: '580px', top: 0  }}>
         {Object.values(images).map((image, index) => (
 
 
@@ -343,7 +343,7 @@ const imageDataset = {
               alt={`Layer ${index + 1}`}
               style={{
                 position: 'absolute',
-                top: 0,
+                top: -20,
                 left: 0,
                 width: '100%',
                 height: '100%',
@@ -351,7 +351,7 @@ const imageDataset = {
             />
           )
         ))}
-      </div>
+      </Box>
     );
 };
  
@@ -471,7 +471,7 @@ const ImageSelector = ({ imageDataset, onSelectImage, selectedImages  ,  data })
   };
                       
                                     
-
+/*
   const CustomLegend = ({ legendItems     }) => (
     <Box>
        {legendItems.map((item, index) => (
@@ -489,4 +489,4 @@ const ImageSelector = ({ imageDataset, onSelectImage, selectedImages  ,  data })
   ))}
     </Box>
   );
-  
+  */
