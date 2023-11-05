@@ -17,7 +17,7 @@ import Pie from "./scenes/pie/index.jsx";
 import FAQ from "./scenes/faq/index.jsx";
 import Geography from "./scenes/geography/index.jsx";
 import GetLayers from "./scenes/getLayers/index.jsx";
-
+import Maintenance  from "./scenes/maintenance/index.jsx";
 // provider
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
@@ -34,6 +34,31 @@ import Calendar from "./scenes/calendar/calendar.jsx";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+
+  if ( process.env.REACT_APP_MAINTENANCE === "true"  ){
+
+    return (  
+     
+    
+    <div className="app">
+    
+    <main className="content">
+      
+      <Routes>
+
+      <Route path="/" element={<Maintenance />} />
+      
+        
+      </Routes>
+    </main>
+  </div>
+
+    
+    
+    
+    )
+  }
+    
 
   return (
 
@@ -56,10 +81,8 @@ function App() {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               
-              {/* <Route path="/" element={<Dashboard />} /> */}
               <Route path="/" element={<AllLayerImage />} />
-
-              
+               
               <Route path="/profile" element={<Profile/>} />
               <Route path="/discordBoard" element={<DiscordBoard/>} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />
@@ -92,7 +115,7 @@ function App() {
   </DiscordProvider>
     </UserProvider>
 
-  );
+  ); 
 }
 
 export default App;
