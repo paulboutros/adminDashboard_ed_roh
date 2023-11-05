@@ -22,7 +22,7 @@ useEffect(()=>{
     //const getData_enpPoint = API_URL + "getData";
     const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=twitter&limit=${10}`; // make it specific (filter to twitter fields)
     const result  = await fetch(endpoint);
-   //const result  = await fetch("/api/findUsersWithNonZeroProperties");
+
    const resultsJson = await result.json();
     
    

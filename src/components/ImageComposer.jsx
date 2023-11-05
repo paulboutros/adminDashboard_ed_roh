@@ -1,5 +1,6 @@
 import   { useEffect , useState } from 'react';
 
+
 import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
 
 import CustomLegend from "./Legend"
@@ -12,67 +13,20 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
  
 import { tokens } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
- 
+import { useAllLayersContext } from '../context/AllLayerAvailableContext'; 
+
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';  
  
- 
+import LayerBaseInfo from "./LayerBaseInfo";
 import GridAllLayer from "./GridAllLayer";  
  
  import PopupButton  from "./popup"
-
-// loads images in dataset
-
-// Define the base directory where the images are located.
-const baseDir = 'layersForCharacterCompo';
-
-const imageDataset = {
-    head: [
-      { id: 1, src: 'he/1.png', alt: 'Head 1' },
-      { id: 2, src: 'he/2.png', alt: 'Head 2' },
-      { id: 3, src: 'he/3.png', alt: 'Head 3' },
-    ],
-    
-    shield: [
-      { id: 1, src: 'sh/1.png', alt: 'Shield 1' },
-      { id: 2, src: 'sh/2.png', alt: 'Shield 2' },
-      { id: 3, src: 'sh/3.png', alt: 'Shield 3' },
-    ],
-    weapon: [
-      { id: 1, src: 'we/1.png', alt: 'Weapon 1' },
-      { id: 2, src: 'we/2.png', alt: 'Weapon 2' },
-      { id: 3, src: 'we/3.png', alt: 'Weapon 3' },
-    ],
-    belt: [
-        { id: 1, src: 'be/1.png', alt: 'belt 1' },
-        { id: 2, src: 'be/2.png', alt: 'belt 2' },
-        { id: 3, src: 'be/3.png', alt: 'belt 3' },
-      ],
-    collar: [
-        { id: 1, src: 'co/1.png', alt: 'collar 1' }
-        
-      ],
-
-    body: [
-      { id: 1, src: 'bo/1.png', alt: 'Body 1' }
-       
-    ], 
-    forearn: [
-        { id: 1, src: 'fa/1.png', alt: 'forearm 1' }
-         
-      ]  
-  };
-
-  function getNumber( input){
-    //const input = "he09";
-    const lastTwoDigits = parseInt(input.slice(-2), 10)
-     return lastTwoDigits;
-   }
+ 
  
   const LayerSelector = (  {queryId="" }  ) => {
  
-    const [dataMap, setDataMap] = useState({}); 
-    const [data, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
+   //  const [ownedLayers, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
 
     const fetchCategoryData = async (category  ) => {
     
@@ -80,18 +34,14 @@ const imageDataset = {
    
         try {
           // Fetch data for the category
-           const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}${queryId}`;
+            const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}${queryId}`;
           const result = await fetch(endpoint);
           const resultsJson = await result.json();
      
-        //   console.log(JSON.stringify(resultsJson, null, 2));
 
-          // Add or update the category data in dataMap
-          setDataMap((prevDataMap) => ({
-            ...prevDataMap, // Spread the existing data
-            [category]: resultsJson, // Add or update the category with the new value
-          }));
+        
 
+        //  setData(ownedLayers);
 
         } catch (error) {
           console.error(`Error fetching data for ${category}: ${error}`);
@@ -106,15 +56,9 @@ const imageDataset = {
         fetchCategoryData("he");  fetchCategoryData("we"); fetchCategoryData("sh"); 
     }, [ ]);
      
-      useEffect(() => {
-  const flatDataArray = Object.values(dataMap).reduce((accumulator, categoryData) => {
-    // Use the spread operator to merge the category data arrays into the accumulator
-    return [...accumulator, ...categoryData];
-  }, []);
-
-  // Now, flatDataArray contains all data from all selected categories
-  setData(flatDataArray);
-}, [dataMap]); 
+ useEffect(() => {
+    
+}, [ ]); 
 
       
   const debugMode = false;
@@ -130,27 +74,59 @@ const imageDataset = {
         { color: colors.greenAccent[500], label: 'Label 4' }
         // Add more legend items as needed
       ];
+ 
+   const [RewardPrice, SetRewardPrice]= useState("0");  
+    const [selectedImages, setSelectedImages] = useState(null
+     
 
 
+    );
 
-    const [selectedImages, setSelectedImages] = useState({
+
+     const GetRewardPrice = async ( ) => {
+
       
-     forearn: 'layersForCharacterCompo/fa/1.png', // Example image paths
-     bo: 'layersForCharacterCompo/bo/1.png', // Example image paths
-     be: 'layersForCharacterCompo/be/1.png',  // Example image paths
-     we: 'layersForCharacterCompo/we/1.png', // Example image paths
-     
-     collar: 'layersForCharacterCompo/co/1.png', // Example image paths
-     he: 'layersForCharacterCompo/he/1.png', // Example image paths
-     sh: 'layersForCharacterCompo/sh/1.png'  // Example image paths
-     
+        const kn = selectedImages["kn"][0].layerName;
+        const he = selectedImages["he"][0].layerName;
+        const sh = selectedImages["sh"][0].layerName;
+        const we = selectedImages["we"][0].layerName;
+        const be = selectedImages["be"][0].layerName;
+      try {
+        
+        console.log("  >>>>>>  GetRewardPriceGetRewardPrice   he =  " , he );
 
-    });
+        const endpoint = `${process.env.REACT_APP_API_URL}GetReward?he=${he}&sh=${sh}&we=${we}&be=${be}&kn=${kn}`;
+        const result = await fetch(endpoint);
+        const rewardPrizeObject = await result.json();
+ 
+
+         console.log("  >>>>>>  rewardPrizeObject" , rewardPrizeObject );
+          SetRewardPrice ( rewardPrizeObject.finalRewardPrice.toString()    );
+       
+        
+
+      } catch (error) {
+        console.error(`Error fetching data for he=${he}&sh=${sh}&we=${we}&be=${be}&kn=${kn}`);
+      }
+      
+     
+   };
+  
+       useEffect(()=>{
+       if (!selectedImages) return;
+       
+         GetRewardPrice( );
+
+        
+       
+      }, [ selectedImages ]);
+ 
+
   
     return (
     
     <Box m="20px" >
-    {/* HEADER */}
+   
     <Box display="flex" justifyContent="space-between" alignItems="center">
       
     </Box>
@@ -174,10 +150,7 @@ const imageDataset = {
  
             </Box>
     
-            {/* sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          }, */}
+            
           
             <Box gridColumn="span 4" gridRow="span 1"    >
             <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >
@@ -196,8 +169,11 @@ const imageDataset = {
                     >LOCK
             
                </Button >
+
+
+              { selectedImages ? (
                <PopupButton
-                        text="Claim $50" // Pass the text as a prop
+                        text=   {`Claim $${RewardPrice}`}  
                         style={{
                             color: '#b4a770',
                             borderColor: '#f0c435',
@@ -208,11 +184,10 @@ const imageDataset = {
                             // Add any other custom styles here
                     }}
                     selectedImages ={ selectedImages}
-                     
-                  
-                   
-                  />
-                
+               />
+               ):(
+                <p></p>
+               )}
 
 
                 {/*save it as a remider, if you think you will soon be able to get all the layer to claim it*/}
@@ -247,7 +222,7 @@ const imageDataset = {
             <Box gridColumn="span 8" gridRow="span 8" >
 
             <Box  >
-                 <ImageComposer   images={selectedImages} />  
+                <ImageComposer images={   selectedImages  } />  
                   
                  </Box>  
              </Box>
@@ -280,15 +255,14 @@ const imageDataset = {
           alignItems="center"
           mt="25px"
         >
-            {data ? (
+          
+          
+<div> 
+     Click the following the layers to test combination and see prize reward associated.
+     <ImageSelector  onSelectImage={setSelectedImages}  selectedImages={selectedImages}  />
 
-                
-     
-
-           <ImageSelector imageDataset={dataMap} onSelectImage={setSelectedImages}  selectedImages={selectedImages} data={data} />
-           ) : (
-            <div>Loading...</div> // You can replace this with a loading spinner or message
-             )}
+</div>
+          
 
 
           {/* <ProgressCircle size="125" /> */}
@@ -296,50 +270,51 @@ const imageDataset = {
         </Box>
       </Box>
        
-
- 
-{/* 
-      <Box
-        gridColumn="span 12"  gridRow="span 2"  backgroundColor={colors.primary[400]}  padding="30px"
-       >
-        <Typography  variant="h5" fontWeight="600" sx={{ marginBottom: "0px" }} >
-         Layer Board
-        </Typography>
-         
-          <GridAllLayer isDashboard={true}  sx={{ marginBottom: "15px" }} />
-         
-      </Box> */}
-
-
-       {/* ROW 5 */}
-       
-
+  
       
 
     </Box>
-  </Box>
+   </Box>
  
 
     );
   };
   
   export default LayerSelector;
+ 
+function SelectedImages_filtered( selectedImages ){
+
+     
+  const excludedKeys = ["forearn", "bo", "collar"];
+  const filteredImages = Object.keys(selectedImages).reduce((result, key) => {
+    if (!excludedKeys.includes(key)) {
+      result[key] = selectedImages[key];
+    }
+    return result;
+  }, {});
 
 
+
+}
 
 
 // warning (check element on chrome to make sure it does not overlap the top-right button)
   const ImageComposer = ({ images }) => {
+
+
+      if (!images)return null;
+
+
     return (
       <Box style={{  position: 'relative', width: '580px', height: '580px', top: 0  }}>
-        {Object.values(images).map((image, index) => (
+        { Object.values(images).map((image, index) => (
 
 
-         
+         // [{ imagePath:"layersForCharacterCompo/" + image,  layerName: 1, owning:0 }]
           image && ( // Check if the image is not null
             <img
               key={index}
-              src={image}
+              src= {image[0].imagePath} // {image}
               alt={`Layer ${index + 1}`}
               style={{
                 position: 'absolute',
@@ -350,115 +325,119 @@ const imageDataset = {
               }}
             />
           )
-        ))}
+        )) 
+        }
       </Box>
     );
 };
  
-const ImageSelector = ({ imageDataset, onSelectImage, selectedImages  ,  data }) => {
+ 
+// get all layers from user, and update to add owning, and supply info for
+// also update selected image so they match the default character combination
+const ImageSelector = ({   onSelectImage, selectedImages  }) => {
+ 
 
      const { user } = useUserContext();
+    const { allLayers} = useAllLayersContext(); 
+ 
 
    const _layerSelectorScrollareaHeight =520;
+   
+  // getlayer supply should only change when a new layer is given away
+   useEffect( ()=>{
+      if (!allLayers)return;
 
-    
+      onSelectImage(null);
 
-    
-
-
-       useEffect(()=>{
-        
-      //  console.log(">>    selectedImages = " + JSON.stringify(selectedImages));
-      }, [ selectedImages ]);
-    
-    
-       const handleImageSelect = (category, image   ) => {
-
-
+       
+         // from 1 to 11
          
+      const he_rand = Math.floor(Math.random() * 10)+1;    const he = allLayers.he[he_rand];
+      const sh_rand = Math.floor(Math.random() * 10)+1;    const sh = allLayers.sh[sh_rand];
+
+      const we_rand = Math.floor(Math.random() * 10)+1;    const we = allLayers.we[we_rand];
+      const be_rand = Math.floor(Math.random() * 10)+1;    const be = allLayers.be[be_rand];
+
+      const kn_rand = Math.floor(Math.random() * 10)+1;    const kn = allLayers.kn[kn_rand];
+      
+      
+      onSelectImage( {
+        forearn: [{ imagePath:`layersForCharacterCompo/fa/1.png`,  layerName: 1, owning:0 }]  ,  // Example image paths
+        bo:      [{ imagePath:`layersForCharacterCompo/bo/1.png`,  layerName: 1, owning:0 }] , // Example image paths
+        kn:      [{ imagePath:`layersForCharacterCompo/kn/${kn_rand }.png`,  layerName: kn_rand, owning:kn.owning }] , // Example image paths
+        be:      [{ imagePath:`layersForCharacterCompo/be/${be_rand }.png`,  layerName: be_rand, owning:be.owning }]  ,  // Example image paths
+        we:      [{ imagePath:`layersForCharacterCompo/we/${we_rand }.png`,  layerName: we_rand, owning:we.owning }] , // Example image paths
         
-        sendTracking(user , category, image, "setSelectedImages" ,  "ImageComposer " );
-
-
-      const updatedSelectedImages = { ...selectedImages };
-
-      if (!updatedSelectedImages.hasOwnProperty(category)) {
-        throw new Error(`Category '${category}' does not exist in selectedImages.`);
+        collar:  [{ imagePath:`layersForCharacterCompo/co/1.png`,  layerName: 1, owning:0 }] , // Example image paths
+        he:      [{ imagePath:`layersForCharacterCompo/he/${he_rand }.png`,  layerName: he_rand, owning:he.owning }] , // Example image paths
+        sh:      [{ imagePath:`layersForCharacterCompo/sh/${sh_rand }.png`,  layerName: sh_rand, owning:sh.owning }]   // Example image paths
+        
+        
       }
-       // Update the value associated with the 'category' key
-      updatedSelectedImages[category] = "layersForCharacterCompo/" + image ;//.src;
+         
+      );
+ 
     
+    }, [ allLayers ]);
+ 
 
-      console.log("onSelectImage  CATEGO  = " + JSON.stringify(selectedImages));
-      // Set the updated state using onSelectImage
-      onSelectImage(updatedSelectedImages);
+//onSelectImage which is SetSelected image passed by parent component
+// will update images once we click on one image fromlayer selection bowar
+  const handleImageSelect = (category, obj   ) => {
 
-
-
-
-    };
+    const image = `${category}/${obj.layerName }.png`
+    //`${category}/${obj.layerName }.png`
+ 
+          
+         
+         sendTracking(user , category, image, "setSelectedImages" ,  "ImageComposer " );
+ 
+ 
+       const updatedSelectedImages = { ...selectedImages };
+ 
+       if (!updatedSelectedImages.hasOwnProperty(category)) {
+         throw new Error(`Category '${category}' does not exist in selectedImages.`);
+       }
+        // Update the value associated with the 'category' key
+       //updatedSelectedImages[category] = "layersForCharacterCompo/" + image ;//.src;
+     
+       updatedSelectedImages[category] =
+        [{ imagePath:"layersForCharacterCompo/" + image, 
+         layerName: obj.layerName,
+          owning: obj.owning }]
+ 
+          console.log( "category" , category,    "OBJ  = ",  obj );
+ 
+       console.log("onSelectImage  CATEGO  = ",  updatedSelectedImages );
+       // Set the updated state using onSelectImage
+       onSelectImage(updatedSelectedImages);
+   
+ 
+     };
+    
   
     return (
        
         <Box maxHeight="calc(75vh)"  overflow="auto" >
-         
-
-{data ? (
-
-
-
+        
 
      <Box m="0 0 0 0" height= {_layerSelectorScrollareaHeight} > 
-         <Grid container spacing={2}  >
-         {Object.keys(imageDataset).map((category) => (
 
-              
-               imageDataset[category].map((obj, index) => (
-                
-                <Grid item xs={12} sm={6} md={4} key={index} >
-                   <Card
-              sx={{
-                position: 'relative',
-                border: colors.grey[500],
-                backgroundColor: 'transparent',
-              }}
-            >
-              <CardMedia
-                component="img"
-                src={`/${category}/${getNumber(obj.layerName)}.png`}
-                alt={index}
-                onClick={() =>
-                  handleImageSelect(category, `${category}/${getNumber(obj.layerName)}.png`)
-                }
-                style={{
-                  cursor: 'pointer',
-                  maxWidth: '100%',
-                  height: 'auto',
-                }}
-              />
-            </Card>
-                </Grid>
-              ))
-            ))
-        }
+      { allLayers ? ( 
+           <LayerBaseInfo   
+          //  layerToChooseFrom={ layerToChooseFrom}   allLayers
+             layerToChooseFrom={ allLayers}   
+             handleImageSelect ={handleImageSelect} 
+            colors ={colors}
+            />
+            ):(
 
-    </Grid>
+              <p> layer loading... </p>
+            )
+      }
+
        </Box>
-
-
-
-
-
-
-
-
-) : (
-    <div>Loading...</div> // You can replace this with a loading spinner or message
-  )}
-
-
-
-
+ 
 
         
         {/* <Button variant="contained" color="primary" onClick={() => onSelectImage(selectedImages)}>
@@ -469,24 +448,4 @@ const ImageSelector = ({ imageDataset, onSelectImage, selectedImages  ,  data })
 
     );
   };
-                      
-                                    
-/*
-  const CustomLegend = ({ legendItems     }) => (
-    <Box>
-       {legendItems.map((item, index) => (
-    <Box
-      key={index}
-      sx={{ marginLeft: '20px' }}
-      display="flex"
-      justifyContent="flex-start"
-      alignItems="center"
-      height="100%"
-    >
-      <Box sx={{ width: 15, height: 10, backgroundColor: item.color }}></Box>
-      <Typography variant="h6"  sx={{ marginLeft: '5px' }} color={item.color}>   {item.label} </Typography>
-    </Box>
-  ))}
-    </Box>
-  );
-  */
+ 

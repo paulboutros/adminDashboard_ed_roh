@@ -193,7 +193,17 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+             <Item
+              title="Get Layers"
+              to="getLayers"//  "/userProfile"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
            
+           
+
 
 
             <Typography
@@ -218,7 +228,7 @@ const Sidebar = () => {
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            /> */}
+            /> 
             <Item
               title="Twitter Board"
               to="/twitterBoard"
@@ -226,6 +236,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            */}
             {/* <Item
               title="Dashboard"
               to="/dashboard"

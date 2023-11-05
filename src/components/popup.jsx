@@ -1,66 +1,42 @@
 import React, { useState } from 'react';
-//import Button from '@mui/material/Button';
+import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
  
 import { tokens } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
-import {Grid, Box ,Button, IconButton, Typography, useTheme, colors } from "@mui/material";
+import { useAppLinkContext } from '../context/AppLinkContext.js';
+import {openOAuth2Url } from "../data/API";
 
-import CardMedia from '@mui/material/CardMedia';
-import Card from '@mui/material/Card';  
+import {  Box ,Button,   Typography, useTheme  } from "@mui/material";
+
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 import {sendTracking} from "../data/API"
 
-const debugMode = true;
-
-
-const showImage =() =>{
-
-
-
-
-    return(
-
-<div>
-
-
-
-
-</div>
-
-
-
-
-
-
-    );
-}
-
+import LayerBaseInfo from  "./LayerBaseInfo";
+    
+import ReferrerComponent from "./ReferrerComponent"
+import AppLinkDataBox from "./AppLinkDataBox";
+import { useAllLayersContext } from '../context/AllLayerAvailableContext';
 
 const PopupButton =  ({ text, style , selectedImages   }) => {
-
  
+  const { appLink } = useAppLinkContext();
     const { user } = useUserContext();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
     sendTracking(user , "category", "image" , "Claim" ,  "imageComposer jsx")   ;
   const [open, setOpen] = useState(false);
-
-
-
-  const excludedKeys = ["forearn", "bo", "collar"];
-
  
-    
-const modifiedImageData = Object.fromEntries(
-    Object.entries(selectedImages)
-      .filter(([key]) => !excludedKeys.includes(key))
-      .map(([key, imageUrl]) => [key, imageUrl.replace('layersForCharacterCompo/', '')])
-  );
+  
+  const filteredImages = GetfilteredImages(selectedImages);
 
+  // this should be an Api call
+  CheckComBoValidity(filteredImages);
 
   const handleOpen = () => {
     setOpen(true);
@@ -69,75 +45,258 @@ const modifiedImageData = Object.fromEntries(
   const handleClose = () => {
     setOpen(false);
   };
- 
-
-
-
+   
 
   return (
     <div>
+ 
+          
+
       <Button variant="outlined" style={style} onClick={handleOpen}   >
          {text}
       </Button>
 
-      <Dialog open={open} onClose={handleClose}   >
-        <DialogTitle  sx={{ width: "600px", height: "100px" }}  >Missing Items</DialogTitle>
-        <DialogContent  >
-              
-        <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
+      <Dialog open={open} onClose={handleClose} >
+        
+      
+      
+       <div  sx={{  margin: "0px 0px 90px 0px"  }} >
+        
+
+      </div>
+
+        <DialogContent     
+        sx={{
+          backgroundColor: colors.primary[400],
+        //  padding: "20px 40px 0px 40px",
+         
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        
+          
+        }} 
+         
+         >
+
+        {!user ? (
+          
+          <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >  
+          <Box> 
            
+             <Typography  fontWeight="100" sx={{ color: colors.grey[300]}} >
+              
+                <NotEnoughtLayerMessage status={1}  filteredImages={filteredImages}/>
+            {/* To claim the reward, you must own all of the following
+            layers marked with this icon: <CancelRoundedIcon sx={{ 
+               color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px"
+               }} /> <br />
+            If any layers are missing, you can quickly earn them by joining with Discord */}
+            {/* If any layers are missing, you can quickly earn them by sharing the link below: */}
+              </Typography>
+           </Box>
+
+            <Box sx={{
+                display: 'flex',   justifyContent: 'space-between',  alignItems: 'center',   marginTop: '20px',  marginBottom:"20px"
+               }} >
+        
+            <ButtonCTALoginFor2FreeLayers/>
+            {/* <AppLinkDataBox/> */}
+          
+           </Box>
+   
+
+           </div>
+
+
+
+         ) : (
+
+          <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >  
+          <Typography
+            fontWeight="100" 
+            sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} >
+           
+            <NotEnoughtLayerMessage status={2} filteredImages={filteredImages}/>
+                  
+               </Typography>
+                <Box sx={{  display: 'flex',  justifyContent: 'space-between',  alignItems: 'center',  marginTop: '20px',  marginBottom:"20px"
+                 }} >
+               <AppLinkDataBox/>
+                        
+              </Box>
+ 
+            </div>
+
+        )}
+    
+        
+   
+
+ 
 
              
-               </Box>
-        
 
                    <Box > 
 
-                            <Grid container spacing={0} display="flex"
-                             justifyContent="space-between" alignItems="center"
-                            
-                              >
-                                {Object.entries(modifiedImageData).map(([key, imageUrl], index) => (
-                                    <Grid item xs={12} sm={6} md={2} key={index}>
-                                    <Card
-                                        sx={{
-                                        position: 'relative',
-                                        border: '1px solid grey', // Customize border style
-                                        backgroundColor: 'transparent',
-                                        }}
-                                    >
-                                        <CardMedia
-                                        component="img"
-                                        alt={key}
-                                        width="100%"
-                                        height="100%"
-                                        image={imageUrl}
-                                        />
-                                    </Card>
-                                    </Grid>
-                                ))}
-                                </Grid>      
-                        
+                  <LayerBaseInfo   
+           layerToChooseFrom={ filteredImages}  
+             handleImageSelect ={handleImageSelect} 
+            colors ={colors}
+            />
+ 
 
 
+              </Box>  
 
-
-</Box>  
-
-   
-
-
-
-                 
              
  
-          <Button variant="contained" color="primary" onClick={handleClose}>
-            Close
-          </Button>
+          
         </DialogContent>
       </Dialog>
     </div>
   );
 };
 
+
+function GetfilteredImages( selectedImages ){
+  const excludedKeys = ["forearn", "bo", "collar"];
+  const filteredImages = Object.keys(selectedImages).reduce((result, key) => {
+    if (!excludedKeys.includes(key)) {
+      result[key] = selectedImages[key];
+    }
+    return result;
+  }, {});
+
+  return filteredImages;
+
+}
+
+
+function ButtonCTALoginFor2FreeLayers(){
+  const { user } = useUserContext();
+  const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+  
+     return(
+
+
+      <div>
+      <Button
+      sx={{
+        backgroundColor: colors.blueAccent[700],
+        color: colors.grey[100],
+        fontSize: "14px",
+        fontWeight: "bold",
+        padding: "10px 20px",
+      }}
+      onClick={() => openOAuth2Url(user)}
+    >
+      <DownloadOutlinedIcon sx={{ mr: "10px" }} />
+      Login Now And Recieve 2 free Layers
+    </Button>
+
+
+    </div>
+     )
+ 
+}
+
+function NotEnoughtLayerMessage( {status ,filteredImages}){
+  const { user } = useUserContext();
+  const {allLayers} = useAllLayersContext();
+  const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+  
+//const filteredImages = GetfilteredImages(selectedImages);
+
+    switch (status) {
+      case 1:
+        return (
+         <div>
+          
+           { CheckComBoValidity(filteredImages) }
+           <CancelRoundedIcon sx={{ 
+         color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />
+        
+         If any layers are missing, you can quickly earn them by joining with Discord
+        </div>)
+      case 2:
+        return (<div>
+        { CheckComBoValidity(filteredImages) } 
+        <CancelRoundedIcon sx={{ 
+         color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />  
+         If any layers are missing, you can quickly earn them by sharing the link below:
+            {/* Now, you can share or post the link. Every think someone open your link,  Discord will
+             initiate the login process. If they decide to join, you will instantly recieve a new layer.
+
+             On your profile page you can check, your new layers as well as the status of your invite link.
+             Good luck! */}
+        </div>);
+      default:
+        return <div>Default message</div>;
+    }
+      
+ 
+}
+
+
+
+
 export default PopupButton;
+
+
+ 
+
+
+
+
+const handleImageSelect = (category, obj   ) => {
+    // empty function just to have something to pass in the composant props..
+    // may be use full later
+   
+
+   };
+
+
+  function CheckComBoValidity(filteredImages){
+      const missingCategories = [];
+
+for (const category in filteredImages) {
+  if (filteredImages[category][0].owning === 0) {
+    console.log("Missing " + category + " info");
+    missingCategories.push(category);
+  }
+}
+
+
+ if (missingCategories.length > 0 ){
+
+  //console.log("Missing Categories:", missingCategories);
+ }else{ 
+
+  //console.log("you won !:" );
+ }
+
+
+   /* 
+     
+   */
+    const missingCount =  missingCategories.length;
+        switch (missingCount) {
+          case 5:
+            return ("To claim the reward, you must own all 5 of the following layers marked with this icon:") 
+            case 4:case 3:
+            return ( `To claim the reward, you must own the ${missingCount} layers marked with this icon:` );
+            case 1:case 2:
+              return ( 
+                 `You are so close! Only ${missingCount} left to own, and the reward is yours! Great job!`
+                  
+                 );
+              
+          default:
+            return (" You won !!!!!") ;
+        }
+ 
+
+  }

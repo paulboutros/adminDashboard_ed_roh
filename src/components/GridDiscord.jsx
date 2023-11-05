@@ -55,20 +55,37 @@ const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Obj
 
 useEffect(()=>{
   (async ()=> {
-    const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=discord&limit=${10}`; // make it specific (filter to discord fields)
+    
+    const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScore`; 
+   // const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=discord&limit=${60}`; // make it specific (filter to discord fields)
     const result  = await fetch(endpoint);
     
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
-    const resultsJson = await result.json();
+    let resultsJson = await result.json();
     
-    const temp = resultsJson.map((item) => ({
+
+
+     console.log(  "resultsJson"  ,resultsJson);
+     
+
+
+    let temp = resultsJson.map((item) => ({
 
       discord: item.discord,
+      invite_code : item.invite_code,
+
       id: item.id,
       data: { ...item },
-    }));
-    temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
 
+     
+    }));
+ 
+
+    
+
+
+    temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
+ console.log  ("disocrd temp    =",temp) ;
       setNewDataList(temp);
 
 
@@ -87,7 +104,15 @@ const columns = [
   {
     field: "discord",
     headerName: "Discord",
-    flex: 3,
+    flex: 2,
+    cellClassName: "name-column--cell",
+    
+  } ,
+    
+  {
+    field: "invite_code",
+    headerName: "Invite Code",
+    flex: 2,
     cellClassName: "name-column--cell",
     
   } ,
@@ -110,7 +135,7 @@ const columns = [
   },
   
   
-  
+  /*
     {
       field: "walletShort",
       headerName: "Wallet",
@@ -120,13 +145,7 @@ const columns = [
   
       
     } ,
-    {
-      field: "invite_code",
-      headerName: "Invite Code",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      
-    } ,
+    */
   
   
      
@@ -314,15 +333,17 @@ const RenderCellA = ({ debugMode , colors , data }) => {
     height="100%"
   
   >
-  
+     {/* invite use  stacked */}
      <OneBar data={data.invite_use} text ={"used"}  colors ={ colors.greenAccent[600] } />
-     <OneBar data={data.invite_sent} text ={""}  colors ={ colors.blueAccent[600] }  minus={data.invite_use} />
+      {/* invite_sent  stacked */}
+     {/* <OneBar data={data.invite_sent} text ={""}  colors ={ colors.blueAccent[600] }  minus={data.invite_use} /> */}
      
      </Box>
   
      <Box  sx={{ marginLeft: '5px' }}>
     
-     <OneBar data={data.message} text ={""}  colors ={  GetLegendColor("message")  } />
+    {/* message */}
+     {/* <OneBar data={data.message} text ={""}  colors ={  GetLegendColor("message")  } /> */}
      </Box>
 
     </Box>
@@ -373,10 +394,7 @@ left: 0, // Offset it by the width of the background bar
                  
                 {/* <FavoriteIcon   sx={{ color:  colors, fontSize: "26px" }} /> */}
                 <FavoriteIcon   sx={{ color:  colors, fontSize: "15px" }} /> 
-          
-
-
-
+           
 
 
               {/* You can place an icon or text here */}
@@ -389,19 +407,10 @@ left: 0, // Offset it by the width of the background bar
 </div>
   );
 }
-
-
  
 
-
 function PoolRewardInfo() {
-
-  
-  
-  
-   
-
-
+ 
   const { user } = useUserContext();
 
   const theme = useTheme();
@@ -494,38 +503,7 @@ function PoolRewardInfo() {
            
       {/* box just for space */}
           <Box height="5px" /> 
-
  
-
-          {/* <Box sx={ box_horiz_align  } >
-            
-         
-          <Box   sx={ box_vertical_align }  >
-              
-              <Typography variant="h5"  >
-              1st
-              </Typography>
-              <Typography variant="h5" sx={{ color: colors.greenAccent[500] }}>
-              $500         
-              </Typography>
-
-         </Box>
-
-         <Box   sx={ box_vertical_align }  >
-              
-              <Typography variant="h5"  >
-              1st
-              </Typography>
-              <Typography variant="h5" sx={{ color: colors.greenAccent[500] }}>
-              $500
-              </Typography>
-              
-         </Box>
-
-          
- 
-          </Box> */}
-  
 
         </Box>
         
@@ -558,7 +536,7 @@ function PoolRewardInfo() {
             fontWeight="600"
             color={colors.grey[100]}
           >
-            Smart Contract # (Mock Data)
+          Smart Contract # (Mock Data)
           </Typography>
           <Typography
             variant="h3"
@@ -576,47 +554,7 @@ function PoolRewardInfo() {
         
       </Box>
     </Box>
-
-     {/* legend */}
-     {/* <Box
-      gridColumn="span 12"
-      gridRow="span 0.5"
-      backgroundColor={colors.primary[400]}
-    >
-      <Box
-        mt="25px"
-        p="0 30px"
-        display="flex "
-        justifyContent="space-between"
-        alignItems="center"
-      >
-
-       
-        <Box sx={ box_horiz_align  }>
-          <Typography    
-            variant="h5"
-            fontWeight="600"
-            color={colors.grey[100]}
-          >
-          
-          </Typography>
-          <Typography
-            variant="h3"
-            fontWeight="bold"
-            color={colors.greenAccent[500]}
-          >
-            
-             <CustomLegend legendItems={legendItems} orientation="horizontal" />    
-              
-          </Typography>
-        </Box>
-        
-      </Box>
-      <Box height="250px" m="-20px 0 0 0">
-        
-      </Box>
-    </Box> */}
-    
+ 
   </Box>
 
 
