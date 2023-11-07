@@ -12,7 +12,7 @@ import Card from '@mui/material/Card';
 import ImageCard from "./ImageCard";
 
 import {useNotificationContext }   from '../context/NotificationContext.js'; // to get user data from context provider
-import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../Utils/utils.js"
+import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../utils.js"
 
 import CardMedia from '@mui/material/CardMedia'; // Update this import
 

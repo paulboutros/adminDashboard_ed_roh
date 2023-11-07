@@ -101,8 +101,8 @@ import GridAllLayer from "./GridAllLayer";
  
 
          console.log("  >>>>>>  rewardPrizeObject" , rewardPrizeObject );
-          SetRewardPrice ( rewardPrizeObject.finalRewardPrice.toString()    );
-       
+          SetRewardPrice ( rewardPrizeObject.finalRewardPrice.toFixed(2).toString()    );
+         
         
 
       } catch (error) {

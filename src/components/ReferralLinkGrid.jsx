@@ -12,7 +12,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {useEffect, useState} from "react";
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
  
-import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../Utils/utils.js"
+import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../utils.js"
    
 
 import  CountdownTimer from "./CountdownTimer";

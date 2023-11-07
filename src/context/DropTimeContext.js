@@ -1,6 +1,6 @@
 import {createContext, useContext,    useState, useEffect } from "react";
 import { useUserContext } from './UserContext.js'; // to get user data from context provider
-import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../Utils/utils.js"
+import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../utils.js"
 
 
 const DropTimeContext = createContext();

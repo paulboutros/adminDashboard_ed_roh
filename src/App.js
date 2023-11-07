@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route  } from "react-router-dom";
+
+
 import Topbar from "./scenes/global/Topbar.jsx";
 import Sidebar from "./scenes/global/Sidebar.jsx";
 import Dashboard from "./scenes/dashboard/index.jsx";
@@ -30,6 +32,18 @@ import { DiscordProvider }  from './context/DiscordContext.js';
 import { AppLinkProvider }from './context/AppLinkContext.js'; 
 
 import Calendar from "./scenes/calendar/calendar.jsx";
+
+ 
+//web 3 market plce component:
+//import './App.css';
+import Navbar from '../src/components/Navbar.js';
+import Marketplace from '../src/components/Marketplace.js';
+import ProfileNFT from '../src/components/Profile.js'; /// original component name was Profile => change to avoid conflict
+import SellNFT from '../src/components/SellNFT.js';
+import NFTPage from '../src/components/NFTpage.js';
+  
+
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -81,8 +95,18 @@ function App() {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               
-              <Route path="/" element={<AllLayerImage />} />
+              {/* <Route path="/" element={<AllLayerImage />} /> */}
                
+              {/* NFT marketplace pages */}
+              
+              <Route path="/" element={<AllLayerImage />}/>
+              {/* <Route path="/" element={<Marketplace />}/> */}
+              <Route path="/nftPage" element={<NFTPage />}/>        
+              <Route path="/ProfileNFT" element={<ProfileNFT />}/>
+              <Route path="/sellNFT" element={<SellNFT />}/>    
+
+
+
               <Route path="/profile" element={<Profile/>} />
               <Route path="/discordBoard" element={<DiscordBoard/>} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />
