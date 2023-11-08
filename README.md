@@ -13,3 +13,10 @@ server is deployed by "express-to-vercel-main" vs code project
 # Test Or dev API
 - create fake participant mock data etc...
 "dev-tool-and-api"   vs code project 
+
+
+set up webpack:
+https://blog.thirdweb.com/guides/create-a-shopify-theme-with-thirdweb/
+webpack issue when adding web3 librarries
+
+https://ethereum.stackexchange.com/questions/123530/module-not-found-error-cant-resolve-stream-in-react-project-including-web3

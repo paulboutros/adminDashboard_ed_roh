@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route  } from "react-router-dom";
+ import { Routes, Route  } from "react-router-dom";
 
 
 import Topbar from "./scenes/global/Topbar.jsx";
@@ -24,7 +24,7 @@ import Maintenance  from "./scenes/maintenance/index.jsx";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
 
-import { UserProvider } from './context/UserContext.js';
+ import { UserProvider } from './context/UserContext.js';
 import { AllLayersProvider }  from './context/AllLayerAvailableContext.js';
 import { NotificationProvider }  from './context/NotificationContext.js'; 
 import { DropTimeProvider }  from './context/DropTimeContext.js'; 
@@ -36,19 +36,55 @@ import Calendar from "./scenes/calendar/calendar.jsx";
  
 //web 3 market plce component:
 //import './App.css';
-import Navbar from '../src/components/Navbar.js';
-import Marketplace from '../src/components/Marketplace.js';
-import ProfileNFT from '../src/components/Profile.js'; /// original component name was Profile => change to avoid conflict
-import SellNFT from '../src/components/SellNFT.js';
-import NFTPage from '../src/components/NFTpage.js';
+//import NavBar from "./components/FARMER/NavBar.jsx";
+import FarmerPage from "./scenes/farmerPage/index.jsx";
   
-
+import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { Goerli } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
 
+const testThirdWeb = true;
+  if ( testThirdWeb === true  ){
+
+    return (  
+     
+      <ThirdwebProvider activeChain={Goerli}> 
+      <UserProvider>
+      {/* <NavBar/> */}
+
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+      <div className="app">
+       <main className="content">
+        
+        <Routes>
+         <Route path="/" element={<FarmerPage />} />
+         </Routes>
+      </main>
+    </div>
+
+    </ThemeProvider>
+
+    </UserProvider>
+    </ThirdwebProvider>
+    
+    )
+  }
+
+
+
+
+
+
+
+
+
+
+  
   if ( process.env.REACT_APP_MAINTENANCE === "true"  ){
 
     return (  
@@ -76,6 +112,8 @@ function App() {
 
   return (
 
+
+     
     <UserProvider>
 
  <DiscordProvider>
@@ -99,11 +137,10 @@ function App() {
                
               {/* NFT marketplace pages */}
               
+            
               <Route path="/" element={<AllLayerImage />}/>
               {/* <Route path="/" element={<Marketplace />}/> */}
-              <Route path="/nftPage" element={<NFTPage />}/>        
-              <Route path="/ProfileNFT" element={<ProfileNFT />}/>
-              <Route path="/sellNFT" element={<SellNFT />}/>    
+                 
 
 
 
@@ -120,7 +157,7 @@ function App() {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/geography" element={<Geography />} />
-              <Route path="/getLayers" element={<GetLayers />} />
+               <Route path="/getLayers" element={<GetLayers />} />
               
               
             </Routes>
@@ -138,6 +175,8 @@ function App() {
      </AppLinkProvider>
   </DiscordProvider>
     </UserProvider>
+
+  
 
   ); 
 }

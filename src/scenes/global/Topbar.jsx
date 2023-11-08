@@ -38,7 +38,7 @@ const Topbar = () => {
      const addr = await signer.getAddress();
      updateAddress(addr);
    }
-   
+   /*
    function updateButton() {
      const ethereumButton = document.querySelector('.enableEthereumButton');
      ethereumButton.textContent = "Connected";
@@ -67,7 +67,7 @@ const Topbar = () => {
            window.location.replace(location.pathname)
          });
    }
-   
+   */
      useEffect(() => {
        if(window.ethereum == undefined)
          return;
@@ -77,7 +77,7 @@ const Topbar = () => {
          console.log("here");
          getAddress();
          toggleConnect(val);
-         updateButton();
+        // updateButton();
        }
    
        window.ethereum.on('accountsChanged', function(accounts){
@@ -107,14 +107,14 @@ const Topbar = () => {
       >
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
         <IconButton type="button" sx={{ p: 1 }}>
-          <SearchIcon />
-        </IconButton>
+           <SearchIcon />
+          </IconButton>
       </Box>
 
       {/* ICONS */}
-      <Box display="flex">
+       <Box display="flex">
       
-        <Typography style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+         <Typography style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           {currAddress !== "0x" ? "Connected to":"Not Connected. Please login to view NFTs"} {currAddress !== "0x" ? (currAddress.substring(0,15)+'...'):""}
         </Typography>
 
@@ -146,7 +146,7 @@ const Topbar = () => {
      
       }}
       className="enableEthereumButton  "
-      onClick={() => connectWebsite() }
+   //   onClick={() => connectWebsite() }
     >
         {connected? "Connected":"Connect Wallet"}
        
