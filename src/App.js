@@ -62,12 +62,12 @@ const testThirdWeb = true;
        <main className="content">
         
         <Routes>
-         <Route path="/" element={<FarmerPage />} />
+          <Route path="/" element={<FarmerPage />} />
          </Routes>
       </main>
     </div>
 
-    </ThemeProvider>
+     </ThemeProvider>
 
     </UserProvider>
     </ThirdwebProvider>
