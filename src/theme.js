@@ -1,6 +1,18 @@
 import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles/index.js";
 
+
+
+export const text1 ={
+  color:100,
+  fontSize: 100
+};  
+export const text2 ={
+  color:200,
+  fontSize: 50
+};  
+
+export const grayText = 100;
 // color design tokens export
 export const tokens = (mode) => ({
   ...(mode === "dark"

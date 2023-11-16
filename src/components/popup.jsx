@@ -1,29 +1,42 @@
-import React, { useState } from 'react';
+
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import {  useAddress } from "@thirdweb-dev/react";
+
+
+import React, { useState , useEffect } from 'react';
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
- 
+  
 import { tokens } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAppLinkContext } from '../context/AppLinkContext.js';
-import {openOAuth2Url } from "../data/API";
+import {sendTracking, openOAuth2Url, ERC20claim , testSDK } from "../data/API";
 
 import {  Box ,Button,   Typography, useTheme  } from "@mui/material";
 
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
-import {sendTracking} from "../data/API"
-
+ 
 import LayerBaseInfo from  "./LayerBaseInfo";
     
 import ReferrerComponent from "./ReferrerComponent"
 import AppLinkDataBox from "./AppLinkDataBox";
 import { useAllLayersContext } from '../context/AllLayerAvailableContext';
 
+
+
+
 const PopupButton =  ({ text, style , selectedImages   }) => {
  
+  
+
+const address = useAddress();
+
+    
+
+
   const { appLink } = useAppLinkContext();
     const { user } = useUserContext();
     const theme = useTheme();
@@ -36,7 +49,19 @@ const PopupButton =  ({ text, style , selectedImages   }) => {
   const filteredImages = GetfilteredImages(selectedImages);
 
   // this should be an Api call
-  CheckComBoValidity(filteredImages);
+ // user.address = address;
+      
+  // CheckComBoValidity(filteredImages ,user);
+  useEffect(()=>{
+    if (!address) return;
+    
+    CheckComBoValidity(filteredImages ,user , address);
+
+     
+    
+   }, [ selectedImages ]);
+
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -86,7 +111,7 @@ const PopupButton =  ({ text, style , selectedImages   }) => {
            
              <Typography  fontWeight="100" sx={{ color: colors.grey[300]}} >
               
-                <NotEnoughtLayerMessage status={1}  filteredImages={filteredImages}/>
+                <NotEnoughtLayerMessage status={1}  filteredImages={filteredImages} user={user} address={address}  />
             {/* To claim the reward, you must own all of the following
             layers marked with this icon: <CancelRoundedIcon sx={{ 
                color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px"
@@ -117,7 +142,7 @@ const PopupButton =  ({ text, style , selectedImages   }) => {
             fontWeight="100" 
             sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} >
            
-            <NotEnoughtLayerMessage status={2} filteredImages={filteredImages}/>
+            <NotEnoughtLayerMessage status={2} filteredImages={filteredImages}  user={user} address={address}  />
                   
                </Typography>
                 <Box sx={{  display: 'flex',  justifyContent: 'space-between',  alignItems: 'center',  marginTop: '20px',  marginBottom:"20px"
@@ -202,8 +227,8 @@ function ButtonCTALoginFor2FreeLayers(){
  
 }
 
-function NotEnoughtLayerMessage( {status ,filteredImages}){
-  const { user } = useUserContext();
+function NotEnoughtLayerMessage( {status ,filteredImages, user , address}){
+  //const { user } = useUserContext();
   const {allLayers} = useAllLayersContext();
   const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -215,7 +240,7 @@ function NotEnoughtLayerMessage( {status ,filteredImages}){
         return (
          <div>
           
-           { CheckComBoValidity(filteredImages) }
+           { CheckComBoValidity(filteredImages ,user , address ) }
            <CancelRoundedIcon sx={{ 
          color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />
         
@@ -223,7 +248,7 @@ function NotEnoughtLayerMessage( {status ,filteredImages}){
         </div>)
       case 2:
         return (<div>
-        { CheckComBoValidity(filteredImages) } 
+        { CheckComBoValidity(filteredImages ,user , address) } 
         <CancelRoundedIcon sx={{ 
          color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />  
          If any layers are missing, you can quickly earn them by sharing the link below:
@@ -254,17 +279,23 @@ export default PopupButton;
 const handleImageSelect = (category, obj   ) => {
     // empty function just to have something to pass in the composant props..
     // may be use full later
-   
-
+    
    };
 
 
-  function CheckComBoValidity(filteredImages){
+   
+
+  function CheckComBoValidity(filteredImages, user, address){
+
+    // testSDK( address );
+ 
+    console.log("CheckComBoValidity  address " , address  );
+     
       const missingCategories = [];
 
 for (const category in filteredImages) {
   if (filteredImages[category][0].owning === 0) {
-    console.log("Missing " + category + " info");
+    console.log("Missing ", category , " info");
     missingCategories.push(category);
   }
 }
@@ -275,13 +306,15 @@ for (const category in filteredImages) {
   //console.log("Missing Categories:", missingCategories);
  }else{ 
 
-  //console.log("you won !:" );
+ 
+
+
+      ERC20claim(user.ID, filteredImages ,  address  );
+   console.log("  you won !:" , address );
  }
 
 
-   /* 
-     
-   */
+   
     const missingCount =  missingCategories.length;
         switch (missingCount) {
           case 5:
@@ -300,3 +333,7 @@ for (const category in filteredImages) {
  
 
   }
+
+
+
+   

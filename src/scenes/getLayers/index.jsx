@@ -15,7 +15,7 @@ import AppLinkDataBox from "../../components/AppLinkDataBox";
 import ReferralLinkGrid from "../../components/ReferralLinkGrid";
 import Header from "../../components/Header";
  
-import GridImage from "../../components/GridImage";  
+import NFTGrid from "../../components/NFTGrid";  
  
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ReferrerComponent from "../../components/ReferrerComponent"
@@ -101,7 +101,7 @@ const Profile =  () => {
            Layer Board
           </Typography>
            
-            <GridImage  
+            <NFTGrid  
            
               queryId= {`&ID=${user.ID}`}
              sx={{ marginBottom: "15px" }} 

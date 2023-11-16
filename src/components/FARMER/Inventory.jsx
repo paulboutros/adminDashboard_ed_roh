@@ -1,14 +1,13 @@
+ import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../../const/addresses';
+ //import Link from 'next/link';
+ import { Link } from 'react-router-dom';
+
+
 import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../../const/addresses';
-import Link from 'next/link';
-//import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
- 
-import {Box , Typography, Container ,Button} from "@mui/material";
-import Grid from '@mui/material/Grid';          
-import Card from '@mui/material/Card';          
-import ImageCard from "./ImageCard";
+import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
 
+ 
 
 export function Inventory({ nft }) {
     const address = useAddress();
@@ -37,9 +36,9 @@ export function Inventory({ nft }) {
     if(nft?.length === 0) {
         return (
             <Box>
-                <Typography>No tools.</Typography>
+                <Text>No tools.</Text>
                 <Link
-                    href="/shop"
+                    to="/shop"
                 >
                     <Button>Shop Tool</Button>
                 </Link>
@@ -48,23 +47,23 @@ export function Inventory({ nft }) {
     }
 
     return (
-        <Grid columns={3} spacing={4}>
+        <SimpleGrid columns={3} spacing={4}>
             {nft?.map((nft) => (
                 <Card key={nft.metadata.id} p={5}>
-                    <Box>
+                    <Stack alignItems={"center"}>
                     <MediaRenderer 
                         src={nft.metadata.image} 
                         height="100px"
                         width="100px"
                     />
-                    <Typography>{nft.metadata.name}</Typography>
+                    <Text>{nft.metadata.name}</Text>
                     <Web3Button
                         contractAddress={STAKING_ADDRESS}
                         action={() => stakeNFT(nft.metadata.id)}
                     >Equip</Web3Button>
-                    </Box>
+                    </Stack>
                 </Card>
             ))}
-        </Grid>
+        </SimpleGrid>
     );
 };

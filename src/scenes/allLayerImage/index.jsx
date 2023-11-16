@@ -5,19 +5,24 @@ import {useEffect, useState} from "react";
 import { Box } from "@mui/material";
 //import dotenv from "dotenv";
 
-import GridImage from "../../components/GridImage";
+import NFTGrid from "../../components/NFTGrid";
 import Header from "../../components/Header";
 import ImageComposer from "../../components/ImageComposer";
 
 import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  
-
+import { TOOLS_ADDRESS } from "../../const/addresses";
+import { useContract, useNFTs } from "@thirdweb-dev/react";
 
 
 
 //const API_URL = process.env.API_URL;
 const AllLayerImage = () => {
   
+  const { contract } = useContract(TOOLS_ADDRESS);
+  const { data, isLoading } = useNFTs(contract);
+   
+
   const { user } = useUserContext();
 
   useEffect(()=>{
@@ -37,9 +42,17 @@ const AllLayerImage = () => {
      {/* {user ? ( <ImageComposer  queryId= {`&userId=${user.ID}&limit=1`}/>  ) : ( <div>User is not defined.</div> )} */}
 
         <ReferredUserComponent/>
-       <ImageComposer/>
+         <ImageComposer/>  
       
-       <GridImage/>
+       <NFTGrid
+       
+          
+       isLoading={isLoading} 
+       NFTdata={data} 
+       emptyText={"No NFTs found"}
+       
+       
+       /> 
      </Box>
    </Box>
  );

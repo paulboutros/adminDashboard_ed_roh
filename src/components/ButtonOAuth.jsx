@@ -1,5 +1,5 @@
  import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
-import {  useTheme  , Button } from "@mui/material";
+import {  useTheme  , Button, Typography } from "@mui/material";
 import { tokens } from "../theme";
  import {openOAuth2Url } from "../data/API";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -9,7 +9,7 @@ const ButtonOAuth = ( ) => {
   const {user, setUser } = useUserContext();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
+  const _textColor = colors.grey[200];
 
   function handleLogout (){
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -19,12 +19,13 @@ const ButtonOAuth = ( ) => {
   return (
     <>
         {!user ? (
-            <Button
-              variant="contained"
+            <Button  
+              variant= "text" //"contained"
               color="primary"
               onClick={() => openOAuth2Url(null)}
              >
-              Discord Login
+              <Typography  color= {_textColor} >   Discord Login     </Typography>
+             
              </Button>
 
             ):(
@@ -33,7 +34,8 @@ const ButtonOAuth = ( ) => {
               color="primary"
               onClick={() => handleLogout()}
              >
-              Logout
+              <Typography  color= {_textColor} >   Logout    </Typography>
+              
             </Button>           
            )}
 

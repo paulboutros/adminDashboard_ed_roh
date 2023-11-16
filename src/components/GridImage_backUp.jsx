@@ -28,7 +28,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';//@mui/lab/Toggl
 import { useTheme } from "@mui/material";
  
  let i =0;
-const GridImage = ( {queryId ="", isDashboard = false }  ) => {
+const NFTGrid_BACKUP = ( {queryId ="", isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -349,7 +349,7 @@ useEffect(() => {
   );
 };
 
-export default GridImage;
+ export default NFTGrid_BACKUP;
 
 
 // number/int would be the token ID

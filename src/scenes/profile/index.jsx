@@ -9,7 +9,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import ReferralLinkGrid from "../../components/ReferralLinkGrid";
 import Header from "../../components/Header";
  
-import GridImage from "../../components/GridImage";  
+import NFTGrid from "../../components/NFTGrid";  
  
 import ReferrerComponent from "../../components/ReferrerComponent"
 import JoinIncentive from "../../components/JoinIncentive";
@@ -95,8 +95,8 @@ const Profile =  () => {
       
       </Box>
 
-
-          <Box
+     
+     <Box
           color={colors.grey[400]}
           display="flex"
           flexDirection="column"
@@ -123,7 +123,7 @@ const Profile =  () => {
            Layer Board
           </Typography>
            
-            <GridImage  
+            <NFTGrid  
            
               queryId= {`&ID=${user.ID}`}
              sx={{ marginBottom: "15px" }} 

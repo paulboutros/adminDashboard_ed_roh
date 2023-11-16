@@ -1,5 +1,6 @@
 import { useState } from "react";
- import { Routes, Route  } from "react-router-dom";
+ import { BrowserRouter as Router,
+   Routes, Route  } from "react-router-dom";
 
 
 import Topbar from "./scenes/global/Topbar.jsx";
@@ -20,6 +21,10 @@ import FAQ from "./scenes/faq/index.jsx";
 import Geography from "./scenes/geography/index.jsx";
 import GetLayers from "./scenes/getLayers/index.jsx";
 import Maintenance  from "./scenes/maintenance/index.jsx";
+import TokenDetails from "./scenes/tokenDetails/index.jsx";
+import ProfileWallet from "./scenes/profileWallet/index.jsx";
+
+
 // provider
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
@@ -36,40 +41,52 @@ import Calendar from "./scenes/calendar/calendar.jsx";
  
 //web 3 market plce component:
 //import './App.css';
-//import NavBar from "./components/FARMER/NavBar.jsx";
+import NavBar from "./components/FARMER/NavBar.jsx";
 import FarmerPage from "./scenes/farmerPage/index.jsx";
+import Sell from "./scenes/sell/index.jsx";
+
+import Shop from "./scenes/farmerPage/shop.jsx";
+
+
+
   
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Goerli } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
+
+import { ChakraProvider } from "@chakra-ui/react";
 
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
 
-const testThirdWeb = true;
+const testThirdWeb = false;
   if ( testThirdWeb === true  ){
 
     return (  
      
-      <ThirdwebProvider activeChain={Goerli}> 
-      <UserProvider>
-      {/* <NavBar/> */}
-
+      <ThirdwebProvider 
+      activeChain={Goerli} 
+      clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID}
+      > 
+      
+      <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-      <div className="app">
-       <main className="content">
-        
+      {/* <ChakraProvider> */}
+         <NavBar/>  
+      
+         
         <Routes>
-          <Route path="/" element={<FarmerPage />} />
+          <Route path="/" element={<FarmerPage/>} />
+          <Route path="/shop" element={<Shop/>} />
          </Routes>
-      </main>
-    </div>
+      
+     {/* </ChakraProvider> */}
+  
 
-     </ThemeProvider>
-
-    </UserProvider>
+    </ThemeProvider>
+    </ColorModeContext.Provider>
+    
     </ThirdwebProvider>
     
     )
@@ -113,10 +130,11 @@ const testThirdWeb = true;
   return (
 
 
-     
-    <UserProvider>
+    <ThirdwebProvider activeChain={Goerli}>
 
- <DiscordProvider>
+       <UserProvider>
+
+   <DiscordProvider>
     <AppLinkProvider>
    
       <DropTimeProvider>
@@ -131,19 +149,28 @@ const testThirdWeb = true;
           <Sidebar isSidebar={isSidebar} />
           <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
+
+          {/* <Router> */}
             <Routes>
               
               {/* <Route path="/" element={<AllLayerImage />} /> */}
                
-              {/* NFT marketplace pages */}
+              
               
             
               <Route path="/" element={<AllLayerImage />}/>
               {/* <Route path="/" element={<Marketplace />}/> */}
                  
 
+              <Route path="/farmerPage" element={<FarmerPage/>} />
+              <Route path="/shop" element={<Shop/>} />
+              <Route path="/sell" element={<Sell/>} />
+              <Route path="/token/:contractAddress/:tokenId" element={<TokenDetails/>} />
 
 
+              <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
+
+               
               <Route path="/profile" element={<Profile/>} />
               <Route path="/discordBoard" element={<DiscordBoard/>} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />
@@ -158,9 +185,12 @@ const testThirdWeb = true;
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/geography" element={<Geography />} />
                <Route path="/getLayers" element={<GetLayers />} />
-              
+                
               
             </Routes>
+         {/* </Router> */}
+
+
           </main>
         </div>
       </ThemeProvider>
@@ -174,8 +204,9 @@ const testThirdWeb = true;
      
      </AppLinkProvider>
   </DiscordProvider>
-    </UserProvider>
+       </UserProvider>
 
+    </ThirdwebProvider>
   
 
   ); 

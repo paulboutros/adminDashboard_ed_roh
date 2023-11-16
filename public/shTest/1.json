@@ -1,0 +1,37 @@
+
+  {
+    "name": "shield 1",
+    "description": "shield 1",
+    "image": "ipfs/QmXvq5Fgx5ojGL7fweCCqZdztikTKLPjouMYxESGGwsipN/1.png", 
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Necro"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "none"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 0
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 70
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  },
+  

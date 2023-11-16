@@ -1,0 +1,353 @@
+[
+  {
+    "name": "knee 11",
+    "description": "knee 11",
+    "image": "ipfs://wulirocksLayer/11.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Necro"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "none"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 0
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 70
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  },
+  {
+    "name": "knee 12",
+    "description": "knee 12",
+    "image": "ipfs://wulirocksLayer/12.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Legend"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Royal"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 5
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 80
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 2
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  },
+  {
+    "name": "knee 13",
+    "description": "knee 13",
+    "image": "ipfs://wulirocksLayer/13.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Legend"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Royal"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 80
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 2
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  },
+  {
+    "name": "knee 14",
+    "description": "knee 14",
+    "image": "ipfs://wulirocksLayer/14.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Alien"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Ice"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 2
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 20
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  }, 
+  {
+    "name": "knee 15",
+    "description": "knee 15",
+    "image": "ipfs://wulirocksLayer/15.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Knight"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Royal"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 20
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 10
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  },
+  {
+    "name": "knee 16",
+    "description": "knee 16",
+    "image": "ipfs://wulirocksLayer/16.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Legend"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Royal"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 70
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 3
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  }, 
+  {
+    "name": "knee 17",
+    "description": "knee 17",
+    "image": "ipfs://wulirocksLayer/17.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Legend"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Royal"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 5
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 60
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 3
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  }, 
+  {
+    "name": "knee 18",
+    "description": "knee 18",
+    "image": "ipfs://wulirocksLayer/18.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Root"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "none"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 0
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 70
+      }
+    ]
+  },
+  {
+    "name": "knee 19",
+    "description": "knee 19",
+    "image": "ipfs://wulirocksLayer/19.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Legend"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Royal"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 70
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  },
+  {
+    "name": "knee 20",
+    "description": "knee 20",
+    "image": "ipfs://wulirocksLayer/20.png",
+    "attributes": [
+      {
+        "trait_type": "Class 1",
+        "value": "Legend"
+      },
+      {
+        "trait_type": "Class 2",
+        "value": "Royal"
+      },
+       {
+      "trait_type": "Gold", 
+      "value": 70
+      }, 
+      {
+        "trait_type": "Silver", 
+       "value": 0
+      },
+       {
+        "trait_type": "Bone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Ice Stone", 
+       "value": 0
+      },
+       {
+        "trait_type": "Roots", 
+       "value": 0
+      }
+    ]
+  }    
+
+]

@@ -3,7 +3,7 @@ import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
-import { tokens } from "../../theme";
+import { text1,  tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -17,36 +17,12 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
  
 import {sendTracking} from "../../data/API"
-
-//provider
-import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+import Item from "../../components/Item";
+ import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
 
 // that path will assign the src property of an <im element, therefore it is assume that path starts from public directory
 let avatarURL="/he/1.png"; // add default avatar here
  
-const Item = ({ title, to, icon, selected, setSelected }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-
-  const { user } = useUserContext();
-  
-  return (
-    <MenuItem
-      active={selected === title}
-      style={{
-        color: colors.grey[100],
-      }}
-      onClick={() =>{
-         setSelected(title)
-         sendTracking(user , "N/A", "N/A" , title ,  "Side Bar " ) 
-        }}
-      icon={icon}
-    >
-      <Typography>{title}</Typography>
-      <Link to={to} />
-    </MenuItem>
-  );
-};
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -123,7 +99,7 @@ const Sidebar = () => {
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: "10px 0 20px 0",
-              color: colors.grey[100],
+              color: colors.grey[ text1.color ],
             }}
           >
             {!isCollapsed && (
@@ -133,8 +109,8 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINIS
+                <Typography variant="h3" color={colors.grey[ text1.color ]}>
+                  Wulirocks
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -145,7 +121,7 @@ const Sidebar = () => {
 
           {!isCollapsed && (
             <Box mb="25px">
-              <Box display="flex" justifyContent="center" alignItems="center">
+              {/* <Box display="flex" justifyContent="center" alignItems="center">
                 <img
                   alt="profile-user"
                   width="100px"
@@ -153,7 +129,7 @@ const Sidebar = () => {
                   src=  {user ?   getAvatar()  : avatarURL  } 
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
-              </Box>
+              </Box> 
               <Box textAlign="center">
                 <Typography
                   variant="h2"
@@ -164,10 +140,13 @@ const Sidebar = () => {
                    {user ?   <div>  {user.discord} </div>  : <div> Guest </div> }
                 
                 </Typography>
+              
+
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  {/* VP Fancy Admin */}
+                  
                 </Typography>
               </Box>
+               */}
             </Box>
           )}
 
@@ -201,7 +180,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-           
+            <Item
+              title="Sell"
+              to="sell"//  "/userProfile"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
            
 
 

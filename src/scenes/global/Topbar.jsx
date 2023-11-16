@@ -1,8 +1,14 @@
  
-import { providers, Contract, utils } from 'ethers';
+//https://portal.thirdweb.com/connect/connect-wallet/class-name
+  //web3
+import { BigNumber, ethers } from "ethers";
+import { ConnectWallet } from "@thirdweb-dev/react";
+import { useContract, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
+import { TOOLS_ADDRESS , REWARDS_ADDRESS } from "../../const/addresses";
+import { Link } from "react-router-dom";
 
-import { Box, IconButton, useTheme  , Button, Typography } from "@mui/material";
-import { useContext, useEffect, useState  } from "react";
+import { Divider ,Box, IconButton, useTheme  , Button, Typography } from "@mui/material";
+import { Children, useContext, useEffect, useState  } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -11,9 +17,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-
-import { useLocation } from 'react-router';
- import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+ import { RowCenterBox, VerticalStackAlignCenter } from "../../components/Layout"
 
 import ButtonOAuth from "../../components/ButtonOAuth";
  
@@ -22,101 +26,73 @@ const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-  const { user } = useUserContext();
+ 
+  const _textColor = colors.grey[200];
 
+  const address = useAddress();
 
-   //WEB 3
-
-   const [connected, toggleConnect] = useState(false);
-   const location = useLocation();
-   const [currAddress, updateAddress] = useState('0x');
-   
-   async function getAddress() {
-     //const ethers = require("ethers"); //was comon js  replced with import { providers, Contract, utils } from 'ethers';
-     const provider = new providers.Web3Provider(window.ethereum);
-     const signer = provider.getSigner();
-     const addr = await signer.getAddress();
-     updateAddress(addr);
-   }
-   /*
-   function updateButton() {
-     const ethereumButton = document.querySelector('.enableEthereumButton');
-     ethereumButton.textContent = "Connected";
-     ethereumButton.classList.remove("hover:bg-blue-70");
-     ethereumButton.classList.remove("bg-blue-500");
-     ethereumButton.classList.add("hover:bg-green-70");
-     ethereumButton.classList.add("bg-green-500");
-   }
-   
-   async function connectWebsite() {
-   
-       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-       if(chainId !== '0x5')
-       {
-         //alert('Incorrect network! Switch your metamask network to Rinkeby');
-         await window.ethereum.request({
-           method: 'wallet_switchEthereumChain',
-           params: [{ chainId: '0x5' }],
-        })
-       }  
-       await window.ethereum.request({ method: 'eth_requestAccounts' })
-         .then(() => {
-           updateButton();
-           console.log("here");
-           getAddress();
-           window.location.replace(location.pathname)
-         });
-   }
-   */
-     useEffect(() => {
-       if(window.ethereum == undefined)
-         return;
-       let val = window.ethereum.isConnected();
-       if(val)
-       {
-         console.log("here");
-         getAddress();
-         toggleConnect(val);
-        // updateButton();
-       }
-   
-       window.ethereum.on('accountsChanged', function(accounts){
-         window.location.replace(location.pathname)
-       })
-     });
-   
-   
-
-
-   //WEB 3 ends
+  const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
    
  
-
    
- 
-
-
-  
+  const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
+   
   return (
-    <Box display="flex" justifyContent="space-between" p={2}>
+    <Box display="flex" justifyContent="space-between" p={2}
+       
+      
+    >
       {/* SEARCH BAR */}
-      <Box
+
+      < RowCenterBox
+       >
+
+         <Box
         display="flex"
         backgroundColor={colors.primary[400]}
         borderRadius="3px"
+ 
+       height= "40px"
+
+      
+
       >
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-        <IconButton type="button" sx={{ p: 1 }}>
+          <IconButton type="button" sx={{ p: 1 }}
+          
+          >
            <SearchIcon />
           </IconButton>
       </Box>
 
+      </RowCenterBox>
+     
+
+
+  
+      {/* <Button component={Link} to="/buy" variant="text" color={colors.grey[400]}  > */}
+ 
+      
+      <RowCenterBox   
+      
+      padding={"15px 0 15px 0"} >
+        <Button component={Link} to="/buy" variant="text"  >
+                <Typography  color= {_textColor} >  Buy     </Typography>
+        </Button>
+        <Divider  color=  {_textColor}  orientation="vertical" style={{ height: '50%', width: '2px' }} />
+        <Button component={Link} to="/sell" variant="text" color="primary">
+        <Typography  color={_textColor} >  Sell     </Typography>
+        </Button>
+      </RowCenterBox>
+
+
+
+
+
       {/* ICONS */}
        <Box display="flex">
       
-         <Typography style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {currAddress !== "0x" ? "Connected to":"Not Connected. Please login to view NFTs"} {currAddress !== "0x" ? (currAddress.substring(0,15)+'...'):""}
-        </Typography>
+      
 
 
         <IconButton onClick={colorMode.toggleColorMode}>
@@ -132,32 +108,56 @@ const Topbar = () => {
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>
-        <IconButton>
- 
+
+
+
+        <IconButton
+        onClick={() =>{
+         }}
+        >
+        
+        {/* <Link to={"/shop"} >Shop</Link> */}
           <PersonOutlinedIcon />
              
         </IconButton>
-        <Button
-      sx={{
-        backgroundColor: colors.blueAccent[700],
-        color: colors.grey[100],
-        fontSize: "14px",
-        fontWeight: "bold",
-     
-      }}
-      className="enableEthereumButton  "
-   //   onClick={() => connectWebsite() }
-    >
-        {connected? "Connected":"Connect Wallet"}
-       
-    </Button>
+      
 
+        <VerticalStackAlignCenter>
         
-{/*              
-        <Button className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm" onClick={connectWebsite}>{connected? "Connected":"Connect Wallet"}</Button> 
-         */}
+          <Typography  fontSize={"small"} fontWeight={"150px"}>$WU</Typography>
+            {rewardBalance && (
+              <Typography  fontSize={"small"} fontWeight={"150"}> 
+                  {Number(ethers.utils.formatUnits(rewardBalance, 18)).toFixed(2)}
+               </Typography>
+              )}
+        </VerticalStackAlignCenter>  
 
-        <ButtonOAuth/>
+
+
+
+        <RowCenterBox>
+        <ConnectWallet
+        theme={theme.palette.mode}
+        modalSize={"wide"}
+
+        style={{ height: "50px" }}
+        welcomeScreen={{
+          title: "Get it at to Wuli.rocks",
+          subtitle: "Just connect to get started",
+        }}
+        modalTitleIconUrl={""}
+        />
+
+         <ButtonOAuth/>
+
+         </RowCenterBox>
+
+
+
+
+
+
+      
        
       </Box>
     </Box>
@@ -165,5 +165,4 @@ const Topbar = () => {
 };
 
 export default Topbar;
-
 

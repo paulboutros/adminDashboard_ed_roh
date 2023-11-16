@@ -6,7 +6,7 @@ import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui
 import CustomLegend from "./Legend"
 //import API from "../data/API"
 
-import {sendTracking} from "../data/API"
+import {sendTracking, GetRewardPrice } from "../data/API"
 
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -15,19 +15,15 @@ import { tokens } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAllLayersContext } from '../context/AllLayerAvailableContext'; 
 
-import CardMedia from '@mui/material/CardMedia';
-import Card from '@mui/material/Card';  
- 
+   
 import LayerBaseInfo from "./LayerBaseInfo";
-import GridAllLayer from "./GridAllLayer";  
- 
+  
  import PopupButton  from "./popup"
+import { cookieStorageManager } from '@chakra-ui/react';
  
  
   const LayerSelector = (  {queryId="" }  ) => {
  
-   //  const [ownedLayers, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
-
     const fetchCategoryData = async (category  ) => {
     
      
@@ -76,14 +72,14 @@ import GridAllLayer from "./GridAllLayer";
       ];
  
    const [RewardPrice, SetRewardPrice]= useState("0");  
-    const [selectedImages, setSelectedImages] = useState(null
+    const [selectedImages, setSelectedImages] = useState(null);
      
 
 
-    );
+    
 
 
-     const GetRewardPrice = async ( ) => {
+     const GetRewardPriceApp = async ( ) => {
 
       
         const kn = selectedImages["kn"][0].layerName;
@@ -91,14 +87,55 @@ import GridAllLayer from "./GridAllLayer";
         const sh = selectedImages["sh"][0].layerName;
         const we = selectedImages["we"][0].layerName;
         const be = selectedImages["be"][0].layerName;
+
+
+        const knData = selectedImages["kn"][0];
+        const heData = selectedImages["he"][0];
+        const shData = selectedImages["sh"][0];
+        const weData = selectedImages["we"][0];
+        const beData = selectedImages["be"][0];
+
+        let layerCombo ={
+          kn: {  layerNumber: knData.layerName , tokenID: knData.tokenID } ,
+          he: {  layerNumber: heData.layerName , tokenID: heData.tokenID } ,
+
+          sh:{  layerNumber: shData.layerName , tokenID: shData.tokenID } ,
+          we: {  layerNumber: weData.layerName , tokenID: weData.tokenID } ,
+          be: {  layerNumber: beData.layerName , tokenID: beData.tokenID }  
+        
+        
+     
+       } 
+   
+    console.log("selectedImages  for price  =" ,selectedImages);
+
+       console.log(
+        "  knData " , knData.tokenID,
+       "  heData " , heData.tokenID,
+       "  shData " , shData.tokenID,
+       "  weData " , weData.tokenID,
+       "  beData " , beData.tokenID  );
+      /* 
+    layerCombo ={
+     he:   {  layerNumber: 4, tokenID: 3 } ,
+    sh:  {  layerNumber: 4, tokenID: 3 } ,
+     we:   {  layerNumber: 1, tokenID: 0 } ,
+    be:   {  layerNumber: 1, tokenID: 0 } ,
+   
+    kn: {  layerNumber: 3, tokenID : 2 } 
+
+  } 
+ */
+
       try {
         
-        console.log("  >>>>>>  GetRewardPriceGetRewardPrice   he =  " , he );
-
+        
+        const rewardPrizeObject = await GetRewardPrice( layerCombo);  // he,sh,we,be,kn
+        /*
         const endpoint = `${process.env.REACT_APP_API_URL}GetReward?he=${he}&sh=${sh}&we=${we}&be=${be}&kn=${kn}`;
         const result = await fetch(endpoint);
         const rewardPrizeObject = await result.json();
- 
+        */
 
          console.log("  >>>>>>  rewardPrizeObject" , rewardPrizeObject );
           SetRewardPrice ( rewardPrizeObject.finalRewardPrice.toFixed(2).toString()    );
@@ -115,7 +152,7 @@ import GridAllLayer from "./GridAllLayer";
        useEffect(()=>{
        if (!selectedImages) return;
        
-         GetRewardPrice( );
+         GetRewardPriceApp( );
 
         
        
@@ -173,12 +210,12 @@ import GridAllLayer from "./GridAllLayer";
 
               { selectedImages ? (
                <PopupButton
-                        text=   {`Claim $${RewardPrice}`}  
+                        text=   {`Claim $WU${RewardPrice}`}  
                         style={{
                             color: '#b4a770',
                             borderColor: '#f0c435',
                             height: '25px',
-                            width: '100px',
+                            width: '150px',
                             borderWidth: '2px',
                             textTransform: 'none',
                             // Add any other custom styles here
@@ -191,6 +228,7 @@ import GridAllLayer from "./GridAllLayer";
 
 
                 {/*save it as a remider, if you think you will soon be able to get all the layer to claim it*/}
+{/* 
                <Button variant="outlined"// sx={{ typography: 'h5' , color: "#65582B" }}
                     style={{
                         color:  "#b4a770",
@@ -201,7 +239,7 @@ import GridAllLayer from "./GridAllLayer";
           
                </Button> 
 
-               <Button variant="outlined" //sx={{ typography: 'h5' , color: colors.greenAccent[500] }}
+               <Button variant="outlined" 
                     style={{
                         color: colors.greenAccent[500],
                         borderColor: colors.greenAccent[500], // Set border color
@@ -210,7 +248,7 @@ import GridAllLayer from "./GridAllLayer";
                     }} >Mint
           
                </Button>
-               
+                */}
  
 
 
@@ -345,20 +383,29 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
    
   // getlayer supply should only change when a new layer is given away
    useEffect( ()=>{
-      if (!allLayers)return;
-
+      if (!allLayers || allLayers.lenght === 0)return;
+      if ( allLayers.he === null ) return;
+      if ( allLayers.sh === null ) return;
+      if ( allLayers.we === null ) return;
+      if ( allLayers.be === null ) return;
+      if ( allLayers.kn === null ) return;
+      const indexTotal = allLayers.he.length + allLayers.sh.length + allLayers.we.length + allLayers.be.length + allLayers.kn.length;
+      if (indexTotal !== 55)return; // to make sure they are all length of 11
       onSelectImage(null);
 
        
          // from 1 to 11
          
-      const he_rand = Math.floor(Math.random() * 10)+1;    const he = allLayers.he[he_rand];
-      const sh_rand = Math.floor(Math.random() * 10)+1;    const sh = allLayers.sh[sh_rand];
+         console.log( "Image COmposer:    allLayers   =  "  ,  allLayers   );
+     // not that sometimes it reached this part of code code while
+     //allLayers.lenght   so we added a check
+      let he_rand = Math.floor(Math.random() * 10)+1;    const he = allLayers.he[he_rand];
+      let sh_rand = Math.floor(Math.random() * 10)+1;    const sh = allLayers.sh[sh_rand];
 
-      const we_rand = Math.floor(Math.random() * 10)+1;    const we = allLayers.we[we_rand];
-      const be_rand = Math.floor(Math.random() * 10)+1;    const be = allLayers.be[be_rand];
+      let we_rand = Math.floor(Math.random() * 10)+1;    const we = allLayers.we[we_rand];
+      let be_rand = Math.floor(Math.random() * 10)+1;    const be = allLayers.be[be_rand];
 
-      const kn_rand = Math.floor(Math.random() * 10)+1;    const kn = allLayers.kn[kn_rand];
+      let kn_rand = Math.floor(Math.random() * 10)+1;    const kn = allLayers.kn[kn_rand];
       
       
       onSelectImage( {
@@ -404,7 +451,10 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
        updatedSelectedImages[category] =
         [{ imagePath:"layersForCharacterCompo/" + image, 
          layerName: obj.layerName,
-          owning: obj.owning }]
+         tokenID: obj.tokenID,
+          owning: obj.owning 
+        
+        }]
  
           console.log( "category" , category,    "OBJ  = ",  obj );
  

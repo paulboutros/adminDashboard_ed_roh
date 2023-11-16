@@ -1,22 +1,18 @@
 
 import { MediaRenderer, Web3Button, useContract, useContractMetadata } from "@thirdweb-dev/react";
 import { FARMER_ADDRESS } from "../../const/addresses";
-import {Box , Typography, Container, useTheme} from "@mui/material";
+  
 
-import { tokens } from "../../theme";
+import { Box, Container, Flex, Heading } from "@chakra-ui/react";
 
-
-export const  ClaimFarmer = ( ) => {
-     
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const { contract } = useContract(FARMER_ADDRESS);
+export function ClaimFarmer() {
+    const { contract } = useContract(FARMER_ADDRESS);
     const { data: metadata } = useContractMetadata(contract);
     
     return (
         <Container maxW={"1200px"}>
-            <Box>
-                <Typography>Claim Farmer to start farming</Typography>
+            <Flex direction={"column"} alignItems={"center"} justifyContent={"center"} h={"50vh"}>
+                <Heading>Claim Farmer to start farming</Heading>
                 <Box borderRadius={"8px"} overflow={"hidden"} my={10}>
                     <MediaRenderer
                         src={metadata?.image}
@@ -29,9 +25,7 @@ export const  ClaimFarmer = ( ) => {
                     contractAddress={FARMER_ADDRESS}
                     action={(contract) => contract.erc1155.claim(0, 1)}
                 >Claim Farmer</Web3Button>
-            </Box>
+            </Flex>
         </Container>
-    ); 
+    );
 }
-  
- // export default ClaimFarmer;
