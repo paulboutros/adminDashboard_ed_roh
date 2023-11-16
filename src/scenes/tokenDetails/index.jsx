@@ -17,7 +17,11 @@ import { Avatar,
 } from "@chakra-ui/react";
 
 
-import { RowCenterBox, VerticalStackAlignCenter , VerticalStackAlignLeft, RoundedBox } from "../../components/Layout"
+import { RowChildrenAlignCenter,
+     VerticalStackAlignCenter ,
+     VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,
+     VerticalSpace,
+      RoundedBox } from "../../components/Layout"
 
 
 import { 
@@ -182,12 +186,12 @@ const TokenDetails =  ( ) => {
     return (
     <div>
      
-
+      {/* nft to area info */}
      <VerticalStackAlignLeft>
  
-        <RowCenterBox>
-           <Typography>
-           <Box> 
+        <RowChildrenAlignCenter>
+            
+            <Box> 
                <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
                 {contractMetadata && (
                      <Box   >
@@ -199,46 +203,27 @@ const TokenDetails =  ( ) => {
                 )}
                </Skeleton>
            </Box>
-             </Typography>
-
-             {/* <Divider orientation="vertical"  color= {colors.grey[400]} style={{ marginLeft:"5px",  marginRight:"15px",  height : '40px', width: '1px' }} /> 
-  */}
+            
+            
            <VerticalStackAlignLeft>
 
 
-
-           <Typography marginBottom={1} variant='h3' fontWeight={"bold"}>{contractMetadata.name}</Typography>
+             <NftInfoStack nft ={nft}  contractMetadata ={contractMetadata} /> 
            
-            <Typography color={colors.grey[text2.color]} variant="h7" fontWeight= {text2.fontWeight} >
-             Wulirocks Layers to use in Compo Reward.
-            </Typography>
-            <CustomLinkWithIcon   to={`/profile/${nft.owner}`} color={colors.grey[200]} >
-            {`${nft.owner.slice(0, 6)}...${nft.owner.slice(-4)}`}
-            </CustomLinkWithIcon>
-            <Link backgroundColor={colors.grey[400]} 
-            to={`/profile/${nft.owner}`}>
-            </Link>
         </VerticalStackAlignLeft>
            
-        </RowCenterBox> 
+        </RowChildrenAlignCenter> 
       </VerticalStackAlignLeft>
       <Divider   orientation="hotizontal" style={{ marginBottom:"20px",  width: '100%', height: '1px' }} />  
-
  
 
+      <RowChildrenAlignTop> 
+       
+      <Box style={{ marginLeft:"50px"  }}   >   </Box>
 
-
-
-      <RowCenterBox> 
       
-
-         
-
-
-
-
-
-        <Box style={{ marginLeft:"50px"  }}   > 
+       <VerticalStackAlignLeft>
+        
             <RoundedBox> 
             <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
                    
@@ -249,16 +234,19 @@ const TokenDetails =  ( ) => {
                         <MediaRenderer
                             src={nft.metadata.image}
                             style={{  width: '100%',position: 'relative', left: '10px',  top:"10px" }}
-                            // width: '65%', height: 'auto'  , position: 'relative', left: '65px'
+                            
                         />
                     </VerticalStackAlignCenter>
             </Box>
             </Skeleton>
              </RoundedBox>
-         </Box>
+        
+
+           <NftTraitBox nft={nft} />  
+           </VerticalStackAlignLeft>
 
            {/* right side stack    */}
-            <VerticalStackAlignLeft>
+            <VerticalStackAlignLeft fullWidth={true}>
             <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
                
              
@@ -274,27 +262,25 @@ const TokenDetails =  ( ) => {
                 left="0"
                 right="0"
             />
-            <Box
-                height="100px" padding="20px" 
+            <Box height="100px" padding="20px" >
+                
                  
                 
-           > 
+            
                <Divider   orientation="hotizontal" style={{ marginBottom:"20px",  width: '100%', height: '1px' }} />  
                <NftPriceBlock 
                       boxColor={boxColor}  directListing={directListing}  
                       loadingMarketplace={loadingMarketplace} 
-                      loadingDirectListing ={loadingDirectListing}  
-                      auctionListing={auctionListing} 
-                      loadingAuction={loadingAuction} 
-              /> 
+                      loadingDirectListing ={loadingDirectListing} auctionListing={auctionListing} loadingAuction={loadingAuction} 
+               /> 
                
             </Box>
              </Box>
             
 
-             <Box marginBottom={2}>
-  {/* Content of the first Box */}
-</Box>
+            
+             <VerticalSpace space={2}/>
+
                
                <Skeleton isLoaded={!loadingMarketplace || !loadingDirectListing || !loadingAuction}>
                    
@@ -319,27 +305,20 @@ const TokenDetails =  ( ) => {
                       >
                       Buy at asking price
                         </Web3Button>
-                      <Typography align="center">or</Typography>
-                      
+                       <Typography align="center">or</Typography>
+                    
                       
                        <TextField
-                          fullWidth
-                          margin="bottom"
-                          variant="outlined"
-                          label="Minimum Bid"
-                          type="number"
-                          value={bidValue}
-                          onChange={(e) => setBidValue(e.target.value)}
+                          fullWidth margin="bottom" variant="outlined"  label="Minimum Bid" type="number" value={bidValue}
+                           onChange={(e) => setBidValue(e.target.value)}
                        /> 
 
+                      <VerticalSpace space={2}/>
+
                       <Web3Button
-                       
-                          contractAddress={MARKETPLACE_ADDRESS}
-                          action={async () => await createBidOffer()}
-                          isDisabled={!auctionListing || !auctionListing[0]}
-                          className="tw-web3button--connect-wallet"
-                          style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
-                      >
+                           contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionListing || !auctionListing[0]}
+                           className="tw-web3button--connect-wallet" style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
+                       >
                           Place Bid
                       </Web3Button>
                       </Box>
@@ -360,7 +339,7 @@ const TokenDetails =  ( ) => {
              
 
             </VerticalStackAlignLeft>
-      </RowCenterBox>    
+      </RowChildrenAlignTop>     
   
 
 
@@ -382,46 +361,8 @@ const TokenDetails =  ( ) => {
  
 
 
-    
-        <Box
-           padding= {paddingPX} 
-          border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
-         >
-         
-           {/* <SimpleGrid columns={2} spacing={6}> */}
-  
-                    <Grid container spacing={3}>
-                    
-                    
-                    <Grid item xs={12}  margin= {trait_margin}  >
-                        <Typography fontWeight="bold">Traits:</Typography>
-                        <Grid container spacing={4}>
-                        {Object.entries(nft?.metadata?.attributes || {}).map(([key, value]) => (
-                            <Grid item key={key}>
-                            <Box
-                                display="flex"
-                                flexDirection="column"
-                                alignItems="center"
-                                justifyContent="center"
-
-                                 padding={2}
-                                border={1}
-                                 borderColor={ _borderColor} //borderRadius={_borderRadius}
-                                borderRadius={2}
-                            >
-                                <Typography fontSize="small">{value.trait_type}</Typography>
-                                <Typography fontSize="small" fontWeight="bold">
-                                {value.value}
-                                </Typography>
-                            </Box>
-                            </Grid>
-                        ))}
-                        </Grid>
-                    </Grid>
-                    </Grid>
- 
-             {/* </SimpleGrid> */}
-        </Box>
+      {/* <NftTraitBox nft={nft} />   */}
+       
  
 
       </Box> 
@@ -501,6 +442,88 @@ const CustomLinkWithIcon = ({ to, children }) => {
 
     )
   }
+  function NftTraitBox ( {nft}){
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+  
+    const boxColor = colors.primary[400];
+    const  _borderColor = colors.primary[400]
+    const _borderRadius= "10px";
+     const  paddingPX = "0px";
+     const trait_margin = "15px";
+
+ return(
+    <Box
+    padding= {paddingPX} 
+   border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+  >
+  
+    {/* <SimpleGrid columns={2} spacing={6}> */}
+
+             <Grid container spacing={3}>
+             
+             
+             <Grid item xs={12}  margin= {trait_margin}  >
+                 <Typography fontWeight="bold">Traits:</Typography>
+                 <Grid container spacing={4}>
+                 {Object.entries(nft?.metadata?.attributes || {}).map(([key, value]) => (
+                     <Grid item key={key}>
+                     <Box
+                         display="flex"
+                         flexDirection="column"
+                         alignItems="center"
+                         justifyContent="center"
+
+                          padding={2}
+                         border={1}
+                          borderColor={ _borderColor} //borderRadius={_borderRadius}
+                         borderRadius={2}
+                     >
+                         <Typography fontSize="small">{value.trait_type}</Typography>
+                         <Typography fontSize="small" fontWeight="bold">
+                         {value.value}
+                         </Typography>
+                     </Box>
+                     </Grid>
+                 ))}
+                 </Grid>
+             </Grid>
+             </Grid>
+
+      {/* </SimpleGrid> */}
+ </Box>
+ 
+ )
+
+  }
+
+  function NftInfoStack ( {nft, contractMetadata } ){
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+  
+    const boxColor = colors.primary[400];
+    const  _borderColor = colors.primary[400]
+    const _borderRadius= "10px";
+     const  paddingPX = "0px";
+     const trait_margin = "15px";
+    return (
+        <div>
+        <Typography marginBottom={1} variant='h3' fontWeight={"bold"}>{contractMetadata.name}</Typography>
+            <Typography color={colors.grey[text2.color]} variant="h7" fontWeight= {text2.fontWeight} >
+             Wulirocks Layers to use in Compo Reward.
+            </Typography>
+            <CustomLinkWithIcon   to={`/profile/${nft.owner}`} color={colors.grey[200]} >
+            {`${nft.owner.slice(0, 6)}...${nft.owner.slice(-4)}`}
+            </CustomLinkWithIcon>
+            <Link backgroundColor={colors.grey[400]} 
+            to={`/profile/${nft.owner}`}>
+            </Link>
+         </div>
+    )
+  }
+
+
+  
 
   
   

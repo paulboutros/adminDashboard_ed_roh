@@ -2,7 +2,7 @@ import { Divider ,Box, IconButton, useTheme  , Button, Typography } from "@mui/m
 import {text2, text1, tokens } from "../theme";
 
 
-export function RowCenterBox( {children} ){
+export function RowChildrenAlignCenter( {children} ){
 
   
     return(
@@ -11,6 +11,25 @@ export function RowCenterBox( {children} ){
       flexDirection="row"
       alignItems="center"
       justifyContent="center"
+     >
+       {children}
+      </Box>
+    
+  
+     )
+  
+  }
+  export function RowChildrenAlignTop( {children} ){
+
+  
+    return(
+      <Box  //make thing vertically centered
+      display="flex"
+      flexDirection="row"
+      alignItems="flex-start" // in row this align to top edge of container
+      justifyContent="flex-start" // in row
+
+       
      >
        {children}
       </Box>
@@ -38,22 +57,48 @@ export function RowCenterBox( {children} ){
   
   }
   
-  export function VerticalStackAlignLeft(  {children} ){
+  export function VerticalStackAlignLeft(  {children  , fullWidth } ){
    
+      return (
+
+        <Box
+        width={fullWidth ? '100%' : 'auto'}
+        display="flex" 
+        flexDirection="column"
+        alignItems="flex-start" 
+        justifyContent="center">
+        {children}
+       </Box>
   
-    return (
+      )
 
-      <Box
-      width="100%"
-      display="flex" 
-      flexDirection="column"
-      alignItems="flex-start" 
-      justifyContent="center">
-      {children}
-     </Box>
-
-    )
+    
+    
 }
+export function VerticalStackAlignTopLeft(  {children  , fullWidth } ){
+   
+  return (
+
+    <Box
+    width={fullWidth ? '100%' : 'auto'}
+    display="flex" 
+    flexDirection="column"
+
+    alignItems="flex-start" // horiz
+    justifyContent="flex-start" // vertical
+    
+    >
+    {children}
+   </Box>
+
+  )
+
+
+
+}
+
+
+
 
 export function RoundedBox(  {children} ){
  
@@ -75,6 +120,19 @@ export function RoundedBox(  {children} ){
     )
 
 }
+
+
+export function VerticalSpace ( {space}){
+ 
+ return(  <Box marginBottom={ space }> </Box>  )
+ 
+}
+export function HorizontalSpace ( {space}){
+ 
+  return(  <Box marginLeft={ space }> </Box>  )
+  
+ 
+ }
 
   
   

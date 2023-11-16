@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 import { Divider ,Box, IconButton, useTheme  , Button, Typography } from "@mui/material";
 import { Children, useContext, useEffect, useState  } from "react";
-import { ColorModeContext, tokens } from "../../theme";
+import { ColorModeContext, tokens, buttonStyle } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -17,7 +17,12 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
- import { RowCenterBox, VerticalStackAlignCenter } from "../../components/Layout"
+ import { RowChildrenAlignCenter,
+   VerticalStackAlignCenter,
+   VerticalStackAlignLeft,
+   RoundedBox,
+   HorizontalSpace
+  } from "../../components/Layout"
 
 import ButtonOAuth from "../../components/ButtonOAuth";
  
@@ -26,10 +31,8 @@ const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
- 
-  const _textColor = colors.grey[200];
-
-  const address = useAddress();
+   const _textColor = colors.grey[200];
+   const address = useAddress();
 
   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
    
@@ -44,28 +47,29 @@ const Topbar = () => {
     >
       {/* SEARCH BAR */}
 
-      < RowCenterBox
+      < RowChildrenAlignCenter
        >
 
          <Box
-        display="flex"
-        backgroundColor={colors.primary[400]}
-        borderRadius="3px"
+        display="flex" height= "40px"
+      //  backgroundColor={colors.primary[400]}
+      //  borderRadius="3px"
  
-       height= "40px"
-
-      
-
+       
+ 
       >
+
+    <RoundedBox> 
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
           <IconButton type="button" sx={{ p: 1 }}
           
           >
            <SearchIcon />
           </IconButton>
+        </RoundedBox>
       </Box>
 
-      </RowCenterBox>
+      </RowChildrenAlignCenter>
      
 
 
@@ -73,7 +77,7 @@ const Topbar = () => {
       {/* <Button component={Link} to="/buy" variant="text" color={colors.grey[400]}  > */}
  
       
-      <RowCenterBox   
+      <RowChildrenAlignCenter   
       
       padding={"15px 0 15px 0"} >
         <Button component={Link} to="/buy" variant="text"  >
@@ -83,7 +87,7 @@ const Topbar = () => {
         <Button component={Link} to="/sell" variant="text" color="primary">
         <Typography  color={_textColor} >  Sell     </Typography>
         </Button>
-      </RowCenterBox>
+      </RowChildrenAlignCenter>
 
 
 
@@ -121,8 +125,9 @@ const Topbar = () => {
              
         </IconButton>
       
-
-        <VerticalStackAlignCenter>
+       <HorizontalSpace space={2}/>
+       
+        <VerticalStackAlignLeft>
         
           <Typography  fontSize={"small"} fontWeight={"150px"}>$WU</Typography>
             {rewardBalance && (
@@ -130,17 +135,18 @@ const Topbar = () => {
                   {Number(ethers.utils.formatUnits(rewardBalance, 18)).toFixed(2)}
                </Typography>
               )}
-        </VerticalStackAlignCenter>  
+        </VerticalStackAlignLeft> 
+
+        <HorizontalSpace space={2}/>
 
 
 
-
-        <RowCenterBox>
+        <RowChildrenAlignCenter>
         <ConnectWallet
         theme={theme.palette.mode}
         modalSize={"wide"}
 
-        style={{ height: "50px" }}
+        style={{ height: buttonStyle.wallet.height }}
         welcomeScreen={{
           title: "Get it at to Wuli.rocks",
           subtitle: "Just connect to get started",
@@ -150,7 +156,7 @@ const Topbar = () => {
 
          <ButtonOAuth/>
 
-         </RowCenterBox>
+         </RowChildrenAlignCenter>
 
 
 

@@ -2,7 +2,12 @@ import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles/index.js";
 
 
+export const buttonStyle={
+    colorBlue: 700, 
 
+    discord:{ height : 50 },
+    wallet:{ height : 50 }
+}
 export const text1 ={
   color:100,
   fontSize: 100
