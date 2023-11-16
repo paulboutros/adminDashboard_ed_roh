@@ -41,7 +41,7 @@ import {
 import { Link } from 'react-router-dom';
  import { BigNumber, ethers } from "ethers";
 
-import {    Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
+import { Text, Skeleton ,  Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
 
 import NFT from "./FARMER/NFT";
 
@@ -49,17 +49,11 @@ import NFT from "./FARMER/NFT";
 
   
 const GridImage = ( { 
-  
-                // queryId ="", isDashboard = false,
-
-                  isLoading,
+                   isLoading,
                   NFTdata,
                   overrideOnclickBehavior,
                   emptyText = "No NFTs found" 
-
-
-
-
+ 
 }  ) => {
 
 
@@ -67,27 +61,17 @@ const GridImage = ( {
 
     const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
     const { contract } = useContract(TOOLS_ADDRESS);
-
-   
-      //const { data: nfts } = useNFTs(contract);
-     
-   // const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
  
- 
-
-
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const { user } = useUserContext();
    
 const [selectedCategories, setSelectedCategories] =   useState(["he"]); // useState(["he","sh"]); // State to track selected categories
-
-//toggleCategory("he")
- // Function to toggle the selected category
- const toggleCategory = (category) => {
+ 
+ const toggleCategory = (category) => {};
   
-};
+
 
 //==========================================================================
 // pb added to fetch data
@@ -120,197 +104,53 @@ useEffect(() => {
    
   if (!notification)return;
  if (!user)return;
-  //FetchTempGiveAway();
-  //console.log( "  USE EFFETC notification    " , notification );
   
- 
 }, [notification , user  , NFTdata ]);
-
-// !warning.  useState is asynchronous .. queryId changes will take effect on next render (also to rendering batching reason)
-
-  
- 
-
-async function RevealAndAdd( index, ID ){
-
-  
-  try {
- 
-
-    const dataToSend= { 
-      index: index  ,
-       ID: ID 
-    }
-
-    const endpoint = `${process.env.REACT_APP_API_URL}RevealAndAdd`; // make it specific (filter to twitter fields)
-    const result = await axios.post(endpoint, dataToSend/*, config*/);
- 
-
-    setNotification(result);
-    //result.data.
-
-
-} catch (error) {
-  console.error(`Error RevelAndAdd  `);
-}
-
- }
-
- 
-
  
 useEffect(() => {
   const flatDataArray = Object.values(dataMap).reduce((accumulator, categoryData) => {
     // Use the spread operator to merge the category data arrays into the accumulator
     return [...accumulator, ...categoryData];
   }, []);
-
-
-  //console.log("  ===  dataMap "   + JSON.stringify(dataMap, null, 2));
-
-  // Now, flatDataArray contains all data from all selected categories
+  
   setData(flatDataArray);
 }, [dataMap  , notification]);
  
  
-  // const _height = isDashboard ? 220: 340 ;//  "25vh": "75vh" ;
- 
+  
   return (
-       
-
-          <Box>
-            <Box>
-            <ToggleButtonGroup
-              value={selectedCategories}
-             // exclusive // This makes it work like radio buttons
-              onChange={(_, newCategories) => {
-                if (newCategories !== null) {
-                   setSelectedCategories(newCategories); 
-                }
-              }}
-              aria-label="Categories"
-            >
-              <ToggleButton value="he" onClick={() => toggleCategory("he")}>
-                Head
-              </ToggleButton>
-              <ToggleButton value="we" onClick={() => toggleCategory("we")}>
-                Weapon
-              </ToggleButton>
-              <ToggleButton value="sh" onClick={() => toggleCategory("sh")}>
-                Shield
-              </ToggleButton>
-            </ToggleButtonGroup>
-
-            <Box>
-              {/* <p>Selected Categories: {selectedCategories.join(', ')}</p> */}
-            </Box>
-          </Box>
-
-        <Box
-          // sx={{
-          //   "& .MuiCardMedia-root": {
-          //      height: "100%",  width: "100%" ,
-          //      backgroundColor: colors.blueAccent[700],
-          //   }
-          // }}
-        >
-
-
-     
-    {TempGiveAway && TempGiveAway.giveAways && TempGiveAway.giveAways.length>0 ? (
-
-
-       <Box m="40px 0 0 0" > 
+    <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>
+    {isLoading ? (
+        [...Array(20)].map((_, index) => (
+            <Skeleton key={index} height={"312px"} width={"100%"} />
+        ))
+        // WARNING REPO reffer to NFT data as "data" instead of "NFTdata" i our case
+    ) : NFTdata && NFTdata.length > 0 ? (
+      NFTdata.map((nft) => 
+            !overrideOnclickBehavior ? (
+                <Link
+                   to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
+                   key={nft.metadata.id}
+                >
+                <NFT nft={nft} />
+                </Link>
+            ) : (
+                <div
+                    key={nft.metadata.id}
+                    onClick={() => overrideOnclickBehavior(nft)}
+                >
+                    <NFT nft={nft} />
+                </div>
+            ))
+    ) : (
+        <Text>{emptyText}</Text>
+    )}
+</SimpleGrid>  
  
-            <Grid container spacing={2}>
-           {TempGiveAway.giveAways
-           .filter(result => !result.claimed)
-             .map((result, index) => (
-      
-
-                <Grid item xs={4} sm={4} md={6} lg={3} key={index}>
-                  <Card>
-                  <CardActions>
-
-                   <Tooltip title="Once claimed, Layer will be revealed added to you owner layer list, ready to be used">
-                    <Button  variant="contained" color="primary" onClick={() => RevealAndAdd(index,user.ID  )}  size="small">claim</Button>
-                   </Tooltip>
-                  
-                    {/* <Button  variant="contained" color={colors.grey[200]} size="small">Learn More</Button> */}
-                  </CardActions>
-                    <ImageCard
-                      image={`/giveAway/unOpened.png`}
-                      title={`${"GiveAway"}`}
-                      extraInfo={`time${ formatTimestampToCustomFormat( result.time) }`}
-                    />
-                   
-                  </Card>
-                 
-                  {/* <Button onClick={() => RevelAndAdd(index,user.ID)}>Reveal</Button> */}
-                </Grid>
-              
-               ) 
-            )}
-            </Grid>
- 
-       </Box>
-          ) : (
-            <div>No layer awaiting</div> // You can replace this with a loading spinner or message
-          )}
-
-      {NFTdata && NFTdata.length > 0 ?/*&& transformedResults && transformedResults.length>0*/  (
-          
-         <Box m="40px 0 0 0" > 
- 
-        {/* <Grid container spacing={2}> */}
-
- 
-        <SimpleGrid columns={4} spacing={10}>
-                 {NFTdata?.map(
-                  
-                  (nft) => 
-                    !overrideOnclickBehavior ? (
-                        <Link
-                            to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                            key={nft.metadata.id}
-                        >
-                        <NFT nft={nft} />
-                        </Link>
-                    ) : (
-                        <div
-                            to={nft.metadata.id}
-                            onClick={() => overrideOnclickBehavior(nft)}
-                        >
-                            <NFT nft={nft} />
-                        </div>
-                    )
-                    
-                    )
-                    
-                 }
-
-
-         {/* </Grid> */}
-         </SimpleGrid>
-       </Box>
- 
-          ) : (
-            <div>Loading...</div> // You can replace this with a loading spinner or message
-          )}
-
-        </Box>
-    </Box>
   );
 };
 
 export default GridImage;
 
-
-// number/int would be the token ID
-// should be utility function
- function getNumber( input){
-  //const input = "he09";
-  const lastTwoDigits = parseInt(input.slice(-2), 10)
-   return lastTwoDigits;
- }
+ 
  

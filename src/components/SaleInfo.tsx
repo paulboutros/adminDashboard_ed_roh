@@ -1,15 +1,12 @@
 import React from "react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
-
-import { useNavigate  } from 'react-router-dom';
- //import { useRouter } from "next/router";
-
+//import { useRouter } from "next/router";
+import { NavigateFunction, useNavigate  } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import { Web3Button, useContract, useCreateAuctionListing, useCreateDirectListing } from "@thirdweb-dev/react";
-import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
-import { Box, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { Web3Button, useAddress ,useContract, useCreateAuctionListing, useCreateDirectListing } from "@thirdweb-dev/react";
+import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS, REWARDS_ADDRESS } from "../const/addresses";
+ import { Box, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 
-/*
 type Props = {
     nft: NFTType;
 };
@@ -17,7 +14,9 @@ type Props = {
 type DirectFormData = {
     nftContractAddress: string;
     tokenId: string;
-    price: string;
+    currency: string,
+    price:string,
+    quantity: string,
     startDate: Date;
     endDate: Date;
 };
@@ -31,13 +30,11 @@ type AuctionFormData = {
     floorPrice: string;
     buyoutPrice: string;
 };
-*/
 
-export default function SaleInfo({ nft } ) {
-
+export default function SaleInfo({ nft }: Props) {
+    const address = useAddress();
     const navigate = useNavigate ();
-   // const router = useRouter();
-
+    //const router = useRouter();
     const { contract: marketplace } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
 
     const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
@@ -47,15 +44,14 @@ export default function SaleInfo({ nft } ) {
     async function checkAndProvideApproval() {
         const hasApproval = await nftCollection?.call(
             "isApprovedForAll",
-            nft.owner,
-            MARKETPLACE_ADDRESS
+            [address!, MARKETPLACE_ADDRESS]
+            
         );
 
         if (!hasApproval) {
             const txResult = await nftCollection?.call(
                 "setApprovalForAll",
-                MARKETPLACE_ADDRESS,
-                true
+                [MARKETPLACE_ADDRESS, true]
             );
 
             if (txResult) {
@@ -66,22 +62,26 @@ export default function SaleInfo({ nft } ) {
         return true;
     }
 
-    const { register: registerDirect, handleSubmit: handleSubmitDirect } = useForm({
+    const { register: registerDirect, handleSubmit: handleSubmitDirect } = useForm<DirectFormData>({
         defaultValues: {
             nftContractAddress: TOOLS_ADDRESS,
             tokenId: nft.metadata.id,
+            currency: REWARDS_ADDRESS ,
             price: "0",
+            quantity:"1",
             startDate: new Date(),
             endDate: new Date(),
         },
     });
 
-    async function handleSubmissionDirect(data ) {
+    async function handleSubmissionDirect(data: DirectFormData) {
         await checkAndProvideApproval();
         const txResult = await createDirectListing({
             assetContractAddress: data.nftContractAddress,
             tokenId: data.tokenId,
+            currencyContractAddress: REWARDS_ADDRESS ,//data.currency,
             pricePerToken: data.price,
+            quantity: data.quantity,
             startTimestamp: new Date(data.startDate),
             endTimestamp: new Date(data.endDate),
         });
@@ -94,7 +94,7 @@ export default function SaleInfo({ nft } ) {
     useCreateAuctionListing(marketplace);
 
     const { register: registerAuction, handleSubmit: handleSubmitAuction } =
-    useForm ({
+    useForm<AuctionFormData>({
       defaultValues: {
         nftContractAddress: TOOLS_ADDRESS,
         tokenId: nft.metadata.id,
@@ -105,7 +105,7 @@ export default function SaleInfo({ nft } ) {
       },
     });
 
-    async function handleSubmissionAuction(data ) {
+    async function handleSubmissionAuction(data: AuctionFormData) {
         await checkAndProvideApproval();
         const txResult = await createAuctionListing({
             assetContractAddress: data.nftContractAddress,
@@ -145,6 +145,25 @@ export default function SaleInfo({ nft } ) {
                                 {...registerDirect("endDate")}
                             />
                         </Box>
+
+                        <Box>
+                            <Text fontWeight={"bold"}>currency:</Text>
+                            <Input
+                                placeholder="0"
+                                size="md"
+                                type="text"
+                                {...registerDirect("currency")}
+                            />
+                        </Box>
+                        <Box>
+                            <Text fontWeight={"bold"}>quantity:</Text>
+                            <Input
+                                placeholder="0"
+                                size="md"
+                                type="number"
+                                {...registerDirect("quantity")}
+                            />
+                        </Box>
                         <Box>
                             <Text fontWeight={"bold"}>Price:</Text>
                             <Input
@@ -160,8 +179,10 @@ export default function SaleInfo({ nft } ) {
                                 await handleSubmitDirect(handleSubmissionDirect)();
                             }}
                             onSuccess={(txResult) => {
-                                navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
-                              //  router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                                       navigate(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                                //navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+
+                               // router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
                             }}
                         >Create Direct Listing</Web3Button>
                     </Stack>
@@ -208,8 +229,9 @@ export default function SaleInfo({ nft } ) {
                                 return await handleSubmitAuction(handleSubmissionAuction)();
                             }}
                             onSuccess={(txResult) => {
-                                navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
-                             //  router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                                      navigate(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                               //  navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                               // router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
                             }}
                         >Create Auction Listing</Web3Button>
                     </Stack>

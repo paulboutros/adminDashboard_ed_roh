@@ -5,7 +5,7 @@ import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
 import { GetLayerSupply } from "../data/API.js";
 import { useUserContext } from './UserContext.js'; // to get user data from context provider
 
-import { TOOLS_ADDRESS } from "../const/addresses.js";
+import { TOOLS_ADDRESS } from "../const/addresses.ts";
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 
 const maxLayers = 11;

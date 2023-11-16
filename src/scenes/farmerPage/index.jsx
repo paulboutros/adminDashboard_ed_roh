@@ -12,7 +12,7 @@ import { ConnectWallet, MediaRenderer, useAddress,
  
  
   } from "@thirdweb-dev/react";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, DROP_ADDRESS } from "../../const/addresses.js";
+import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, DROP_ADDRESS } from "../../const/addresses.ts";
 import { ClaimFarmer } from "../../components/FARMER/ClaimFarmer";
 import { Equipped } from "../../components/FARMER/Equipped";
 import { Inventory } from "../../components/FARMER/Inventory";

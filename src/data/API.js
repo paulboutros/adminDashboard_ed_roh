@@ -3,10 +3,7 @@ import axios from "axios";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import {  useAddress } from "@thirdweb-dev/react";
 
-
-import {DROP_ADDRESS , TOOLS_ADDRESS} from "../const/addresses.js"
-
-
+ 
  
 
 /*
