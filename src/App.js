@@ -45,7 +45,7 @@ import NavBar from "./components/FARMER/NavBar.jsx";
 import FarmerPage from "./scenes/farmerPage/index.jsx";
 import Sell from "./scenes/sell/index.jsx";
 
-import Shop from "./scenes/farmerPage/shop.jsx";
+import Shop from "./scenes/shop/index.tsx";
 
 
 

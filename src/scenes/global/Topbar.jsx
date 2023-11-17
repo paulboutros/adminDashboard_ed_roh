@@ -80,7 +80,7 @@ const Topbar = () => {
       <RowChildrenAlignCenter   
       
       padding={"15px 0 15px 0"} >
-        <Button component={Link} to="/buy" variant="text"  >
+        <Button component={Link} to="/shop" variant="text"  >
                 <Typography  color= {_textColor} >  Buy     </Typography>
         </Button>
         <Divider  color=  {_textColor}  orientation="vertical" style={{ height: '50%', width: '2px' }} />

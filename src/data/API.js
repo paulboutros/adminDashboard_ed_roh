@@ -109,6 +109,8 @@ export async function GetLayerSupply(){
   return allSupply;
 }
 
+
+/*
 export async function  Add_owning_and_otherLayerInfo( user , layerToChooseFrom ){
 
 
@@ -172,7 +174,7 @@ export async function  Add_owning_and_otherLayerInfo( user , layerToChooseFrom )
     return updatedLayerToChooseFrom;
 
 }
-
+*/
 
 
 

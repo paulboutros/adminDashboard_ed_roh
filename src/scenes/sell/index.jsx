@@ -1,6 +1,6 @@
 import { Box, Button, Card, Container, Flex, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { ThirdwebNftMedia, useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { 
     MARKETPLACE_ADDRESS,
@@ -17,6 +17,16 @@ export default function Sell() {
     const { data, isLoading } = useOwnedNFTs(contract, address);
 
     const [selectedNFT, setSelectedNFT] = useState();
+
+
+    useEffect( ()=>{
+       // console.log("owner NNT  data     ",        data);
+        if (!data)return;
+  
+       
+  
+      }, [ data ]);
+
 
 
      if (data){

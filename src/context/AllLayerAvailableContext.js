@@ -1,12 +1,12 @@
-import {createContext, useContext,    useState, useEffect } from "react";
+import {createContext, useContext,  useState, useEffect } from "react";
 
 import { getAllLayersAvailable  } from "../data/API.js";
-import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
+//import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
 import { GetLayerSupply } from "../data/API.js";
 import { useUserContext } from './UserContext.js'; // to get user data from context provider
 
 import { TOOLS_ADDRESS } from "../const/addresses.ts";
-import { useContract, useNFTs } from "@thirdweb-dev/react";
+import { useContract, useNFTs,  useOwnedNFTs, useAddress  } from "@thirdweb-dev/react";
 
 const maxLayers = 11;
 const AllLayersContext = createContext();
@@ -21,8 +21,10 @@ export function AllLayersProvider({ children }) {
     const { user } = useUserContext();
 
     const { contract } = useContract(TOOLS_ADDRESS);
-    const { data: NFTdata } = useNFTs(contract);
+    const { data: NFTdata } = useNFTs(contract); // get all neft
 
+     const address = useAddress();  
+     const {data: ownedNftData, isLoading } = useOwnedNFTs(contract, address);// get user nft
     //console.log(  "  AllLayersProvider         NFTdata   "   , NFTdata);
     
     const [allLayers, setAllLayers] = useState(null);
@@ -30,25 +32,33 @@ export function AllLayersProvider({ children }) {
 
     useEffect( ()=>{
 
-
-
-      if (!NFTdata){ return};
+      // if (!address){return;}
+       if (!ownedNftData){return;}
+       if (!NFTdata){ return;} 
 
      
         // cretae basic layers available to choos efrom in the app
         const initialize = async ()=>{
-            const layers  = await Create_Initial_layerToChooseFrom( NFTdata );
+            const layers  = await Create_Initial_layerToChooseFrom( NFTdata, ownedNftData );
             setAllLayers(layers); 
         }
         initialize();
 
     }, [  user,// this will need to re-run when the user logout for example 
-         NFTdata  // we get the supply from contract noe, no more from Mongo
+         NFTdata, ownedNftData  // we get the supply from contract now, no more from Mongo
     ]); 
 
+    useEffect( ()=>{
 
+    //  console.log( "  >>>>  >>>>    ownedNftData" ,  ownedNftData  , "address", address );
+      if (!ownedNftData)return;
 
-    // if logged in , add user owning data on each layer previously created with " Create_Initial_layerToChooseFrom "
+      CheckOwnedNft(ownedNftData);
+
+    }, [ ownedNftData ]);
+
+/*
+     
     useEffect( ()=>{
         if (!user)return;
         if (!allLayers)return;
@@ -61,32 +71,8 @@ export function AllLayersProvider({ children }) {
        //NFTdata
         _fetching();
     
- }, [ user, allLayers  ]);
-
-
-
-
-
-
-    /*
-    useEffect(() => {
-      // Fetch allLayers data from the API
-      const fetchAllLayersData = async () => {
-        try {
-
-          if (!user)return; 
-          const response = await getAllLayersAvailable();
-          setAllLayers(response);
-        } catch (error) {
-          // Handle errors if the API call fails
-          console.error('Error fetching allLayers data:', error);
-        }
-      };
-  
-      fetchAllLayersData();
-    }, [ user ]); // Empty dependency array runs the effect once
-  */
-
+    }, [ user, allLayers  ]);
+ */
 
     return (
       <AllLayersContext.Provider value={{ allLayers, setAllLayers }}>
@@ -105,14 +91,23 @@ NO API call for this
  calling API Add_owning_and_otherLayerInfo()
 
 */
-async function Create_Initial_layerToChooseFrom( NFTdata ){
+async function CheckOwnedNft( ownedNftData){
+
+ // console.log( "  >>>>  >>>>    ownedNftData" ,  ownedNftData   );
+}
+
+async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
   
     const initialLayerToChooseFrom = {};
 
-     // we do not need to be registered to see supply
-    const allSupply = await GetLayerSupply();
 
-    console.log( "  >>>>    GetLayerSupply  GetLayerSupply" , allSupply   );
+   
+     // we do not need to be registered to see supply
+  //  const allSupply = await GetLayerSupply();
+
+     //console.log( "  >>>>    GetLayerSupply  GetLayerSupply" , allSupply   );
+   
+    
 
     const categories = ['he', 'sh', 'we', 'be', 'kn'];
     const layerCount = maxLayers;
@@ -133,18 +128,19 @@ async function Create_Initial_layerToChooseFrom( NFTdata ){
 
 //================================================================================
 
-console.log( "  >>>>    Create_Initial_layerToChooseFrom " , NFTdata   );
- 
+//console.log( "  >>>>    Create_Initial_layerToChooseFrom " , NFTdata   );
+ let ownerLayerFound = 0;
 NFTdata.forEach((nft) => {
-  // console.log(`Token ID: ${nft.id}, Supply: ${nft.supply}`);
- 
+  /*
   console.log("Token ID: ",    nft.metadata.id  , 
                "trait_type:   ",  nft.metadata.attributes[0].trait_type ,
               "value:   ",  nft.metadata.attributes[0].value,   
                "supply:   " ,  nft.supply  
              
              );
-             const category     = nft.metadata.attributes  [0].trait_type ;
+     */
+
+             const category     = nft.metadata.attributes[0].trait_type ;
             const layerNumber  = nft.metadata.attributes[0].value ;   
             const supply       = nft.supply;
 
@@ -153,18 +149,27 @@ NFTdata.forEach((nft) => {
             initialLayerToChooseFrom[category][layerNumber].tokenID = nft.metadata.id ;
             
 
-            console.log(">>>>   initialLayerToChooseFrom[category][layerNumber].supply" , 
-              initialLayerToChooseFrom[category][layerNumber].supply)
-              
-             
-              ;
+            ownedNftData.forEach((ownedNFT) => {
+               if (ownedNFT.metadata.id === nft.metadata.id ){
+                initialLayerToChooseFrom[category][layerNumber].owning =
+                ownedNFT.quantityOwned;
+                
+                ownerLayerFound++;
+               }
+            });
 
+            
+      
+           // console.log(">>>>   initialLayerToChooseFrom[category][layerNumber].supply" , 
+         //     initialLayerToChooseFrom[category][layerNumber].supply);
+         
   });
    
 
 
-  console.log(">>>> NFT   >>>>>   initialLayerToChooseFrom" ,  initialLayerToChooseFrom);
-
+   console.log("DDDDDD  >>>> NFT   >>>>>   initialLayerToChooseFrom" ,  initialLayerToChooseFrom);
+   console.log( "DDDDDD   >>>>    ownedNftData" ,
+     ownedNftData , "ownerLayerFound   = " + ownerLayerFound  );
 
 
 

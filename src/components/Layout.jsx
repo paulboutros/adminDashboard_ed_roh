@@ -120,7 +120,40 @@ export function RoundedBox(  {children} ){
     )
 
 }
+export function BoxWithTopBar(  {children , topBarHeight = 20  , boxHeight = 200} ){
 
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const boxColor = colors.primary[400];
+  const  _borderColor = colors.primary[400]
+  const _borderRadius= "10px";
+  return(
+    <Box 
+                border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+                overflow="hidden"   position="relative" >
+                
+                <Box
+                    height= {topBarHeight} 
+                    backgroundColor={colors.primary[700]}
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    right="0"
+                />
+                <Box height=  {boxHeight}   padding="20px" >
+                 <Divider   orientation="hotizontal" style={{ marginBottom:"20px",  width: '100%', height: '1px' }} />  
+              
+                 {children}
+              </Box>
+       </Box>
+
+
+
+  )
+
+ }
 
 export function VerticalSpace ( {space}){
  
@@ -133,6 +166,8 @@ export function HorizontalSpace ( {space}){
   
  
  }
+
+ 
 
   
   
