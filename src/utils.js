@@ -1,11 +1,15 @@
  
- 
+
 export const getBackgroundColor = (debugMode, color) => {
     return debugMode ? color : color;
 };
 
 
+export  function addressShortened( addressText){
+   return `${addressText.slice(0, 6)}...${addressText.slice(-4)}`;
 
+
+}
 export function formatTimestampToCustomFormat(timestamp) {
     const date = new Date(timestamp);
     const day = date.getUTCDate();
@@ -32,6 +36,54 @@ export function formatTimestampToCustomFormat(timestamp) {
   
     return `${daysText}${hoursText}${minutesText}${secondsText}`;
   }
+
+
+
+
+
+  
+
+export function CopyToClipboard(  copyText ) {
+  
+  console.log( " >>>>>>>>>>>>>.   copyText"  , copyText );
+    // This is the function we wrote earlier
+    async function copyTextToClipboard(text) {
+      if ('clipboard' in navigator) {
+        return await navigator.clipboard.writeText(text);
+      } else {
+        return document.execCommand('copy', true, text);
+      }
+    }
+  
+    // onClick handler function for the copy button
+    const handleCopyClick = () => {
+
+      
+      copyTextToClipboard(copyText)
+        // .then(() => {
+        
+        //    setTimeout(() => {
+        //    }, 1500);
+        // })
+        // .catch((err) => {
+        //   console.log(err);
+        // })
+        ;
+         
+        
+
+
+    }
+
+    handleCopyClick();
+  
+     
+  }
+
+    
+
+    
+
 
    
 

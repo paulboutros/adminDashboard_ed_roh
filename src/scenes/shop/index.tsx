@@ -1,12 +1,11 @@
 /*
-shop/buy
+shop/buy Thirdweb tuto
 https://www.youtube.com/watch?v=8FRm_efm99o&t=1503s
 starts at 27:00min
 */
 
 
-import {useEffect, useState} from "react";
-import { useContract, useDirectListings, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
+ import { useContract, useDirectListings, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
 import {
     MARKETPLACE_ADDRESS,
    // LAYER_EDITION_ADDRESS,
@@ -15,14 +14,10 @@ import {
     REWARDS_ADDRESS
 
 } from "../../const/addresses";
-//import  { SetLayerSupply } from "../../data/API"
-//import Link from "next/link";
-import { Link } from 'react-router-dom';
- import { BigNumber, ethers } from "ethers";
-
+ 
+import NFTContratHeader from "../../components/NFTcontractHeader.jsx"
 import { Box, Text, Button, Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
-import NFT from "../../components/FARMER/NFT";
-import TokenDetails from "../../scenes/tokenDetails/index.jsx"  
+ import TokenDetails from "../../scenes/tokenDetails/index.jsx"  
 
    import { PackNFTCard } from "../../components/PackNFT";
 
@@ -45,6 +40,8 @@ export default function Shop() {
 
     return (
         <div className="ddd">
+
+             <NFTContratHeader/>
             {/* <h1>Shop Packs</h1> */}
             <Box m="20px" maxHeight="calc(80vh)" overflow="auto" >
                 {!loadingDirectListings ? (

@@ -26,21 +26,7 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
       if (!dropTime){return; }
 
       setfutureDate( dropTime.NextGiveAway );
-      
-    //  GetRewardNextTime ={GetRewardNextTime} 
-   //  onCountdownFinish={handleCountdownFinish}
-
-/*
-     const giveAwayTiming = {
-      NextGiveAway: timing_response.giveAwayTiming.NextGiveAway,
-      frequency:frequency,
-      lastGiveAway: lastGiveAway, 
-      Next_Drop_title: `NextGiveAway \n every:${frequency}`   
- };
-*/
-
-
-
+       
 
      
     }, [dropTime]);
@@ -110,6 +96,49 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 
 
 
+  export function CountdownTimerWithArg({ startTime, endTime }) {
+    let endTimeInSecondsX = endTime - startTime;
+  
+     const currentTimestamp = new Date().getTime() /1000;
+     endTimeInSecondsX = endTime - currentTimestamp;
 
+     const calculateTimeLeft = () => {
+     const days = Math.floor(endTimeInSecondsX / (24 * 60 * 60));
+     const hours = Math.floor((endTimeInSecondsX % (24 * 60 * 60)) / 3600);
+     const minutes = Math.floor((endTimeInSecondsX % 3600) / 60);
+     const remainingSeconds =Math.floor(endTimeInSecondsX % 60); 
+    
+      if ( endTimeInSecondsX <=0 ){
+
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      }
+
+       return { days, hours, minutes, seconds: remainingSeconds }
+    };
+  
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setTimeLeft(calculateTimeLeft());
+      }, 1000);
+  
+      return () => clearInterval(timer);
+    }, [endTimeInSecondsX]);
+  
+    return (
+      <div>
+        {timeLeft.days > 0 && (
+          <div>
+            {timeLeft.days} {timeLeft.days === 1 ? 'day' : 'days'}
+          </div>
+        )}
+        <div>
+          {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+        </div>
+      </div>
+    );
+  }
+ 
 
 export default CountdownTimer;

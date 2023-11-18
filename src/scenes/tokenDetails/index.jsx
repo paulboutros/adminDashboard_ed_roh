@@ -1,11 +1,14 @@
 
  import { IconButton , Button, TextField , CardMedia, Box, Grid, Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
 
-import  {evolve} from "../../utils/updateMetadata.js"
+ 
+import { CountdownTimerWithArg } from   "../../components/CountdownTimer.jsx"
+import  { formatTimestampToCustomFormat, addressShortened ,handleCopyClick} from "../../utils.js"
 //https://chakra-ui.com/docs/components/button
  import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract, useMinimumNextBid, useValidDirectListings, useValidEnglishAuctions  } from "@thirdweb-dev/react";
 import { Avatar, 
-   // Container,
+      useToast ,
+   Tooltip,
    Button as ChakraButton,
     Flex,
      Input,
@@ -15,7 +18,7 @@ import { Avatar,
     Skeleton
 } from "@chakra-ui/react";
 
-
+import {CopyText, CustomLinkWithLocalIcon,  CustomLinkWithIcon } from "../../components/LinkTextButton.jsx"
 import { RowChildrenAlignCenter,
      VerticalStackAlignCenter ,
      VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,
@@ -48,6 +51,7 @@ import { Link, useParams } from 'react-router-dom';
 
 const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } ) => {
  
+    const toast = useToast()
      let {  contractAddress,   tokenId } = useParams();
    // const { contractAddress, tokenId } = useParams();
 
@@ -180,212 +184,177 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } )
         return txResult;
     }
 
-  
+   
     if(!nft  ){
         return (<div></div>)
 
     }else{
        
-     if (!AlllistingData){
+    // if (!AlllistingData){
         return (
         <div>
         
         {/* nft top area info */}
-        
-        <NFTContratHeader/>
-       
-         
-        
-        
+        { !AlllistingData  &&(
+          <NFTContratHeader/>
+        )}
+
          <RowChildrenAlignTop> 
-        
-
-
-
-
-        <Box style={{ marginLeft:"50px"  }}   >   </Box>
+         
+         <Box style={{ marginLeft:"50px"  }}   >   </Box>
 
         
-          <VerticalStackAlignLeft>
-            
-                <RoundedBox> 
-                <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
-                    
-                <Box height="350px" width="350px" >
-                    
-                        <VerticalStackAlignCenter>
-                        
-                            <MediaRenderer
-                                src={nft.metadata.image}
-                                style={{  width: '100%',position: 'relative', left: '10px',  top:"10px" }}
-                                
-                            />
-                        </VerticalStackAlignCenter>
-                </Box>
-                </Skeleton>
-                </RoundedBox>
-            
+<VerticalStackAlignLeft>
 
-            {/* <NftTraitBox nft={nft} />   */}
-          </VerticalStackAlignLeft>
+   <RoundedBox> 
+   <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
+       
+   <Box height="350px" width="350px" >
+       
+           <VerticalStackAlignCenter>
+           
+               <MediaRenderer
+                   src={nft.metadata.image}
+                   style={{  width: '100%',position: 'relative', left: '10px',  top:"10px" }}
+                   
+               />
+           </VerticalStackAlignCenter>
+   </Box>
+   </Skeleton>
+   </RoundedBox>
 
-            {/* right side stack    */}
-                <VerticalStackAlignLeft fullWidth={true}>
-                <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
-                
-                <BoxWithTopBar>
+
+{/* <NftTraitBox nft={nft} />   */}
+</VerticalStackAlignLeft>
+
+   {/* right side stack    */}
+   <VerticalStackAlignLeft fullWidth={true}>
+   <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
+   
+   <BoxWithTopBar>
+
+
+   <VerticalStackAlignLeft >
+   <Box  >
+     <NftPriceBlock 
+           boxColor={boxColor}  directListing={directListing}  
+           loadingMarketplace={loadingMarketplace} 
+           loadingDirectListing ={loadingDirectListing} auctionListing={auctionListing} loadingAuction={loadingAuction} 
+    /> 
+  </Box>
+ 
+          <RowChildrenAlignTop> 
+    <NftTraitBox nft={nft} /> 
+    <HorizontalSpace space={2}></HorizontalSpace>
+    <SupplyBox nft={nft} /> 
+  
+           <VerticalStackAlignLeft>
+                <CopyText  
+                    to={`/profile/${nft.owner}`}
+                    text= { addressShortened(nft.owner) } 
+                    tooltipText={"copy address to clipboard"}
+                    textToCopy={nft.owner}
+                    >
+
+                </CopyText>
+   
+
+                <CustomLinkWithLocalIcon  
+                to={`/profile/${nft.owner}`}
+                text= { addressShortened(nft.owner) } 
+                tooltipText={"visit owner's profile"}
+                >
+
+               </CustomLinkWithLocalIcon>
+             <p>listing ID : {AlllistingData?.id}</p>
+             <p>tokenId    : {AlllistingData?.tokenId}</p>
+             
+             </VerticalStackAlignLeft>
+           { AlllistingData  ? (
+                <div>
+                <p>creator: {  addressShortened(AlllistingData?.creatorAddress) }</p>
+                 <p>Start: { formatTimestampToCustomFormat(AlllistingData?.startTimeInSeconds*1000) } </p>
+                <p>End: { formatTimestampToCustomFormat(AlllistingData?.endTimeInSeconds*1000) } </p>
+        
+                <CountdownTimerWithArg 
+                  startTime={AlllistingData.startTimeInSeconds}
+                  endTime={AlllistingData.endTimeInSeconds}
+                /> 
+                </div>
+            ):(   <div> </div>) }
+
+              <AddressBox nft={nft} AlllistingData={AlllistingData} />
+
+              </RowChildrenAlignTop> 
+
+
+             </VerticalStackAlignLeft>
+
+          </BoxWithTopBar>
+            <VerticalSpace space={2}/>
+
+   
+           <Skeleton isLoaded={!loadingMarketplace || !loadingDirectListing || !loadingAuction}>
+       
+      
+       <Box spacing={5} color={colors.primary[200]} >
+
+          
+           <Box sx={ flex }>    
+               <Web3Button 
+           className="tw-web3button--connect-wallet"
+           style={{
+               fontWeight:"600",
+               color:colors.primary[500],
+               backgroundColor:colors.blueAccent[700], 
+               width: '100%'
+           }}
+
+
+           contractAddress={MARKETPLACE_ADDRESS}
+           action={async () => buyListing()}
+           isDisabled={(!auctionListing || !auctionListing[0]) && (!directListing || !directListing[0])}
+           >
+           Buy at asking price
+               </Web3Button>
+           <Typography align="center">or</Typography>
+           
+           
+           <TextField
+               fullWidth margin="bottom" variant="outlined"  label="Minimum Bid" type="number" value={bidValue}
+               onChange={(e) => setBidValue(e.target.value)}
+           /> 
+
+           <VerticalSpace space={2}/>
+
+           <Web3Button
+               contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionListing || !auctionListing[0]}
+               className="tw-web3button--connect-wallet" style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
+           >
+               Place Bid
+           </Web3Button>
+           </Box>
+
+
+       </Box>
+          </Skeleton>
+
+   </Box>
+
+
+   </VerticalStackAlignLeft>
+
+
 
              
-                <VerticalStackAlignLeft >
-                <Box  >
-                  <NftPriceBlock 
-                        boxColor={boxColor}  directListing={directListing}  
-                        loadingMarketplace={loadingMarketplace} 
-                        loadingDirectListing ={loadingDirectListing} auctionListing={auctionListing} loadingAuction={loadingAuction} 
-                 /> 
-               </Box>
-                 <NftTraitBox nft={nft} /> 
-                 </VerticalStackAlignLeft>
-
-                 </BoxWithTopBar>
-
-                
-                <VerticalSpace space={2}/>
-
-                
-                <Skeleton isLoaded={!loadingMarketplace || !loadingDirectListing || !loadingAuction}>
-                    
-                    {/* Buy at asking price */}
-                    <Box spacing={5} color={colors.primary[200]} >
-
-                        {/* <Flex direction="column"> */}
-                        <Box sx={ flex }>    
-                            <Web3Button 
-                        className="tw-web3button--connect-wallet"
-                        style={{
-                            fontWeight:"600",
-                            color:colors.primary[500],
-                            backgroundColor:colors.blueAccent[700], 
-                            width: '100%'
-                        }}
-
-
-                        contractAddress={MARKETPLACE_ADDRESS}
-                        action={async () => buyListing()}
-                        isDisabled={(!auctionListing || !auctionListing[0]) && (!directListing || !directListing[0])}
-                        >
-                        Buy at asking price
-                            </Web3Button>
-                        <Typography align="center">or</Typography>
-                        
-                        
-                        <TextField
-                            fullWidth margin="bottom" variant="outlined"  label="Minimum Bid" type="number" value={bidValue}
-                            onChange={(e) => setBidValue(e.target.value)}
-                        /> 
-
-                        <VerticalSpace space={2}/>
-
-                        <Web3Button
-                            contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionListing || !auctionListing[0]}
-                            className="tw-web3button--connect-wallet" style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
-                        >
-                            Place Bid
-                        </Web3Button>
-                        </Box>
-
-
-                    </Box>
-                    </Skeleton>
-
-                </Box>
- 
-
-                </VerticalStackAlignLeft>
-        </RowChildrenAlignTop>     
+         </RowChildrenAlignTop>     
       
         
     </div>
 
         ) 
-      }else{
-
-
-        console.log("from TOKEN DETAILS: directListing", directListing);
-
-        return (<div     >  
-            
-            
-            <RowChildrenAlignTop> 
-        
-        <Box style={{ marginLeft:"50px"  }}   >   </Box>
-
-        
-          <VerticalStackAlignLeft>
-            
-               
-           
-          </VerticalStackAlignLeft>
-
-            {/* right side stack    */}
-              <VerticalStackAlignLeft fullWidth={true}>
-                <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
-                
-                <BoxWithTopBar boxHeight ={150}>
-             
-                <RowChildrenAlignTop> 
-
-              
-                <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
-                    
-                    <Box height="110px" width="110px" >
-                           
-                              <MediaRenderer
-                                  src={nft.metadata.image}
-                                  style={{  width: '120%',position: 'relative', left: '10px',  bottom:"100px" }}
-                                  
-                              />
-                          
-                  </Box>
-                  </Skeleton>
-                  <HorizontalSpace space={50}/> 
-                <NftPriceBlock 
-                        boxColor={boxColor}  directListing={directListing}  
-                        loadingMarketplace={loadingMarketplace} 
-                        loadingDirectListing ={loadingDirectListing} auctionListing={auctionListing} loadingAuction={loadingAuction} 
-                /> 
-                  <HorizontalSpace space={50}/> 
-               <NftPriceBlock 
-                        boxColor={boxColor}  directListing={directListing}  
-                        loadingMarketplace={loadingMarketplace} 
-                        loadingDirectListing ={loadingDirectListing} auctionListing={auctionListing} loadingAuction={loadingAuction} 
-                /> 
-
-                 <VerticalStackAlignLeft>
-                 </VerticalStackAlignLeft>
-  
-                 </RowChildrenAlignTop> 
-                
-                 </BoxWithTopBar>
-
-                
-                {/* <VerticalSpace space={2}/> */}
- 
-
-                </Box>
-
-             
-                
-
-                </VerticalStackAlignLeft>
-        </RowChildrenAlignTop>     
      
-        
-            
-            
-             </div>)
-
-      }
+ 
 
     }
     
@@ -441,6 +410,78 @@ export default TokenDetails;
 </Box>
 
     )
+  }
+
+   
+  function SupplyBox ( {nft}){
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+  
+    const boxColor = colors.primary[400];
+    const  _borderColor = colors.primary[400]
+    const _borderRadius= "10px";
+     const  paddingPX = "0px";
+     const trait_margin = "15px";
+
+ return(
+    <Box sx={{  position: 'relative', top:"-5px", height: "110px"  }}
+    padding= {2} 
+    border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+   >
+                  <Typography 
+                 fontWeight="200"
+                 sx={{  position: 'relative', top:"-5px"  }}
+                  >Supply:</Typography>
+                  
+                 <RowChildrenAlignCenter>  
+                     <Box
+                         display="flex"
+                         flexDirection="column"
+                         alignItems="center"
+                         justifyContent="center"
+
+                          padding={1}
+                          border={1}
+                          borderColor={ _borderColor} //borderRadius={_borderRadius}
+                          borderRadius={2}
+                     >
+                         <Typography fontSize="small">{nft?.supply}</Typography>
+                         
+                     </Box>
+                     </RowChildrenAlignCenter>   
+ 
+      
+ </Box>
+ 
+ )
+
+  }
+  function  AddressBox ( {nft , AlllistingData }){
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+  
+    const boxColor = colors.primary[400];
+    const  _borderColor = colors.primary[400]
+    const _borderRadius= "10px";
+     const  paddingPX = "0px";
+     const trait_margin = "15px";
+
+ return(
+    <Box sx={{  position: 'relative', top:"-5px", height: "50px"  }}
+    padding= {2} 
+    border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+   >
+                  { AlllistingData  ? (           
+             <p>status : {GetListingStatus(AlllistingData )  }</p>  
+                 ):(<div></div>) }
+            
+                 
+ 
+      
+ </Box>
+ 
+ )
+
   }
   function NftTraitBox ( {nft}){
     const theme = useTheme();
@@ -501,7 +542,22 @@ export default TokenDetails;
 
   }
 
+  function   GetListingStatus(AlllistingData){
+   
+    if (!AlllistingData){return ""; }
 
+    //console.log("listing ID" , AlllistingData.id, "  AlllistingData.status",  AlllistingData.status );
+    // CREATED, COMPLETED, or CANCELLED
+    switch (AlllistingData.status ){
+      case 2: return "COMPLETED";  
+      case 3: return "CANCELLED";  
+      case 4: return "ACTIVE"; // or created  
+      case 5: return "EXPIRED"; 
+     default: return "ERROR";  
+    }
+   
+
+  }
  
 
   

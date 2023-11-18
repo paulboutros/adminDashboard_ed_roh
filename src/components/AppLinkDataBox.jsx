@@ -92,12 +92,10 @@ import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
                   
                   
                      {/* this first row act as the top header of the grid */}
-                       <Row  
-
-
-                          Comp_discordClipBoard={
-
-                            <Box display="flex" justifyContent="center">
+                         <Row  
+ 
+                           Comp_discordClipBoard={
+                             <Box display="flex" justifyContent="center">
                             <CopyToClipboard copyText={referralData.shareableLink}  backgroundColor={colors.primary[400]}  textColor={colors.greenAccent[400]}
                             />
                            </Box>

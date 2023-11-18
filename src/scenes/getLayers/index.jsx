@@ -322,7 +322,7 @@ p={5} // padding around the grid
 >
          
     <AppLinkDataBox/>  
-                  {/* <ReferralLinkGrid col1_title={"App Invite"}  />   */}
+                  
               
     
 </Box>

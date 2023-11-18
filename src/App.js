@@ -131,7 +131,7 @@ const testThirdWeb = false;
 
 
     <ThirdwebProvider activeChain={Goerli}>
-
+ <ChakraProvider>
        <UserProvider>
 
    <DiscordProvider>
@@ -205,7 +205,7 @@ const testThirdWeb = false;
      </AppLinkProvider>
   </DiscordProvider>
        </UserProvider>
-
+    </ChakraProvider>
     </ThirdwebProvider>
   
 

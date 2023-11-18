@@ -1,6 +1,8 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'; 
 import {Button, Box,  Divider,  Typography, useTheme   } from "@mui/material";
 
+
+import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
  //https://chakra-ui.com/docs/components/button
  import { MediaRenderer  } from "@thirdweb-dev/react";
 import { Avatar, 
@@ -8,7 +10,7 @@ import { Avatar,
    
 } from "@chakra-ui/react";
 
-
+import { CustomLinkWithIcon } from "./LinkTextButton.jsx"
 import { RowChildrenAlignCenter,
      VerticalStackAlignCenter ,
      VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,
@@ -24,7 +26,7 @@ import {
     TOOLS_ADDRESS 
 } from "../const/addresses.ts";
 //import {getSDK } from "../../utils/updateMetadata";
-import {text2, text1, tokens } from "../theme.js";
+import {buttonStyle, text2, text1, tokens } from "../theme.js";
  
 import { getSDK_fromPrivateKey } from "../data/API.js";
   
@@ -127,10 +129,38 @@ import { Link, useParams } from 'react-router-dom';
     
     return (
         <div>
-        <Typography marginBottom={1} variant='h3' fontWeight={"bold"}>{contractMetadata.name}</Typography>
+
+      {/* backgroundColor={colors.blueAccent[buttonStyle.colorBlue ]} */}
+
+
+           <RowChildrenAlignCenter> 
+           {/* <VerifiedUserOutlinedIcon  
+            style={{
+                color:  colors.greenAccent[buttonStyle.colorBlue-200 ] ,
+                //  color:  colors.blueAccent[buttonStyle.colorBlue-200 ] ,
+                 position: 'relative', bottom: '4px', right:"1px"
+                }}
+             />  */}
+            <Typography
+              
+              style={{
+                
+                //  color:  colors.blueAccent[buttonStyle.colorBlue-200 ] ,
+                 position: 'relative' , right:"2px"
+                }}
+
+
+             marginBottom={1} variant='h3' fontWeight={"bold"}>{contractMetadata.name}</Typography>
+            </RowChildrenAlignCenter> 
+
             <Typography color={colors.grey[text2.color]} variant="h7" fontWeight= {text2.fontWeight} >
              Wulirocks Layers to use in Compo Reward.
             </Typography>
+
+
+
+
+
             {/* TOOLS_ADDRESS */}
 
             {/* <CustomLinkWithIcon   to={`/profile/${nft.owner}`} color={colors.grey[200]} >
@@ -142,11 +172,14 @@ import { Link, useParams } from 'react-router-dom';
   {/* https://goerli.etherscan.io/address/ */}
 
            <CustomLinkWithIcon  
+ 
             to={`https://goerli.etherscan.io/address/${TOOLS_ADDRESS}`} 
             text={`${TOOLS_ADDRESS.slice(0, 6)}...${TOOLS_ADDRESS.slice(-4)}`}
-            color={colors.grey[200]} >
-            
-            </CustomLinkWithIcon>
+            color={colors.grey[200]} 
+            tooltipText={"vist goerli.etherscan"}
+          >
+
+           </CustomLinkWithIcon>
 
            
 
@@ -155,72 +188,9 @@ import { Link, useParams } from 'react-router-dom';
   }
 
    
-  const CustomLinkWithIcon = ({ to, children, text }) => {
+   
 
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-
-  return(
-
-    
-        <Box >
-          {/* <OpenInNewIcon   sx={{ marginRight:1,  fontSize: 14 }}   /> */}
-          <Button variant="text" 
-           style={{ textDecoration: 'none',
-           display: 'flex',
-            alignItems: 'center',
-            color: colors.grey[300]
-          }} 
-          startIcon={ <OpenInNewIcon sx={{ marginRight:1,  fontSize: 14 }}/>}
-          onClick={() => openEtherScanLink( to )}
- 
-
-          > {text} </Button>
-
- 
-            {/* <a href={to} target="_blank" rel="noopener noreferrer" >
-            {children}
-            </a> */}
-
-
-        </Box>
-  )
-
-    return (
-      <Link to={to} style={{ textDecoration: 'none',
-       display: 'flex',
-        alignItems: 'center',
-        color: colors.grey[300]
-        }}>
-          <OpenInNewIcon   sx={{ marginRight:1,  fontSize: 14 }}   />
-        {children}
-       
-      </Link>
-    );
-  };
-
-  
-/*
- const CustomLinkWithIcon = ({ to, children }) => {
-
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-
-    return (
-      <Link to={to} style={{ textDecoration: 'none',
-       display: 'flex',
-        alignItems: 'center',
-        color: colors.grey[300]
-        }}>
-             <OpenInNewIcon   sx={{ marginRight:1,  fontSize: 14 }}   />
-        {children}
-       
-      </Link>
-    );
-  };
-
-*/
-
+   
 
 function openEtherScanLink( url){
 

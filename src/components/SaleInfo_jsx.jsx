@@ -60,7 +60,7 @@ export default function SaleInfo({ nft } ) {
         await checkAndProvideApproval();
 
     
-
+    console.log("SELL in data.tokenId" , data.tokenId );
 
 
         const txResult = await createDirectListing({

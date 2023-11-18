@@ -51,8 +51,7 @@ const address = useAddress();
   // this should be an Api call
  // user.address = address;
       
-  // CheckComBoValidity(filteredImages ,user);
-  useEffect(()=>{
+   useEffect(()=>{
     if (!address) return;
     
     CheckComBoValidity(filteredImages ,user , address);
@@ -286,11 +285,11 @@ const handleImageSelect = (category, obj   ) => {
    
 
   function CheckComBoValidity(filteredImages, user, address){
-
+   
     // testSDK( address );
- 
+    console.log("popup  user " , address  );
     console.log("CheckComBoValidity  address " , address  );
-     
+     if(!user) return;
       const missingCategories = [];
 
 for (const category in filteredImages) {

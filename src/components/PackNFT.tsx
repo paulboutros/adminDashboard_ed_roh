@@ -99,38 +99,5 @@ export const PackNFTCard = ({ contractAddress, tokenId }: Props) => {
         </BoxWithTopBar>
             
   )  
-    return (
-        <div className="{vvvvpackCard}">
-            {!loadingNFT && !loadingPackListings ? (
-                <div className="{styles.shopPack}">
-                    <div>
-                        <MediaRenderer
-                            src={packNFT?.metadata.image}
-                            width="20%"
-                            height="100%"
-                        />
-                    </div>
-                    <div className="{styles.packInfo}">
-                        <h3>{packNFT?.metadata.name}</h3>
-                        
-                        <p>Cost: {packListings![tokenId].currencyValuePerToken.displayValue} {` ` + packListings![tokenId].currencyValuePerToken.symbol}</p>
-                        <p>Supply: {packListings![tokenId].quantity}</p>
-                        <p>creator: {packListings![tokenId].creatorAddress}</p>
-                        <p>ends: {packListings![tokenId].endTimeInSeconds}</p>
-                        <p>price per token: {packListings![tokenId].pricePerToken}</p>
-                        {!address ? (
-                            <p>Login to buy</p>
-                        ) : (
-                            <Web3Button
-                            contractAddress={MARKETPLACE_ADDRESS}
-                            action={() => buyPack()}
-                            >Buy Pack</Web3Button>
-                        )}
-                    </div>
-                </div>
-            ) : (
-                <p>Loading...</p>
-            )}
-        </div>
-    )
+    
 };
