@@ -165,21 +165,21 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-            <Item
+             <Item
               title="Profile"
               to="profile"//  "/userProfile"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            />   
 
-             <Item
+               <Item
               title="Get Layers"
               to="getLayers"//  "/userProfile"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            />  
             <Item
               title="Sell"
               to="sell"//  "/userProfile"
@@ -198,13 +198,13 @@ const Sidebar = () => {
             >
               Social Contest
             </Typography>
-            <Item
+            {/* <Item
               title="Discord Board"
               to="/discordBoard"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
           
             {/* <Item

@@ -21,11 +21,13 @@ import { Avatar,
 import {CopyText, CustomLinkWithLocalIcon,  CustomLinkWithIcon } from "../../components/LinkTextButton.jsx"
 import { RowChildrenAlignCenter,
      VerticalStackAlignCenter ,
-     VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,
+     VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,RowChildrenAlignLeft,
+     RowChildrenAlignRight,
      VerticalSpace,
       RoundedBox,
       BoxWithTopBar,
-      HorizontalSpace
+      HorizontalSpace,
+      RoundedBoxInfo
     } from "../../components/Layout.jsx"  
 
 import NFTContratHeader from "../../components/NFTcontractHeader.jsx"
@@ -49,12 +51,13 @@ import {useEffect, useState} from "react";
 import { Link, useParams } from 'react-router-dom';
 
 
-const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } ) => {
+const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData, displayMode  } ) => {
  
-    const toast = useToast()
+    
      let {  contractAddress,   tokenId } = useParams();
-   // const { contractAddress, tokenId } = useParams();
+    
 
+    //if prop underfined it means it is called from url (so we get props from url param)
     if( propContractAddress !==undefined && propTokenId !==undefined  ){
         contractAddress = propContractAddress;
         tokenId = propTokenId;
@@ -109,19 +112,10 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } )
     fetchNFT();
      
   }, [contractAddress, tokenId]);
-
-
-
-
-
-  
+ 
 
            const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
-           
-                
-               
-           
-
+ 
             const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
 
             const { data: directListing, isLoading: loadingDirectListing } = 
@@ -189,109 +183,142 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } )
         return (<div></div>)
 
     }else{
+
+      if (displayMode && displayMode === "grid"){
+           return(
+            // <Box>
+ 
+            //   <DisplayNFTimage nft={nft}/> 
+            //  </Box>
+
+            <RoundedBox>
+            <MediaRenderer
+             src={nft.metadata.image}
+              />
+            </RoundedBox>
+
+          )
+
+      } 
        
-    // if (!AlllistingData){
+     //  if it displays as list
         return (
         <div>
-        
+    
         {/* nft top area info */}
         { !AlllistingData  &&(
           <NFTContratHeader/>
         )}
+
+{/* 
+      <Box display="flex" justifyContent="space-between"   padding={2}  >   
+      
+      
+      <StatusBox nft={nft} AlllistingData={AlllistingData} />
+     <StatusBox nft={nft} AlllistingData={AlllistingData} />  
+     </Box> */}
+
+
 
          <RowChildrenAlignTop> 
          
          <Box style={{ marginLeft:"50px"  }}   >   </Box>
 
         
-<VerticalStackAlignLeft>
+       <VerticalStackAlignLeft>
 
-   <RoundedBox> 
-   <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
-       
-   <Box height="350px" width="350px" >
-       
-           <VerticalStackAlignCenter>
-           
-               <MediaRenderer
-                   src={nft.metadata.image}
-                   style={{  width: '100%',position: 'relative', left: '10px',  top:"10px" }}
-                   
-               />
-           </VerticalStackAlignCenter>
-   </Box>
-   </Skeleton>
-   </RoundedBox>
+        <DisplayNFTimage nft={nft} /> 
+   
 
 
-{/* <NftTraitBox nft={nft} />   */}
-</VerticalStackAlignLeft>
+ </VerticalStackAlignLeft>
 
    {/* right side stack    */}
    <VerticalStackAlignLeft fullWidth={true}>
-   <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
+         <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
    
-   <BoxWithTopBar>
+    <BoxWithTopBar>
 
+  <RowChildrenAlignLeft>
+     <VerticalStackAlignLeft >
+          <Box  >
+            <NftPriceBlock boxColor={boxColor}  directListing={directListing} loadingMarketplace={loadingMarketplace} loadingDirectListing ={loadingDirectListing}  auctionListing={auctionListing} loadingAuction={loadingAuction}   AlllistingData={AlllistingData}/>
+         </Box>
 
-   <VerticalStackAlignLeft >
-   <Box  >
-     <NftPriceBlock 
-           boxColor={boxColor}  directListing={directListing}  
-           loadingMarketplace={loadingMarketplace} 
-           loadingDirectListing ={loadingDirectListing} auctionListing={auctionListing} loadingAuction={loadingAuction} 
-    /> 
-  </Box>
- 
-          <RowChildrenAlignTop> 
-    <NftTraitBox nft={nft} /> 
-    <HorizontalSpace space={2}></HorizontalSpace>
-    <SupplyBox nft={nft} /> 
-  
-           <VerticalStackAlignLeft>
-                <CopyText  
-                    to={`/profile/${nft.owner}`}
-                    text= { addressShortened(nft.owner) } 
+               <div>
+                 <Typography color={colors.grey[ text2.color ]} >creator:</Typography>
+                 <CopyText  
+                    to={`/profile/${AlllistingData?.creatorAddress}`}//nft.owner
+                    text= { addressShortened(AlllistingData?.creatorAddress) } 
                     tooltipText={"copy address to clipboard"}
-                    textToCopy={nft.owner}
+                    textToCopy={AlllistingData?.creatorAddress}
                     >
 
-                </CopyText>
-   
+                 </CopyText> 
+                   <CustomLinkWithLocalIcon  
+                   to={`/profile/${AlllistingData?.creatorAddress}`}
+                   text= { addressShortened(AlllistingData?.creatorAddress) } 
+                   tooltipText={"visit owner's profile"}
+                   >
+                   </CustomLinkWithLocalIcon>
+               </div>
+              
+           
+     </VerticalStackAlignLeft>
 
-                <CustomLinkWithLocalIcon  
-                to={`/profile/${nft.owner}`}
-                text= { addressShortened(nft.owner) } 
-                tooltipText={"visit owner's profile"}
-                >
+     <HorizontalSpace space={1}></HorizontalSpace>
+     < Box   whiteSpace="nowrap" >
+      <VerticalStackAlignLeft>
+         
+         <Typography color={colors.grey[ text2.color ]} >listing ID</Typography>
+         <Typography> {AlllistingData?.id}</Typography>
+         <Typography color={colors.grey[ text2.color ]} >tokenId</Typography>
+         <Typography>{AlllistingData?.tokenId}</Typography>
+         
+      </VerticalStackAlignLeft>
+   </Box>
+   <HorizontalSpace space={1}></HorizontalSpace>
 
-               </CustomLinkWithLocalIcon>
-             <p>listing ID : {AlllistingData?.id}</p>
-             <p>tokenId    : {AlllistingData?.tokenId}</p>
-             
-             </VerticalStackAlignLeft>
+ 
+    <RowChildrenAlignTop> 
+    <NftTraitBox nft={nft} /> 
+    <HorizontalSpace space={1}></HorizontalSpace>
+    {/* <SupplyBox nft={nft} />  */}
+    <Box   >
+       <RoundedBoxInfo  name="Supply:" value={nft?.supply}  _width="120" />
+    </Box>
+    <HorizontalSpace space={1}></HorizontalSpace> 
+          
            { AlllistingData  ? (
                 <div>
-                <p>creator: {  addressShortened(AlllistingData?.creatorAddress) }</p>
-                 <p>Start: { formatTimestampToCustomFormat(AlllistingData?.startTimeInSeconds*1000) } </p>
-                <p>End: { formatTimestampToCustomFormat(AlllistingData?.endTimeInSeconds*1000) } </p>
-        
-                <CountdownTimerWithArg 
+                 <CountdownTimerWithArg 
                   startTime={AlllistingData.startTimeInSeconds}
                   endTime={AlllistingData.endTimeInSeconds}
                 /> 
                 </div>
             ):(   <div> </div>) }
 
-              <AddressBox nft={nft} AlllistingData={AlllistingData} />
 
-              </RowChildrenAlignTop> 
+        {/*this is inside  RowChildrenAlignLeft  , so tp force it to righ we do this  */}
+        <HorizontalSpace space={10}></HorizontalSpace> 
+         <Box 
+        //   sx={{  position: 'relative', left:"70px"  }}
+           >
+              <StatusBox nft={nft} AlllistingData={AlllistingData} />
+         </Box>
 
 
-             </VerticalStackAlignLeft>
+     </RowChildrenAlignTop> 
 
-          </BoxWithTopBar>
-            <VerticalSpace space={2}/>
+
+   
+    
+      
+
+ </RowChildrenAlignLeft>
+  
+  </BoxWithTopBar>
+            <VerticalSpace space={1}/>
 
    
            <Skeleton isLoaded={!loadingMarketplace || !loadingDirectListing || !loadingAuction}>
@@ -325,7 +352,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } )
                onChange={(e) => setBidValue(e.target.value)}
            /> 
 
-           <VerticalSpace space={2}/>
+           <VerticalSpace space={1}/>
 
            <Web3Button
                contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionListing || !auctionListing[0]}
@@ -338,17 +365,20 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } )
 
        </Box>
           </Skeleton>
-
-   </Box>
-
-
-   </VerticalStackAlignLeft>
-
-
-
-             
+           </Box>
+          </VerticalStackAlignLeft>
+       
          </RowChildrenAlignTop>     
-      
+         {/* </Box> */}
+         <div>
+
+        
+
+
+</div>
+
+
+
         
     </div>
 
@@ -364,25 +394,23 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData  } )
 
 export default TokenDetails;
  
-
-
-  function NftPriceBlock (   { boxColor, directListing, loadingMarketplace, loadingDirectListing , auctionListing , loadingAuction }  ){
+function NftPriceBlock (   { boxColor, directListing, loadingMarketplace, loadingDirectListing , auctionListing , loadingAuction, AlllistingData }  ){
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
     return (
-        <Box   sx={{  position: 'relative', top:"-5px"  }} >
+        <Box   >
         <Typography
          
-         sx={{  position: 'relative', top:"-5px"  }}
+        //  sx={{  position: 'relative', top:"-5px"  }}
          color={colors.grey[ text2.color ]} >Price: </Typography>
-        <Skeleton isLoaded={!loadingMarketplace && !loadingDirectListing}>
-        {directListing && directListing[0] ? (
+        
+        {AlllistingData ? (
             <Typography color={colors.grey[ text1.color ]}
-            sx={{  position: 'relative', top:"-5px"  }}
+            // sx={{  position: 'relative', top:"-5px"  }}
             variant="h5" fontWeight="60">
-            {`${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`}
+            {`${AlllistingData?.currencyValuePerToken.displayValue} ${AlllistingData.currencyValuePerToken.symbol}`}
             </Typography>
         ) : auctionListing && auctionListing[0] ? (
             <Typography variant="h5" fontWeight="bold">
@@ -395,7 +423,7 @@ export default TokenDetails;
             Not for sale
             </Typography>
         )}
-        </Skeleton>
+        
         <Skeleton isLoaded={!loadingAuction}>
         {auctionListing && auctionListing[0] && (
             <Flex direction="column">
@@ -413,6 +441,8 @@ export default TokenDetails;
   }
 
    
+
+   
   function SupplyBox ( {nft}){
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -425,8 +455,8 @@ export default TokenDetails;
 
  return(
     <Box sx={{  position: 'relative', top:"-5px", height: "110px"  }}
-    padding= {2} 
-    border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+    padding= {2}   border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+   
    >
                   <Typography 
                  fontWeight="200"
@@ -449,14 +479,16 @@ export default TokenDetails;
                          
                      </Box>
                      </RowChildrenAlignCenter>   
- 
-      
+       
  </Box>
  
  )
 
   }
-  function  AddressBox ( {nft , AlllistingData }){
+
+
+
+  function  StatusBox ( {nft , AlllistingData }){
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
   
@@ -467,7 +499,7 @@ export default TokenDetails;
      const trait_margin = "15px";
 
  return(
-    <Box sx={{  position: 'relative', top:"-5px", height: "50px"  }}
+    <Box 
     padding= {2} 
     border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
    >
@@ -494,7 +526,7 @@ export default TokenDetails;
      const trait_margin = "15px";
 
  return(
-    <Box sx={{  position: 'relative', top:"-5px"  }}
+    <Box  
     padding= {paddingPX} 
    border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
   >
@@ -507,8 +539,8 @@ export default TokenDetails;
              <Grid item xs={12}  margin= {trait_margin}  >
                  <Typography 
                  fontWeight="200"
-                 sx={{  position: 'relative', top:"-5px"  }}
-               
+                 sx={{ color: colors.grey[200], position: 'relative', top:"-5px"  }}
+                 
                  >Traits:</Typography>
                  <Grid container spacing={4}>
                  {Object.entries(nft?.metadata?.attributes || {}).map(([key, value]) => (
@@ -546,8 +578,7 @@ export default TokenDetails;
    
     if (!AlllistingData){return ""; }
 
-    //console.log("listing ID" , AlllistingData.id, "  AlllistingData.status",  AlllistingData.status );
-    // CREATED, COMPLETED, or CANCELLED
+     // CREATED, COMPLETED, or CANCELLED
     switch (AlllistingData.status ){
       case 2: return "COMPLETED";  
       case 3: return "CANCELLED";  
@@ -556,9 +587,30 @@ export default TokenDetails;
      default: return "ERROR";  
     }
    
+  }
+
+  
+   
+  function DisplayNFTimage( {nft}){
+ 
+   return(
+    <RoundedBox> 
+        
+            <Box height="350px" width="350px" >
+                
+                
+                    <MediaRenderer
+                        src={nft.metadata.image}
+                        style={{  width: '100%',position: 'relative', left: '10px',  top:"10px" }}
+                        
+                    />
+                
+        </Box>
+   
+  </RoundedBox>
+   )
 
   }
- 
 
   
 

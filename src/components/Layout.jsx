@@ -3,7 +3,6 @@ import {text2, text1, tokens } from "../theme";
 
 
 export function RowChildrenAlignCenter( {children} ){
-
   
     return(
       <Box  //make thing vertically centered
@@ -14,7 +13,37 @@ export function RowChildrenAlignCenter( {children} ){
      >
        {children}
       </Box>
-    
+  
+     )
+  
+  }
+
+  export function RowChildrenAlignRight( {children} ){
+  
+    return(
+      <Box  //make thing vertically centered
+      display="flex"
+      flexDirection="row"
+      alignItems="flex-end"
+      marginRight="auto" // Pushes children to the left edge
+     >
+       {children}
+      </Box>
+  
+     )
+  
+  }
+  export function RowChildrenAlignLeft( {children} ){
+  
+    return(
+      <Box  //make thing vertically centered
+      display="flex"
+      flexDirection="row"
+      alignItems="flex-start"
+      marginLeft="auto" // Pushes children to the left edge
+     >
+       {children}
+      </Box>
   
      )
   
@@ -99,8 +128,74 @@ export function VerticalStackAlignTopLeft(  {children  , fullWidth } ){
 
 
 
+export function RoundedBoxInfo ( { name ,value, _height = "110px", _width = "60px"  }){
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
-export function RoundedBox(  {children} ){
+  const boxColor = colors.primary[400];
+  const  _borderColor = colors.primary[400]
+  const _borderRadius= "10px";
+   const  paddingPX = "0px";
+   const trait_margin = "15px";
+
+return(
+  <Box  sx={{  height: _height, width: _width }} //,  width: "60px" 
+  padding= {2}   border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+ 
+ >
+                <Typography 
+               fontWeight="200"
+              
+              
+               sx={{ color: colors.grey[200] ,  position: 'relative', top:"-5px"  }}
+                >{name}</Typography>
+                
+               <RowChildrenAlignCenter>  
+                   <Box
+                       display="flex"
+                       flexDirection="column"
+                       alignItems="center"
+                       justifyContent="center"
+
+                        padding={1}
+                        border={1}
+                        borderColor={ _borderColor} //borderRadius={_borderRadius}
+                        borderRadius={2}
+                   >
+                       <Typography fontSize="small">{value}</Typography>
+                       
+                   </Box>
+                   </RowChildrenAlignCenter>   
+     
+</Box>
+
+)
+
+}
+ 
+
+export function RoundedBoxSmall(  {children} ){
+ 
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const boxColor = colors.primary[400];
+  const  _borderColor = colors.primary[400]
+  const _borderRadius= "10px";
+
+
+  return (
+    <Box   
+       border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+    >
+    {children}
+   </Box>
+
+  )
+
+}
+
+export function RoundedBox(  {children , _height } ){
  
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -111,7 +206,9 @@ export function RoundedBox(  {children} ){
 
 
     return (
-      <Box   
+      <Box  
+      
+         height={_height ? _height  : 'auto'}
          border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
       >
       {children}
@@ -142,10 +239,14 @@ export function BoxWithTopBar(  {children , topBarHeight = 20  , boxHeight = 200
                     left="0"
                     right="0"
                 />
-                <Box height=  {boxHeight}   padding="20px" >
-                 <Divider   orientation="hotizontal" style={{ marginBottom:"20px",  width: '100%', height: '1px' }} />  
+                <Box height=  {boxHeight}  paddingTop={20} paddingBottom={20}  >   
+                 {/* padding="20px" */}
+                 <Divider   orientation="hotizontal" style={{    width: '100%', height: '1px' }} />  
               
+                 <Box padding="20px" > 
                  {children}
+                 </Box>
+
               </Box>
        </Box>
 

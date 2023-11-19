@@ -14,7 +14,7 @@
  import { TOOLS_ADDRESS } from "../../const/addresses";
  import { useContract, useNFTs } from "@thirdweb-dev/react";
  
- 
+ import Shop from "../shop/index"
  
  //const API_URL = process.env.API_URL;
  const AllLayerImage = () => {
@@ -44,7 +44,8 @@
          <ReferredUserComponent/>
           <ImageComposer/>  
        
-        <NFTGrid
+          {/* <Shop display_mode='grid'/>  */}
+         <NFTGrid
         
            
         isLoading={isLoading} 
@@ -52,7 +53,11 @@
         emptyText={"No NFTs found"}
         
         
-        /> 
+        />  
+
+
+   
+
       </Box>
     </Box>
   );

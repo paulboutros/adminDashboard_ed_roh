@@ -22,6 +22,8 @@ import Geography from "./scenes/geography/index.jsx";
 import GetLayers from "./scenes/getLayers/index.jsx";
 import Maintenance  from "./scenes/maintenance/index.jsx";
 import TokenDetails from "./scenes/tokenDetails/index.jsx";
+import TokenPage from "./scenes/tokenPage/index.jsx";
+
 import ProfileWallet from "./scenes/profileWallet/index.jsx";
 
 
@@ -78,7 +80,7 @@ const testThirdWeb = false;
          
         <Routes>
           <Route path="/" element={<FarmerPage/>} />
-          <Route path="/shop" element={<Shop/>} />
+          <Route path="/shop" element={<Shop display_mode="list"/>} />
          </Routes>
       
      {/* </ChakraProvider> */}
@@ -163,10 +165,11 @@ const testThirdWeb = false;
                  
 
               <Route path="/farmerPage" element={<FarmerPage/>} />
-              <Route path="/shop" element={<Shop/>} />
+              <Route path="/shop" element={<Shop display_mode="list"/>} />
               <Route path="/sell" element={<Sell/>} />
-              <Route path="/token/:contractAddress/:tokenId" element={<TokenDetails/>} />
-
+              {/* <Route path="/token/:contractAddress/:tokenId" element={<TokenDetails/>} /> */}
+              <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
+               
 
               <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
 

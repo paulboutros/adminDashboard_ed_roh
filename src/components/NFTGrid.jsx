@@ -47,56 +47,33 @@ import NFT from "./FARMER/NFT";
 
  
 
+/*
+ Called from 
+ 1) All layer image
+ 2) Sell NFT
+*/
   
-const GridImage = ( { 
+const NFTGrid = ( { 
                    isLoading,
                   NFTdata,
                   overrideOnclickBehavior,
                   emptyText = "No NFTs found" 
  
 }  ) => {
-
-
-  const address = useAddress();
-
-    const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
-    const { contract } = useContract(TOOLS_ADDRESS);
  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const { user } = useUserContext();
-   
-const [selectedCategories, setSelectedCategories] =   useState(["he"]); // useState(["he","sh"]); // State to track selected categories
- 
- const toggleCategory = (category) => {};
-  
-
+    
 
 //==========================================================================
 // pb added to fetch data
 const [dataMap, setDataMap] = useState({}); 
-const [data, setData] = useState(); // Set rowData to Array of Objects, one Object per Row
-const [transformedResults, set_ownedLayer] = useState([]); // Set rowData to Array of Objects, one Object per Row
- 
-const [TempGiveAway, setTempGiveAway] = useState();  
-
+  
 
 const { notification, setNotification } = useNotificationContext();
-
-async function  FetchTempGiveAway(){
-
-  const endpoint_t = `${process.env.REACT_APP_API_URL}GetTempGiveAway?ID=${user.ID}`; // make it specific (filter to twitter fields)
-  const result_t = await fetch(endpoint_t);
-  let response_t = await result_t.json();
   
-   
-    
-  setTempGiveAway(response_t.giveAwayTiming  );
-   
-  
- } 
-
 useEffect(() => {
   
    console.log( ">>>>>>>>>>   NFTdata     =" , NFTdata ) ;    
@@ -107,17 +84,15 @@ useEffect(() => {
   
 }, [notification , user  , NFTdata ]);
  
-useEffect(() => {
-  const flatDataArray = Object.values(dataMap).reduce((accumulator, categoryData) => {
-    // Use the spread operator to merge the category data arrays into the accumulator
-    return [...accumulator, ...categoryData];
-  }, []);
-  
-  setData(flatDataArray);
-}, [dataMap  , notification]);
  
  
-  
+  /*
+   overrideOnclickBehavior  has 2 behavior when clicking on the NFT
+   1) you are redirected toward the detialed page of the NFT
+   2) you select that Nft as the Nft you want to sell, so it directs you toward the sell
+    page, to sell that specific/selected NFT
+  */
+
   return (
     <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>
     {isLoading ? (
@@ -141,7 +116,9 @@ useEffect(() => {
                 >
                     <NFT nft={nft} />
                 </div>
-            ))
+            )
+            
+            )
     ) : (
         <Text>{emptyText}</Text>
     )}
@@ -150,7 +127,7 @@ useEffect(() => {
   );
 };
 
-export default GridImage;
+export default NFTGrid;
 
  
  

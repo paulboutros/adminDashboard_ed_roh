@@ -5,10 +5,19 @@ import {  Web3Button,   useContract,ThirdwebNftMedia, useValidDirectListings, us
 import { TOOLS_ADDRESS , MARKETPLACE_ADDRESS  } from "../../const/addresses";
 import {evolve} from "../../utils/updateMetadata"
 
-//import ImageCard from "../ImageCard";
+import { MediaRenderer   } from "@thirdweb-dev/react";
+
+import {VerticalStackAlignCenter ,
+   RoundedBox,
+   RoundedBoxInfo,
+   RowChildrenAlignCenter,RowChildrenAlignLeft,
+   VerticalStackAlignLeft
+
+} from "../../components/Layout.jsx"
  
 
- import { Box, Typography ,CardContent  ,Card , Grid, CardMedia   } from '@mui/material'; // Update this import
+
+ import { Box, Typography ,CardContent  ,Card , Grid, CardMedia,image   } from '@mui/material'; // Update this import
 
 //import  Skeleton from '@material-ui/lab/Skeleton'
 
@@ -20,7 +29,13 @@ type Props = {
     nft: NFT;
 };*/
 
+import {text2, text1, tokens } from "../../theme.js";
+import {   useTheme  } from "@mui/material";
+
 export default function NFTComponent({ nft } ) {
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   const  {contract: marketplace, isLoading: loadingMarketplace } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
 
@@ -38,17 +53,69 @@ export default function NFTComponent({ nft } ) {
       });
 
 
-      
+      return (
+        <div>
+ 
+           <RoundedBox  margin={1} _height={380}>
+
+            <Typography margin={1} >  {nft.metadata.name} </Typography>  
+           
+              <MediaRenderer
+               src={nft.metadata.image}
+                />
+         <Box  margin={1} sx={{ position: 'relative', top:"-53px"  }}   >  
+         
+         {/* sx={{ position: 'relative', top:"-60px"  }} */}
+           <RowChildrenAlignLeft >
+     
+          <Box>
+          <RoundedBoxInfo 
+            name={nft.metadata.attributes[0].trait_type}
+            value={nft.metadata.attributes[0].value}   _width = {"50px"}  _height = {"80px"} 
+            />       
+           </Box>
+           <Box >
+
+          <RoundedBoxInfo 
+            name={"ID"}
+            value={nft.metadata.id}   _width = {"50px"}  _height = {"80px"}
+             />       
+           </Box>
+
+           {/* <Box margin={1}>
+
+           <RoundedBoxInfo 
+            name={"supply"}
+            value={nft.metadata.supply}   _width = {"80px"}  _height = {"80px"}
+             />       
+            </Box> */}
+           </RowChildrenAlignLeft>
+        </Box>  
+          </RoundedBox>
+         
+          
+        </div>
+      )
 
       return (
-        <Card key={nft.metadata.id} >
+        <Card key={nft.metadata.id} sx={{backgroundColor: colors.primary[500]  }}>
+        
+         
+        
         <CardMedia
+                 
                  component="img"
                  alt={nft.metadata.id}
                  height="80%"//"80%"
-                // height="200"
-              //  width="100%"
-                image={nft.metadata.image}
+                 image={nft.metadata.image}
+
+                 sx={{
+                 
+                     backgroundColor: colors.primary[500] 
+                  
+                }}
+  
+
         />
          <CardContent>
     <Grid container spacing={2} alignItems="center">
@@ -91,48 +158,13 @@ export default function NFTComponent({ nft } ) {
         <Typography variant="h5" fontWeight="fontWeightBold" style={{ marginTop: '5px', textAlign: 'center' }}>
           {nft.metadata.name}
         </Typography>
-        {/* {!isLoading && data ? (
-          <>
-            <Typography variant="body1" style={{ textAlign: 'center', marginTop: '5px' }}>
-              Cost: {ethers.utils.formatEther(data?.price)} {data?.currencyMetadata.symbol}
-            </Typography>
-            <Typography variant="body1" style={{ textAlign: 'center', marginTop: '5px' }}>
-              Supply: {data?.currentMintSupply} /{data?.maxClaimableSupply}
-            </Typography>
-          </>
-        ) : (
-          <Typography variant="body1" style={{ textAlign: 'center' }}>
-            Loading...
-          </Typography>
-        )} */}
+        
       </Grid>
     </Grid>
   </CardContent>
       </Card>
     )
 
-
-/*
-    return (
-        <Card key={nft.metadata.id} overflow={"hidden"}>
-            <MediaRenderer
-                src={nft.metadata.image}
-                height="100%"
-                width="100%"
-            />
-            <Text fontSize={"2xl"} fontWeight={"bold"} my={5} textAlign={"center"}>{nft.metadata.name}</Text>
-            {!isLoading && data ? (
-                <Text textAlign={"center"} my={5}>Cost: {ethers.utils.formatEther(data?.price)}{" " + data?.currencyMetadata.symbol}</Text>
-            ) :(
-                <Text>Loading...</Text>
-            )}
-            <Web3Button
-                contractAddress={TOOLS_ADDRESS}
-                action={(contract) => contract.erc1155.claim(nft.metadata.id, 1)}
-            >Buy</Web3Button>
-        </Card>
-    )
-*/
-
+ 
 
 };
