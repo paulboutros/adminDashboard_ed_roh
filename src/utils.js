@@ -6,6 +6,9 @@ export const getBackgroundColor = (debugMode, color) => {
 
 
 export  function addressShortened( addressText){
+
+  if(!addressText){return "no adress"; }
+
    return `${addressText.slice(0, 6)}...${addressText.slice(-4)}`;
 
 
@@ -36,12 +39,50 @@ export function formatTimestampToCustomFormat(timestamp) {
   
     return `${daysText}${hoursText}${minutesText}${secondsText}`;
   }
+ 
 
-
-
-
-
+  export function hexToReadableTimestamp(hexTimestamp, short = false) {
+    // Convert hex to decimal
+    const decimalTimestamp = parseInt(hexTimestamp, 16);
   
+    // Create a Date object using the decimal timestamp (milliseconds since epoch)
+    const date = new Date(decimalTimestamp * 1000);
+  
+    // Format the date as a string
+    let readableTimestamp = date.toLocaleString(); // Adjust the format as needed
+  
+  if (short){
+    readableTimestamp = date.toLocaleTimeString([], { timeStyle: 'short' });
+  }
+
+    return readableTimestamp;
+  }
+  
+  export function hexToDaysAgo(hexTimestamp) {
+    // Convert hex to decimal
+    const decimalTimestamp = parseInt(hexTimestamp, 16);
+  
+    // Create a Date object using the decimal timestamp (milliseconds since epoch)
+    const date = new Date(decimalTimestamp * 1000);
+  
+    // Calculate the difference in milliseconds between the current time and the provided timestamp
+    const differenceInMilliseconds = Date.now() - date.getTime();
+  
+    // Convert milliseconds to days
+    const daysAgo = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+  
+    if (daysAgo === 0 ){
+      return "Today at "+ hexToReadableTimestamp(hexTimestamp ,true );
+    }
+
+     return `${daysAgo} days ago`
+    return daysAgo;
+  }
+  
+   
+  
+
+
 
 export function CopyToClipboard(  copyText ) {
   

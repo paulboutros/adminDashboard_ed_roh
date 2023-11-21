@@ -23,6 +23,7 @@ import GetLayers from "./scenes/getLayers/index.jsx";
 import Maintenance  from "./scenes/maintenance/index.jsx";
 import TokenDetails from "./scenes/tokenDetails/index.jsx";
 import TokenPage from "./scenes/tokenPage/index.jsx";
+import TokenPageByID from "./scenes/tokenPageByID/index.jsx";
 
 import ProfileWallet from "./scenes/profileWallet/index.jsx";
 
@@ -165,11 +166,13 @@ const testThirdWeb = false;
                  
 
               <Route path="/farmerPage" element={<FarmerPage/>} />
-              <Route path="/shop" element={<Shop display_mode="list"/>} />
+              {/* <Route path="/shop" element={<Shop display_mode="list"/>} /> */}
+              <Route path="/shop" element={<Shop display_mode="grid"/>} />
               <Route path="/sell" element={<Sell/>} />
               {/* <Route path="/token/:contractAddress/:tokenId" element={<TokenDetails/>} /> */}
               <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
-               
+              <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId" element={<TokenPageByID/>} />
+              
 
               <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
 

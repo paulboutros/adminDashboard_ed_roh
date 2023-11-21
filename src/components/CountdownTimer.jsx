@@ -102,12 +102,16 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
      const currentTimestamp = new Date().getTime() /1000;
      endTimeInSecondsX = endTime - currentTimestamp;
 
+     let dayText;
      const calculateTimeLeft = () => {
      const days = Math.floor(endTimeInSecondsX / (24 * 60 * 60));
      const hours = Math.floor((endTimeInSecondsX % (24 * 60 * 60)) / 3600);
      const minutes = Math.floor((endTimeInSecondsX % 3600) / 60);
      const remainingSeconds =Math.floor(endTimeInSecondsX % 60); 
     
+ 
+     dayText  = days > 1 ? 'days' : 'day'; 
+
       if ( endTimeInSecondsX <=0 ){
 
         return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -118,6 +122,9 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
   
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   
+
+   
+
     useEffect(() => {
       const timer = setInterval(() => {
         setTimeLeft(calculateTimeLeft());
@@ -127,14 +134,16 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
     }, [endTimeInSecondsX]);
   
     return (
-      <div>
-        {timeLeft.days > 0 && (
-          <div>
-            {timeLeft.days} {timeLeft.days === 1 ? 'day' : 'days'}
-          </div>
-        )}
+      <div  whiteSpace="nowrap" >
+       
         <div>
-          {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+         
+          {/* {timeLeft.days > 0 && ( <div>    {timeLeft.days} {timeLeft.days === 1 ? 'day' : 'days'}  </div>  )}  */}
+          {timeLeft.days} {dayText.toString().padStart(2, '0')} {' '}
+          {timeLeft.hours.toString().padStart(2, '0')   }h{' '}
+          {timeLeft.minutes.toString().padStart(2, '0') }m{' '}
+          {timeLeft.seconds.toString().padStart(2, '0') }s{' '}
+           
         </div>
       </div>
     );

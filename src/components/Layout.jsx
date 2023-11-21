@@ -25,7 +25,7 @@ export function RowChildrenAlignCenter( {children} ){
       display="flex"
       flexDirection="row"
       alignItems="flex-end"
-      marginRight="auto" // Pushes children to the left edge
+      marginLeft="auto" // Pushes children to the left edge
      >
        {children}
       </Box>
@@ -217,7 +217,7 @@ export function RoundedBox(  {children , _height } ){
     )
 
 }
-export function BoxWithTopBar(  {children , topBarHeight = 20  , boxHeight = 200} ){
+export function BoxWithTopBar(  {children  ,timeLeft, topBarHeight = 20  , boxHeight = 200 }  ){
 
 
   const theme = useTheme();
@@ -238,7 +238,23 @@ export function BoxWithTopBar(  {children , topBarHeight = 20  , boxHeight = 200
                     top="0"
                     left="0"
                     right="0"
-                />
+                 >
+
+ 
+
+                 <Box style={{  position: 'absolute', right:"10px"}}  >
+                 <RowChildrenAlignCenter>
+                 <Typography >
+                     Sale ends in:
+                    </Typography>
+                   <Typography 
+                      sx={{ marginLeft: "10px", color: colors.grey[text1.color]     }}
+                   >{timeLeft}</Typography>
+                     </RowChildrenAlignCenter>
+                  </Box>
+                
+         
+                 </Box>
                 <Box height=  {boxHeight}  paddingTop={20} paddingBottom={20}  >   
                  {/* padding="20px" */}
                  <Divider   orientation="hotizontal" style={{    width: '100%', height: '1px' }} />  

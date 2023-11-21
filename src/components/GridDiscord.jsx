@@ -59,7 +59,7 @@ useEffect(()=>{
     const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScore`; 
    // const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=discord&limit=${60}`; // make it specific (filter to discord fields)
     const result  = await fetch(endpoint);
-    
+    console.log(  "result"  ,result);
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
     let resultsJson = await result.json();
     

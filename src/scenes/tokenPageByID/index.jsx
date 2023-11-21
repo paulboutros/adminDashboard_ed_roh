@@ -62,16 +62,16 @@ import {useEffect, useState} from "react";
 import { Link, useParams } from 'react-router-dom';
 
 
-const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  AuctionListingData,     displayMode  } ) => {
+const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,  AuctionListingData,     displayMode  } ) => {
 
    
-    let {  contractAddress,   tokenId } = useParams();
+    let {  contractAddress, tokenId,  listingId } = useParams();
    
 
    //if prop underfined it means it is called from url (so we get props from url param)
    if( propContractAddress !==undefined && propTokenId !==undefined  ){
        contractAddress = propContractAddress;
-       tokenId = propTokenId;
+      // tokenId = propTokenId;
    }
  
  const { user } = useUserContext();
@@ -131,7 +131,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
            const { data: directListing, isLoading: loadingDirectListing } = 
            useValidDirectListings(marketplace, {
                tokenContract: TOOLS_ADDRESS, 
-               tokenId: nft?.metadata.id,
+               tokenId: tokenId,// nft?.metadata.id,
            });
 
            //Add these for auction section
@@ -140,7 +140,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
            const { data: auctionListing, isLoading: loadingAuction } =
            useValidEnglishAuctions(marketplace, {
                tokenContract: TOOLS_ADDRESS,
-               tokenId: nft?.metadata.id,
+               tokenId: tokenId,// nft?.metadata.id,
            });
 
  
@@ -247,58 +247,31 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
    }else{
 
 
+      if ( marketplace?.directListings?.length > 0){
 
+        return (<div>  has direct listing </div>)
+      }
+      if ( marketplace?.englishAuctions?.length > 0){
 
-     if (displayMode && displayMode === "grid"){
-          return(
-            <Box>
-            <Link
-                   //to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                   to={`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${AlllistingData?.id}`}
-                   key={nft.metadata.id}
-                >
-            
-           
-
-           <RoundedBox>
-           <MediaRenderer
-            src={nft.metadata.image}
-             />
-           </RoundedBox>
-
-          {AlllistingData && (
-            <div>
-            <p> ID: { nft.metadata.id }</p>
-           <p> listing: {AlllistingData?.id }</p>
-           <p> 
-           {`${AlllistingData?.currencyValuePerToken.displayValue} ${AlllistingData?.currencyValuePerToken.symbol}`}
-            
-            </p>
-          
-           
-              </div>
-           ) } 
-
-           </Link>
-           </Box>
-
-         )
-
-     } 
+        return (<div>  has auction listing </div>)
+      }
+      
       
     //  if it displays as list
        return (
        <div>
    
        {/* nft top area info */}
-       { !AlllistingData  &&(
-         <NFTContratHeader/>
-       )}
+        
 
            
         
 
-       
+       <SimpleButton contract={ marketplace } selectEvent={transferEvents}  />
+       {/* { transferEvents && (
+         
+
+       )} */}
 
         <RowChildrenAlignTop> 
         
@@ -484,7 +457,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
         {/* </Box> */}
         <div>
 
-        <Activity nft={ nft } />
+        <Activity nft={ nft } listingID={listingId} />
 
 
 </div>
@@ -504,7 +477,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
    
 };
 
-export default TokenDetails;
+export default TokenDetailsByID;
 
 function NftPriceBlock (   { boxColor, directListing, loadingMarketplace, loadingDirectListing ,
     auctionListing , loadingAuction, AlllistingData, AuctionListingData }  ){
@@ -728,11 +701,11 @@ return(
  
 
  
- /*
+ 
  async function  GetContractName (contract , selectEvent){
    const events = await contract.events.getAllEvents();
-   //const eventNames = events.map(event => event.eventName);
-  // console.log( "  contract  eventNames    === " , eventNames  );
+   const eventNames = events.map(event => event.eventName);
+   console.log( "  contract  eventNames    === " , eventNames  );
 
    console.log( "selectEvent" , selectEvent);
 
@@ -758,12 +731,12 @@ return(
     "bidder" , bidder );
 
  };
- */
+ 
  function SimpleButton  ( { contract , selectEvent  }) {
  //  const contract = 'YourContractAddress'; // Replace this with the actual contract address
  
    const handleClick = () => {
-   //  GetContractName(contract , selectEvent );
+     GetContractName(contract , selectEvent );
    };
  
    return (

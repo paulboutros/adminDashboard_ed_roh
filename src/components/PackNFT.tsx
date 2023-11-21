@@ -52,7 +52,7 @@ export const PackNFTCard = ({ contractAddress, tokenId }: Props) => {
   return(
 
     
-        <BoxWithTopBar boxHeight={250} >
+        <BoxWithTopBar timeLeft={""} boxHeight={250} >
              
               {!loadingNFT && !loadingPackListings ? (
               

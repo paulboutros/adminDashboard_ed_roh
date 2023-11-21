@@ -377,6 +377,27 @@ export async function  getData   () {
      return resultsJson;
    } 
 
+
+   async function getEthToUsdRate() {
+    try {
+      const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+      const ethToUsdRate = response.data.ethereum.usd;
+      return ethToUsdRate;
+    } catch (error) {
+      console.error('Error fetching ETH to USD rate:', error.message);
+      throw error;
+    }
+  }
+ export async function convertEthToUsd( ) {
+    const ethToUsdRate = await getEthToUsdRate();
+   
+    return ethToUsdRate;
+  }
+  
+
+
+
+
    export async function  bestEarner   () {
     //const getData_enpPoint = API_URL + "getData";
     const endpoint = `${process.env.REACT_APP_API_URL}bestEarner`; // make it specific (filter to twitter fields)

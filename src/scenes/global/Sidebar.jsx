@@ -198,13 +198,13 @@ const Sidebar = () => {
             >
               Social Contest
             </Typography>
-            {/* <Item
+            <Item
               title="Discord Board"
               to="/discordBoard"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            /> */}
+            />
 
           
             {/* <Item
