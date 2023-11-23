@@ -137,7 +137,7 @@ import { cookieStorageManager } from '@chakra-ui/react';
         const rewardPrizeObject = await result.json();
         */
 
-         console.log("  >>>>>>  rewardPrizeObject" , rewardPrizeObject );
+        // console.log("  >>>>>>  rewardPrizeObject" , rewardPrizeObject );
           SetRewardPrice ( rewardPrizeObject.finalRewardPrice.toFixed(2).toString()    );
          
         
@@ -396,7 +396,7 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
        
          // from 1 to 11
          
-         console.log( "Image COmposer:    allLayers   =  "  ,  allLayers   );
+        // console.log( "Image COmposer:    allLayers   =  "  ,  allLayers   );
      // not that sometimes it reached this part of code code while
      //allLayers.lenght   so we added a check
       let he_rand = Math.floor(Math.random() * 10)+1;    const he = allLayers.he[he_rand];

@@ -5,36 +5,41 @@
  import { Box } from "@mui/material";
  //import dotenv from "dotenv";
  
+ import { GetAllNFTfromSDK } from "../../data/API.js"
  import NFTGrid from "../../components/NFTGrid";
- import Header from "../../components/Header";
- import ImageComposer from "../../components/ImageComposer";
+  import ImageComposer from "../../components/ImageComposer";
  
  import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
   
  import { TOOLS_ADDRESS } from "../../const/addresses";
  import { useContract, useNFTs } from "@thirdweb-dev/react";
  
- import Shop from "../shop/index"
- 
+  
  //const API_URL = process.env.API_URL;
  const AllLayerImage = () => {
    
    const { contract } = useContract(TOOLS_ADDRESS);
-   const { data, isLoading } = useNFTs(contract);
-    
+    const { data, isLoading } = useNFTs(contract);
+   
  
-   const { user } = useUserContext();
- 
+    const [allNFTs, setAllNFTs] = useState();
    useEffect(()=>{
-     if (!user)return;
- 
-      
+     async function get(){
+         const result =  await  GetAllNFTfromSDK();
+         setAllNFTs(result);
+     }
+    
+    get();
      
-  }, [ user ]);
+  }, [   ]);
  
- 
+  
   return (
-   <Box m="20px" maxHeight="calc(85vh)"  overflow="auto"  >  
+    !allNFTs ? (
+      <div>allNFTs not loaded</div>
+    ) : (
+      // <div> allNFTs loaded </div>
+      <Box m="20px" maxHeight="calc(85vh)"  overflow="auto"  >  
       {/* <Header title="All Layer image" subtitle="Image for all NFT Layers" /> */}
       
       <Box   >
@@ -49,7 +54,7 @@
         
            
         isLoading={isLoading} 
-        NFTdata={data} 
+        NFTdata={allNFTs} 
         emptyText={"No NFTs found"}
         
         
@@ -60,7 +65,20 @@
 
       </Box>
     </Box>
+    )
   );
+  
+
+
+
+  // return (
+
+    
+  
+  // );
+
+
+
  };
  
  export default AllLayerImage;

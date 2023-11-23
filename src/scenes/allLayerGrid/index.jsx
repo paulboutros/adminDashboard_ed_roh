@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Heading, Text } from "@chakra-ui/react";
-//import NFTGrid from "../components/NFTGrid";
-import { TOOLS_ADDRESS } from "../../const/addresses";
+ import { TOOLS_ADDRESS } from "../../const/addresses";
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 
 

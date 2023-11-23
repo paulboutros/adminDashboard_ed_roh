@@ -50,12 +50,13 @@ export const CustomLinkWithLocalIcon = ({ to,  text,  tooltipText }) => {
         <Box >
           {/* <OpenInNewIcon   sx={{ marginRight:1,  fontSize: 14 }}   /> */}
           <Button variant="text" 
-           style=  {{ textDecoration: 'none',
+          
+           style=  {{ textDecoration: 'none', 
            display: 'flex',
            alignItems: 'center',
            color: colors.grey[300],
-          
-           position: 'relative' , left:"-6px"  }}
+           fontSize: "15px",
+           position: 'relative' , left:"-6px", bottom:"7px"  }}
            startIcon={ <OpenInNewIcon sx={{ marginRight:-0.5,  fontSize: 14 }}/>}
 
            component={Link}

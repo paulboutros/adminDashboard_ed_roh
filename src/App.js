@@ -171,7 +171,7 @@ const testThirdWeb = false;
               <Route path="/sell" element={<Sell/>} />
               {/* <Route path="/token/:contractAddress/:tokenId" element={<TokenDetails/>} /> */}
               <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
-              <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId" element={<TokenPageByID/>} />
+              <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={<TokenPageByID/>} />
               
 
               <Route path="/profileWallet/:address" element={<ProfileWallet/>} />

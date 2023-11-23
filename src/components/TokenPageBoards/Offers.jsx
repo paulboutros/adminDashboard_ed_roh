@@ -4,8 +4,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import {useEffect, useState} from "react";
 import { Box , Typography, useTheme } from "@mui/material";
 import { DataGrid  } from "@mui/x-data-grid";
-import { text1, tokens } from "../../theme";
+import { text1, tokens, DataGridStyle } from "../../theme";
 import  { addressShortened } from "../../utils.js"
+import DataGridHeader from "../DataGridHeader.jsx"
 
 import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
     useMinimumNextBid, useValidDirectListings,
@@ -62,8 +63,8 @@ useEffect (()=>{
 
      if (!transferEvents) return;
 (async ()=> {
-      const gridData= await  GetContractName (marketplace , transferEvents);
-      setNewDataList(gridData);
+     // const gridData= await  GetContractName (marketplace , transferEvents);
+     // setNewDataList(gridData);
 })();
   
 
@@ -137,91 +138,12 @@ const columns = [
     <Box  >
       
        
-        <Box
-        
-        sx={{
-          "& .MuiDataGrid-root": {
-           // border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-           // borderBottom: "none",
-          },
-          
-
-          "& .MuiDataGrid-cellContent": {
-            fontSize:14,
-          },
-          "& .name-column--cell": {
-            color: colors.grey[200],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-             
-            backgroundColor: colors.primary[600],
-           // borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            // that is color of each row
-            backgroundColor: colors.primary[500],
-          },
-
-          "& .MuiDataGrid-footerContainer": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-           // borderTop: "none",
-            backgroundColor: colors.primary[600],  
-          //  minHeight :"20px" // default is 52, see chrome element inspector
-          },
-          // .MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular, , .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolba
-          "& .MuiTablePagination-toolbar, .MuiDataGrid-footerContainer": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-            
-            minHeight :"10px" // default is 52, see chrome element inspector
-          },
-          // the area where it is written "row per page"| block 1 page out of X page
-          
-          "& .MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows ": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-            marginBottom :"0px" ,marginTop :"0px"  // these affect pagination bar heights
-            //marginBottom :"5px" ,marginTop :"5px"  // these affect pagination bar heights
-          },
-          // to go to next pagination page
-          "& .MuiButtonBase-root ": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-            paddingBottom :"0px" ,paddingTop :"0px"  // initial was 8 (affect pagination bar height)
-           
-          },
-           //  MuiTablePagination-select MuiSelect-standard MuiInputBase-input
-           "& .MuiSelect-select": {
-            paddingBottom :"0px" ,paddingTop :"0px"  // initial was 8 (affect pagination bar height)
-           },
-           "& .css-pwwg96": {
-            marginTop :"0px"  // initial was 40 (affect distance with title)
-           },
-           
-          
-            //MuiButtonBase-root
-
-/*
-          MuiToolbar-root 
-          MuiToolbar-gutters 
-          MuiToolbar-regular 
-          MuiTablePagination-toolbar 
-          css-bvbdia-MuiTablePagination-root
-          css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar
-*/
-     //MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-     "& .MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar": {
-      //minHeight: `10px !important`,
-      // height: `30px !important`
-    },
-            
-           
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
-      >
+      <Box  sx={DataGridStyle(theme, colors)} >
 
       {newDataList ? (
-       <Box m= {` ${grid_gap}  0 0 0 `} height= {_height} style={{ width: '101%' }} > 
+       <Box    height= {_height} style={{ width: '100%' }}  >
+  {/* m= {` ${grid_gap}  0 0 0 `} height= {_height} style={{ width: '100%' }}  */}
+        <DataGridHeader  title={"Offers"} />  
         <DataGrid
           rows={newDataList}
           columns={columns}
@@ -357,53 +279,3 @@ left: 0, // Offset it by the width of the background bar
 </div>
   );
 }
-
-async function  GetContractName (contract , selectEvent){
-
-
-    const events = await contract.events.getAllEvents();
-    const eventNames = events.map(event => event.eventName);
-    
- 
-    const ethToUsdRate = await convertEthToUsd( ); ;
- 
-   let gridData = new Array();
-  let index =0;
-      selectEvent.forEach(element => {
- 
-        
-        const bidAmountHex =  element.data.bidAmount._hex;
-        const bidAmountDecimal = parseInt(bidAmountHex, 16);
-        const ethValue = ethers.utils.formatEther(bidAmountDecimal);
-        const USDPrice = ethValue * ethToUsdRate; 
-
-
-
-        const eventName = element.eventName;
- 
-        
-        const bidder = addressShortened(element.data.bidder) ;
-        
- 
-
-
-        const data ={
-            id:index,
-            eventName: eventName, 
-            ethValue: ethValue,
-            USDPrice: ("$"+USDPrice.toFixed(2)),
-            bidder:bidder
-        }
-        index++;
-        gridData.push(data);
-
-      });
-
-   
-
-     return gridData;
- 
-  };
- 
- 
- 

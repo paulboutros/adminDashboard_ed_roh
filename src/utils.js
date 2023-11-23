@@ -79,11 +79,6 @@ export function formatTimestampToCustomFormat(timestamp) {
     return daysAgo;
   }
   
-   
-  
-
-
-
 export function CopyToClipboard(  copyText ) {
   
   console.log( " >>>>>>>>>>>>>.   copyText"  , copyText );
@@ -120,6 +115,37 @@ export function CopyToClipboard(  copyText ) {
   
      
   }
+
+
+
+  export function convertSecondsToDateString(endTimeInSeconds) {
+    // Convert seconds to milliseconds
+    const endTimeInMilliseconds = endTimeInSeconds * 1000;
+  
+    // Create a Date object using the milliseconds
+    const date = new Date(endTimeInMilliseconds);
+  
+    // Format the date
+    const options = {
+      month: 'long', // Specify the full month name
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true, // Use 12-hour clock format
+    };
+  
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+  
+    return formattedDate;
+  }
+  
+  // Example usage
+  //const endTimeInSeconds = 1679790700; // Replace with your actual seconds value
+   
+  
+  //console.log(formattedDateString); // Output: November 22, 2023 at 3:45 PM
+  
 
     
 

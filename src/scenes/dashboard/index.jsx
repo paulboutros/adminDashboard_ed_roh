@@ -12,7 +12,7 @@ import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
 import GeographyChart from "../../components/GeographyChart"; 
 //import GridAllLayer from "../../components/GridAllLayer";  
-import NFTGrid from "../../components/NFTGrid";  
+ 
 import GridDiscord from "../../components/GridDiscord";  
 import GridTwitter from "../../components/GridTwitter";  
 import BarChart from "../../components/BarChart";
@@ -380,7 +380,7 @@ const Dashboard = () => {
            Layer Board
           </Typography>
            
-            <NFTGrid isDashboard={true}  sx={{ marginBottom: "15px" }} />
+            
            
         </Box>
 

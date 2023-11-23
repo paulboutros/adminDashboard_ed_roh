@@ -76,7 +76,7 @@ const { notification, setNotification } = useNotificationContext();
   
 useEffect(() => {
   
-   console.log( ">>>>>>>>>>   NFTdata     =" , NFTdata ) ;    
+  // console.log( ">>>>>>>>>>   NFTdata     =" , NFTdata ) ;    
   
    
   if (!notification)return;

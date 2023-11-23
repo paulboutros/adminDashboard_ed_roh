@@ -40,7 +40,7 @@ export function RowChildrenAlignCenter( {children} ){
       display="flex"
       flexDirection="row"
       alignItems="flex-start"
-      marginLeft="auto" // Pushes children to the left edge
+      //marginLeft="auto" // actually, this push children to the right side
      >
        {children}
       </Box>
@@ -195,7 +195,7 @@ export function RoundedBoxSmall(  {children} ){
 
 }
 
-export function RoundedBox(  {children , _height } ){
+export function RoundedBox(  {children , _height , padding=0 } ){
  
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -207,7 +207,7 @@ export function RoundedBox(  {children , _height } ){
 
     return (
       <Box  
-      
+         padding={padding}
          height={_height ? _height  : 'auto'}
          border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
       >
@@ -257,7 +257,7 @@ export function BoxWithTopBar(  {children  ,timeLeft, topBarHeight = 20  , boxHe
                  </Box>
                 <Box height=  {boxHeight}  paddingTop={20} paddingBottom={20}  >   
                  {/* padding="20px" */}
-                 <Divider   orientation="hotizontal" style={{    width: '100%', height: '1px' }} />  
+                 <Divider   orientation="horizontal" style={{    width: '100%', height: '1px' }} />  
               
                  <Box padding="20px" > 
                  {children}

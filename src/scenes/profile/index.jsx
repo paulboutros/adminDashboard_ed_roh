@@ -9,7 +9,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import ReferralLinkGrid from "../../components/ReferralLinkGrid";
 import Header from "../../components/Header";
  
-import NFTGrid from "../../components/NFTGrid";  
+ 
  
 import ReferrerComponent from "../../components/ReferrerComponent"
 import JoinIncentive from "../../components/JoinIncentive";
@@ -123,11 +123,11 @@ const Profile =  () => {
            Layer Board
           </Typography>
            
-            <NFTGrid  
+            {/* <N FT Gr id  
            
               queryId= {`&ID=${user.ID}`}
              sx={{ marginBottom: "15px" }} 
-             />
+             /> */}
            
         </Box>
 

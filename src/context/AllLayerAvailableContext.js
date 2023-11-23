@@ -1,6 +1,6 @@
 import {createContext, useContext,  useState, useEffect } from "react";
 
-import { getAllLayersAvailable  } from "../data/API.js";
+import { getAllLayersAvailable , GetAllNFTfromSDK   } from "../data/API.js";
 //import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
 import { GetLayerSupply } from "../data/API.js";
 import { useUserContext } from './UserContext.js'; // to get user data from context provider
@@ -13,22 +13,48 @@ const AllLayersContext = createContext();
 
 export function useAllLayersContext() { return useContext(AllLayersContext);}
  
-
-
-
+ 
 export function AllLayersProvider({ children }) {
   
     const { user } = useUserContext();
 
     const { contract } = useContract(TOOLS_ADDRESS);
-    const { data: NFTdata } = useNFTs(contract); // get all neft
-
-     const address = useAddress();  
-     const {data: ownedNftData, isLoading } = useOwnedNFTs(contract, address);// get user nft
-    //console.log(  "  AllLayersProvider         NFTdata   "   , NFTdata);
-    
+   
+     
+     
+     
     const [allLayers, setAllLayers] = useState(null);
-    //const [layerToChooseFrom, set_layerToChooseFromUserowned] = useState( initialLayerToChooseFrom);
+ 
+
+
+    //const { data: NFTdata } = useNFTs(contract); // get all neft
+    const [NFTdata, setAllNFTs] = useState(null);
+    useEffect(()=>{
+      async function get(){
+          const result =  await  GetAllNFTfromSDK();
+          setAllNFTs(result);
+      }
+      get();
+    }, []);
+
+    //const {data: ownedNftData, isLoading } = useOwnedNFTs(contract, address);// get user nft
+
+    const address = useAddress();  
+    const [ownedNftData, setAllOwnedNFTs] = useState(null);
+    useEffect(()=>{
+      if (!address)return;
+      async function get(){
+          const result =  await  GetAllNFTfromSDK(address);
+          setAllOwnedNFTs(result);
+
+          console.log( "owner result",   result  );
+      }
+     
+     get();
+      
+   }, [ address  ]);
+
+
 
     useEffect( ()=>{
 
@@ -56,26 +82,10 @@ export function AllLayersProvider({ children }) {
       CheckOwnedNft(ownedNftData);
 
     }, [ ownedNftData ]);
-
-/*
-     
-    useEffect( ()=>{
-        if (!user)return;
-        if (!allLayers)return;
-          const _fetching = async ()=>{
-          // these are  all layers available for selection, plain layers
-          const updatedLayerToChooseFrom = await Add_owning_and_otherLayerInfo( user, allLayers  );
-          setAllLayers(updatedLayerToChooseFrom); 
-          // set_layerToChooseFromUserowned(updatedLayerToChooseFrom);
-         }
-       //NFTdata
-        _fetching();
-    
-    }, [ user, allLayers  ]);
- */
+ 
 
     return (
-      <AllLayersContext.Provider value={{ allLayers, setAllLayers }}>
+      <AllLayersContext.Provider value={{ allLayers, NFTdata, ownedNftData,  setAllLayers }}>
         {children}
       </AllLayersContext.Provider>
     );
@@ -130,8 +140,13 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 
 //console.log( "  >>>>    Create_Initial_layerToChooseFrom " , NFTdata   );
  let ownerLayerFound = 0;
+
+ //console.log(">>. nft: ",    NFTdata  );
+
 NFTdata.forEach((nft) => {
+
   /*
+  console.log(">>. nft: ",    nft  );
   console.log("Token ID: ",    nft.metadata.id  , 
                "trait_type:   ",  nft.metadata.attributes[0].trait_type ,
               "value:   ",  nft.metadata.attributes[0].value,   
@@ -166,11 +181,11 @@ NFTdata.forEach((nft) => {
   });
    
 
-
+  /*
    console.log("DDDDDD  >>>> NFT   >>>>>   initialLayerToChooseFrom" ,  initialLayerToChooseFrom);
    console.log( "DDDDDD   >>>>    ownedNftData" ,
      ownedNftData , "ownerLayerFound   = " + ownerLayerFound  );
-
+*/
 
 
 //=====================================================================================

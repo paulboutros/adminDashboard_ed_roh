@@ -15,11 +15,10 @@ import AppLinkDataBox from "../../components/AppLinkDataBox";
 import ReferralLinkGrid from "../../components/ReferralLinkGrid";
 import Header from "../../components/Header";
  
-import NFTGrid from "../../components/NFTGrid";  
+// import N FT Gri d from "../../components/N FT Gr id";  
  
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
-import ReferrerComponent from "../../components/ReferrerComponent"
-import JoinIncentive from "../../components/JoinIncentive";
+ import JoinIncentive from "../../components/JoinIncentive";
 import {useEffect, useState} from "react";
 import  CountdownTimer from "../../components/CountdownTimer";
 
@@ -101,11 +100,11 @@ const Profile =  () => {
            Layer Board
           </Typography>
            
-            <NFTGrid  
+            {/* <NF TG rid  
            
               queryId= {`&ID=${user.ID}`}
              sx={{ marginBottom: "15px" }} 
-             />
+             /> */}
            
         </Box>
 

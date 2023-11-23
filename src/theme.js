@@ -233,3 +233,81 @@ export const useMode = () => {
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return [theme, colorMode];
 };
+
+
+
+export function DataGridStyle(theme , colors){
+  const sx={ 
+    "& .MuiDataGrid-root": {
+     // border: "none",
+      //borderTop: "none",
+      // border: '1px solid #ddd', // Add border for better visibility
+       border: `1px solid ${theme.palette.grey[700]}`, // Add border for better visibility
+      borderTopLeftRadius: '0', // Top-left corner not rounded
+      borderTopRightRadius: '0', // Top-right corner not rounded
+      borderBottomLeftRadius: '10px', // Bottom-left corner rounded
+      borderBottomRightRadius: '10px', // Bottom-right corner rounded
+      overflow: 'hidden', // Ensure overflow is hidden to hide rounded corners
+
+    },
+    "& .MuiDataGrid-cell": {
+     // borderBottom: "none",
+    },
+    
+
+    "& .MuiDataGrid-cellContent": {
+      fontSize:14,
+    },
+    "& .name-column--cell": {
+      color: colors.grey[200],
+    },
+    "& .MuiDataGrid-columnHeaders": {
+       
+      backgroundColor: colors.primary[600],
+     // borderBottom: "none",
+    },
+    "& .MuiDataGrid-virtualScroller": {
+      // that is color of each row
+      backgroundColor: colors.primary[500],
+    },
+
+    "& .MuiDataGrid-footerContainer": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
+     //  borderTop: "none",
+      backgroundColor: colors.primary[600],  
+    //  minHeight :"20px" // default is 52, see chrome element inspector
+    },
+    // .MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular, , .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolba
+    "& .MuiTablePagination-toolbar, .MuiDataGrid-footerContainer": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
+      
+      minHeight :"10px" // default is 52, see chrome element inspector
+    },
+    // the area where it is written "row per page"| block 1 page out of X page
+    
+    "& .MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows ": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
+      marginBottom :"0px" ,marginTop :"0px"  // these affect pagination bar heights
+      //marginBottom :"5px" ,marginTop :"5px"  // these affect pagination bar heights
+    },
+    // to go to next pagination page
+    "& .MuiButtonBase-root ": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
+      paddingBottom :"0px" ,paddingTop :"0px"  // initial was 8 (affect pagination bar height)
+     
+    },
+     //  MuiTablePagination-select MuiSelect-standard MuiInputBase-input
+     "& .MuiSelect-select": {
+      paddingBottom :"0px" ,paddingTop :"0px"  // initial was 8 (affect pagination bar height)
+     },
+     "& .css-pwwg96": {
+      marginTop :"0px"  // initial was 40 (affect distance with title)
+     },
+   
+    "& .MuiCheckbox-root": {
+      color: `${colors.greenAccent[200]} !important`,
+    },
+    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+      color: `${colors.grey[100]} !important`,
+    },
+  };
+
+return sx;
+
+}

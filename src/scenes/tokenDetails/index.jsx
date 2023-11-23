@@ -48,10 +48,10 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
-import { getSDK_fromPrivateKey, convertEthToUsd } from "../../data/API.js";
+import { getSDK_fromPrivateKey  } from "../../data/API.js";
 import { ethers } from "ethers";
 
-import Listing from "../../components/TokenPageBoards/Listing.jsx";
+import ShowAuction from "../../components/TokenPageBoards/ShowAuction.jsx";
 import Activity from "../../components/TokenPageBoards/Activity.jsx"
 import Offers from "../../components/TokenPageBoards/Offers.jsx"
 
@@ -106,7 +106,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
       let contractMetadataResult;
      try {
     
-       console.error(' nftResult  >>>> fetching NFT:', nftResult);
+       console.log(' nftResult  >>>> fetching NFT:', nftResult);
 
        contractMetadataResult = await contract.metadata.get();
        setContractMetadata(contractMetadataResult);
@@ -250,16 +250,19 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
 
 
      if (displayMode && displayMode === "grid"){
-          return(
+
+       if (AlllistingData){
+              return(
             <Box>
+
+
+
             <Link
                    //to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                   to={`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${AlllistingData?.id}`}
+                   to={`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${AlllistingData?.id}/NAN`}
                    key={nft.metadata.id}
                 >
-            
-           
-
+             
            <RoundedBox>
            <MediaRenderer
             src={nft.metadata.image}
@@ -280,10 +283,57 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
            ) } 
 
            </Link>
+
+
+
+
+
            </Box>
 
-         )
+              )
+        }
+        if (AuctionListingData){
+            return(
+                <Box>
+    
+    
+    
+                <Link
+                       //to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
+                       to={`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
+                       key={nft.metadata.id}
+                    >
+                 
+               <RoundedBox>
+               <MediaRenderer
+                src={nft.metadata.image}
+                 />
+               </RoundedBox>
+    
+              {AuctionListingData && (
+                <div>
+                <p> ID: { nft.metadata.id }</p>
+               <p> Auction ID: {AuctionListingData?.id }</p>
+               {/* <p> 
+               {`${AuctionListingData?.currencyValuePerToken.displayValue} ${AuctionListingData?.currencyValuePerToken.symbol}`}
+                
+                </p> */}
+              
+               
+                  </div>
+               ) } 
+    
+               </Link>
+    
+    
+    
+    
+    
+               </Box>
+    
+                  )
 
+        }
      } 
       
     //  if it displays as list
@@ -417,7 +467,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
    </BoxWithTopBar>
 
     
-   <Listing nft={ nft } />
+   <ShowAuction nft={ nft } />
   
    <Offers nft={ nft } />
            <VerticalSpace space={1}/>
@@ -727,49 +777,4 @@ return(
 
  
 
- 
- /*
- async function  GetContractName (contract , selectEvent){
-   const events = await contract.events.getAllEvents();
-   //const eventNames = events.map(event => event.eventName);
-  // console.log( "  contract  eventNames    === " , eventNames  );
-
-   console.log( "selectEvent" , selectEvent);
-
-   const bidAmountHex =  selectEvent[0].data.bidAmount._hex;
-
-  
-   const bidAmountDecimal = parseInt(bidAmountHex, 16);
-
-   console.log(">>>>  selectEvent[0].data.auction.endtimeStamp: " , selectEvent[0].data.auction.endTimestamp._hex );
-   console.log(">>>>  selectEvent[0].data.auction: " , selectEvent[0].data.auction );
-   console.log(">>>>  selectEvent[0].data.auction.quantity " , selectEvent[0].data.auction.quantity._hex );
-
-   const eventName =  selectEvent[0].data.eventName
-
-   const ethValue = ethers.utils.formatEther(bidAmountDecimal)
-   const USDPrice = await convertEthToUsd(bidAmountDecimal);
-   const bidder = selectEvent[0].data.bidder;
-
-   console.log(
-    "eventName",eventName,
-    "ethValue =" , ethValue ,
-    "USDPrice", USDPrice, 
-    "bidder" , bidder );
-
- };
- */
- function SimpleButton  ( { contract , selectEvent  }) {
- //  const contract = 'YourContractAddress'; // Replace this with the actual contract address
- 
-   const handleClick = () => {
-   //  GetContractName(contract , selectEvent );
-   };
- 
-   return (
-     <button onClick={handleClick}>
-       Click me to get contract events
-     </button>
-   );
- };
   

@@ -27,6 +27,10 @@ export default function ProfilePage() {
         //router.query.address as string
     );
         console.log(ownedNfts);
+
+        return (
+ <div>  this was disabled to temporarily to fix the metadata nft bug, you can turn it back if fixed</div>
+        )
     return (
         <Container maxW={"1200px"} p={5}>
             <Heading>{"Owned NFT(s)"}</Heading>

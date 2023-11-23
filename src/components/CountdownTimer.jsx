@@ -5,7 +5,16 @@ import { tokens } from "../theme";
 import { Box, Grid, Divider,  Typography, useTheme } from "@mui/material";
 import { useDropTimeContext } from   '../context/DropTimeContext'; // to get user data from context provider
 
-  
+import { RowChildrenAlignCenter,
+  VerticalStackAlignCenter ,
+  VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,RowChildrenAlignLeft,
+  RowChildrenAlignRight,
+  VerticalSpace,
+   RoundedBox,
+   BoxWithTopBar,
+   HorizontalSpace,
+   RoundedBoxInfo
+ } from "./Layout.jsx"  
  
 function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish}*/ ) {
 
@@ -96,7 +105,7 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 
 
 
-  export function CountdownTimerWithArg({ startTime, endTime }) {
+  export function CountdownTimerWithArg({ startTime, endTime , color }) {
     let endTimeInSecondsX = endTime - startTime;
   
      const currentTimestamp = new Date().getTime() /1000;
@@ -110,7 +119,7 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
      const remainingSeconds =Math.floor(endTimeInSecondsX % 60); 
     
  
-     dayText  = days > 1 ? 'days' : 'day'; 
+     dayText  = days > 1 ? 'Days' : 'Day'; 
 
       if ( endTimeInSecondsX <=0 ){
 
@@ -122,7 +131,8 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
   
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   
-
+  const _variant1 ='h3';
+  const _variant2 ='h5';
    
 
     useEffect(() => {
@@ -138,11 +148,57 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
        
         <div>
          
-          {/* {timeLeft.days > 0 && ( <div>    {timeLeft.days} {timeLeft.days === 1 ? 'day' : 'days'}  </div>  )}  */}
-          {timeLeft.days} {dayText.toString().padStart(2, '0')} {' '}
-          {timeLeft.hours.toString().padStart(2, '0')   }h{' '}
-          {timeLeft.minutes.toString().padStart(2, '0') }m{' '}
-          {timeLeft.seconds.toString().padStart(2, '0') }s{' '}
+         <RowChildrenAlignLeft>
+          {/* =================================================================================== */}
+
+    {timeLeft.days >0  && (<div>
+        <VerticalStackAlignLeft> 
+
+           <Typography color={color} variant= {_variant1} >   {timeLeft.days} </Typography>
+
+           <VerticalSpace space={2}/>  
+           <Typography color={color} variant= {_variant2}  >   {dayText.toString().padStart(2, '0')}   </Typography>
+           
+          </VerticalStackAlignLeft>
+
+        <HorizontalSpace space={3}/> 
+        </div>)}
+{/* =================================================================================== */}
+            <VerticalStackAlignLeft> 
+             <Typography color={color} variant= {_variant1} >   {timeLeft.hours.toString().padStart(2, '0')   }  </Typography>
+            <VerticalSpace space={2}/> 
+            <Typography color={color} variant= {_variant2} >   Hours  </Typography>
+            
+            </VerticalStackAlignLeft>
+
+        <HorizontalSpace space={3}/> 
+
+{/* =================================================================================== */}
+           <VerticalStackAlignLeft> 
+             <Typography color={color} variant= {_variant1} >   {timeLeft.minutes.toString().padStart(2, '0') } </Typography>
+            <VerticalSpace space={2}/> 
+            <Typography color={color} variant= {_variant2} >   Minutes  </Typography>
+            
+            </VerticalStackAlignLeft>
+
+          <HorizontalSpace space={3}/>         
+{/* =================================================================================== */}
+<VerticalStackAlignLeft> 
+             <Typography color={color} variant= {_variant1} >  {timeLeft.seconds.toString().padStart(2, '0') } </Typography>
+            <VerticalSpace space={2}/> 
+            <Typography color={color} variant= {_variant2} >   Secondes  </Typography>
+            
+            </VerticalStackAlignLeft>
+
+          <HorizontalSpace space={3}/>         
+{/* =================================================================================== */}
+
+
+
+            </RowChildrenAlignLeft>
+
+          
+ 
            
         </div>
       </div>

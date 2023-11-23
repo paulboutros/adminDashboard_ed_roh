@@ -4,8 +4,9 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import {  useAddress } from "@thirdweb-dev/react";
 
  
+import metadataList from "../metadata/nftmetadata.json"
  
-
+import { TOOLS_ADDRESS } from "../const/addresses.ts"
 /*
 const sdk = ThirdwebSDK.fromPrivateKey(
   process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY, // Your wallet's private key (only required for write operations)
@@ -34,8 +35,55 @@ export function getSDK_fromPrivateKey() {
       return sdk;
   };
    
+export async function GetAllNFTfromSDK( ownedNft  /*address*/ ){
+       
+  const sdk = getSDK_fromPrivateKey();//new ThirdwebSDK("goerli");
+  const contract = await sdk.getContract(TOOLS_ADDRESS);
 
+    let nfts;
+    if ( ownedNft === null ){
+      nfts = await contract.erc1155.getAll();
+    }else{
+      nfts = ownedNft;
+     
+     }
+   
 
+     if (   !nfts  ){
+        console.log( " >>>>null    nfts=" , nfts    );
+          return;
+     }
+ 
+   //console.log( " >>>>>>>>>>>>>>>      address=" , address   );
+   const allNfts =[];
+    
+   if (ownedNft === null ){
+      for (let i = 0; i < nfts.length; i++) {
+          nfts[i].metadata = metadataList[i].metadata;
+          allNfts.push(nfts[i]);
+         // You can append more properties as needed
+      }
+    }else{
+      for (let i = 0; i < nfts.length; i++) {
+       // const elementFound = metadataList.find(metadata => metadata.id === i.toString());
+        const elementFound = metadataList.find(metadata => metadata.metadata.id === i.toString() );
+        nfts[i].metadata = elementFound.metadata;
+
+       // console.log( "elementFound " , elementFound );
+        allNfts.push(nfts[i]);
+       // You can append more properties as needed
+    }
+
+    }
+   
+   
+
+    return allNfts ;
+ 
+  //  setNFT(nfts);
+   
+  
+  }   
 
 
 export async function  authorize   () {
