@@ -5,7 +5,7 @@ starts at 27:00min
 */
 
 import {useEffect, useState} from "react";
- import { useContract, useDirectListings,useValidEnglishAuctions,
+ import { useContract, useDirectListings,useValidEnglishAuctions, useValidDirectListings,
     ConnectWallet, useNFTs, useContractRead, useAddress , useMakeBid } from "@thirdweb-dev/react";
 import {
     MARKETPLACE_ADDRESS,
@@ -46,7 +46,7 @@ interface ShopProps {
 
     const {
         data: directListings,isLoading: loadingDirectListings,
-     } = useDirectListings(
+     } = useValidDirectListings(
         marketplace,
         {
             tokenContract: TOOLS_ADDRESS,

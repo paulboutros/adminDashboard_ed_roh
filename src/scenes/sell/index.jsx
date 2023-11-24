@@ -21,31 +21,22 @@ export default function Sell() {
 
 
 
-     const { data, isLoading } = useOwnedNFTs(contract, address);
+     
      const [selectedNFT, setSelectedNFT] = useState();
 
     //const { ownedNftData } = useAllLayersContext();
     const [ownedNfts, setOwnedNfts] = useState(null);
-    /*
     
-       useEffect(()=>{
-         async function get(){
-             const result =  await  GetAllNFTfromSDK(address);
-             setAllOwnedNFTs(result);
-             console.log( "owner result",   result  );
-        }
-       
-       get();
-        
-     }, [   ]);
-     */   
      const [allNFTs, setAllNFTs] = useState();
+
+
+     const { data, isLoading } = useOwnedNFTs(contract, address);
      useEffect(()=>{
        async function get(){
            const result =  await  GetAllNFTfromSDK(data);
           // setAllNFTs(result);
            setOwnedNfts(result);
-        console.log( "owned  with metadata added = ", result    );
+      //  console.log( "owned  with metadata added = ", result    );
       }
       
       get();

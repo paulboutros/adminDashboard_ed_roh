@@ -39,26 +39,58 @@ export function AllLayersProvider({ children }) {
 
     //const {data: ownedNftData, isLoading } = useOwnedNFTs(contract, address);// get user nft
 
-    const address = useAddress();  
-    const [ownedNftData, setAllOwnedNFTs] = useState(null);
+    const address = useAddress(); 
+
+    const [ownedNftData, setOwnedNfts] = useState(null);
+
+
+    //===============================================================================================================
+    /*
     useEffect(()=>{
+      console.log(">>   address ",  address);
       if (!address)return;
       async function get(){
           const result =  await  GetAllNFTfromSDK(address);
+          console.log("setAllOwnedNFTs result",  result);
           setAllOwnedNFTs(result);
-
-          console.log( "owner result",   result  );
       }
-     
      get();
       
    }, [ address  ]);
+*/
+   const { data, isLoading } = useOwnedNFTs(contract, address);
+   useEffect(()=>{
+     async function get(){
+         const result =  await  GetAllNFTfromSDK(data);
+        // setAllNFTs(result);
+         setOwnedNfts(result);
+     // console.log( "owned  with metadata added = ", result    );
+    }
+    
+    get();
+     
+  }, [data]);
+
+
+//==============================================================================================================
+
+
+
+
+
+
 
 
 
     useEffect( ()=>{
 
       // if (!address){return;}
+
+    //  console.log( "ownedNftData =",   ownedNftData  );
+      if (NFTdata){
+      //  console.log( "NFTdata is now defined: length=",   NFTdata.length  );
+      }
+     
        if (!ownedNftData){return;}
        if (!NFTdata){ return;} 
 
@@ -66,6 +98,8 @@ export function AllLayersProvider({ children }) {
         // cretae basic layers available to choos efrom in the app
         const initialize = async ()=>{
             const layers  = await Create_Initial_layerToChooseFrom( NFTdata, ownedNftData );
+
+           
             setAllLayers(layers); 
         }
         initialize();

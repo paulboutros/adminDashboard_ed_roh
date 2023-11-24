@@ -22,20 +22,21 @@ import {
 const grid_gap ="20px";
   
 
-const ShowAuction = ( { nft , auctionId, listingId, isDashboard = false }  ) => {
+const ShowAuction = ( { nft , auctionId, listingId, title, isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [filterModel, setFilterModel] = useState([]);
 
   const gridtext  = text2.color;
   const gridFont  = text2.fontSize;
- 
-  
+ // const _height = isDashboard ? 220: 340 ;//  "25vh": "75vh" ;
+ const _rowHeight = isDashboard ?  20: 40 ;
+ const _headerHeight = isDashboard ?  20: 40 ;
+ const _footerHeight = isDashboard ?  20: 40 ;
+const maxRowsPerPage = 5;          
   
   const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
-
-       //    const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
-             // Load historical transfer events: TODO - more event types like sale
+        
              const { data: transferEvents, isLoading: loadingTransferEvents } =
            
              useContractEvents(marketplace, "NewBid", {
@@ -48,11 +49,12 @@ const ShowAuction = ( { nft , auctionId, listingId, isDashboard = false }  ) => 
                  },
              });   
 
-   
+  
 //==========================================================================
 // pb added to fetch data
  const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Objects, one Object per Row
+const [_height, setHeight] = useState(300);
 
 useEffect (()=>{
 
@@ -64,10 +66,19 @@ useEffect (()=>{
   let gridData;  
     if (auctionId){
        gridData= await  GetContractName (marketplace ,  nft,auctionId, listingId,"auction" );//auctionId
+
+       setHeight( gridData.length * _rowHeight   + _headerHeight + _rowHeight );
+       
+
+
     }
     if (listingId){
       gridData= await  GetContractName (marketplace ,  nft, auctionId, listingId,"listing" );//auctionId
+
+      const maxRows =5;
+      setHeight( maxRows * _rowHeight  + _headerHeight + _rowHeight  );
    }  
+
    setNewDataList(gridData);
 
      
@@ -151,10 +162,7 @@ const columns = [
 
 
  
-  const _height = isDashboard ? 220: 340 ;//  "25vh": "75vh" ;
-  const _rowHeight = isDashboard ?  20: 40 ;
-  const _headerHeight = isDashboard ?  20: 40 ;
-  const _footerHeight = isDashboard ?  20: 40 ;
+ 
 
   if (!newDataList){ 
       return(
@@ -163,6 +171,7 @@ const columns = [
        )
    }
 
+   
   return (
     <Box  >
       
@@ -174,7 +183,7 @@ const columns = [
       {newDataList ? (
          <Box    height= {_height} style={{ width: '100%' }}  >
        {/* <Box m= {` ${grid_gap}  0 0 0 `} height= {_height} style={{ width: '101%' }} > */}
-        <DataGridHeader  title={"Auction"} />  
+        <DataGridHeader  title={title} />  
         <DataGrid
           rows={newDataList}
           columns={columns}
@@ -186,6 +195,10 @@ const columns = [
           rowHeight={_rowHeight} // Set the row height to 40 pixels
            headerHeight={_headerHeight}   
            footerHeight={_footerHeight}  
+         //  autoHeight
+
+         //  pageSize={maxRowsPerPage}
+            pagination
 
         //   filterModel={filterModel}
          // onFilterModelChange={(model) => setFilterModel(model)}

@@ -27,7 +27,9 @@ import { Avatar,
 import {CopyText, CustomLinkWithLocalIcon,  CustomLinkWithIcon } from "../../components/LinkTextButton.jsx"
 import { RowChildrenAlignCenter,
     VerticalStackAlignCenter ,
-    VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,RowChildrenAlignLeft,
+    VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,VerticalStackAlign,
+    
+    RowChildrenAlignLeft,RowChildrenAlignLeftBottom,
     RowChildrenAlignRight,
     VerticalSpace,
      RoundedBox,
@@ -65,9 +67,11 @@ import toast, { Toaster } from "react-hot-toast";
 //import toastStyle from "../../../util/toastConfig";
 
 // key  page control for global edditing
+const _buttonHeight ="50px";
 const _mainBoxPadding = 3;
 const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,     displayMode  } ) => {
 
+  
     
     let {  contractAddress, tokenId,  listingId, auctionId } = useParams();
    
@@ -91,11 +95,33 @@ const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,
  
 
  const [nft, setNFT] = useState();
- const [ auctionData, setAuctionData ] = useState(); 
- const [ listingData, setListingData ] = useState(); 
+ const [ auctionData, setAuctionData ] = useState(null); 
+ const [ listingData, setListingData ] = useState(null); 
  
 
+  
+ const [ ethToUsdRate, setEthToUsdRate ] = useState(0); 
+useEffect(() => {
+  // Function to fetch NFT data
+  const fetchUSDrate = async () => {
+ 
+    try {
+    //  if (ethToUsdRate === undefined){
+       // console.log("ethToUsdRate  is now defined ");
+        const result = await convertEthToUsd( );
+        setEthToUsdRate(result);  
+    //  }
 
+    } catch (error) {
+      console.error('Error fetching NFT:', error);
+    }
+  };
+
+  
+  // Call the fetch functions when component mounts
+  fetchUSDrate();
+   
+}, []);
    
 
 
@@ -275,7 +301,14 @@ const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,
 
 
    function currentListing( ){
+   
+      
+     
 
+      if  (listingData ){ return listingData; }
+      else{ return auctionData;}
+
+      /*
       let listingResult;
 
        if ( listingType === "Direct listing" ){
@@ -285,6 +318,9 @@ const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,
         return auctionData;
         // , listingData,auctionData
       } 
+     */
+
+
    }
 
  
@@ -295,47 +331,41 @@ const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,
 
    }else{
 
-     /*
-      if ( marketplace?.directListings?.length > 0){
-
-        return (<div>  has direct listing </div>)
-      }
-      if ( marketplace?.englishAuctions?.length > 0){
-
-        return (<div>  has auction listing </div>)
-      }*/
-      
-         
-
-
-
-      //====================
-    //  if it displays as list
+    
        return (
 
-        !loadingDirectListing && !loadingMarketplace ? (
+         
+          // !loadingDirectListing && !loadingAuction ? (
+          auctionData || listingData ? ( 
 
           <div>
     
+    <VerticalStackAlign>
+     <RowChildrenAlignTop>
+       <Box 
+           style={{ backgroundColor:colors.blueAccent[700],  width: '200px' , height: '200px'   }}
+       >  </Box>
+      </RowChildrenAlignTop> 
 
-          <RowChildrenAlignTop> 
+     </VerticalStackAlign>
+
+
+
+
+
+    <Box style={{ marginLeft:"50px"  }}   >   </Box>
+  <VerticalStackAlign>
+     <RowChildrenAlignTop> 
           
-          <Box style={{ marginLeft:"50px"  }}   >   </Box>
-  
-         
-        <VerticalStackAlignLeft>
-  
-         <DisplayNFTimage nft={nft} /> 
     
-  
-  
-  
-   
-  {/* =================   2n BOX ======================================================= */}
-  </VerticalStackAlignLeft>
-  
+         
+           <DisplayNFTimage nft={nft} /> 
+    
+ 
+       
+   {/* =================   2n BOX ======================================================= */}
      
-        <VerticalStackAlignLeft fullWidth={true}>
+     <VerticalStackAlignLeft fullWidth={true}>
           <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
   
      <Box  padding={0}  >
@@ -366,181 +396,95 @@ const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,
           
      </Box>
      
-     <RoundedBox>
+     <RoundedBox  backgroundColor= {colors.primary[600]}>
      
-     <Box  padding={_mainBoxPadding}  >
-        
-        <div>
+     <Box padding={_mainBoxPadding}  >
+         <div>
           <Typography color={colors.grey[ text2.color ]} 
            variant ="h4"> Sales ends {convertSecondsToDateString(  currentListing().endTimeInSeconds)} 
            </Typography>
-          <VerticalSpace space={1}/>
-          <CountdownTimerWithArg 
-             startTime={ currentListing().startTimeInSeconds}  
-             endTime={ currentListing().endTimeInSeconds} 
-             color={colors.grey[ text2.color ]}
-           /> 
-             </div>
+           <VerticalSpace space={1}/>
+          <CountdownTimerWithArg  startTime={ currentListing().startTimeInSeconds}  endTime={ currentListing().endTimeInSeconds} color={colors.grey[ text2.color ]}/> 
+         </div>
         
-  
-       {/* =======================================================================================   */}
-   
-        </Box>
+     </Box>
+
       <VerticalSpace space={0.5}/>
-    <Divider orientation="horizontal" style={{ height: "1px", width: '100%' }} />
-  
+      <Divider orientation="horizontal" style={{ height: "1px", width: '100%' }} />
+   
+
     <RowChildrenAlignLeft>
-  
-      <VerticalStackAlignLeft >
-           <Box  >
-             <NftPriceBlock boxColor={boxColor} 
-              directListing={directListing} loadingMarketplace={loadingMarketplace} 
-              loadingDirectListing ={loadingDirectListing}  auctionListing={auctionListing} 
-              loadingAuction={loadingAuction} 
-                AlllistingData={   listingData    }
-                auctionData={auctionData}
-                />
-          </Box>
-  
-                <div>
-                  <Typography color={colors.grey[ text2.color ]} >creator:</Typography>
-                  <CopyText  
-                     to={`/profile/${AlllistingData?.creatorAddress}`}//nft.owner
-                     text= { addressShortened(AlllistingData?.creatorAddress) } 
-                     tooltipText={"copy address to clipboard"}
-                     textToCopy={AlllistingData?.creatorAddress}
-                     >
-  
-                  </CopyText> 
-                  
-                </div>
-               
-            
-      </VerticalStackAlignLeft>
-  
-      <HorizontalSpace space={1}/> 
-      < Box whiteSpace="nowrap" >
-       <VerticalStackAlignLeft>
-          
-          <Typography color={colors.grey[ text2.color ]} >listing ID</Typography>
-          <Typography> {AlllistingData?.id}</Typography>
-          <Typography color={colors.grey[ text2.color ]} >tokenId</Typography>
-          
-          
-       </VerticalStackAlignLeft>
-    </Box>
-  
-    <HorizontalSpace space={1}/> 
-    < Box whiteSpace="nowrap" >
-       <VerticalStackAlignLeft>
-          
-          <Typography color={colors.grey[ text2.color ]} >Supply:</Typography>
-          <Typography> {nft?.supply}</Typography>
-          <Typography color={colors.grey[ text2.color ]} > {nft?.metadata?.attributes[0].trait_type} </Typography>
-          <Typography>{nft?.metadata?.attributes[0].value}</Typography>
-          
-       </VerticalStackAlignLeft>
-    </Box>
-  
-    <HorizontalSpace space={1}/> 
-  
-  
-     <RowChildrenAlignTop> 
-      
-     <HorizontalSpace space={1}/>  
-      
-  
-          
-         <HorizontalSpace space={10}/> 
-         <Box style={{  position: 'absolute', right:"10px"}}  >
-             
-               <StatusBox nft={nft} AlllistingData={AlllistingData} />
-          </Box>
-  
-  
-      </RowChildrenAlignTop> 
-        
-  
-  </RowChildrenAlignLeft>
+      <VerticalStackAlign padding={_mainBoxPadding} >
+        <NftPriceBlock AlllistingData={listingData}  auctionData={auctionData} ethToUsdRate={ethToUsdRate}  />
+        <VerticalSpace space={2}/>
+
+                  {/* web button for listing and auction */}
+            { auctionData ?(
+                <RowChildrenAlignLeft>
+                  <TextField onChange={(e) => setBidValue(e.target.value)}
+                  style={{ minWidth: '200px',  height: _buttonHeight }} 
+                      variant="outlined"  label="Minimum Bid" type="number" value={bidValue}  
+                    /> 
+                      <HorizontalSpace space={1}/>
+                      
+                    <Web3Button
+                      
+                        contractAddress={MARKETPLACE_ADDRESS} 
+                        action={async () => await createBidOffer()}  isDisabled={!auctionData}
+
+                        className="tw-web3button--connect-wallet" 
+                        style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                        
+                    >
+                        Place Bid
+                    </Web3Button>
+                </RowChildrenAlignLeft>
+              ):(
+                
+                <RowChildrenAlignTop>        
+                    <Web3Button 
+                className="tw-web3button--connect-wallet"
+                style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                contractAddress={MARKETPLACE_ADDRESS}
+                action={async () => buyListing()}
+                isDisabled={( !auctionData) && ( !AlllistingData)}
+                >
+                Buy at asking price
+                    </Web3Button>
+                     <HorizontalSpace space={1}/>    
+                    <Web3Button
+                    contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionData}
+                    className="tw-web3button--connect-wallet" 
+                    style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                >
+                    Make Offer
+                    </Web3Button>  
+                </RowChildrenAlignTop>     
+              )}     
+
+        </VerticalStackAlign>
+    </RowChildrenAlignLeft>
    
      </RoundedBox>
   
+     <VerticalSpace space={1}/>
      {/* auctionId */}
-     <ShowAuction nft={ nft }   auctionId={ auctionId }  />
-     <ShowAuction nft={ nft }   listingId={listingId}  />
-      {/* <Offers nft={ nft}  listing={listingId} /> */}
-             <VerticalSpace space={1}/>
-  
+
+       {listingData ? (
+          <ShowAuction nft={ nft }   listingId={listingId}  title={"Direct listing"}  />
+       ):(
+          <ShowAuction nft={ nft }   auctionId={ auctionId }  title={"Auction"}  />
+       )}
     
-            <Skeleton isLoaded={!loadingMarketplace || !loadingDirectListing || !loadingAuction}>
+      {/* <Offers nft={ nft}  listing={listingId} /> */}
         
-       
-        <Box spacing={5} color={colors.primary[200]} >
-  
-           
-            <Box sx={ flex }> 
-            <RowChildrenAlignTop>        
-                <Web3Button 
-            className="tw-web3button--connect-wallet"
-            style={{ fontWeight:"600", color:colors.primary[500], backgroundColor:colors.blueAccent[700],  width: '100%'}}
-             contractAddress={MARKETPLACE_ADDRESS}
-            action={async () => buyListing()}
-            isDisabled={( !auctionData) && ( !AlllistingData)}
-            >
-            Buy at asking price
-            </Web3Button>
-  
-  {/*         
-            <Web3Button
-                contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionListing || !auctionData}
-                className="tw-web3button--connect-wallet" style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
-            >
-                Make Offer
-            </Web3Button> */}
-   
-            </RowChildrenAlignTop>     
-  
-  
-  
-  
-            <Typography align="center">or</Typography>
-            
-            
-            <TextField
-              //   fullWidth margin="bottom"
-                 variant="outlined"  label="Minimum Bid" type="number"
-                 value={bidValue}
-                onChange={(e) => setBidValue(e.target.value)}
-            /> 
-  
-            <VerticalSpace space={1}/>
-  
-            <Web3Button
-                contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionData}
-                className="tw-web3button--connect-wallet" style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
-            >
-                Place Bid
-            </Web3Button>
-  
-           
-            </Box>
-  
-  
-        </Box>
-           </Skeleton>
             </Box>
        </VerticalStackAlignLeft>
         
-          </RowChildrenAlignTop>     
-          {/* </Box> */}
-          <div>
-  
-          <Activity nft={ nft } listingID={listingId}  />
-  
-  
-             </div>
-   
-         
+     </RowChildrenAlignTop>     
+      <Activity nft={ nft } listingID={listingId}  />  
+    </VerticalStackAlign>
+
           </div>
         ):(
 
@@ -562,50 +506,60 @@ const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,
 
 export default TokenDetailsByID;
 
-function NftPriceBlock (   { boxColor, directListing, loadingMarketplace, loadingDirectListing ,
-    auctionListing , loadingAuction, AlllistingData, auctionData }  ){
+function NftPriceBlock (   { 
+     AlllistingData, auctionData, ethToUsdRate }  ){
 
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
 
    return (
-       <Box    padding={_mainBoxPadding} >
-        <VerticalSpace space ={1}/> 
-       <Typography
-          
-       //  sx={{  position: 'relative', top:"-5px"  }}
-        color={colors.grey[ text2.color ]} >Price: </Typography>
-       
+       <Box  >
+        
+       <Typography color={colors.grey[ text2.color ]} >Current price: </Typography>
+   
        {AlllistingData ? (
            <Typography color={colors.grey[ text1.color ]}
            // sx={{  position: 'relative', top:"-5px"  }}
-           variant="h1" fontWeight="60">
-           {`${AlllistingData?.currencyValuePerToken.displayValue} ${AlllistingData.currencyValuePerToken.symbol}`}
+           variant="h1" fontWeight="50">
+            {`${AlllistingData?.currencyValuePerToken.displayValue} ${AlllistingData.currencyValuePerToken.symbol}`}
+           
            </Typography>
        ) : auctionData ? (
-           <Typography variant="h5" fontWeight="bold">
+         
+        <RowChildrenAlignLeftBottom>
+          
+           <Typography variant="h1" fontWeight={600} >
            {`${auctionData?.buyoutCurrencyValue.displayValue} ${auctionData?.buyoutCurrencyValue.symbol}`}
            </Typography>
+
+               <HorizontalSpace space={1}/>  
+           <Typography variant="h4"  color= {colors.grey[ text2.color]}  
+               style={{  position: 'relative', bottom:"5px" }}  >
+            {` $${ (auctionData.buyoutCurrencyValue.displayValue * ethToUsdRate ).toFixed(2) }`}  
+           </Typography>
+         
+        </RowChildrenAlignLeftBottom>
+     
        ) : (
-           <Typography  variant="h5" fontWeight="bold"
+           <Typography  variant="h1" fontWeight="bold"
             color= {colors.primary[500]} 
            >
            Not for sale
            </Typography>
        )}
        
-       <Skeleton isLoaded={!loadingAuction}>
+       
        { auctionData && (
            <Flex direction="column">
            <Typography color="darkgray">Bids starting from</Typography>
            <Typography fontSize="3xl" fontWeight="bold">
                {`${auctionData?.minimumBidCurrencyValue.displayValue} ${auctionData?.minimumBidCurrencyValue.symbol}`}
            </Typography>
-           <Typography></Typography>
+          
            </Flex>
        )}
-       </Skeleton>
-</Box>
+      
+     </Box>
 
    )
  }

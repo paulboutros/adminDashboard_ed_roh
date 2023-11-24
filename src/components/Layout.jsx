@@ -48,7 +48,28 @@ export function RowChildrenAlignCenter( {children} ){
      )
   
   }
-  export function RowChildrenAlignTop( {children} ){
+
+export function RowChildrenAlignLeftBottom( {children} ){
+
+  
+    return(
+      <Box  //make thing vertically centered
+      display="flex"
+      flexDirection="row"
+      alignItems="flex-end" // align to the bottom
+      justifyContent="flex-start" // align to the left
+
+       
+     >
+       {children}
+      </Box>
+    
+  
+     )
+  
+  }
+
+  export function RowChildrenAlignTop ( {children} ){
 
   
     return(
@@ -86,6 +107,25 @@ export function RowChildrenAlignCenter( {children} ){
   
   }
   
+  //neutral, respect whatever horizontal alignement of the children
+  export function VerticalStackAlign(  {children  , padding } ){
+   
+    return (
+
+      <Box
+      width= '100%'
+      padding ={padding}
+    //  display="flex" 
+     // flexDirection="column"
+     // alignItems="flex-start" 
+   //   justifyContent="center"
+   >
+      {children}
+     </Box>
+
+    )
+
+}
   export function VerticalStackAlignLeft(  {children  , fullWidth } ){
    
       return (
@@ -100,9 +140,7 @@ export function RowChildrenAlignCenter( {children} ){
        </Box>
   
       )
-
-    
-    
+ 
 }
 export function VerticalStackAlignTopLeft(  {children  , fullWidth } ){
    
@@ -195,7 +233,7 @@ export function RoundedBoxSmall(  {children} ){
 
 }
 
-export function RoundedBox(  {children , _height , padding=0 } ){
+export function RoundedBox(  {children , _height , backgroundColor ,  padding=0 } ){
  
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -207,6 +245,7 @@ export function RoundedBox(  {children , _height , padding=0 } ){
 
     return (
       <Box  
+         backgroundColor =  {backgroundColor || null} 
          padding={padding}
          height={_height ? _height  : 'auto'}
          border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}

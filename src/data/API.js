@@ -41,10 +41,11 @@ export async function GetAllNFTfromSDK( ownedNft  /*address*/ ){
   const contract = await sdk.getContract(TOOLS_ADDRESS);
 
     let nfts;
-    if ( ownedNft === null ){
-      nfts = await contract.erc1155.getAll();
-    }else{
-      nfts = ownedNft;
+    if ( ownedNft ){
+       nfts = ownedNft;
+     }else{
+       nfts = await contract.erc1155.getAll();
+     //  console.log( " >>>>  contract.erc1155.getAll() =" , nfts    );
      
      }
    
@@ -57,23 +58,30 @@ export async function GetAllNFTfromSDK( ownedNft  /*address*/ ){
    //console.log( " >>>>>>>>>>>>>>>      address=" , address   );
    const allNfts =[];
     
-   if (ownedNft === null ){
-      for (let i = 0; i < nfts.length; i++) {
-          nfts[i].metadata = metadataList[i].metadata;
-          allNfts.push(nfts[i]);
-         // You can append more properties as needed
+   if (ownedNft){
+    for (let i = 0; i < nfts.length; i++) {
+      // const elementFound = metadataList.find(metadata => metadata.id === i.toString());
+       const elementFound = metadataList.find(metadata => metadata.metadata.id === i.toString() );
+       
+       //if (elementFound && elementFound.metadata) {
+         if ( !nfts[i] || !nfts[i].metadata || !elementFound || typeof elementFound !== 'object' || !elementFound.metadata  ) {
+           console.warn(`No metadata found for id ${i}`);
+       } else {
+         nfts[i].metadata = elementFound.metadata;
+       
+       }
+
+      // console.log( "elementFound " , elementFound );
+        allNfts.push(nfts[i]);
+      // You can append more properties as needed
       }
     }else{
       for (let i = 0; i < nfts.length; i++) {
-       // const elementFound = metadataList.find(metadata => metadata.id === i.toString());
-        const elementFound = metadataList.find(metadata => metadata.metadata.id === i.toString() );
-        nfts[i].metadata = elementFound.metadata;
-
-       // console.log( "elementFound " , elementFound );
-        allNfts.push(nfts[i]);
-       // You can append more properties as needed
-    }
-
+         nfts[i].metadata = metadataList[i].metadata;
+         allNfts.push(nfts[i]);
+         // You can append more properties as needed
+        }
+ 
     }
    
    

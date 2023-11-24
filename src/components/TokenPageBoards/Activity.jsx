@@ -62,7 +62,7 @@ const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Obj
 
 useEffect (()=>{
 
-    console.log( "useEffect:marketplace >>>>>>>>>>>>>>>>>>     = " , marketplace);
+     
 
 
      if (!marketplace) return;

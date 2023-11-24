@@ -26,6 +26,8 @@
    useEffect(()=>{
      async function get(){
          const result =  await  GetAllNFTfromSDK();
+
+        // console.log("result" , result );
          setAllNFTs(result);
      }
     
@@ -36,7 +38,7 @@
   
   return (
     !allNFTs ? (
-      <div>allNFTs not loaded</div>
+      <div>alllayerimage.js allNFTs not loaded</div>
     ) : (
       // <div> allNFTs loaded </div>
       <Box m="20px" maxHeight="calc(85vh)"  overflow="auto"  >  
