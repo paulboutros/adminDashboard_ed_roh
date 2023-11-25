@@ -150,15 +150,21 @@ export async function  GetContractName (contract , nft, auctionIdArg ,listingId,
         }
         index++;
    
-
+        if (boardtype ==="listing"){
+          if ( parseInt(cellData.listingID) === parseInt(listingId) ){ //auctionId 
+           //  console.log( " MATCH >>>>>>   auctionId = " , auctionIdArg  ,  "cellData.auctionId = " , cellData.auctionId  );
+          }else{
+             continue;
+          }
+        }
         
-        if (boardtype ==="auction"){
+         if (boardtype ==="auction"){
               if ( parseInt(cellData.auctionId) === parseInt(auctionIdArg) ){ //auctionId 
                //  console.log( " MATCH >>>>>>   auctionId = " , auctionIdArg  ,  "cellData.auctionId = " , cellData.auctionId  );
               }else{
                  continue;
               }
-            }
+           }
 
         gridData.push(data);
 

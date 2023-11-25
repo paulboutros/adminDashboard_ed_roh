@@ -191,11 +191,14 @@ const columns = [
       >
 
       {newDataList ? (
+
+      <div> 
+         <DataGridHeader  title={"Activity"} /> 
        <Box height= {_height} style={{ width: '100%' }} >  
             {/* m= {` ${grid_gap}  0 0 0 `}  */}
 
       
-       <DataGridHeader  title={"Activity"} /> 
+      
         <DataGrid
           rows={newDataList}
           columns={columns}
@@ -210,6 +213,8 @@ const columns = [
          
         />
        </Box>
+       </div>
+
     ) : (
       <div>Loading...</div> // You can replace this with a loading spinner or message
     )}

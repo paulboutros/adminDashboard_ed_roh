@@ -72,8 +72,7 @@ const _mainBoxPadding = 3;
 const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,     displayMode  } ) => {
 
   
-    const image_span ="span 3";
-    const under_image_span =  "span 2";
+    
     let {  contractAddress, tokenId,  listingId, auctionId } = useParams();
    
  
@@ -288,7 +287,7 @@ useEffect(() => {
                auctionData.id,
                bidValue
            );
-       } else if (listingData){  
+       } else if (AlllistingData){  
            txResult = await marketplace?.offers.makeOffer({
                assetContractAddress: TOOLS_ADDRESS,
                tokenId: nft.metadata.id,
@@ -309,7 +308,17 @@ useEffect(() => {
       if  (listingData ){ return listingData; }
       else{ return auctionData;}
 
-      
+      /*
+      let listingResult;
+
+       if ( listingType === "Direct listing" ){
+            return listingData;
+      }else{ // auction
+
+        return auctionData;
+        // , listingData,auctionData
+      } 
+     */
 
 
    }
@@ -330,84 +339,56 @@ useEffect(() => {
           auctionData || listingData ? ( 
 
           <div>
-             <Box display="flex" flexDirection="column" gap="20px" padding="20px">
-      {/* Nested Flex Container for First Two Blocks */}
-      <Box display="flex" flexDirection="row" gap="20px">
-        {/* First Block (40%) */}
 
-        <Box flex="1" flexDirection="column"  >
-          <Box flex="1"    >
+    {/* GRID & CHARTS */}
+    <Box
+        display="grid"
+        gridTemplateColumns="repeat(12, 1fr)"
+        gridAutoRows="140px"
+        gap="20px"
+      >
+       
+       
+        {/* ROW 1 */}
+        <Box
+          gridColumn="span 5"
+          gridRow="span 5"
+          backgroundColor={colors.primary[400]}
+        >
          
-        
-          <DisplayNFTimage nft={nft} />
+              <DisplayNFTimage nft={nft} />
         </Box>
-        <VerticalSpace space={2}/>
-        <Box flex="1"   >
-          <RoundedBox  backgroundColor= {colors.primary[600]}>
-
-          <Box padding={_mainBoxPadding}  > 
-           <VerticalStackAlignLeft>
- 
-             <Typography variant = "h5"  fontWeight={600} >#{ tokenId}</Typography>
-            <Typography variant = "h5"  fontWeight={600} >#{ tokenId}</Typography>
-
-          </VerticalStackAlignLeft>
-
-           </Box>
-          </RoundedBox>
-       </Box>
-
-        </Box>
-
- {/* Nested Flex Container for Second and Third Blocks */}
-     <Box flex="1" flexDirection="column" gap="20px">
-
-
-        {/* right title block 1 title */}
-        <Box flex="1"    >
+       
+        <Box gridColumn="span 7" gridRow="span 1"  backgroundColor={colors.primary[400]} >
+        <Box  padding={0}  >
+         <VerticalStackAlignLeft>
+         <Typography variant = "h2"  fontWeight={600} >#{ tokenId}</Typography>
+         <VerticalSpace space={1}/>
+  
+          <RowChildrenAlignLeft>
+            <Typography color={colors.grey[ text2.color ]} >listing ID</Typography>
+            <HorizontalSpace space={1}/> 
+            <Typography> {listingData?.id}</Typography>
+  
+            <HorizontalSpace space={1}/> 
+            <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography>
            
-              <Box  padding={0}  >
-              <VerticalStackAlignLeft>
-              <Typography variant = "h2"  fontWeight={600} >#{ tokenId}</Typography>
-              <VerticalSpace space={1}/>
-        
-                <RowChildrenAlignLeft>
-                  <Typography color={colors.grey[ text2.color ]} >listing ID</Typography>
-                  <HorizontalSpace space={1}/> 
-                  <Typography> {listingData?.id}</Typography>
-        
-                  <HorizontalSpace space={1}/> 
-                  <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography>
-                
-                </RowChildrenAlignLeft>
-        
-        
-                <RowChildrenAlignLeft>
-        
-                <Typography variant ="h5"> Current Owner </Typography>
-                <HorizontalSpace space={1} /> 
-                <CustomLinkWithLocalIcon   to={`/profile/${nft.owner}`} text= { addressShortened(nft.owner) }   tooltipText={"visit owner's profile"}/>
-                </RowChildrenAlignLeft>   
-        
-                </VerticalStackAlignLeft>
-                
-            </Box>
-   
-
-        </Box>
-
-
-
-     <VerticalSpace space={2}/> 
-
-
-
-
-
-
-    {/* sale price part  */}
-        <Box flex="1"  > 
-        <RoundedBox  backgroundColor= {colors.primary[600]}>
+          </RowChildrenAlignLeft>
+  
+  
+          <RowChildrenAlignLeft>
+  
+          <Typography variant ="h5"> Current Owner </Typography>
+          <HorizontalSpace space={1} /> 
+          <CustomLinkWithLocalIcon   to={`/profile/${nft.owner}`} text= { addressShortened(nft.owner) }   tooltipText={"visit owner's profile"}/>
+           </RowChildrenAlignLeft>   
+  
+          </VerticalStackAlignLeft>
+          
+     </Box>
+         </Box>
+         <Box gridColumn="span 7" gridRow="span 3"  backgroundColor={colors.primary[400]} >
+         <RoundedBox  backgroundColor= {colors.primary[600]}>
      
      <Box padding={_mainBoxPadding}  >
          <div>
@@ -433,7 +414,7 @@ useEffect(() => {
             { auctionData ?(
                 <RowChildrenAlignLeft expand={true}>
                   <TextField onChange={(e) => setBidValue(e.target.value)}
-                  style={{ minWidth: '50px',  height: _buttonHeight }} 
+                  style={{ minWidth: '200px',  height: _buttonHeight }} 
                       variant="outlined"  label="Minimum Bid" type="number" value={bidValue}  
                     /> 
                       <HorizontalSpace space={1}/>
@@ -449,34 +430,22 @@ useEffect(() => {
                     >
                         Place Bid
                     </Web3Button>
-                    <HorizontalSpace space={1}/>
-                    <Web3Button 
-                    className="tw-web3button--connect-wallet"
-                    style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
-                    contractAddress={MARKETPLACE_ADDRESS}
-                    action={async () => buyListing()}
-                    isDisabled={( !auctionData) }
-                    >
-
-                       Buy out
-                    </Web3Button>
-
                 </RowChildrenAlignLeft>
               ):(
                 
                 <RowChildrenAlignTop>        
                     <Web3Button 
-                    className="tw-web3button--connect-wallet"
-                    style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
-                    contractAddress={MARKETPLACE_ADDRESS}
-                    action={async () => buyListing()}
-                    isDisabled={( !listingData) }
-                    >
+                className="tw-web3button--connect-wallet"
+                style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                contractAddress={MARKETPLACE_ADDRESS}
+                action={async () => buyListing()}
+                isDisabled={( !auctionData) && ( !AlllistingData)}
+                >
                 Buy at asking price
                     </Web3Button>
                      <HorizontalSpace space={1}/>    
                     <Web3Button
-                    contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!listingData}
+                    contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionData}
                     className="tw-web3button--connect-wallet" 
                     style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
                 >
@@ -488,35 +457,181 @@ useEffect(() => {
         </VerticalStackAlign>
     </RowChildrenAlignLeft>
    
-        </RoundedBox>
+     </RoundedBox>
+         </Box>
+         <Box gridColumn="span 7" gridRow="span 1"  backgroundColor={colors.primary[400]} >
+             info 3
+         </Box>
+      
+        {/* ROW 2 */}
+        <Box
+          gridColumn="span 5"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          p="30px"
+        >
+         GGGGSS
+         
         </Box>
+        <Box
+          gridColumn="span 7"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+         
+        >
+          
+         WWWWW
+        </Box>
+   
+          {/* ROW 3 */}
+        <Box
+          gridColumn="span 12"
+          gridRow="span 4"
+          backgroundColor={colors.primary[400]}
+          p="30px"
+        >
+         all activity
+         
+        </Box>
+  
+      </Box>
 
-        <VerticalSpace space={2}/> 
-        <Box    > 
-            
-        {listingData ? (
+{/* GRID & CHARTS END */}
+
+ 
+ 
+
+
+    <Box style={{ marginLeft:"50px"  }}   >   </Box>
+  <VerticalStackAlign>
+     <RowChildrenAlignTop> 
+          
+    
+         
+           <DisplayNFTimage nft={nft} /> 
+    
+ 
+       
+   {/* =================   2n BOX ======================================================= */}
+     
+     <VerticalStackAlignLeft fullWidth={true}>
+          <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
+  
+     <Box  padding={0}  >
+         <VerticalStackAlignLeft>
+         <Typography variant = "h2"  fontWeight={600} >#{ tokenId}</Typography>
+         <VerticalSpace space={1}/>
+  
+          <RowChildrenAlignLeft>
+            <Typography color={colors.grey[ text2.color ]} >listing ID</Typography>
+            <HorizontalSpace space={1}/> 
+            <Typography> {listingData?.id}</Typography>
+  
+            <HorizontalSpace space={1}/> 
+            <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography>
+           
+          </RowChildrenAlignLeft>
+  
+  
+          <RowChildrenAlignLeft>
+  
+          <Typography variant ="h5"> Current Owner </Typography>
+          <HorizontalSpace space={1} /> 
+          <CustomLinkWithLocalIcon   to={`/profile/${nft.owner}`} text= { addressShortened(nft.owner) }   tooltipText={"visit owner's profile"}/>
+           </RowChildrenAlignLeft>   
+  
+          </VerticalStackAlignLeft>
+          
+     </Box>
+     
+     <RoundedBox  backgroundColor= {colors.primary[600]}>
+     
+     <Box padding={_mainBoxPadding}  >
+         <div>
+          <Typography color={colors.grey[ text2.color ]} 
+           variant ="h4"> Sales ends {convertSecondsToDateString(  currentListing().endTimeInSeconds)} 
+           </Typography>
+           <VerticalSpace space={1}/>
+          <CountdownTimerWithArg  startTime={ currentListing().startTimeInSeconds}  endTime={ currentListing().endTimeInSeconds} color={colors.grey[ text2.color ]}/> 
+         </div>
+        
+     </Box>
+
+      <VerticalSpace space={0.5}/>
+      <Divider orientation="horizontal" style={{ height: "1px", width: '100%' }} />
+   
+
+    <RowChildrenAlignLeft>
+      <VerticalStackAlign padding={_mainBoxPadding}  expand={true} >
+        <NftPriceBlock AlllistingData={listingData}  auctionData={auctionData} ethToUsdRate={ethToUsdRate}  />
+        <VerticalSpace space={2}/>
+
+                  {/* web button for listing and auction */}
+            { auctionData ?(
+                <RowChildrenAlignLeft expand={true}>
+                  <TextField onChange={(e) => setBidValue(e.target.value)}
+                  style={{ minWidth: '200px',  height: _buttonHeight }} 
+                      variant="outlined"  label="Minimum Bid" type="number" value={bidValue}  
+                    /> 
+                      <HorizontalSpace space={1}/>
+                      
+                    <Web3Button
+                      
+                        contractAddress={MARKETPLACE_ADDRESS} 
+                        action={async () => await createBidOffer()}  isDisabled={!auctionData}
+
+                        className="tw-web3button--connect-wallet" 
+                        style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                        
+                    >
+                        Place Bid
+                    </Web3Button>
+                </RowChildrenAlignLeft>
+              ):(
+                
+                <RowChildrenAlignTop>        
+                    <Web3Button 
+                className="tw-web3button--connect-wallet"
+                style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                contractAddress={MARKETPLACE_ADDRESS}
+                action={async () => buyListing()}
+                isDisabled={( !auctionData) && ( !AlllistingData)}
+                >
+                Buy at asking price
+                    </Web3Button>
+                     <HorizontalSpace space={1}/>    
+                    <Web3Button
+                    contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!auctionData}
+                    className="tw-web3button--connect-wallet" 
+                    style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                >
+                    Make Offer
+                    </Web3Button>  
+                </RowChildrenAlignTop>     
+              )}     
+
+        </VerticalStackAlign>
+    </RowChildrenAlignLeft>
+   
+     </RoundedBox>
+  
+     <VerticalSpace space={1}/>
+     {/* auctionId */}
+
+       {listingData ? (
           <ShowAuction nft={ nft }   listingId={listingId}  title={"Direct listing"}  />
        ):(
           <ShowAuction nft={ nft }   auctionId={ auctionId }  title={"Auction"}  />
        )}
- 
-        </Box>
-
+    
+      {/* <Offers nft={ nft}  listing={listingId} /> */}
         
+            </Box>
+       </VerticalStackAlignLeft>
         
-      </Box>
- 
-
-      </Box>
-
-      
-      {/* Third Block (100%) */}
-      <Box  >
-      <Activity nft={ nft } listingID={listingId}  /> 
-      </Box>
-    </Box>
-
- 
+     </RowChildrenAlignTop>     
+      <Activity nft={ nft } listingID={listingId}  />  
+    </VerticalStackAlign>
 
           </div>
         ):(

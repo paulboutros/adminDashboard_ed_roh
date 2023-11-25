@@ -33,10 +33,11 @@ export function RowChildrenAlignCenter( {children} ){
      )
   
   }
-  export function RowChildrenAlignLeft( {children} ){
+  export function RowChildrenAlignLeft( {children , expand } ){
   
     return(
       <Box  //make thing vertically centered
+      width= {expand ? '100%' : null }  //  width= {null}// '100%
       display="flex"
       flexDirection="row"
       alignItems="flex-start"
@@ -74,6 +75,7 @@ export function RowChildrenAlignLeftBottom( {children} ){
   
     return(
       <Box  //make thing vertically centered
+      width= 'auto'// '100%'
       display="flex"
       flexDirection="row"
       alignItems="flex-start" // in row this align to top edge of container
@@ -108,12 +110,12 @@ export function RowChildrenAlignLeftBottom( {children} ){
   }
   
   //neutral, respect whatever horizontal alignement of the children
-  export function VerticalStackAlign(  {children  , padding } ){
+  export function VerticalStackAlign(  {children  , padding , expand } ){
    
     return (
 
       <Box
-      width= '100%'
+      width= {expand ? '100%' : null }  //  width= {null}// '100%'
       padding ={padding}
     //  display="flex" 
      // flexDirection="column"

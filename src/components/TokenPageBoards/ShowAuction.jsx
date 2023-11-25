@@ -93,71 +93,141 @@ useEffect(() => {
 }, [nft]);
   
    
+let columns;
 
-const columns = [
+if (auctionId){
+  columns = [
  
-  {
-    field: "auctionId",
-    headerName: "auction Id",
-    flex: 0.5,
-    cellClassName: "name-column--cell",
-     
-  } ,
-  {
-    field: "tokenId",
-    headerName: "token Id",
-    flex: 1,
-    cellClassName: "name-column--cell",
-     
-  } ,
-  {
-    field: "eventName",
-    headerName: "eventName",
-    flex: 1,
-    cellClassName: "name-column--cell",
-     
-  } ,
-    
-  {
-    field: "price",
-    headerName: "ethValue",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    
-  } ,
-  {
-      field: "usdPrice",   
-      headerName: "USDPrice",
+    {
+      field: "auctionId",
+      headerName: "auction Id",
+      flex: 0.5,
+      cellClassName: "name-column--cell",
+       
+    } ,
+    {
+      field: "tokenId",
+      headerName: "token Id",
       flex: 1,
       cellClassName: "name-column--cell",
+       
+    } ,
+    {
+      field: "eventName",
+      headerName: "eventName",
+      flex: 1,
+      cellClassName: "name-column--cell",
+       
+    } ,
       
-  } , 
-   {
-      field: "from",   
-      headerName: "bidder",
-      flex:1,
+    {
+      field: "price",
+      headerName: "ethValue",
+      flex: 1,
       cellClassName: "name-column--cell",
       
     } ,
     {
-     // field: "expiration",   
-     // headerName: "Expiration",
-     field: "date",   
-     headerName: "Date",
+        field: "usdPrice",   
+        headerName: "USDPrice",
+        flex: 1,
+        cellClassName: "name-column--cell",
+        
+    } , 
+     {
+        field: "from",   
+        headerName: "bidder",
+        flex:1,
+        cellClassName: "name-column--cell",
+        
+      } ,
+      {
+       // field: "expiration",   
+       // headerName: "Expiration",
+       field: "date",   
+       headerName: "Date",
+        flex: 1,
+        renderCell: (params) => {
+          return (
+            <Box>
+              <Typography fontSize={colors.grey[gridFont]} color={colors.grey[gridtext]} >{params.value}</Typography>
+             </Box>
+          );
+        },
+        
+      }   
+    
+       
+    
+    ];
+}
+// for auction
+if (listingId){
+  columns = [
+ 
+    {
+      field: "listingID",
+      headerName: "listing Id",
+      flex: 0.5,
+      cellClassName: "name-column--cell",
+       
+    } ,
+    {
+      field: "tokenId",
+      headerName: "token Id",
       flex: 1,
-      renderCell: (params) => {
-        return (
-          <Box>
-            <Typography fontSize={colors.grey[gridFont]} color={colors.grey[gridtext]} >{params.value}</Typography>
-           </Box>
-        );
-      },
+      cellClassName: "name-column--cell",
+       
+    } ,
+    {
+      field: "eventName",
+      headerName: "eventName",
+      flex: 1,
+      cellClassName: "name-column--cell",
+       
+    } ,
       
-    }   
-  
-     
-  
-  ];
+    {
+      field: "price",
+      headerName: "ethValue",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      
+    } ,
+    {
+        field: "usdPrice",   
+        headerName: "USDPrice",
+        flex: 1,
+        cellClassName: "name-column--cell",
+        
+    } , 
+     {
+        field: "from",   
+        headerName: "from",
+        flex:1,
+        cellClassName: "name-column--cell",
+        
+      } ,
+      {
+       // field: "expiration",   
+       // headerName: "Expiration",
+       field: "date",   
+       headerName: "Date",
+        flex: 1,
+        renderCell: (params) => {
+          return (
+            <Box>
+              <Typography fontSize={colors.grey[gridFont]} color={colors.grey[gridtext]} >{params.value}</Typography>
+             </Box>
+          );
+        },
+        
+      }   
+    
+       
+    
+    ];
+}
 
 
 
@@ -179,11 +249,16 @@ const columns = [
         <Box  sx={DataGridStyle(theme, colors)} >
         
       
-
+        {/* height= {_height} */}
       {newDataList ? (
+
+
+         <div>
+
+        <DataGridHeader  title={title} /> 
          <Box    height= {_height} style={{ width: '100%' }}  >
-       {/* <Box m= {` ${grid_gap}  0 0 0 `} height= {_height} style={{ width: '101%' }} > */}
-        <DataGridHeader  title={title} />  
+       
+         
         <DataGrid
           rows={newDataList}
           columns={columns}
@@ -199,14 +274,13 @@ const columns = [
 
          //  pageSize={maxRowsPerPage}
             pagination
-
-        //   filterModel={filterModel}
-         // onFilterModelChange={(model) => setFilterModel(model)}
-          
-         
+ 
          
         />
-       </Box>
+        </Box>
+
+        </div>
+
     ) : (
       <div>Loading...</div> // You can replace this with a loading spinner or message
     )}
