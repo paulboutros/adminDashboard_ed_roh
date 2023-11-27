@@ -14,7 +14,7 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 /*
 layer based info is used by 
--layer slectionPanel
+-layer selectionPanel  imageComposer.jsx
 -popup to validate claim
 it  takes a list of layer object and display image, how many are owned  etc..
 */
@@ -62,7 +62,33 @@ it  takes a list of layer object and display image, how many are owned  etc..
                         />
                 
 
-                 <Tooltip title= {`layer supply: ${ obj.supply }`}      >
+                  <Tooltip title= {`token supply: ${ obj.supply }`}      >
+                   <Typography
+                    
+                        
+                       style={{
+                        color: colors.grey[500],
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                        position: 'absolute',
+                        top: '5px',
+                        right: '5px',
+                        //backgroundColor: 'white',
+                        borderRadius: '50%',
+                      // padding: '3px 8px',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                     }}
+                   >
+                    
+                    
+                    {  obj.supply }  
+                  </Typography> 
+                  </Tooltip>
+
+
+                  <Tooltip title= {`Token ID#: ${ obj.tokenID }`}      >
                    <Typography
                     
                         
@@ -83,18 +109,19 @@ it  takes a list of layer object and display image, how many are owned  etc..
                    >
                     
                     
-                    {  obj.supply }  
+                    #{  obj.tokenID }  
                   </Typography> 
                   </Tooltip>
+               
 
 
 
-                     
+ 
 
 
                   <Tooltip title=
-                   {`layer ID: ${ obj.layerName }\n  
-                     you own : ${ obj.owning }`}  
+                   {`you own : ${ obj.owning } of \n Token ID: ${  obj.tokenID } `}  
+                       
  
 
                        >

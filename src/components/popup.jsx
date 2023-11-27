@@ -1,7 +1,20 @@
 
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import {  useAddress } from "@thirdweb-dev/react";
+import {
+ // MARKETPLACE_ADDRESS,
+ // LAYER_EDITION_ADDRESS,
+ // TOOLS_ADDRESS ,
+  
+  REWARDS_ADDRESS
 
+} 
+
+from "../../const/addresses";
+
+
+
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import {  useAddress, Web3Button } from "@thirdweb-dev/react";
+ 
 
 import React, { useState , useEffect } from 'react';
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -103,39 +116,10 @@ const address = useAddress();
          
          >
 
-        {!user ? (
-          
-          <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >  
-          <Box> 
-           
-             {/* <Typography  fontWeight="100" sx={{ color: colors.grey[300]}} > */}
-              
-                <NotEnoughtLayerMessage status={1}  filteredImages={filteredImages} user={user} address={address}  />
-            {/* To claim the reward, you must own all of the following
-            layers marked with this icon: <CancelRoundedIcon sx={{ 
-               color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px"
-               }} /> <br />
-            If any layers are missing, you can quickly earn them by joining with Discord */}
-            {/* If any layers are missing, you can quickly earn them by sharing the link below: */}
-            
-           </Box>
 
-            <Box sx={{
-                display: 'flex',   justifyContent: 'space-between',  alignItems: 'center',   marginTop: '20px',  marginBottom:"20px"
-               }} >
+            {/* use that login to get reward somewher else */}
+           {/* <ButtonCTALoginFor2FreeLayers/> */}
         
-            <ButtonCTALoginFor2FreeLayers/>
-            {/* <AppLinkDataBox/> */}
-          
-           </Box>
-   
-
-           </div>
-
-
-
-         ) : (
-
           <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >  
           
            
@@ -144,13 +128,48 @@ const address = useAddress();
                
                 <Box sx={{  display: 'flex',  justifyContent: 'space-between',  alignItems: 'center',  marginTop: '20px',  marginBottom:"20px"
                  }} >
-               <AppLinkDataBox/>
+               {/* <AppLinkDataBox/> */}
+
+
+
+
+
+                     {/*            
+               <Web3Button
+              contractAddress={REWARDS_ADDRESS} 
+               action={async () => await createBidOffer()} 
+               // isDisabled={!auctionListing || !AuctionListingData}
+              className="tw-web3button--connect-wallet"
+               style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
+          >
+              Claim Your Reward
+          </Web3Button> 
+          
+            
+          
+          */}
+
+          
+
+             <Button variant="contained"
+              onClick={() => ERC20claim( filteredImages ,  address  )}  
+              
+             >
+               CLAIM Your Reward !
+             </Button>
+
+
+
+
+
+
+
+
                         
               </Box>
  
             </div>
-
-        )}
+ 
     
         
    
@@ -182,6 +201,13 @@ const address = useAddress();
 
 
 function GetfilteredImages( selectedImages ){
+
+
+    console.log ( "POPUP: selectedImages",  selectedImages );
+
+
+
+
   const excludedKeys = ["forearn", "bo", "collar"];
   const filteredImages = Object.keys(selectedImages).reduce((result, key) => {
     if (!excludedKeys.includes(key)) {
@@ -316,8 +342,8 @@ for (const category in filteredImages) {
  
 
   if(!user) return;
-      ERC20claim(user.ID, filteredImages ,  address  );
-   console.log("  you won !:" , address );
+     // ERC20claim(user.ID, filteredImages ,  address  );
+ //  console.log("  you won !:" , address );
  }
 
 
@@ -330,7 +356,7 @@ for (const category in filteredImages) {
         switch (missingCount) {
           case 5:
             return ("Welcome to the claiming section. In order To claim the reward,"+ 
-             +"you must own the 5 NFTs marked with this icon:") 
+              "you must own the 5 NFTs marked with this icon:") 
             //return ("To claim the reward, you must own all 5 of the following layers marked with this icon:") 
             case 4:case 3:
               return ( `Very Nice!

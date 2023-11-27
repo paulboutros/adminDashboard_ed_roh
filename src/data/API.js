@@ -310,7 +310,33 @@ export async function testSDK( address ){
 }
 
 
-export async function ERC20claim(ID, filteredImages_arg , address){
+export async function ERC20claim( filteredImages_arg , address){
+     
+  
+
+  const dataToSend= { 
+  // ID:ID,
+   filteredImages: filteredImages_arg  ,
+   address:address 
+  }
+
+
+  console.log("dataToSend:" ,  dataToSend);
+const endpoint = `${process.env.REACT_APP_API_URL}ERC20claim`; // make it specific (filter to twitter fields)
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+ console.log("resultsPostJson" , resultsPostJson);
+//  setReferralCode(result.data.shareableLink);
+ // setShowCopyButton(true);
+
+  // set the refferal code to the one we jsut generate
+//  resultsJson = resultsPostJson;
+
+
+return resultsPostJson;
+}
+
+export async function ERC20claim_discord_login_required(ID, filteredImages_arg , address){
      
   
 
@@ -335,6 +361,7 @@ export async function ERC20claim(ID, filteredImages_arg , address){
  
     return resultsPostJson;
 } 
+ 
 
 
 

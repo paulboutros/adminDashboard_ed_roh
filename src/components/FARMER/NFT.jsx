@@ -83,24 +83,22 @@ export default function NFTComponent({ nft } ) {
              />       
            </Box>
 
-           {/* <Box margin={1}>
+            <Box margin={1}>
 
            <RoundedBoxInfo 
-            name={"supply"}
+            name={"sup"}
             value={nft.metadata.supply}   _width = {"80px"}  _height = {"80px"}
              />       
-            </Box> */}
+            </Box>  
            </RowChildrenAlignLeft>
         </Box>  
           </RoundedBox>
          
-          <Button variant="contained" 
+          {/* <Button variant="contained" 
               sx={{backgroundColor: colors.redAccent[500]  }}
-             
-          onClick={() => evolve(nft, "",  nft.metadata.id )} >
+               onClick={() => evolve(nft, "",  nft.metadata.id )} >
                  update meta
-
-            </Button>
+           </Button> */}
           
         </div>
       )

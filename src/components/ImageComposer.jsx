@@ -411,13 +411,13 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
       onSelectImage( {
         forearn: [{ imagePath:`layersForCharacterCompo/fa/1.png`,  layerName: 1, owning:0 }]  ,  // Example image paths
         bo:      [{ imagePath:`layersForCharacterCompo/bo/1.png`,  layerName: 1, owning:0 }] , // Example image paths
-        kn:      [{ imagePath:`layersForCharacterCompo/kn/${kn_rand }.png`,  layerName: kn_rand, owning:kn.owning }] , // Example image paths
-        be:      [{ imagePath:`layersForCharacterCompo/be/${be_rand }.png`,  layerName: be_rand, owning:be.owning }]  ,  // Example image paths
-        we:      [{ imagePath:`layersForCharacterCompo/we/${we_rand }.png`,  layerName: we_rand, owning:we.owning }] , // Example image paths
+        kn:      [{ imagePath:`layersForCharacterCompo/kn/${kn_rand }.png`,  layerName: kn_rand, owning:kn.owning, tokenID:kn.tokenID  }] , // Example image paths
+        be:      [{ imagePath:`layersForCharacterCompo/be/${be_rand }.png`,  layerName: be_rand, owning:be.owning, tokenID:be.tokenID  }]  ,  // Example image paths
+        we:      [{ imagePath:`layersForCharacterCompo/we/${we_rand }.png`,  layerName: we_rand, owning:we.owning, tokenID:we.tokenID  }] , // Example image paths
         
         collar:  [{ imagePath:`layersForCharacterCompo/co/1.png`,  layerName: 1, owning:0 }] , // Example image paths
-        he:      [{ imagePath:`layersForCharacterCompo/he/${he_rand }.png`,  layerName: he_rand, owning:he.owning }] , // Example image paths
-        sh:      [{ imagePath:`layersForCharacterCompo/sh/${sh_rand }.png`,  layerName: sh_rand, owning:sh.owning }]   // Example image paths
+        he:      [{ imagePath:`layersForCharacterCompo/he/${he_rand }.png`,  layerName: he_rand, owning:he.owning, tokenID:he.tokenID  }] , // Example image paths
+        sh:      [{ imagePath:`layersForCharacterCompo/sh/${sh_rand }.png`,  layerName: sh_rand, owning:sh.owning, tokenID:sh.tokenID }]   // Example image paths
         
         
       }
@@ -482,7 +482,7 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
             />
             ):(
 
-              <p> layer loading... </p>
+               <p> layer loading... </p>
             )
       }
 

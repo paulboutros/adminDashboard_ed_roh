@@ -105,21 +105,21 @@ useEffect(() => {
             NFTdata.map((nft) => 
             !overrideOnclickBehavior ? (
   
-              <NFT nft={nft} />
-                // <Link
-                //    to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                //    key={nft.metadata.id}
-                // >
-                //   <NFT nft={nft} />
+               
+                <Link
+                   to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
+                   key={nft.metadata.id}
+                >
+                  <NFT nft={nft} />
 
                
-                // </Link>
+                </Link>
             ) : (
                 <div
                     key={nft.metadata.id}
                     onClick={() => overrideOnclickBehavior(nft)}
                 >
-                    <NFT nft={nft} />
+                     <NFT nft={nft} />
                 </div>
             )
             

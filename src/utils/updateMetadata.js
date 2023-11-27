@@ -60,12 +60,12 @@ export async function evolve(
     nftTokenId //: string,
 ){
     try {
-        const category ="sh"; 
+        const category ="kn"; 
         const catOffSet = 1;
           const resultNumber = parseInt(nftTokenId) + catOffSet;
 
 
-           console.log( " >>>>>    resultNumber" + resultNumber);
+          // console.log( " >>>>>    resultNumber" + resultNumber);
         const sdk = getSDK_fromPrivateKey();
 
         const contract = await sdk.getContract(TOOLS_ADDRESS);
@@ -73,18 +73,18 @@ export async function evolve(
        
             const metadata = {
                 ...nft.metadata,
-               //  name: (category+( resultNumber ).toString() ),
-                 image: "https://coffee-doubtful-unicorn-619.mypinata.cloud/ipfs/QmUh9yAraVTeqLuaPR8D3Xq37J1HEDFWN46k43nxNK9Hno/3.png",
+                 // name: "sh02" //(category+( resultNumber ).toString() ),
+             //    image: "https://coffee-doubtful-unicorn-619.mypinata.cloud/ipfs/QmVB8b68bXt5p7Jvup5qiYzrYt8JGF1XWDE9u2iV8qbrbD/7.png",
               //  description: (category+resultNumber.toString() )  ,
-/*
+               
                  attributes: [
                     {
                         trait_type:category,
-                        value: resultNumber.toString(),   //updatedLvl.toString()
+                        value: "5",// resultNumber.toString(),   //updatedLvl.toString()
                      }
                     
                 ],
-                */
+                   
                 
             };
 
