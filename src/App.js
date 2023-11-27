@@ -21,7 +21,7 @@ import FAQ from "./scenes/faq/index.jsx";
 import Geography from "./scenes/geography/index.jsx";
 import GetLayers from "./scenes/getLayers/index.jsx";
 import Maintenance  from "./scenes/maintenance/index.jsx";
-import TokenDetails from "./scenes/tokenDetails/index.jsx";
+ 
 import TokenPage from "./scenes/tokenPage/index.jsx";
 import TokenPageByID from "./scenes/tokenPageByID/index.jsx";
 
@@ -54,7 +54,7 @@ import Shop from "./scenes/shop/index.tsx";
 
   
 import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { Goerli } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
+import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -69,7 +69,7 @@ const testThirdWeb = false;
     return (  
      
       <ThirdwebProvider 
-      activeChain={Goerli} 
+      activeChain={Sepolia} 
       clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID}
       > 
       
@@ -133,7 +133,7 @@ const testThirdWeb = false;
   return (
 
 
-    <ThirdwebProvider activeChain={Goerli}>
+    <ThirdwebProvider activeChain={Sepolia}>
  <ChakraProvider>
        <UserProvider>
 
@@ -169,7 +169,7 @@ const testThirdWeb = false;
               {/* <Route path="/shop" element={<Shop display_mode="list"/>} /> */}
               <Route path="/shop" element={<Shop display_mode="grid"/>} />
               <Route path="/sell" element={<Sell/>} />
-              {/* <Route path="/token/:contractAddress/:tokenId" element={<TokenDetails/>} /> */}
+               
               <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
               <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={<TokenPageByID/>} />
               

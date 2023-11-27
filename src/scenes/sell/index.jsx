@@ -32,16 +32,25 @@ export default function Sell() {
 
      const { data, isLoading } = useOwnedNFTs(contract, address);
      useEffect(()=>{
+
+        if ( isLoading)return;
+
+        /* // uncomment if you need to override the metadata with locally stored metadata
        async function get(){
            const result =  await  GetAllNFTfromSDK(data);
           // setAllNFTs(result);
            setOwnedNfts(result);
-      //  console.log( "owned  with metadata added = ", result    );
+
+
+           console.log( "contract = ", contract    );
+           console.log( "address = ", address    );
+        console.log( "ownedNfts = ", data    );
       }
       
       get();
-       
-    }, [data]);
+      */
+      setOwnedNfts(data);
+    }, [data, isLoading]);
 
 
 
@@ -62,18 +71,7 @@ export default function Sell() {
        
 
      }, [  data ]);
-
-
-
-
-     useEffect(()=>{ 
-       // if ( !ownedNftData){
-
-         //   console.log( "ownedNftData  = ", ownedNftData );
-     //   }
-
-     }, [   ]);
-
+ 
  
       return (
         // <div>  this was disabled to temporarily to fix the metadata nft bug, you can turn it back if fixed</div>

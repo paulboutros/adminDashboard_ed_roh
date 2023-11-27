@@ -73,9 +73,10 @@ export async function evolve(
        
             const metadata = {
                 ...nft.metadata,
-                name: (category+( resultNumber ).toString() ),
-             //   image: imageToUpload,
-                description: (category+resultNumber.toString() )  ,
+               //  name: (category+( resultNumber ).toString() ),
+                 image: "https://coffee-doubtful-unicorn-619.mypinata.cloud/ipfs/QmUh9yAraVTeqLuaPR8D3Xq37J1HEDFWN46k43nxNK9Hno/3.png",
+              //  description: (category+resultNumber.toString() )  ,
+/*
                  attributes: [
                     {
                         trait_type:category,
@@ -83,6 +84,8 @@ export async function evolve(
                      }
                     
                 ],
+                */
+                
             };
 
 

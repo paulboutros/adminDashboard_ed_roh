@@ -50,7 +50,7 @@ import { Link, useParams } from 'react-router-dom';
     // Function to fetch NFT data
     const fetchNFT = async () => {
 
-        const sdk = getSDK_fromPrivateKey();//new ThirdwebSDK("goerli");
+        const sdk = getSDK_fromPrivateKey(); 
         const contract = await sdk.getContract(TOOLS_ADDRESS);
         
         
@@ -107,7 +107,7 @@ import { Link, useParams } from 'react-router-dom';
           </RowChildrenAlignCenter> 
             </VerticalStackAlignLeft>
 
-            <Divider   orientation="hotizontal" style={{ marginBottom:"20px",  width: '100%', height: '1px' }} />  
+            <Divider   orientation="horizontal" style={{ marginBottom:"20px",  width: '100%', height: '1px' }} />  
 
 
 
@@ -169,14 +169,14 @@ import { Link, useParams } from 'react-router-dom';
             <Link backgroundColor={colors.grey[400]} 
             to={`/profile/${nft.owner}`}>
             </Link> */}
-  {/* https://goerli.etherscan.io/address/ */}
+  {/* https://sepolia.etherscan.io/address/ */}
 
            <CustomLinkWithIcon  
  
-            to={`https://goerli.etherscan.io/address/${TOOLS_ADDRESS}`} 
+            to={`https://seoplia.etherscan.io/address/${TOOLS_ADDRESS}`} 
             text={`${TOOLS_ADDRESS.slice(0, 6)}...${TOOLS_ADDRESS.slice(-4)}`}
             color={colors.grey[200]} 
-            tooltipText={"vist goerli.etherscan"}
+            tooltipText={"vist sepolia.etherscan"}
           >
 
            </CustomLinkWithIcon>

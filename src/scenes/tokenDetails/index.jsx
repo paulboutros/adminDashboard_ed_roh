@@ -98,7 +98,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
    // Function to fetch NFT data
    const fetchNFT = async () => {
 
-       const sdk = getSDK_fromPrivateKey();//new ThirdwebSDK("goerli");
+       const sdk = getSDK_fromPrivateKey(); 
        const contract = await sdk.getContract(TOOLS_ADDRESS);
        //const nftResult = await contract.erc721.get(tokenId);
        const nftResult = await contract.erc1155.get(tokenId);
@@ -368,12 +368,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
         <Box  width="80%"   style={{ marginLeft:"20px",  marginRight:"20px"  }}   > 
   
    <BoxWithTopBar 
-   // timeLeft={
-       
-   //     <CountdownTimerWithArg 
-   //       startTime={AlllistingData.startTimeInSeconds}  
-   //       endTime={AlllistingData.endTimeInSeconds}  />
-   //   }
+   
    >
 
  <RowChildrenAlignLeft>
@@ -410,7 +405,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
     </VerticalStackAlignLeft>
 
     <HorizontalSpace space={1}/> 
-    < Box whiteSpace="nowrap" >
+    < Box  >
      <VerticalStackAlignLeft>
         
         <Typography color={colors.grey[ text2.color ]} >listing ID</Typography>
@@ -422,7 +417,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
   </Box>
 
   <HorizontalSpace space={1}/> 
-  < Box whiteSpace="nowrap" >
+  < Box  >
      <VerticalStackAlignLeft>
         
         <Typography color={colors.grey[ text2.color ]} >Supply:</Typography>

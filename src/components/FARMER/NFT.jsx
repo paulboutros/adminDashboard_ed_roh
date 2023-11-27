@@ -75,6 +75,7 @@ export default function NFTComponent({ nft } ) {
             />       
            </Box>
            <Box >
+          
 
           <RoundedBoxInfo 
             name={"ID"}
@@ -93,6 +94,13 @@ export default function NFTComponent({ nft } ) {
         </Box>  
           </RoundedBox>
          
+          <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+             
+          onClick={() => evolve(nft, "",  nft.metadata.id )} >
+                 update meta
+
+            </Button>
           
         </div>
       )

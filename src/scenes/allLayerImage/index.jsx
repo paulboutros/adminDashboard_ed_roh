@@ -21,18 +21,17 @@
    const { contract } = useContract(TOOLS_ADDRESS);
     const { data, isLoading } = useNFTs(contract);
    
- 
-    const [allNFTs, setAllNFTs] = useState();
+    const { data: allNFTs } = useNFTs(contract); // get all neft
+   // const [allNFTs, setAllNFTs] = useState();
    useEffect(()=>{
+    /*
      async function get(){
          const result =  await  GetAllNFTfromSDK();
-
-        // console.log("result" , result );
-         setAllNFTs(result);
+          setAllNFTs(result);
      }
     
     get();
-     
+     */
   }, [   ]);
  
   

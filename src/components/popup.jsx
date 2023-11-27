@@ -108,7 +108,7 @@ const address = useAddress();
           <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >  
           <Box> 
            
-             <Typography  fontWeight="100" sx={{ color: colors.grey[300]}} >
+             {/* <Typography  fontWeight="100" sx={{ color: colors.grey[300]}} > */}
               
                 <NotEnoughtLayerMessage status={1}  filteredImages={filteredImages} user={user} address={address}  />
             {/* To claim the reward, you must own all of the following
@@ -117,7 +117,7 @@ const address = useAddress();
                }} /> <br />
             If any layers are missing, you can quickly earn them by joining with Discord */}
             {/* If any layers are missing, you can quickly earn them by sharing the link below: */}
-              </Typography>
+            
            </Box>
 
             <Box sx={{
@@ -137,13 +137,11 @@ const address = useAddress();
          ) : (
 
           <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >  
-          <Typography
-            fontWeight="100" 
-            sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} >
+          
            
             <NotEnoughtLayerMessage status={2} filteredImages={filteredImages}  user={user} address={address}  />
                   
-               </Typography>
+               
                 <Box sx={{  display: 'flex',  justifyContent: 'space-between',  alignItems: 'center',  marginTop: '20px',  marginBottom:"20px"
                  }} >
                <AppLinkDataBox/>
@@ -237,16 +235,23 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address}){
     switch (status) {
       case 1:
         return (
-         <div>
+          <Typography
+          fontWeight="100" 
+          sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} >
           
            { CheckComBoValidity(filteredImages ,user , address ) }
            <CancelRoundedIcon sx={{ 
          color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />
         
          If any layers are missing, you can quickly earn them by joining with Discord
-        </div>)
+        </Typography>)
       case 2:
-        return (<div>
+        return (
+        
+         <Typography
+        fontWeight="100" 
+        sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} > 
+
         { CheckComBoValidity(filteredImages ,user , address) } 
         <CancelRoundedIcon sx={{ 
          color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />  
@@ -256,7 +261,10 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address}){
 
              On your profile page you can check, your new layers as well as the status of your invite link.
              Good luck! */}
-        </div>);
+        </Typography>
+        
+        
+        );
       default:
         return <div>Default message</div>;
     }
@@ -289,7 +297,7 @@ const handleImageSelect = (category, obj   ) => {
     // testSDK( address );
     console.log("popup  user " , address  );
     console.log("CheckComBoValidity  address " , address  );
-     if(!user) return;
+    // if(!user) return;
       const missingCategories = [];
 
 for (const category in filteredImages) {
@@ -307,19 +315,29 @@ for (const category in filteredImages) {
 
  
 
-
+  if(!user) return;
       ERC20claim(user.ID, filteredImages ,  address  );
    console.log("  you won !:" , address );
  }
 
 
-   
+   // add option, 
+   // I am low in $Wu and I need more $wu
+   // how ca I get free $Wu
+   // how can I buy $Wu
+
     const missingCount =  missingCategories.length;
         switch (missingCount) {
           case 5:
-            return ("To claim the reward, you must own all 5 of the following layers marked with this icon:") 
+            return ("Welcome to the claiming section. In order To claim the reward,"+ 
+             +"you must own the 5 NFTs marked with this icon:") 
+            //return ("To claim the reward, you must own all 5 of the following layers marked with this icon:") 
             case 4:case 3:
-            return ( `To claim the reward, you must own the ${missingCount} layers marked with this icon:` );
+              return ( `Very Nice!
+               You already own ${5-missingCount} of the NFT required to claim this reward combo,
+               but you still need the ${missingCount} NFTs marked with this icon:`+
+               `You current Wu Balance can certainly buy the missing NFTs` );
+           //  return ( `To claim the reward, you must own the ${missingCount} layers marked with this icon:` );
             case 1:case 2:
               return ( 
                  `You are so close! Only ${missingCount} left to own, and the reward is yours! Great job!`

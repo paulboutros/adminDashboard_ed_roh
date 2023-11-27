@@ -15,12 +15,14 @@ export function useNftContext() {
 
 
 export function NftProvider({ children }) {
-    const [allNft, setAllNft] = useState(null);
+   
     const { contract } = useContract(TOOLS_ADDRESS);
 
 
+    const { data: allNft } = useNFTs(contract); // get all neft
+   // const [allNft, setAllNft] = useState(null);
     useEffect(() => {
-      // Fetch nft data from the API
+       /*
       async function GetAllNFTfromSDK(contract){
        
         const nfts = await contract.erc1155.getAll();
@@ -49,11 +51,11 @@ export function NftProvider({ children }) {
       }    
       GetAllNFTfromSDK(contract);
 
-
+*/
     }, [contract]); // Empty dependency array runs the effect once
   
     return (
-      <NftContext.Provider value={{ allNft, setAllNft }}>
+      <NftContext.Provider value={{ allNft }}>
         {children}
       </NftContext.Provider>
     );

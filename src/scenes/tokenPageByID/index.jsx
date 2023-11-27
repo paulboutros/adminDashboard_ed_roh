@@ -69,7 +69,7 @@ import toast, { Toaster } from "react-hot-toast";
 const totalHeight  = "1200px";
 const _buttonHeight ="50px";
 const _mainBoxPadding = 3;
-const TokenDetailsByID =  ({  propContractAddress,  propTokenId, AlllistingData,     displayMode  } ) => {
+const TokenDetailsByID =  ({  propContractAddress,  propTokenId,  displayMode  } ) => {
 
   
     const image_span ="span 3";
@@ -130,7 +130,7 @@ useEffect(() => {
    // Function to fetch NFT data
    const fetchNFT = async () => {
 
-       const sdk = getSDK_fromPrivateKey();//new ThirdwebSDK("goerli");
+       const sdk = getSDK_fromPrivateKey(); 
        const contract = await sdk.getContract(TOOLS_ADDRESS);
        //const nftResult = await contract.erc721.get(tokenId);
        const nftResult = await contract.erc1155.get(tokenId);
@@ -264,9 +264,9 @@ useEffect(() => {
            txResult = await marketplace?.englishAuctions.buyoutAuction(
                auctionData.id
            );
-       } else if (AlllistingData){
+       } else if (listingData){
            txResult = await marketplace?.directListings.buyFromListing(
-               AlllistingData.id,
+               listingData.id,
                1
            );
        } else {
@@ -426,7 +426,7 @@ useEffect(() => {
 
     <RowChildrenAlignLeft>
       <VerticalStackAlign padding={_mainBoxPadding}  expand={true} >
-        <NftPriceBlock AlllistingData={listingData}  auctionData={auctionData} ethToUsdRate={ethToUsdRate}  />
+        <NftPriceBlock listingData={listingData}  auctionData={auctionData} ethToUsdRate={ethToUsdRate}  />
         <VerticalSpace space={2}/>
 
                   {/* web button for listing and auction */}
@@ -540,7 +540,7 @@ useEffect(() => {
 export default TokenDetailsByID;
 
 function NftPriceBlock (   { 
-     AlllistingData, auctionData, ethToUsdRate }  ){
+  listingData, auctionData, ethToUsdRate }  ){
 
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
@@ -550,11 +550,11 @@ function NftPriceBlock (   {
         
        <Typography color={colors.grey[ text2.color ]} >Current price: </Typography>
    
-       {AlllistingData ? (
+       {listingData ? (
            <Typography color={colors.grey[ text1.color ]}
            // sx={{  position: 'relative', top:"-5px"  }}
            variant="h1" fontWeight="50">
-            {`${AlllistingData?.currencyValuePerToken.displayValue} ${AlllistingData.currencyValuePerToken.symbol}`}
+            {`${listingData?.currencyValuePerToken.displayValue} ${listingData.currencyValuePerToken.symbol}`}
            
            </Typography>
        ) : auctionData ? (
@@ -598,7 +598,7 @@ function NftPriceBlock (   {
  }
  
 
- function  StatusBox ( {nft , AlllistingData }){
+ function  StatusBox ( {nft , listingData }){
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
  
@@ -613,8 +613,8 @@ return(
    padding= {2} 
    border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
   >
-                 { AlllistingData  ? (           
-            <p>status : {GetListingStatus(AlllistingData )  }</p>  
+                 { listingData  ? (           
+            <p>status : {GetListingStatus(listingData )  }</p>  
                 ):(<div></div>) }
          
      
@@ -625,12 +625,12 @@ return(
  }
   
 
- function   GetListingStatus(AlllistingData){
+ function   GetListingStatus(listingData){
   
-   if (!AlllistingData){return ""; }
+   if (!listingData){return ""; }
 
     // CREATED, COMPLETED, or CANCELLED
-   switch (AlllistingData.status ){
+   switch (listingData.status ){
      case 2: return "COMPLETED";  
      case 3: return "CANCELLED";  
      case 4: return "ACTIVE"; // or created  

@@ -226,15 +226,11 @@ const FarmerPage = () => {
 async function transfert( ){
   
   const signer = new ethers.Wallet(process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY  ); // "{{private_key}}"
-   const sdk = await ThirdwebSDK.fromSigner(signer, "goerli", {
+   const sdk = await ThirdwebSDK.fromSigner(signer, process.env.REACT_APP_ETH_NETWORK, {
     clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID , // Use client id if using on the client side, get it from dashboard settings
     secretKey: process.env.REACT_APP_THIRDWEB_SECRET_KEY, // Use secret key if using on the server, get it from dashboard settings. Do NOT expose your secret key to the client-side
   });
-  /*
-// If used on the FRONTEND pass your 'clientId'
-const sdk = new ThirdwebSDK("goerli", {
-  clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID,
-});*/
+   
  
 
 const contract = await sdk.getContract("0x6c66Ec1087419Da555ea989489f160B6e7f2E920");
@@ -254,7 +250,7 @@ async function  getSDKSigner(   address  ){
   // An example of a signer using the ethers library
  const signer = new ethers.Wallet(process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY  ); // "{{private_key}}"
 
-const sdk = await ThirdwebSDK.fromSigner(signer, "goerli", {
+const sdk = await ThirdwebSDK.fromSigner(signer, process.env.REACT_APP_ETH_NETWORK, {
   clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID , // Use client id if using on the client side, get it from dashboard settings
   secretKey: process.env.REACT_APP_THIRDWEB_SECRET_KEY, // Use secret key if using on the server, get it from dashboard settings. Do NOT expose your secret key to the client-side
 });
@@ -269,29 +265,4 @@ console.log( " >>>>>>>>>>>>>>>>>>     address"  ,  address  );
 const tx = await contract.erc20.claim(address, 100.50);
   
 }
-// this was just to test the SDK
-
-/*
-async function getContract(){
  
-  console.log( "REACT_APP_Client_ID=" , process.env.REACT_APP_Client_ID );
-  console.log( "REACT_APP_Secret_Key=" , process.env.REACT_APP_Secret_Key );
-  let sdk = new ThirdwebSDK("goerli", {
-    clientId: process.env.REACT_APP_Client_ID,
-  });
-  // --- OR ---
-  // If used on the BACKEND pass your 'secretKey'
-    sdk = new ThirdwebSDK("goerli", {
-    secretKey: process.env.REACT_APP_Secret_Key,
-  });
-  
-  const contract = await sdk.getContract("0x6c66Ec1087419Da555ea989489f160B6e7f2E920");
-  
-  
-    console.log(  ">>>>>>>>>>>>>>>>>    contract" ,contract  );
-
-
-
-
-}
-*/

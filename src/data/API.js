@@ -7,22 +7,10 @@ import {  useAddress } from "@thirdweb-dev/react";
 import metadataList from "../metadata/nftmetadata.json"
  
 import { TOOLS_ADDRESS } from "../const/addresses.ts"
-/*
-const sdk = ThirdwebSDK.fromPrivateKey(
-  process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY, // Your wallet's private key (only required for write operations)
-  "goerli",
-  {
-     secretKey: process.env.REACT_APP_THIRDWEB_SECRET_KEY
-  },
-);
-*/
+ 
 export function getSDK_fromPrivateKey() {
-  /*
-      const sdk = new ThirdwebSDK("goerli", {
-          clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID,
-        });
-       */
-        const chain = "goerli";
+   
+        const chain =process.env.REACT_APP_ETH_NETWORK;
       const sdk =   ThirdwebSDK.fromPrivateKey(
           process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY,
           chain,
@@ -37,7 +25,7 @@ export function getSDK_fromPrivateKey() {
    
 export async function GetAllNFTfromSDK( ownedNft  /*address*/ ){
        
-  const sdk = getSDK_fromPrivateKey();//new ThirdwebSDK("goerli");
+  const sdk = getSDK_fromPrivateKey(); 
   const contract = await sdk.getContract(TOOLS_ADDRESS);
 
     let nfts;
@@ -125,7 +113,8 @@ export async function  getUserMe   () {
     });
   
     if (!response.ok) {
-      throw new Error(`user/me Error: ${response.status} ${response.statusText}`);
+      console.log("!response.ok: User is not connected to discord.")
+     // throw new Error(`user/me Error: ${response.status} ${response.statusText}`);
     }
   
     const data = await response.json();
@@ -135,6 +124,7 @@ export async function  getUserMe   () {
     return data.user;
 
   } catch (error) {
+     
     console.error('user/me Error:', error);
     throw error; // You can handle the error further as needed
   }
@@ -305,34 +295,7 @@ export async function  GetRewardPrice(dataToSend   /*he,sh,we,be,kn*/ ){
 
 export async function testSDK( address ){
 
- 
-/*
-  console.log(" address  = ",   address );
-
-  console.log("REACT_APP_THIRDWEB_CLIENT_ID",   process.env.REACT_APP_THIRDWEB_CLIENT_ID );
- console.log("REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY",   process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY );
- console.log("REACT_APP_THIRDWEB_THIRDWEB_SECRET_KEY",  process.env.REACT_APP_THIRDWEB_SECRET_KEY);
- 
-  //console.log("process.env.REACT_APP_THIRDWEB_CLIENT_ID", process.env.REACT_APP_THIRDWEB_CLIENT_ID );
-    
-// If used on the FRONTEND pass your 'clientId'
-const sdk = new ThirdwebSDK("goerli", {
-  clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID
-});
- 
-  const contract = await sdk.getContract( DROP_ADDRESS );
-  console.log("contract", contract );
-//  const address = "0x756C47096DeCb0CA7935a59b53e9732b7F283A6C"; // address of the wallet you want to claim the NFTs
   
-
-const quantity = 42.69; // how many tokens you want to claim
-
-const tx = await contract.erc20.claim(address, quantity);
-
-console.log("tx", tx );
-
-const receipt = tx.receipt; // the transaction receipt
-*/
 
 
 

@@ -60,18 +60,25 @@ interface ShopProps {
         tokenContract: TOOLS_ADDRESS,
         tokenId: filterTokenId,
     });
-
  
-    let listingType :string = "auction";// "direct"; // "auction" ; //
  
+        
+ console.log( "display_mode"  , display_mode ) ;
 
-        // return (
-        // <div> 
-        //      <p> direct : { directListings?.length } </p>
-        //      <p> auction : { auctionListing?.length } </p>
-        //     <ConnectWallet/>
-        // </div> 
-        // )
+ useEffect(() => {
+    // Function to fetch NFT data
+     if ( directListings ){
+        console.log( "directListings"  , directListings ) ;
+     }
+     if ( auctionListing ){
+        console.log( "auctionListing"  , auctionListing ) ;
+     }
+     
+  }, [ directListings , auctionListing  ]);
+     
+
+
+
 
 
       if (!address){
@@ -84,94 +91,9 @@ interface ShopProps {
         
       }
 
-     if (  directListings?.length === 0   ){
-        return (
-        <div> 
+     
 
-             
-            <p> This token is currently not for sale </p>
-
-            <p> you can buy Layer Pack that may contain this layer </p>
-
-            <p> you can invite a friend to to this app and recieve 2 free layers per invitation </p>
-        </div> 
-        )
-     }
-
-    if (display_mode === "list"){
-       return (
-        <div className="ddd">
-
-             <NFTContratHeader/>
-            {/* <h1>Shop Packs</h1> */}
-            <Box m="20px" maxHeight="calc(80vh)" overflow="auto" >
-
-               <Box> 
-                {!loadingDirectListings
-                //  && listingType === "direct" 
-                 ? (
-                    directListings?.map((listing, index) => (
-                        <div key={index}>
- 
-
-                          <TokenDetails
-                           propContractAddress = {listing.assetContractAddress}
-                           propTokenId = {listing.tokenId}
-                           AlllistingData ={listing}
-                           AuctionListingData={null}
-                           displayMode = {display_mode}
-                          /> 
- 
- 
-                        </div>
-                    ))
-                ) : (
-                    <p>Loading direct listing... listingType: {listingType} </p>
-                )
-                 }
-               </Box>
-
-
-               <Box> 
-              {!loadingAuction  && listingType === "auction" ? (
-                    auctionListing?.map((auction_listing, index) => (
-                        <div key={index}>
- 
-
-                          <TokenDetails
-                           propContractAddress = {auction_listing.assetContractAddress}
-                           propTokenId = {auction_listing.tokenId}
-
-                           AlllistingData ={null}
-                           AuctionListingData = {auction_listing}
-
-                           displayMode = {display_mode}
-                          /> 
-
-
-
- 
-                        </div>
-                    ))
-                ) : (
-                    <p>Loading auction...{}</p>
-                )
-                
-                
-                }
-
-
-              </Box>
-
-
-
-
-              
-
-            </Box>
-        </div>
-       )
-    }else{ //"grid"
+    
         return (
             <div className="ddd">
      
@@ -198,16 +120,10 @@ interface ShopProps {
                     ) : (
                         <p>Loading dire listing GRID...</p>
                     )}
-
-
-
-
-
-
-
+ 
 
             <Box> 
-              {!loadingAuction  && listingType === "auction" ? (
+              {!loadingAuction ? (
                     auctionListing?.map((auction_listing, index) => (
                         <div key={index}>
  
@@ -221,9 +137,7 @@ interface ShopProps {
 
                            displayMode = {display_mode}
                           /> 
-
-
-
+ 
  
                         </div>
                     ))
@@ -236,25 +150,12 @@ interface ShopProps {
 
 
               </Box>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
              </SimpleGrid>
                 </Box>
             </div>
            )
 
-    }
+     
 };

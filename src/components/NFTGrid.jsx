@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import { Box, Button } from "@mui/material";
 
+import { evolve } from "../utils/updateMetadata.js"
 import CardActions from '@mui/material/CardActions';
  
 import Grid from '@mui/material/Grid';          
@@ -92,7 +93,7 @@ useEffect(() => {
    2) you select that Nft as the Nft you want to sell, so it directs you toward the sell
     page, to sell that specific/selected NFT
   */
-
+// 
   return (
     <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>
     {isLoading ? (
@@ -101,14 +102,18 @@ useEffect(() => {
         ))
         // WARNING REPO reffer to NFT data as "data" instead of "NFTdata" i our case
     ) : NFTdata && NFTdata.length > 0 ? (
-      NFTdata.map((nft) => 
+            NFTdata.map((nft) => 
             !overrideOnclickBehavior ? (
-                <Link
-                   to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                   key={nft.metadata.id}
-                >
-                <NFT nft={nft} />
-                </Link>
+  
+              <NFT nft={nft} />
+                // <Link
+                //    to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
+                //    key={nft.metadata.id}
+                // >
+                //   <NFT nft={nft} />
+
+               
+                // </Link>
             ) : (
                 <div
                     key={nft.metadata.id}
@@ -119,6 +124,8 @@ useEffect(() => {
             )
             
             )
+
+            
     ) : (
         <Text>{emptyText}</Text>
     )}

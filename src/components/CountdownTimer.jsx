@@ -144,7 +144,7 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
     }, [endTimeInSecondsX]);
   
     return (
-      <div  whiteSpace="nowrap" >
+      <div  >
        
         <div>
          

@@ -27,72 +27,61 @@ export function AllLayersProvider({ children }) {
  
 
 
-    //const { data: NFTdata } = useNFTs(contract); // get all neft
-    const [NFTdata, setAllNFTs] = useState(null);
+     const { data: NFTdata } = useNFTs(contract); // get all neft
+   // const [NFTdata, setAllNFTs] = useState(null);
+
+  
     useEffect(()=>{
+        /*
       async function get(){
           const result =  await  GetAllNFTfromSDK();
           setAllNFTs(result);
       }
       get();
+*/
+ 
+
     }, []);
 
-    //const {data: ownedNftData, isLoading } = useOwnedNFTs(contract, address);// get user nft
-
+ 
     const address = useAddress(); 
 
     const [ownedNftData, setOwnedNfts] = useState(null);
 
 
     //===============================================================================================================
-    /*
-    useEffect(()=>{
-      console.log(">>   address ",  address);
-      if (!address)return;
-      async function get(){
-          const result =  await  GetAllNFTfromSDK(address);
-          console.log("setAllOwnedNFTs result",  result);
-          setAllOwnedNFTs(result);
-      }
-     get();
-      
-   }, [ address  ]);
-*/
+     
    const { data, isLoading } = useOwnedNFTs(contract, address);
    useEffect(()=>{
-     async function get(){
-         const result =  await  GetAllNFTfromSDK(data);
-        // setAllNFTs(result);
-         setOwnedNfts(result);
-     // console.log( "owned  with metadata added = ", result    );
-    }
-    
+    if (!data)return;
+  //console.log( "context data", data);
+   /* //if  you want to override with locally stored metadata
+      async function get(){
+          const result =  await  GetAllNFTfromSDK(data);
+          setOwnedNfts(result);
+     }
+   
     get();
-     
-  }, [data]);
+      */
+
+    setOwnedNfts (data);
+
+  }, [data ]);
 
 
 //==============================================================================================================
-
-
-
-
-
-
-
-
+ 
 
     useEffect( ()=>{
 
-      // if (!address){return;}
-
-    //  console.log( "ownedNftData =",   ownedNftData  );
-      if (NFTdata){
-      //  console.log( "NFTdata is now defined: length=",   NFTdata.length  );
-      }
+      console.log( "ownedNftData =", ownedNftData);
+      console.log( "NFTdata =", NFTdata);
      
        if (!ownedNftData){return;}
        if (!NFTdata){ return;} 
+
+
+      
 
      
         // cretae basic layers available to choos efrom in the app
@@ -144,7 +133,8 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
   
     const initialLayerToChooseFrom = {};
 
-
+ // this v2 is more adapted to token id structure
+    const initialLayerToChooseFromV2 = {};
    
      // we do not need to be registered to see supply
   //  const allSupply = await GetLayerSupply();
@@ -179,15 +169,15 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 
 NFTdata.forEach((nft) => {
 
-  /*
-  console.log(">>. nft: ",    nft  );
-  console.log("Token ID: ",    nft.metadata.id  , 
+  
+ // console.log(">>. nft: ",    nft  );
+  console.log("Token ID: ",    nft.metadata.id  ,  "name: ",    nft.metadata.name  , 
                "trait_type:   ",  nft.metadata.attributes[0].trait_type ,
               "value:   ",  nft.metadata.attributes[0].value,   
                "supply:   " ,  nft.supply  
              
              );
-     */
+     
 
              const category     = nft.metadata.attributes[0].trait_type ;
             const layerNumber  = nft.metadata.attributes[0].value ;   
@@ -198,13 +188,29 @@ NFTdata.forEach((nft) => {
             initialLayerToChooseFrom[category][layerNumber].tokenID = nft.metadata.id ;
             
 
+
+           // initialLayerToChooseFromV2.push()
+
+
+
             ownedNftData.forEach((ownedNFT) => {
+
+             
+              /*
                if (ownedNFT.metadata.id === nft.metadata.id ){
-                initialLayerToChooseFrom[category][layerNumber].owning =
+                console.log( "ownedNFT.metadata.id  ", ownedNFT.metadata.id  );
+              //  initialLayerToChooseFrom[category][layerNumber].owning =
+              initialLayerToChooseFrom[
+                nft.metadata.attributes[0].trait_type // category
+                ][
+                  nft.metadata.attributes[0].value// layerNumber
+                ].owning =
+
                 ownedNFT.quantityOwned;
                 
                 ownerLayerFound++;
-               }
+               }*/
+
             });
 
             
@@ -215,11 +221,30 @@ NFTdata.forEach((nft) => {
   });
    
 
-  /*
+
+
+
+
+  ownedNftData.forEach((ownedNFT) => {
+ 
+      console.log( "ownedNFT.metadata.id  ", ownedNFT.metadata.id  );
+    
+     // console.log( " ownedNFT.attributes[0]  ",  ownedNFT.attributes[0]  );
+     const meta = ownedNFT.metadata.attributes[0];
+     initialLayerToChooseFrom[ meta.trait_type][meta.value].owning = ownedNFT.quantityOwned;
+      
+       
+      ownerLayerFound++;
+    
+     
+  });
+
+
+  
    console.log("DDDDDD  >>>> NFT   >>>>>   initialLayerToChooseFrom" ,  initialLayerToChooseFrom);
    console.log( "DDDDDD   >>>>    ownedNftData" ,
      ownedNftData , "ownerLayerFound   = " + ownerLayerFound  );
-*/
+ 
 
 
 //=====================================================================================
