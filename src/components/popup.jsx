@@ -2,18 +2,18 @@
 import {
  // MARKETPLACE_ADDRESS,
  // LAYER_EDITION_ADDRESS,
- // TOOLS_ADDRESS ,
-  
+   TOOLS_ADDRESS ,
+   BURN_TO_CLAIM,
   REWARDS_ADDRESS
 
 } 
 
-from "../../const/addresses";
+from "../const/addresses";
 
 
 
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import {  useAddress, Web3Button } from "@thirdweb-dev/react";
+import { useContract, useAddress, Web3Button } from "@thirdweb-dev/react";
  
 
 import React, { useState , useEffect } from 'react';
@@ -82,7 +82,40 @@ const address = useAddress();
   const handleClose = () => {
     setOpen(false);
   };
+    
+
+  //=====================================================================================
+  //burn to claim:
+   const { contract: wulirockLayerContract } = useContract(TOOLS_ADDRESS);
+
+      const mintMutantNft = async (maycContract ) => {
+    // 1. Check the approval of the mayc contract to burn the user's serum tokens
+    const hasApproval = await wulirockLayerContract?.call("isApprovedForAll", [
+      address,
+      maycContract?.getAddress(),
+    ]);
+     //const balance = await wulirockLayerContract?.call("balanceOf", [address, 0]);
+
+    if (!hasApproval) {
+      // Set approval   THIS CAN ONLY BE DONE FROM CLIENT
+      await wulirockLayerContract?.call("setApprovalForAll", [  maycContract?.getAddress(),  true,   ])  ;
+       
+       
    
+    }
+
+         // if (balance < 1) {  return alert("Not enough serum tokens");  } 
+     
+       //    const tokenIdsToBurn = [0, 12, 21, 34, 40];
+       //   const amounts = [1, 1, 1, 1, 1];
+           
+            await  ERC20claim( filteredImages ,  address  ) 
+          //  await maycContract?.call("burnAndClaim", [address, tokenIdsToBurn ]);
+
+  };
+
+
+  //====================================================================
 
   return (
     <div>
@@ -133,30 +166,26 @@ const address = useAddress();
 
 
 
-
-                     {/*            
+  
+                
                <Web3Button
-              contractAddress={REWARDS_ADDRESS} 
-               action={async () => await createBidOffer()} 
-               // isDisabled={!auctionListing || !AuctionListingData}
-              className="tw-web3button--connect-wallet"
+              contractAddress={BURN_TO_CLAIM}  // contract to interract with
+               action={async ( contract ) => await mintMutantNft( contract )} 
+              
+                 className="tw-web3button--connect-wallet"
                style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
-          >
-              Claim Your Reward
-          </Web3Button> 
+              >
+               Burn to claim
+              </Web3Button>   
+           
           
-            
-          
-          */}
-
-          
-
+{/*             
              <Button variant="contained"
               onClick={() => ERC20claim( filteredImages ,  address  )}  
               
              >
                CLAIM Your Reward !
-             </Button>
+             </Button>   */}
 
 
 

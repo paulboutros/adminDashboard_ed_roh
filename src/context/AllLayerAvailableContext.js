@@ -170,14 +170,14 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 NFTdata.forEach((nft) => {
 
   
- // console.log(">>. nft: ",    nft  );
+  /*
   console.log("Token ID: ",    nft.metadata.id  ,  "name: ",    nft.metadata.name  , 
                "trait_type:   ",  nft.metadata.attributes[0].trait_type ,
               "value:   ",  nft.metadata.attributes[0].value,   
                "supply:   " ,  nft.supply  
              
              );
-     
+     */
 
              const category     = nft.metadata.attributes[0].trait_type ;
             const layerNumber  = nft.metadata.attributes[0].value ;   
