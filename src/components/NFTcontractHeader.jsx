@@ -25,8 +25,7 @@ import {
     MARKETPLACE_ADDRESS,
     TOOLS_ADDRESS 
 } from "../const/addresses.ts";
-//import {getSDK } from "../../utils/updateMetadata";
-import {buttonStyle, text2, text1, tokens } from "../theme.js";
+ import {buttonStyle, text2, text1, tokens } from "../theme.js";
  
 import { getSDK_fromPrivateKey } from "../data/API.js";
   

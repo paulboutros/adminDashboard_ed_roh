@@ -33,8 +33,7 @@ import {
    MARKETPLACE_ADDRESS,
    TOOLS_ADDRESS 
 } from "../../const/addresses.ts";
-//import {getSDK } from "../../utils/updateMetadata";
-import {text2, text1, tokens } from "../../theme.js";
+ import {text2, text1, tokens } from "../../theme.js";
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider

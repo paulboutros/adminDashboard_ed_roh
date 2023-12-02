@@ -56,6 +56,14 @@ export default function NFTComponent({ nft } ) {
       return (
         <div>
  
+           {/* <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+               onClick={() => evolve(nft, "",  nft.metadata.id )} >   createBundle
+                 update meta
+           </Button> */}
+ 
+
+  
            <RoundedBox  margin={1} _height={380}>
 
             <Typography margin={1} >  {nft.metadata.name} </Typography>  
@@ -96,7 +104,7 @@ export default function NFTComponent({ nft } ) {
          
           {/* <Button variant="contained" 
               sx={{backgroundColor: colors.redAccent[500]  }}
-               onClick={() => evolve(nft, "",  nft.metadata.id )} >
+               onClick={() => evolve(nft, "",  nft.metadata.id )} >   
                  update meta
            </Button> */}
           

@@ -81,12 +81,22 @@ const Topbar = () => {
       
       padding={"15px 0 15px 0"} >
         <Button component={Link} to="/shop" variant="text"  >
-                <Typography  color= {_textColor} >  Buy     </Typography>
+        <Typography  color= {_textColor} >  Buy     </Typography>
         </Button>
+
         <Divider  color=  {_textColor}  orientation="vertical" style={{ height: '50%', width: '2px' }} />
+
         <Button component={Link} to="/sell" variant="text" color="primary">
         <Typography  color={_textColor} >  Sell     </Typography>
         </Button>
+
+        <Divider  color=  {_textColor}  orientation="vertical" style={{ height: '50%', width: '2px' }} />
+
+        <Button component={Link} to="/shopPack" variant="text" color="primary">
+        <Typography  color={_textColor} >  Packs     </Typography>
+        </Button>
+
+
       </RowChildrenAlignCenter>
 
 

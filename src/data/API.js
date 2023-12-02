@@ -316,7 +316,7 @@ export async function ERC20claim( filteredImages_arg , address){
 
   const dataToSend= { 
   // ID:ID,
-  idToBurn: 21  ,
+ // idToBurn: 21  ,
    filteredImages: filteredImages_arg  ,
    address:address 
   }
@@ -540,6 +540,5 @@ export const openOAuth2Url = (user) => {
    
 };
 
- 
 
- 
+

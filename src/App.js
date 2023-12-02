@@ -48,8 +48,8 @@ import NavBar from "./components/FARMER/NavBar.jsx";
 import FarmerPage from "./scenes/farmerPage/index.jsx";
 import Sell from "./scenes/sell/index.jsx";
 
-import Shop from "./scenes/shop/index.tsx";
-
+import Shop from        "./scenes/shop/index.tsx";
+import ShopPack from    "./scenes/shopPack/index.jsx";  
 
 
   
@@ -167,7 +167,9 @@ const testThirdWeb = false;
 
               <Route path="/farmerPage" element={<FarmerPage/>} />
               {/* <Route path="/shop" element={<Shop display_mode="list"/>} /> */}
-              <Route path="/shop" element={<Shop display_mode="grid"/>} />
+              <Route path="/shop"     element={<Shop display_mode="grid"/>} />
+              <Route path="/shopPack" element={<ShopPack/>} />
+
               <Route path="/sell" element={<Sell/>} />
                
               <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
@@ -177,6 +179,7 @@ const testThirdWeb = false;
               <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
 
                
+            
               <Route path="/profile" element={<Profile/>} />
               <Route path="/discordBoard" element={<DiscordBoard/>} />
               <Route path="/allLayerGrid" element={<AllLayerGrid />} />

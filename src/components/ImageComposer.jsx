@@ -20,6 +20,7 @@ import LayerBaseInfo from "./LayerBaseInfo";
   
  import PopupButton  from "./popup"
 import { cookieStorageManager } from '@chakra-ui/react';
+import { CreateListing, UpdateAllNFTLayers, UpdateListing, createBundle, mintToCollection } from '../utils/updateMetadata';
  
  
   const LayerSelector = (  {queryId="" }  ) => {
@@ -164,6 +165,46 @@ import { cookieStorageManager } from '@chakra-ui/react';
     
     <Box m="20px" >
    
+   <div>
+ 
+ <Button variant="contained" 
+   sx={{backgroundColor: colors.redAccent[500]  }}
+    onClick={() => createBundle() } >   
+      createBundle
+</Button> 
+
+
+<Button variant="contained" 
+   sx={{backgroundColor: colors.redAccent[500]  }}
+    onClick={() => mintToCollection() } >   
+      mintToCollection
+</Button> 
+
+
+<Button variant="contained" 
+   sx={{backgroundColor: colors.redAccent[500]  }}
+    onClick={() => UpdateListing() } >   
+      UpdateListing
+</Button>
+
+
+
+<Button variant="contained" 
+   sx={{backgroundColor: colors.redAccent[500]  }}
+    onClick={() =>  CreateListing() } >   
+      CreateListing
+</Button>
+
+
+
+<Button variant="contained" 
+   sx={{backgroundColor: colors.redAccent[500]  }}
+    onClick={() =>  UpdateAllNFTLayers() } >   
+      UpdateAllNFTLayers
+</Button> 
+
+
+</div> 
     <Box display="flex" justifyContent="space-between" alignItems="center">
       
     </Box>

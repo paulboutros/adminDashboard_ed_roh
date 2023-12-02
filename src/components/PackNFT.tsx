@@ -1,12 +1,10 @@
-import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS, PACK_ADDRESS  } from "../const/addresses";
 import { MediaRenderer, Web3Button, useAddress, useContract, useDirectListings, useNFT } from "@thirdweb-dev/react";
-import { IconButton , Button, TextField , CardMedia, Box, Grid, Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
+import {  Box  } from "@mui/material";
 
 import { RowChildrenAlignCenter,
     VerticalStackAlignCenter ,
-    VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,
-    VerticalSpace,
-     RoundedBox,
+    
      BoxWithTopBar
    } from "../components/Layout.jsx"
    
@@ -30,7 +28,7 @@ export const PackNFTCard = ({ contractAddress, tokenId }: Props) => {
     useDirectListings(
         marketplace,
         {
-            tokenContract: TOOLS_ADDRESS,//PACK_ADDRESS,
+            tokenContract: PACK_ADDRESS,// TOOLS_ADDRESS,//PACK_ADDRESS,
         }
     );
     console.log("Pack Listings: ", packListings);
@@ -40,7 +38,7 @@ export const PackNFTCard = ({ contractAddress, tokenId }: Props) => {
 
         if (packListings?.[tokenId]) {
             txResult = await marketplace?.directListings.buyFromListing(
-                packListings[tokenId].id,
+                13 , //packListings[tokenId].id
                 quantityDesired
             )
         } else {
@@ -77,8 +75,11 @@ export const PackNFTCard = ({ contractAddress, tokenId }: Props) => {
 
 <p>Cost: {packListings![tokenId].currencyValuePerToken.displayValue} {` ` + packListings![tokenId].currencyValuePerToken.symbol}</p>
                         <p>Supply: {packListings![tokenId].quantity}</p>
-                        <p>creator: {packListings![tokenId].creatorAddress}</p>
-                        <p>ends: {packListings![tokenId].endTimeInSeconds}</p>
+                        {/* <p>creator: {packListings![tokenId].creatorAddress}</p> */}
+                        {/* <p>ends: {packListings![tokenId].endTimeInSeconds}</p> */}
+
+                        <p>ID: { packListings![tokenId].id }  </p>
+                       
                         <p>price per token: {packListings![tokenId].pricePerToken}</p>
                         {!address ? (
                             <p>Login to buy</p>
