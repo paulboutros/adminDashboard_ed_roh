@@ -1,5 +1,6 @@
 import   { useEffect , useState } from 'react';
 
+import {  useAddress } from '@thirdweb-dev/react'
 
 import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
 
@@ -20,7 +21,8 @@ import LayerBaseInfo from "./LayerBaseInfo";
   
  import PopupButton  from "./popup"
 import { cookieStorageManager } from '@chakra-ui/react';
-import { CreateListing, UpdateAllNFTLayers, UpdateListing, createBundle, mintToCollection } from '../utils/updateMetadata';
+import { CreateListing, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../utils/updateMetadata';
+import { OWNER } from '../const/addresses';
  
  
   const LayerSelector = (  {queryId="" }  ) => {
@@ -76,8 +78,11 @@ import { CreateListing, UpdateAllNFTLayers, UpdateListing, createBundle, mintToC
     const [selectedImages, setSelectedImages] = useState(null);
      
 
-
+    const address = useAddress();
     
+
+
+
 
 
      const GetRewardPriceApp = async ( ) => {
@@ -110,33 +115,12 @@ import { CreateListing, UpdateAllNFTLayers, UpdateListing, createBundle, mintToC
    
     console.log("selectedImages  for price  =" ,selectedImages);
 
-       console.log(
-        "  knData " , knData.tokenID,
-       "  heData " , heData.tokenID,
-       "  shData " , shData.tokenID,
-       "  weData " , weData.tokenID,
-       "  beData " , beData.tokenID  );
-      /* 
-    layerCombo ={
-     he:   {  layerNumber: 4, tokenID: 3 } ,
-    sh:  {  layerNumber: 4, tokenID: 3 } ,
-     we:   {  layerNumber: 1, tokenID: 0 } ,
-    be:   {  layerNumber: 1, tokenID: 0 } ,
-   
-    kn: {  layerNumber: 3, tokenID : 2 } 
-
-  } 
- */
-
+        
       try {
         
         
         const rewardPrizeObject = await GetRewardPrice( layerCombo);  // he,sh,we,be,kn
-        /*
-        const endpoint = `${process.env.REACT_APP_API_URL}GetReward?he=${he}&sh=${sh}&we=${we}&be=${be}&kn=${kn}`;
-        const result = await fetch(endpoint);
-        const rewardPrizeObject = await result.json();
-        */
+        
 
         // console.log("  >>>>>>  rewardPrizeObject" , rewardPrizeObject );
           SetRewardPrice ( rewardPrizeObject.finalRewardPrice.toFixed(2).toString()    );
@@ -167,41 +151,17 @@ import { CreateListing, UpdateAllNFTLayers, UpdateListing, createBundle, mintToC
    
    <div>
  
- <Button variant="contained" 
-   sx={{backgroundColor: colors.redAccent[500]  }}
-    onClick={() => createBundle() } >   
-      createBundle
-</Button> 
 
+     {address && address === OWNER? (
 
-<Button variant="contained" 
-   sx={{backgroundColor: colors.redAccent[500]  }}
-    onClick={() => mintToCollection() } >   
-      mintToCollection
-</Button> 
+       <div>
+          <EditorButton/>
 
+       </div>
+     ):(
+      <div></div>
 
-<Button variant="contained" 
-   sx={{backgroundColor: colors.redAccent[500]  }}
-    onClick={() => UpdateListing() } >   
-      UpdateListing
-</Button>
-
-
-
-<Button variant="contained" 
-   sx={{backgroundColor: colors.redAccent[500]  }}
-    onClick={() =>  CreateListing() } >   
-      CreateListing
-</Button>
-
-
-
-<Button variant="contained" 
-   sx={{backgroundColor: colors.redAccent[500]  }}
-    onClick={() =>  UpdateAllNFTLayers() } >   
-      UpdateAllNFTLayers
-</Button> 
+     ) }
 
 
 </div> 
@@ -539,4 +499,53 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
 
     );
   };
+
+  function EditorButton(){
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+
+    return (
+        <div> 
+                        
+            <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+                onClick={() => createBundle() } >   
+                 createBundle
+            </Button> 
+ 
+            <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+                onClick={() => mintToCollection() } >   
+                  mintToCollection
+            </Button> 
+ 
+            <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+                onClick={() => UpdateListing() } >   
+                  UpdateListing
+            </Button>
+
+            <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+                onClick={() => UpdatePackMetaData() } >   
+                  UpdatePackMetaData
+            </Button>
+            
+            
+            <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+                onClick={() =>  CreateListing() } >   
+                  CreateListing
+            </Button>
+            
+            <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+                onClick={() =>  UpdateAllNFTLayers() } >   
+                  UpdateAllNFTLayers
+            </Button> 
+ 
+        </div>
+
+    )
+  }
  

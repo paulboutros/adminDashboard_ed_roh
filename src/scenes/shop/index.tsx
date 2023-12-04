@@ -8,11 +8,9 @@ import {useEffect, useState} from "react";
  import { useContract, useDirectListings,useValidEnglishAuctions, useValidDirectListings,
     ConnectWallet, useNFTs, useContractRead, useAddress , useMakeBid } from "@thirdweb-dev/react";
 import {
-    MARKETPLACE_ADDRESS,
-   // LAYER_EDITION_ADDRESS,
-    TOOLS_ADDRESS ,
-    
-    REWARDS_ADDRESS
+     MARKETPLACE_ADDRESS,
+     TOOLS_ADDRESS  ,
+     REWARDS_ADDRESS
 
 } 
 
@@ -27,18 +25,21 @@ import { BigNumberish } from "ethers";
 interface ShopProps {
     display_mode: string;
     filterTokenId: BigNumberish;
+    NFT_CONTRACT: string;
 }
 
 // display mode, list for shop page, grid for composePage (more simple display)
- export default function Shop( { display_mode ,filterTokenId  }:ShopProps  ) {
+ export default function Shop( { display_mode ,filterTokenId , NFT_CONTRACT  }:ShopProps  ) {
 
-  
-    const address = useAddress();  
-  
-    // display_mode="list";
-    
-     
-
+ /* from App.js shop or shop pack is called and "filterTokenId" is undefined
+  in that case,  filterTokenId will not be used in the filter of listing and will display all listing.
+  But in the case of showing the token detail page, a token ID will be provided so the ID filter will be displayed for display a 
+  specific token
+ */
+ const address = useAddress();  
+   
+  // it can be the basci layers, but it can be the pak as well (both are ERC1155)
+ 
     const {
         contract: marketplace,
         isLoading: loadingMarketplace,
@@ -49,7 +50,7 @@ interface ShopProps {
      } = useValidDirectListings(
         marketplace,
         {
-            tokenContract: TOOLS_ADDRESS,
+            tokenContract: NFT_CONTRACT,
             tokenId: filterTokenId,
 
         }
@@ -57,7 +58,7 @@ interface ShopProps {
 
     const { data: auctionListing, isLoading: loadingAuction } =
     useValidEnglishAuctions(marketplace, {
-        tokenContract: TOOLS_ADDRESS,
+        tokenContract: NFT_CONTRACT,
         tokenId: filterTokenId,
     });
  
@@ -76,11 +77,6 @@ interface ShopProps {
      
   }, [ directListings , auctionListing  ]);
      
-
-
-
-
-
       if (!address){
         return (
             <div> 
@@ -88,12 +84,8 @@ interface ShopProps {
                 <ConnectWallet/>
             </div> 
             )
-        
-      }
-
-     
-
-    
+       }
+ 
         return (
             <div className="ddd">
      
@@ -111,6 +103,8 @@ interface ShopProps {
                                AuctionListingData ={null}  
 
                                displayMode = {display_mode}
+
+                               NFT_CONTRACT ={NFT_CONTRACT}
                               /> 
 
                            
@@ -136,6 +130,8 @@ interface ShopProps {
                            AuctionListingData = {auction_listing}
 
                            displayMode = {display_mode}
+
+                           NFT_CONTRACT ={NFT_CONTRACT}
                           /> 
  
  

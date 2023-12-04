@@ -62,9 +62,16 @@ import {useEffect, useState} from "react";
 import { Link, useParams } from 'react-router-dom';
 
 
-const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  AuctionListingData,     displayMode  } ) => {
+const TokenDetails =  ({  propContractAddress, 
+     propTokenId, AlllistingData,
+       AuctionListingData,  
+          displayMode ,
+          NFT_CONTRACT 
+         } ) => {
 
    
+
+            //NFT_CONTRACT  can be  TOOLS_ADDRESS or CUSTOM_PACK
     let {  contractAddress,   tokenId } = useParams();
    
 
@@ -80,10 +87,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
  const colors = tokens(theme.palette.mode);
 
  const boxColor = colors.primary[400];
- const  _borderColor = colors.primary[400]
- const _borderRadius= "10px";
-  const  paddingPX = "0px";
-  const trait_margin = "15px";
+  
 
   const flex = { display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' };
 
@@ -99,7 +103,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
    const fetchNFT = async () => {
 
        const sdk = getSDK_fromPrivateKey(); 
-       const contract = await sdk.getContract(TOOLS_ADDRESS);
+       const contract = await sdk.getContract(NFT_CONTRACT);
        //const nftResult = await contract.erc721.get(tokenId);
        const nftResult = await contract.erc1155.get(tokenId);
        
@@ -130,7 +134,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
 
            const { data: directListing, isLoading: loadingDirectListing } = 
            useValidDirectListings(marketplace, {
-               tokenContract: TOOLS_ADDRESS, 
+               tokenContract: NFT_CONTRACT, 
                tokenId: nft?.metadata.id,
            });
 
@@ -139,14 +143,13 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
 
            const { data: auctionListing, isLoading: loadingAuction } =
            useValidEnglishAuctions(marketplace, {
-               tokenContract: TOOLS_ADDRESS,
+               tokenContract: NFT_CONTRACT,
                tokenId: nft?.metadata.id,
            });
 
  
 
-       //    const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
-             // Load historical transfer events: TODO - more event types like sale
+       
            const { data: transferEvents, isLoading: loadingTransferEvents } =
            
            useContractEvents(marketplace, "NewBid", {
@@ -201,7 +204,7 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
            );
        } else if (AlllistingData){  
            txResult = await marketplace?.offers.makeOffer({
-               assetContractAddress: TOOLS_ADDRESS,
+               assetContractAddress: NFT_CONTRACT,
                tokenId: nft.metadata.id,
                totalPrice: bidValue,
            })
@@ -258,8 +261,8 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
 
 
             <Link
-                   //to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                   to={`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${AlllistingData?.id}/NAN`}
+                   //to={`/token/${NFT_CONTRACT}/${nft.metadata.id}`}
+                   to={`/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/${AlllistingData?.id}/NAN`}
                    key={nft.metadata.id}
                 >
              
@@ -299,8 +302,8 @@ const TokenDetails =  ({  propContractAddress,  propTokenId, AlllistingData,  Au
     
     
                 <Link
-                       //to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                       to={`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
+                       //to={`/token/${NFT_CONTRACT}/${nft.metadata.id}`}
+                       to={`/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
                        key={nft.metadata.id}
                     >
                  

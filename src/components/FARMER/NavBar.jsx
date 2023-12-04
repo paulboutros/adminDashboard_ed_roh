@@ -1,24 +1,4 @@
-
-/*
-import { Container, Flex, Heading  } from "@chakra-ui/react";
-import { ConnectWallet } from "@thirdweb-dev/react";
-import { Link } from 'react-router-dom';
-
-export default function NavBar() {
-    return (
-        <Container maxW={"1200px"} py={4}>
-            <Flex direction={"row"} justifyContent={"space-between"}>
-                <Heading>Crypto Farm</Heading>
-                <Flex alignItems={"center"}  spacing={40} >
-                    <Link to={"/"}>Play</Link>
-                    <Link to={"/shop"} >Shop</Link>
-                </Flex>
-                <ConnectWallet/>
-            </Flex>
-        </Container>
-    )
-};
-*/
+ 
 import { ConnectWallet } from "@thirdweb-dev/react";
 
 import React from 'react';

@@ -1,9 +1,9 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { NFT } from "@thirdweb-dev/react";
-import { TOOLS_ADDRESS, REWARDS_ADDRESS, PACK_ADDRESS, MARKETPLACE_ADDRESS } from "../const/addresses";
+import { TOOLS_ADDRESS,  REWARDS_ADDRESS, PACK_ADDRESS, MARKETPLACE_ADDRESS  } from "../const/addresses";
 import {getSDK_fromPrivateKey} from "../data/API";  
 
-
+const urlBase = "https://wulibuild.s3.eu-west-3.amazonaws.com/WulirocksLayerNFTimages/"
 const imageToUpload = // "../../public/be/1.png"
  "https://coffee-doubtful-unicorn-619.mypinata.cloud/ipfs/QmVB8b68bXt5p7Jvup5qiYzrYt8JGF1XWDE9u2iV8qbrbD/4.png";
   
@@ -130,28 +130,28 @@ export async function evolve(
 
 export async function CreateListing(){
 
-
+   
     const sdk =  getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
    
-    const marketContract = await sdk.getContract(MARKETPLACE_ADDRESS,"marketplace-v3" );
+     const marketContract = await sdk.getContract(MARKETPLACE_ADDRESS,"marketplace-v3" );
  
 
 
     console.log("CreateListing         ");
     const txResult = await marketContract.directListings.createListing({
         assetContractAddress: PACK_ADDRESS, // Required - smart contract address of NFT to sell
-        tokenId: 0 , // Required - token ID of the NFT to sell
-        pricePerToken: "0.05", // Required - price of each token in the listing
+        tokenId: 2 , // Required - token ID of the NFT to sell
+        pricePerToken: "0.076", // Required - price of each token in the listing
         currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
         isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
-        quantity: 11 , // Optional - number of tokens to sell (1 for ERC721 NFTs)
+        quantity: 5 ,  //  fianl real case is 11 
         startTimestamp: new Date(), // Optional - when the listing should start (default is now)
         endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // Optional - when the listing should end (default is 7 days from now)
       });
 
 
 
-      console.log("CreateListing         "   , txResult); 
+      console.log(">>>>>>    CreateListing         "   , txResult); 
 }
 
 export async function UpdateListing (){
@@ -175,13 +175,93 @@ export async function UpdateListing (){
 
 }
 
+//https://portal.thirdweb.com/typescript/sdk.contractmetadata
+export async function UpdatePackMetaData(){
+     
+  const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
+
+  const packAddress = PACK_ADDRESS;
+ 
+  const packContract = await sdk.getContract(packAddress, "pack");
+
+  //const card = await sdk.getContract(cardAddress, "edition");
+        //await card.setApprovalForAll(packAddress, true);
+  //console.log("Approved card contract to transfer cards to pack contract");
+
+  const packImage = urlBase + "he/" + ( 1 ).toString() + ".png" ;
+
+  console.log("Packs starts updating");
+   
+      const metadata= {
+          name: "Pack 1",
+          description: "Card pack for Test Layers",
+          image: packImage,
+      } 
+      /*
+      const newUri = await sdk.storage.upload(metadata);  
+      const updateNFT = await packContract.call(  "setTokenURI", [ 0, newUri ] ); 
+    */
+    // an other way to do it
+     // const updateNFT = await packContract.metadata.update( metadata);
+
+           packContract = await sdk.getContract(packAddress );
+      const newUri = await sdk.storage.upload(metadata);  
+      const updateNFT = await packContract.call(  "setTokenURI", [ 0, newUri ] ); 
+
+
+  /*
+   setTokenURI is function in NFTmetadata.sol
+  */
+
+  console.log("Packs updated =" , updateNFT );
+ 
+
+}
+
 export async function createBundle(  ){
            
+  const generatedData = generateData();
+
+  console.log( "generatedData" , generatedData );
+  // return ;
+
+  const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
+
+  const packAddress = PACK_ADDRESS;
+  const cardAddress = TOOLS_ADDRESS;  
+
+  const pack = await sdk.getContract(packAddress, "pack");
+
+  const card = await sdk.getContract(cardAddress, "edition");
+        await card.setApprovalForAll(packAddress, true);
+  console.log("Approved card contract to transfer cards to pack contract");
+
+  const packImage =  "https://wulibuild.s3.eu-west-3.amazonaws.com/WulirocksLayerNFTimages/giveAway/pack_01.png";
+
+  console.log("Creating pack");
+  const createPacks = await pack.create({
+      packMetadata: {
+          name: "Pack WuliRocks packs",
+          description: "Get the right layers, cash in the reward",
+          image: packImage,
+      },
+      erc1155Rewards:  generatedData
+       ,
+      rewardsPerPack: 5,
+  });
+
+  console.log("Packs created");
+ 
+
+}
+
+ export async function createBundle_smallTest(  ){
+           
     
-    const sdk =   getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
+    const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
   
     const packAddress = PACK_ADDRESS;
-    const cardAddress =  "0xdA637F0BAA8CB69e7e23926915F6Cec5b248B3B4" ;//"0xF810082B4FaC42d65156Da88D5212dfAA75D0117";
+    const cardAddress = TOOLS_ADDRESS; // "0xdA637F0BAA8CB69e7e23926915F6Cec5b248B3B4" ;//"0xF810082B4FaC42d65156Da88D5212dfAA75D0117";
   
     const pack = await sdk.getContract(packAddress, "pack");
   
@@ -189,13 +269,13 @@ export async function createBundle(  ){
           await card.setApprovalForAll(packAddress, true);
     console.log("Approved card contract to transfer cards to pack contract");
   
-    const packImage =  "https://d391b93f5f62d9c15f67142e43841acc.ipfscdn.io/ipfs/bafybeiffqlsjlkbibt44ahcrukz3upc7ycfwx54ziqxikfcr2ws6psh5gm/logo512.png";
+    const packImage =  "https://wulibuild.s3.eu-west-3.amazonaws.com/WulirocksLayerNFTimages/giveAway/pack_01.png";
   
     console.log("Creating pack");
     const createPacks = await pack.create({
         packMetadata: {
-            name: "Pack 2",
-            description: "A new card pack",
+            name: "toollayer Pack test 2tk",
+            description: "toollayer token 0=1 1=1",
             image: packImage,
         },
         erc1155Rewards: 
@@ -210,62 +290,13 @@ export async function createBundle(  ){
               contractAddress: cardAddress,
               tokenId: 1,
               quantityPerReward: 1,
-              totalRewards: 2
-            } ,
-            {
-                contractAddress: cardAddress,
-                tokenId: 2,
-                quantityPerReward: 1,
-                totalRewards: 3
-            },
-            {
-                contractAddress: cardAddress,
-                tokenId: 3,
-                quantityPerReward: 1,
-                totalRewards: 4
-            } ,
-            {
-                contractAddress: cardAddress,
-                tokenId: 4,
-                quantityPerReward: 1,
-                totalRewards: 5
-            }, 
-            {
-                contractAddress: cardAddress,
-                tokenId: 5,
-                quantityPerReward: 1,
-                totalRewards: 6
-            }, 
-            {
-                contractAddress: cardAddress,
-                tokenId: 6,
-                quantityPerReward: 1,
-                totalRewards: 7
-            },  
-            {
-                contractAddress: cardAddress,
-                tokenId: 7,
-                quantityPerReward: 1,
-                totalRewards: 8
-            }, 
-            {
-                contractAddress: cardAddress,
-                tokenId: 8,
-                quantityPerReward: 1,
-                totalRewards: 9
-            },
-            {
-                contractAddress: cardAddress,
-                tokenId: 9,
-                quantityPerReward: 1,
-                totalRewards: 10
-            }, 
-               
+              totalRewards: 1
+            }  
 
           ]
         
         ,
-        rewardsPerPack: 5,
+        rewardsPerPack: 2,
     });
   
     console.log("Packs created");
@@ -277,10 +308,9 @@ export async function createBundle(  ){
     
 ){
     try {
-
- const urlBase = "https://wulibuild.s3.eu-west-3.amazonaws.com/WulirocksLayerNFTimages/"
+  
         const sdk =   getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
-        const cardAddress =  "0xdA637F0BAA8CB69e7e23926915F6Cec5b248B3B4" ;//"0xF810082B4FaC42d65156Da88D5212dfAA75D0117";
+        const cardAddress = TOOLS_ADDRESS;
      //const contract = await sdk.getContract(TOOLS_ADDRESS);
         const contract = await sdk.getContract(cardAddress, "edition");
         const nfts = await contract.erc1155.getAll();
@@ -400,3 +430,38 @@ async function  use_SetClaimConditions( contract , currencyAdress){
 
 
  }
+
+
+ 
+ function generateData(  ){
+
+     
+  const cardData = [];
+  
+  let totalRewards = 1;
+  
+  for (let tokenId = 0; tokenId < 50; tokenId++) {
+  
+  
+    // const totalRewards = NFTs[ tokenId ].supply;
+  
+    cardData.push({
+      contractAddress: TOOLS_ADDRESS,
+      tokenId: tokenId,
+      quantityPerReward: 1,
+      totalRewards: totalRewards,
+    });
+  
+    totalRewards++;
+  
+    if (totalRewards > 10) {
+      totalRewards = 1;
+    }
+  }
+  
+  //console.log(cardData);
+
+    return cardData;
+
+
+}

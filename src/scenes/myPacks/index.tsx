@@ -1,10 +1,11 @@
 import { ThirdwebNftMedia, Web3Button, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react'
 //import styles from '../styles/Home.module.css'
-import { PACK_ADDRESS } from '../const/addresses';
+ 
 import { useState } from 'react';
 import { PackRewards } from '@thirdweb-dev/sdk/dist/declarations/src/evm/schema';
- import { PackRewardCard } from '../components/PackRewardCard';
+  import { PackRewardCard } from '../../components/PackRewardCard';
 import NFT from "../../components/FARMER/NFT";
+import { PACK_ADDRESS } from '../../const/addresses';
 
 
 export default function MyPacks() {

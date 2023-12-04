@@ -174,8 +174,8 @@ const Sidebar = () => {
             />   
 
                <Item
-              title="Get Layers"
-              to="getLayers"//  "/userProfile"
+              title="My Packs"
+              to="myPacks"//  "/userProfile"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

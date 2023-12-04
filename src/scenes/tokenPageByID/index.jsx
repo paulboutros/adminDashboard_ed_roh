@@ -71,8 +71,7 @@ const _mainBoxPadding = 3;
 const TokenDetailsByID =  ({  propContractAddress,  propTokenId,  displayMode  } ) => {
 
   
-    const image_span ="span 3";
-    const under_image_span =  "span 2";
+  // we may need to change contractAddress param name as it could be confused with web3 button parameter
     let {  contractAddress, tokenId,  listingId, auctionId } = useParams();
    
  
@@ -130,7 +129,7 @@ useEffect(() => {
    const fetchNFT = async () => {
 
        const sdk = getSDK_fromPrivateKey(); 
-       const contract = await sdk.getContract(TOOLS_ADDRESS);
+       const contract = await sdk.getContract(contractAddress);
        //const nftResult = await contract.erc721.get(tokenId);
        const nftResult = await contract.erc1155.get(tokenId);
        
@@ -160,7 +159,7 @@ useEffect(() => {
         
            const { data: directListing, isLoading: loadingDirectListing } = 
            useValidDirectListings(marketplace, {
-               tokenContract: TOOLS_ADDRESS, 
+               tokenContract: contractAddress, 
                tokenId: tokenId,// nft?.metadata.id,
            });
 
@@ -169,7 +168,7 @@ useEffect(() => {
 
            const { data: auctionListing, isLoading: loadingAuction } =
            useValidEnglishAuctions(marketplace, {
-               tokenContract: TOOLS_ADDRESS,
+               tokenContract: contractAddress,
                tokenId: tokenId,// nft?.metadata.id,
            });
 
@@ -289,7 +288,7 @@ useEffect(() => {
            );
        } else if (listingData){  
            txResult = await marketplace?.offers.makeOffer({
-               assetContractAddress: TOOLS_ADDRESS,
+               assetContractAddress: contractAddress,
                tokenId: nft.metadata.id,
                totalPrice: bidValue,
            })

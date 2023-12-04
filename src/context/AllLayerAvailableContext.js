@@ -74,8 +74,8 @@ export function AllLayersProvider({ children }) {
 
     useEffect( ()=>{
 
-      console.log( "ownedNftData =", ownedNftData);
-      console.log( "NFTdata =", NFTdata);
+   //   console.log( "ownedNftData =", ownedNftData);
+   //   console.log( "NFTdata =", NFTdata);
      
        if (!ownedNftData){return;}
        if (!NFTdata){ return;} 
@@ -227,7 +227,7 @@ NFTdata.forEach((nft) => {
 
   ownedNftData.forEach((ownedNFT) => {
  
-      console.log( "ownedNFT.metadata.id  ", ownedNFT.metadata.id  );
+     // console.log( "ownedNFT.metadata.id  ", ownedNFT.metadata.id  );
     
      // console.log( " ownedNFT.attributes[0]  ",  ownedNFT.attributes[0]  );
      const meta = ownedNFT.metadata.attributes[0];
@@ -240,11 +240,11 @@ NFTdata.forEach((nft) => {
   });
 
 
-  
+  /*
    console.log("DDDDDD  >>>> NFT   >>>>>   initialLayerToChooseFrom" ,  initialLayerToChooseFrom);
    console.log( "DDDDDD   >>>>    ownedNftData" ,
      ownedNftData , "ownerLayerFound   = " + ownerLayerFound  );
- 
+ */
 
 
 //=====================================================================================

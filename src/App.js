@@ -19,7 +19,7 @@ import Line from "./scenes/line/index.jsx";
 import Pie from "./scenes/pie/index.jsx";
 import FAQ from "./scenes/faq/index.jsx";
 import Geography from "./scenes/geography/index.jsx";
-import GetLayers from "./scenes/getLayers/index.jsx";
+import MyPacks from "./scenes/myPacks/index.tsx";
 import Maintenance  from "./scenes/maintenance/index.jsx";
  
 import TokenPage from "./scenes/tokenPage/index.jsx";
@@ -49,7 +49,7 @@ import FarmerPage from "./scenes/farmerPage/index.jsx";
 import Sell from "./scenes/sell/index.jsx";
 
 import Shop from        "./scenes/shop/index.tsx";
-import ShopPack from    "./scenes/shopPack/index.jsx";  
+//import ShopPack from    "./scenes/shopPack/index.jsx";  
 
 
   
@@ -57,6 +57,7 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 import { ChakraProvider } from "@chakra-ui/react";
+import {  TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
 
 
 function App() {
@@ -68,11 +69,8 @@ const testThirdWeb = false;
 
     return (  
      
-      <ThirdwebProvider 
-      activeChain={Sepolia} 
-      clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID}
-      > 
-      
+      <ThirdwebProvider  activeChain={Sepolia} clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID} >
+       
       <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
       {/* <ChakraProvider> */}
@@ -167,8 +165,9 @@ const testThirdWeb = false;
 
               <Route path="/farmerPage" element={<FarmerPage/>} />
               {/* <Route path="/shop" element={<Shop display_mode="list"/>} /> */}
-              <Route path="/shop"     element={<Shop display_mode="grid"/>} />
-              <Route path="/shopPack" element={<ShopPack/>} />
+              <Route path="/shop"     element={<Shop display_mode="grid"  NFT_CONTRACT={TOOLS_ADDRESS} />} />
+              <Route path="/shopPack" element={<Shop display_mode="grid"  NFT_CONTRACT={PACK_ADDRESS}/>} />  
+               {/* <Route path="/shopPack" element={<ShopPack/>} /> */}
 
               <Route path="/sell" element={<Sell/>} />
                
@@ -193,7 +192,7 @@ const testThirdWeb = false;
               <Route path="/faq" element={<FAQ />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/geography" element={<Geography />} />
-               <Route path="/getLayers" element={<GetLayers />} />
+              <Route path="/myPacks" element={<MyPacks/>} />
                 
               
             </Routes>
