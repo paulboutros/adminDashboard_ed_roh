@@ -135,20 +135,50 @@ export async function CreateListing(){
    
      const marketContract = await sdk.getContract(MARKETPLACE_ADDRESS,"marketplace-v3" );
  
+  // https://portal.thirdweb.com/typescript/sdk.englishauctions
 
+  // auction listing a layer
+     const txResult = await marketContract.englishAuctions.createAuction({
+      assetContractAddress: TOOLS_ADDRESS, // Required - smart contract address of NFT to sell
+      tokenId: 40, // Required - token ID of the NFT to sell
+      buyoutBidAmount:"0.09", // Required - amount to buy the NFT and close the listing
+      minimumBidAmount:"0.01", // Required - Minimum amount that bids must be to placed
+      currencyContractAddress: REWARDS_ADDRESS, // Optional - smart contract address of the currency to use for the listing
+      quantity: 1, // Optional - number of tokens to sell (1 for ERC721 NFTs)
+      startTimestamp: new Date(), // Optional - when the listing should start (default is now)
+      endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // Optional - when the listing should end (default is 7 days from now)
+      bidBufferBps: 5, // Optional - percentage the next bid must be higher than the current highest bid (default is contract-level bid buffer bps)
+      timeBufferInSeconds: 60 * 10, // Optional - time in seconds that are added to the end time when a bid is placed (default is contract-level time buffer in seconds)
+    });
 
+     
+    // direct listing a layer
+   /*
+     const txResult = await marketContract.directListings.createListing({
+      assetContractAddress: TOOLS_ADDRESS, // Required - smart contract address of NFT to sell
+      tokenId: 40 , // Required - token ID of the NFT to sell
+      pricePerToken: "0.076", // Required - price of each token in the listing
+      currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
+      isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
+      quantity: 1 ,  //  fianl real case is 11 
+      startTimestamp: new Date(), // Optional - when the listing should start (default is now)
+      endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // Optional - when the listing should end (default is 7 days from now)
+    });
+*/
+  // direct listing a pack
     console.log("CreateListing         ");
+    /*
     const txResult = await marketContract.directListings.createListing({
         assetContractAddress: PACK_ADDRESS, // Required - smart contract address of NFT to sell
-        tokenId: 2 , // Required - token ID of the NFT to sell
+        tokenId: 5 , // Required - token ID of the NFT to sell
         pricePerToken: "0.076", // Required - price of each token in the listing
         currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
         isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
-        quantity: 5 ,  //  fianl real case is 11 
+        quantity: 55 ,  //  fianl real case is 11 
         startTimestamp: new Date(), // Optional - when the listing should start (default is now)
         endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // Optional - when the listing should end (default is 7 days from now)
       });
-
+*/
 
 
       console.log(">>>>>>    CreateListing         "   , txResult); 

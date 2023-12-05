@@ -10,7 +10,7 @@ import DiscordBoard from "./scenes/discordBoard/index.jsx";
 
 import Profile from "./scenes/profile/index.jsx";
 import TwitterBoard from "./scenes/twitterBoard/index.jsx";
-import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
+//import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import AllLayerImage from "./scenes/allLayerImage/index.jsx";
  
 import Bar from  "./scenes/bar/index.jsx";
@@ -48,7 +48,7 @@ import NavBar from "./components/FARMER/NavBar.jsx";
 import FarmerPage from "./scenes/farmerPage/index.jsx";
 import Sell from "./scenes/sell/index.jsx";
 
-import Shop from        "./scenes/shop/index.tsx";
+import Shop from        "./scenes/shop/index.jsx";
 //import ShopPack from    "./scenes/shopPack/index.jsx";  
 
 
@@ -181,7 +181,7 @@ const testThirdWeb = false;
             
               <Route path="/profile" element={<Profile/>} />
               <Route path="/discordBoard" element={<DiscordBoard/>} />
-              <Route path="/allLayerGrid" element={<AllLayerGrid />} />
+             {/* <Route path="/allLayerGrid" element={<AllLayerGrid />} /> */}
               <Route path="/allLayerImage" element={<AllLayerImage />} />
               
               <Route path="/twitterBoard" element={<TwitterBoard />} />

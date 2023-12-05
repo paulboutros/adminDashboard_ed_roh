@@ -16,6 +16,6 @@
     "incremental": true
   },
   // "include": ["src/**/*"],
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "src/scenes/shop/index.jsx"],
   "exclude": ["node_modules"]
 }

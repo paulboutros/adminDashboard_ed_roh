@@ -1,7 +1,7 @@
 
  
  
-import Shop from "../shop/index.tsx"
+import Shop from "../shop/index.jsx"
 import { Link, useParams } from 'react-router-dom';
 
 

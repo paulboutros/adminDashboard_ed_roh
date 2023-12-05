@@ -15,21 +15,23 @@ import {
 } 
 
 from "../../const/addresses";
-
+import styles from "../../styles/Buy.module.css";
 import NFTContratHeader from "../../components/NFTcontractHeader.jsx"
 import { Box, Text, Button, Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
-import TokenDetails from "../../scenes/tokenDetails/index.jsx"  
+import NFTListed from "../../components/FARMER/NFTlisted.jsx"  
 import { PackNFTCard } from "../../components/PackNFT";
 import { BigNumberish } from "ethers";
 
+/*
 interface ShopProps {
     display_mode: string;
     filterTokenId: BigNumberish;
     NFT_CONTRACT: string;
 }
+*/
 
 // display mode, list for shop page, grid for composePage (more simple display)
- export default function Shop( { display_mode ,filterTokenId , NFT_CONTRACT  }:ShopProps  ) {
+ export default function Shop( { display_mode ,filterTokenId , NFT_CONTRACT  }   ) {
 
  /* from App.js shop or shop pack is called and "filterTokenId" is undefined
   in that case,  filterTokenId will not be used in the filter of listing and will display all listing.
@@ -85,20 +87,19 @@ interface ShopProps {
             </div> 
             )
        }
- 
+  
         return (
-            <div className="ddd">
+            <   >
      
-                <Box m="20px" maxHeight="calc(80vh)" overflow="auto" >
-              <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>   
+                
+              
                     {!loadingDirectListings ? (
                          directListings?.map((listing, index) => (
-                            <div key={index}>
-    
-                              <TokenDetails
+                            < >
+                        
+                              <NFTListed
                                propContractAddress = {listing.assetContractAddress}
                                propTokenId = {listing.tokenId}
-
                                AlllistingData ={listing}
                                AuctionListingData ={null}  
 
@@ -108,7 +109,7 @@ interface ShopProps {
                               /> 
 
                            
-                            </div>
+                            </ >
                         ))
 
                     ) : (
@@ -117,12 +118,13 @@ interface ShopProps {
  
 
             <Box> 
+            <div className={styles.nftGridContainer}  >    
               {!loadingAuction ? (
-                    auctionListing?.map((auction_listing, index) => (
-                        <div key={index}>
  
-
-                          <TokenDetails
+                    auctionListing?.map((auction_listing, index) => (
+                        // <div key={index} className={styles.nftContainer}>
+                         <>
+                          <NFTListed
                            propContractAddress = {auction_listing.assetContractAddress}
                            propTokenId = {auction_listing.tokenId}
 
@@ -135,22 +137,26 @@ interface ShopProps {
                           /> 
  
  
-                        </div>
+                        </ >
                     ))
+
+            
+
+
                 ) : (
                     <p>Loading auction GRID...</p>
                 )
-                
+               
                 
                 }
-
+              </div>
 
               </Box>
  
 
-             </SimpleGrid>
-                </Box>
-            </div>
+             
+                 
+            </ >
            )
 
      

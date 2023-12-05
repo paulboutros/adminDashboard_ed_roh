@@ -2,17 +2,16 @@
 import Tooltip from '@mui/material/Tooltip';
 import {useEffect, useState} from "react";
 import axios from "axios";
-import { Box, Button } from "@mui/material";
-
+ 
 import { evolve } from "../utils/updateMetadata.js"
 import CardActions from '@mui/material/CardActions';
  
-import Grid from '@mui/material/Grid';          
-import Card from '@mui/material/Card';          
+import  { Grid , Card, Box, Button } from '@mui/material';          
+        
 import ImageCard from "./ImageCard";
 
 import {useNotificationContext }   from '../context/NotificationContext.js'; // to get user data from context provider
-import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../utils.js"
+import {formatTimestampToCustomFormat,  formatMilliseconds} from  "../utils.js"
 
 import CardMedia from '@mui/material/CardMedia'; // Update this import
 
@@ -28,7 +27,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';//@mui/lab/Toggl
 import { useTheme } from "@mui/material";
  
 
- 
+import styles from "../styles/Buy.module.css";
 import { useContract, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
 import {
    // LAYER_EDITION_ADDRESS,
@@ -42,7 +41,7 @@ import {
 import { Link } from 'react-router-dom';
  import { BigNumber, ethers } from "ethers";
 
-import { Text, Skeleton ,  Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
+//import { Text, Skeleton ,  SimpleGrid } from "@chakra-ui/react";
 
 import NFT from "./FARMER/NFT";
 
@@ -95,41 +94,49 @@ useEffect(() => {
   */
 // 
   return (
-    <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>
-    {isLoading ? (
-        [...Array(20)].map((_, index) => (
-            <Skeleton key={index} height={"312px"} width={"100%"} />
-        ))
+    // <SimpleGrid columns={5} spacing={6} w={"100%"} padding={2.5} my={5}>
+   <div className={styles.nftGridContainer}  >
+     {isLoading ? (
+        // [...Array(20)].map((_, index) => (
+        //     <Skeleton key={index} height={"312px"} width={"100%"} />
+        // ))
+        <div> loading </div>
         // WARNING REPO reffer to NFT data as "data" instead of "NFTdata" i our case
     ) : NFTdata && NFTdata.length > 0 ? (
-            NFTdata.map((nft) => 
+            NFTdata.map((nft) =>
+            
+           
             !overrideOnclickBehavior ? (
   
-               
+              
                 <Link
                    to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
                    key={nft.metadata.id}
+                   className={styles.nftContainer}
                 >
                   <NFT nft={nft} />
-
-               
+ 
                 </Link>
+                
             ) : (
+             
                 <div
                     key={nft.metadata.id}
                     onClick={() => overrideOnclickBehavior(nft)}
+                    className={styles.nftContainer}
                 >
                      <NFT nft={nft} />
                 </div>
+               
             )
-            
+           
             )
 
             
     ) : (
-        <Text>{emptyText}</Text>
+       <div> {emptyText} </div> 
     )}
-</SimpleGrid>  
+</div>  
  
   );
 };

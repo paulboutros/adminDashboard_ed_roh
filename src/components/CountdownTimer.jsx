@@ -151,7 +151,8 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
          <RowChildrenAlignLeft>
           {/* =================================================================================== */}
 
-    {timeLeft.days >0  && (<div>
+    {timeLeft.days >0  && (
+       <div>
         <VerticalStackAlignLeft> 
 
            <Typography color={color} variant= {_variant1} >   {timeLeft.days} </Typography>
@@ -161,9 +162,13 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
            
           </VerticalStackAlignLeft>
 
-        <HorizontalSpace space={3}/> 
+         
+       
         </div>)}
 {/* =================================================================================== */}
+          <HorizontalSpace space={3}/> 
+ 
+
             <VerticalStackAlignLeft> 
              <Typography color={color} variant= {_variant1} >   {timeLeft.hours.toString().padStart(2, '0')   }  </Typography>
             <VerticalSpace space={2}/> 

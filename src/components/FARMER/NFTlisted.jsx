@@ -2,7 +2,7 @@
 import { IconButton , Button, TextField , CardMedia, Box, Grid, Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
 
  
-import  { formatTimestampToCustomFormat, addressShortened ,handleCopyClick} from "../../utils.js"
+import  {   addressShortened ,handleCopyClick} from "../../utils.js"
 //https://chakra-ui.com/docs/components/button
 import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
     useMinimumNextBid, useValidDirectListings,
@@ -11,20 +11,22 @@ import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
     
    } from "@thirdweb-dev/react";
 
+import stylesBuy from "../../styles/Buy.module.css";
 
+import styles from "../../styles/NFT.module.css";
 import { Avatar, 
-     useToast ,
-  Tooltip,
-  Button as ChakraButton,
-   Flex,
-    Input,
-     SimpleGrid,
-     Stack,
-    Text,
-   Skeleton
+        useToast ,
+        Tooltip,
+        Button as ChakraButton,
+        Flex,
+        Input,
+        SimpleGrid,
+        Stack,
+        Text,
+        Skeleton
 } from "@chakra-ui/react";
 
-import {CopyText, CustomLinkWithLocalIcon,  CustomLinkWithIcon } from "../../components/LinkTextButton.jsx"
+import {CopyText, CustomLinkWithLocalIcon,  CustomLinkWithIcon } from "../LinkTextButton.jsx"
 import { RowChildrenAlignCenter,
     VerticalStackAlignCenter ,
     VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,RowChildrenAlignLeft,
@@ -34,13 +36,13 @@ import { RowChildrenAlignCenter,
      BoxWithTopBar,
      HorizontalSpace,
      RoundedBoxInfo
-   } from "../../components/Layout.jsx"  
+   } from "../Layout.jsx"  
 
-import NFTContratHeader from "../../components/NFTcontractHeader.jsx"
+import NFTContratHeader from "../NFTcontractHeader.jsx"
 import { 
    MARKETPLACE_ADDRESS,
    TOOLS_ADDRESS 
-} from "../../const/addresses.ts";
+} from "../../const/addresses.js";
 //import {getSDK } from "../../utils/updateMetadata";
 import {text2, text1, tokens } from "../../theme.js";
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -51,9 +53,9 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { getSDK_fromPrivateKey  } from "../../data/API.js";
 import { ethers } from "ethers";
 
-import ShowAuction from "../../components/TokenPageBoards/ShowAuction.jsx";
-import Activity from "../../components/TokenPageBoards/Activity.jsx"
-import Offers from "../../components/TokenPageBoards/Offers.jsx"
+import ShowAuction from "../TokenPageBoards/ShowAuction.jsx";
+import Activity from "../TokenPageBoards/Activity.jsx"
+import Offers from "../TokenPageBoards/Offers.jsx"
 
 
 
@@ -62,7 +64,7 @@ import {useEffect, useState} from "react";
 import { Link, useParams } from 'react-router-dom';
 
 
-const TokenDetails =  ({  propContractAddress, 
+const NFTListed =  ({  propContractAddress, 
      propTokenId, AlllistingData,
        AuctionListingData,  
           displayMode ,
@@ -186,8 +188,17 @@ const TokenDetails =  ({  propContractAddress,
        return txResult;
    }
 
+   
+ function linkPath( NFT_CONTRACT , nft ,       AuctionListingData,  AlllistingData  ){
+    if ( AuctionListingData ){
+      return  `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`;
 
+    }else {
+     return   `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/${AlllistingData?.id}/NAN` ;
 
+    }
+
+ }
    
 
    
@@ -215,34 +226,6 @@ const TokenDetails =  ({  propContractAddress,
    }
 
 
-   // return (
-   //     <div>
-
-
-   //       <h1>List of Bids</h1>
-   //       <div>
-   //       { Allbids &&(
-   //          <h1>bid count: {Allbids.length}</h1>
-   //       ) 
-           
-   //       }
-   //       </div>
-
-   //       {Allbids?.map((bid) => (
-   //         <div key={bid.id}>
-   //           <p>Bid ID: {bid.id}</p>
-   //           <p>Bid Amount: {bid.amount}</p>
-   //           <p>Bidder Address: {bid.bidder}</p>
-   //         </div>
-   //       ))}
-   //     </div>
-   //   ) 
-
-
-
-
-
-
   
    if(!nft  ){
        return (<div></div>)
@@ -254,89 +237,64 @@ const TokenDetails =  ({  propContractAddress,
 
      if (displayMode && displayMode === "grid"){
 
-       if (AlllistingData){
-              return(
-            <Box>
+         
 
-
-
-            <Link
-                   //to={`/token/${NFT_CONTRACT}/${nft.metadata.id}`}
-                   to={`/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/${AlllistingData?.id}/NAN`}
-                   key={nft.metadata.id}
-                >
-             
-           <RoundedBox>
-           <MediaRenderer
-            src={nft.metadata.image}
-             />
-           </RoundedBox>
-
-          {AlllistingData && (
-            <div>
-            <p> ID: { nft.metadata.id }</p>
-           <p> listing: {AlllistingData?.id }</p>
-           <p> 
-           {`${AlllistingData?.currencyValuePerToken.displayValue} ${AlllistingData?.currencyValuePerToken.symbol}`}
-            
-            </p>
-          
-           
-              </div>
-           ) } 
-
-           </Link>
-
-
-
-
-
-           </Box>
-
-              )
-        }
-        if (AuctionListingData){
-            return(
-                <Box>
-    
-    
-    
-                <Link
-                       //to={`/token/${NFT_CONTRACT}/${nft.metadata.id}`}
-                       to={`/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
-                       key={nft.metadata.id}
-                    >
-                 
-               <RoundedBox>
-               <MediaRenderer
-                src={nft.metadata.image}
-                 />
-               </RoundedBox>
-    
-              {AuctionListingData && (
-                <div>
-                <p> ID: { nft.metadata.id }</p>
-               <p> Auction ID: {AuctionListingData?.id }</p>
-               {/* <p> 
-               {`${AuctionListingData?.currencyValuePerToken.displayValue} ${AuctionListingData?.currencyValuePerToken.symbol}`}
+            return (
                 
-                </p> */}
-              
-               
-                  </div>
-               ) } 
-    
-               </Link>
-    
-    
-    
-    
-    
-               </Box>
-    
-                  )
 
-        }
+                     <Link
+                     to={linkPath(  NFT_CONTRACT , nft  ,  AuctionListingData   , AlllistingData    )  } 
+                       // to={`/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
+                         key={nft.metadata.id}
+                         className={stylesBuy.nftContainer}
+                      >    
+
+  
+
+                  <ThirdwebNftMedia metadata={nft.metadata} className={styles.nftImage} />
+                   <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
+                  <p className={styles.nftName}>{nft.metadata.name}</p>
+            
+                  <div className={styles.priceContainer}>
+                    {loadingMarketplace || loadingDirectListing || loadingAuction ? (
+                       <div> loading  </div>   // <Skeleton width="100%" height="100%" />
+                    ) : directListing && AlllistingData ? (
+                      <div className={styles.nftPriceContainer}>
+                        <div>
+                          <p className={styles.nftPriceLabel}>Price</p>
+                          <p className={styles.nftPriceValue}>
+                            {`${AlllistingData?.currencyValuePerToken.displayValue}
+                      ${AlllistingData?.currencyValuePerToken.symbol}`}
+                          </p>
+                        </div>
+                      </div>
+                    ) : auctionListing && AuctionListingData ? (
+                      <div className={styles.nftPriceContainer}>
+                        <div>
+                          <p className={styles.nftPriceLabel}>Minimum Bid</p>
+                          <p className={styles.nftPriceValue}>
+                            {`${AuctionListingData?.minimumBidCurrencyValue.displayValue}
+                              ${AuctionListingData?.minimumBidCurrencyValue.symbol}`}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={styles.nftPriceContainer}>
+                        <div>
+                          <p className={styles.nftPriceLabel}>Price</p>
+                          <p className={styles.nftPriceValue}>Not for sale</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                    </Link> 
+
+
+                 
+              ) 
+ 
+        
      } 
       
     //  if it displays as list
@@ -552,7 +510,7 @@ const TokenDetails =  ({  propContractAddress,
    
 };
 
-export default TokenDetails;
+export default NFTListed;
 
 function NftPriceBlock (   { boxColor, directListing, loadingMarketplace, loadingDirectListing ,
     auctionListing , loadingAuction, AlllistingData, AuctionListingData }  ){

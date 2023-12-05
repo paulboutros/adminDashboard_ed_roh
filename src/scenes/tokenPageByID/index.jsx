@@ -65,6 +65,12 @@ import { Link, useParams } from 'react-router-dom';
 import toast, { Toaster } from "react-hot-toast";
 //import toastStyle from "../../../util/toastConfig";
 
+
+import stylesBuy from "../../styles/Buy.module.css";
+
+import styles from "../../styles/NFT.module.css";
+
+
 const totalHeight  = "1200px";
 const _buttonHeight ="50px";
 const _mainBoxPadding = 3;
@@ -376,8 +382,11 @@ useEffect(() => {
         
                   <HorizontalSpace space={1}/> 
                   <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography>
-                
-                </RowChildrenAlignLeft>
+                  <HorizontalSpace space={1}/> 
+                  <Typography color={colors.grey[ text2.color ]} > {`Supply: ${listingData?.quantity}`}</Typography>
+                  
+
+                  </RowChildrenAlignLeft>
         
         
                 <RowChildrenAlignLeft>
@@ -540,6 +549,10 @@ export default TokenDetailsByID;
 function NftPriceBlock (   { 
   listingData, auctionData, ethToUsdRate }  ){
 
+
+
+ 
+
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
 
@@ -549,12 +562,22 @@ function NftPriceBlock (   {
        <Typography color={colors.grey[ text2.color ]} >Current price: </Typography>
    
        {listingData ? (
+
+        <RowChildrenAlignLeftBottom>
            <Typography color={colors.grey[ text1.color ]}
            // sx={{  position: 'relative', top:"-5px"  }}
            variant="h1" fontWeight="50">
             {`${listingData?.currencyValuePerToken.displayValue} ${listingData.currencyValuePerToken.symbol}`}
            
            </Typography>
+
+            <HorizontalSpace space={1}/>  
+            <Typography variant="h4"  color= {colors.grey[ text2.color]}  
+                style={{  position: 'relative', bottom:"5px" }}  >
+            {` $${(listingData?.currencyValuePerToken.displayValue * ethToUsdRate ).toFixed(2) }`}  
+            </Typography>
+           </RowChildrenAlignLeftBottom>
+
        ) : auctionData ? (
          
         <RowChildrenAlignLeftBottom>
@@ -563,7 +586,7 @@ function NftPriceBlock (   {
            {`${auctionData?.buyoutCurrencyValue.displayValue} ${auctionData?.buyoutCurrencyValue.symbol}`}
            </Typography>
 
-               <HorizontalSpace space={1}/>  
+             <HorizontalSpace space={1}/>  
            <Typography variant="h4"  color= {colors.grey[ text2.color]}  
                style={{  position: 'relative', bottom:"5px" }}  >
             {` $${ (auctionData.buyoutCurrencyValue.displayValue * ethToUsdRate ).toFixed(2) }`}  
@@ -643,15 +666,31 @@ return(
  function DisplayNFTimage( {nft}){
 
   return(
+    <div className={stylesBuy.nftContainer}> 
+           
+            <ThirdwebNftMedia metadata={nft.metadata} className={styles.nftImage} />
+                
+                    {/* <MediaRenderer src={nft.metadata.image} style={{ height: '100%', width: '100%' }}/> */}
+          
+                
+        {/* </Box> */}
+   
+  </div>
+   )
+
+
+
+
+  return(
    <RoundedBox> 
        
-           {/* <Box height="650px" width="650px" > */}
-               
+         
+               //className={stylesBuy.nftContainer}
                
                    <MediaRenderer
                        src={nft.metadata.image}
                        style={{ height: '100%', width: '100%' }}
-                      //  ,position: 'relative', left: '10px',  top:"10px"
+                    
                        
                    />
                
