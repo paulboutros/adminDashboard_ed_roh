@@ -235,7 +235,7 @@ export function RoundedBoxSmall(  {children} ){
 
 }
 
-export function RoundedBox(  {children , _height , backgroundColor ,  padding=0 } ){
+export function RoundedBox(  {children , _height , backgroundColor ,  padding=0 , margin=0} ){
  
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -247,10 +247,11 @@ export function RoundedBox(  {children , _height , backgroundColor ,  padding=0 
 
     return (
       <Box  
-         backgroundColor =  {backgroundColor || null} 
+         backgroundColor = {backgroundColor || null} 
+         margin={margin}
          padding={padding}
          height={_height ? _height  : 'auto'}
-         border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}
+         border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius} 
       >
       {children}
      </Box>

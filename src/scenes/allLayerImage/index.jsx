@@ -40,8 +40,8 @@
       <div>alllayerimage.js allNFTs not loaded</div>
     ) : (
       // <div> allNFTs loaded </div>
-      <Box m="20px" maxHeight="calc(85vh)"  overflow="auto"  >  
-      {/* <Header title="All Layer image" subtitle="Image for all NFT Layers" /> */}
+      <Box margin="0px 20px 20px 20px"  maxHeight="calc(85vh)"  overflow="auto"  >  
+      
       
       <Box   >
      

@@ -2,6 +2,28 @@ import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles/index.js";
 
 
+
+// this is to replicate the css styles found in styles module of Thridweb market v 3
+export const styles = {
+
+ 
+  largeImage: {  
+ // Override default NFT renderer width
+ width: '100% !important',
+ height: '100% !important',
+ borderRadius: 8,
+ background: 'rgba(255, 255, 255, 0.04)',
+ objectFit: 'cover'  
+   
+  }
+
+
+}
+
+
+
+
+ 
 export const buttonStyle={
     colorBlue: 700, 
 
@@ -16,7 +38,7 @@ export const text2 ={
   color:200,
   fontSize: 50
 };  
-
+// type: control + K the control + G to generate the shades
 export const grayText = 100;
 // color design tokens export
 export const tokens = (mode) => ({
@@ -33,7 +55,21 @@ export const tokens = (mode) => ({
           800: "#292929",
           900: "#141414",
         },
-        primary: {
+        primary: { // for primary, we now the the daark grey palette instead
+         
+          100: "#d0d0d0",
+          200: "#a1a1a1",
+          300: "#727272",
+          400: "#434343",
+          500: "#141414",
+          600: "#101010",
+          700: "#0c0c0c",
+          800: "#080808",
+          900: "#040404"
+ 
+        },
+        /*
+        primary: { // this was the bleuish color.. we do not want anymore
           100: "#d0d1d5",
           200: "#a1a4ab",
           300: "#727681",
@@ -44,6 +80,7 @@ export const tokens = (mode) => ({
           800: "#080b12",
           900: "#040509",
         },
+       */
         greenAccent: {
           100: "#dbf5ee",
           200: "#b7ebde",
@@ -147,7 +184,7 @@ export const themeSettings = (mode) => {
         ? {
             // palette values for dark mode
             primary: {
-              main: colors.primary[500],
+              main:  colors.primary[500],
             },
             secondary: {
               main: colors.greenAccent[500],
@@ -160,6 +197,7 @@ export const themeSettings = (mode) => {
             background: {
               default: colors.primary[500],
             },
+            cancelIconColor: colors.grey[600], 
           }
         : {
             // palette values for light mode
@@ -177,6 +215,7 @@ export const themeSettings = (mode) => {
             background: {
               default: "#fcfcfc",
             },
+            cancelIconColor: colors.grey[600],
           })
 
           

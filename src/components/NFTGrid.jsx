@@ -3,7 +3,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {useEffect, useState} from "react";
 import axios from "axios";
  
-import { evolve } from "../utils/updateMetadata.js"
+import { evolve } from "../util/updateMetadata.js"
 import CardActions from '@mui/material/CardActions';
  
 import  { Grid , Card, Box, Button } from '@mui/material';          

@@ -12,7 +12,7 @@ import {sendTracking, GetRewardPrice } from "../data/API"
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
  
-import { tokens } from "../theme";
+import { tokens, styles } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAllLayersContext } from '../context/AllLayerAvailableContext'; 
 
@@ -21,8 +21,9 @@ import LayerBaseInfo from "./LayerBaseInfo";
   
  import PopupButton  from "./popup"
 import { cookieStorageManager } from '@chakra-ui/react';
-import { CreateListing, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../utils/updateMetadata';
+import { CreateListing, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata';
 import { OWNER } from '../const/addresses';
+import { RoundedBox } from './Layout';
  
  
   const LayerSelector = (  {queryId="" }  ) => {
@@ -149,48 +150,37 @@ import { OWNER } from '../const/addresses';
     
     <Box m="20px" >
    
-   <div>
- 
+    <div>
+       {address && address === OWNER? (
+        <div>
+           <EditorButton/>
 
-     {address && address === OWNER? (
-
-       <div>
-          <EditorButton/>
-
-       </div>
+        </div>
      ):(
-      <div></div>
+        <div></div>
 
      ) }
-
-
-</div> 
-    <Box display="flex" justifyContent="space-between" alignItems="center">
-      
-    </Box>
-
-    {/* GRID & CHARTS */}
-    <Box  display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
-     
-      
-        <Box gridColumn="span 8" gridRow="span 4"  backgroundColor={colors.primary[400]}>
-         
-       {/* add color to set you grid element if needed  backgroundColor={colors.primary[200]}  */}
-        <Box  display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
-     
+ 
+    </div> 
+      <Box display="flex" justifyContent="space-between" alignItems="center"> </Box>
+ 
+      {/* GRID & CHARTS */}
+      <Box  display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
+       
+      {/*The composed character image block*/}
+      <Box gridColumn="span 8" gridRow="span 4" >  
+           <RoundedBox>
+          <Box margin = {"8px"} backgroundColor = {'rgba(255, 255, 255, 0.04)'} borderRadius = {"10px"}  > 
+    
+          <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
+        
             <Box gridColumn="span 8" gridRow="span 1"   >
 
-            <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
-            <Typography variant="h5"fontWeight="600" color={colors.grey[100]}>  NFT Composer </Typography>
-
-             
+               <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
+                 <Typography variant="h5"fontWeight="600" color={colors.grey[100]}>  NFT Composer </Typography>
                </Box>
- 
-            </Box>
-    
-            
-          
-            <Box gridColumn="span 4" gridRow="span 1"    >
+             </Box>
+             <Box gridColumn="span 4" gridRow="span 1"    >
             <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >
           
 
@@ -226,37 +216,12 @@ import { OWNER } from '../const/addresses';
                ):(
                 <p></p>
                )}
-
-
-                {/*save it as a remider, if you think you will soon be able to get all the layer to claim it*/}
-{/* 
-               <Button variant="outlined"// sx={{ typography: 'h5' , color: "#65582B" }}
-                    style={{
-                        color:  "#b4a770",
-                        borderColor:  "#f0c435", // Set border color
-                        height: "25px",borderWidth: '2px',
-                        textTransform: 'none', // Prevent text from being transformed to uppercase
-                    }} >SAVE
-          
-               </Button> 
-
-               <Button variant="outlined" 
-                    style={{
-                        color: colors.greenAccent[500],
-                        borderColor: colors.greenAccent[500], // Set border color
-                        height: "25px",borderWidth: '2px',
-                        textTransform: 'none', // Prevent text from being transformed to uppercase
-                    }} >Mint
-          
-               </Button>
-                */}
  
-
 
              <IconButton> <DownloadOutlinedIcon sx={{ fontSize: "26px", color: colors.greenAccent[500] }}/></IconButton>
             
-               </Box>
-           </Box>
+            </Box>
+            </Box>
 
             <Box gridColumn="span 8" gridRow="span 8" >
 
@@ -273,68 +238,50 @@ import { OWNER } from '../const/addresses';
                 <CustomLegend legendItems={legendItems} />
             </Box>
 
-       </Box>
-       </Box>
-
-       
+            </Box>
+            </Box>
+          </RoundedBox>
+        </Box>
+ 
         
       {/* ROW 3 */}
       <Box
         gridColumn="span 4"
         gridRow="span 4"
-        backgroundColor={colors.primary[400]}
+        backgroundColor={colors.primary[500]}
         p="30px"
       >
         <Typography variant="h5" fontWeight="600">
           Layers Selector
         </Typography>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          mt="25px"
-        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            mt="25px"
+          >
           
           
 <div> 
      Click the following the layers to test combination and see prize reward associated.
-     <ImageSelector  onSelectImage={setSelectedImages}  selectedImages={selectedImages}  />
+     <ImageSelector onSelectImage={setSelectedImages}  selectedImages={selectedImages}  />
 
 </div>
-          
-
-
-          {/* <ProgressCircle size="125" /> */}
+    
            
         </Box>
       </Box>
-       
-  
       
-
-    </Box>
-   </Box>
+     </Box>
+      
+     </Box>
  
 
     );
   };
   
   export default LayerSelector;
- 
-function SelectedImages_filtered( selectedImages ){
-
-     
-  const excludedKeys = ["forearn", "bo", "collar"];
-  const filteredImages = Object.keys(selectedImages).reduce((result, key) => {
-    if (!excludedKeys.includes(key)) {
-      result[key] = selectedImages[key];
-    }
-    return result;
-  }, {});
-
-
-
-}
+  
 
 
 // warning (check element on chrome to make sure it does not overlap the top-right button)

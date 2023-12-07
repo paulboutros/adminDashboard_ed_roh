@@ -1,14 +1,15 @@
  
 //https://portal.thirdweb.com/connect/connect-wallet/class-name
   //web3
-import { BigNumber, ethers } from "ethers";
+import {   ethers } from "ethers";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { useContract, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS , REWARDS_ADDRESS } from "../../const/addresses";
 import { Link } from "react-router-dom";
 
-import { Divider ,Box, IconButton, useTheme  , Button, Typography } from "@mui/material";
-import { Children, useContext, useEffect, useState  } from "react";
+import { Box, IconButton, useTheme ,   Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {   useContext, useEffect, useState  } from "react";
 import { ColorModeContext, tokens, buttonStyle } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -18,46 +19,52 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
  import { RowChildrenAlignCenter,
-   VerticalStackAlignCenter,
+    
    VerticalStackAlignLeft,
    RoundedBox,
    HorizontalSpace
   } from "../../components/Layout"
 
-import ButtonOAuth from "../../components/ButtonOAuth";
-import MenuPopupState from  "../../components/MenuPopupState";
+ import styles from        "../../styles/Navbar.module.css"; 
+ import stylesProfile from "../../styles/Profile.module.css"; 
+
 
 const Topbar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
+
+   const [tab, setTab] = useState("Buy");
+   const theme = useTheme();
+   const navigate = useNavigate();
+   const colors = tokens(theme.palette.mode);
+   const colorMode = useContext(ColorModeContext);
    const _textColor = colors.grey[200];
    const address = useAddress();
 
   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
-   
- 
-   
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
    
-  return (
-    <Box display="flex" justifyContent="space-between" p={2}
-       
+  
+  const OpenPage = ( route, setTab, tabName ) => {
+
+   
+  
+     setTab(tabName);
+     navigate(`/${route}`); 
+ 
       
-    >
-      {/* SEARCH BAR */}
+  };
 
-      < RowChildrenAlignCenter
-       >
+  return (
+    <Box display="flex" justifyContent="space-between" padding="0px 16px 0px 16px">
+       { /* SEARCH BAR */ }
+       <RowChildrenAlignCenter>
+       
 
-         <Box
-        display="flex" height= "40px"
-      //  backgroundColor={colors.primary[400]}
-      //  borderRadius="3px"
- 
+         <Box  display="flex" >
+      
+      
        
  
-      >
+      
 
     <RoundedBox> 
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
@@ -77,10 +84,9 @@ const Topbar = () => {
       {/* <Button component={Link} to="/buy" variant="text" color={colors.grey[400]}  > */}
  
       
-      <RowChildrenAlignCenter   
+      <RowChildrenAlignCenter padding={"15px 0 15px 0"} >
       
-      padding={"15px 0 15px 0"} >
-        <Button component={Link} to="/shop" variant="text"  >
+        {/* <Button component={Link} to="/shop" variant="text"  >
         <Typography  color= {_textColor} >  Buy     </Typography>
         </Button>
 
@@ -94,7 +100,31 @@ const Topbar = () => {
 
         <Button component={Link} to="/shopPack" variant="text" color="primary">
         <Typography  color={_textColor} >  Packs     </Typography>
-        </Button>
+        </Button> */}
+ 
+              <div className={stylesProfile.toptabs}>
+                <h3 className={`${stylesProfile.toptab} ${tab === "Buy" ? stylesProfile.topactiveTab : ""}`}
+                   onClick={() => OpenPage("shop", setTab, "Buy"  ) }
+                >
+                  Buy
+               </h3>
+                <h3
+                  className={`${stylesProfile.toptab}  ${tab === "Sell" ? stylesProfile.topactiveTab : ""}`}
+                  onClick={() => OpenPage("sell", setTab, "Sell"  ) }
+                >
+                  Sell
+                </h3>
+                <h3
+                  className={`${stylesProfile.toptab}  ${tab === "Pack" ? stylesProfile.topactiveTab : ""}`}
+                  onClick={() => OpenPage("shopPack", setTab, "Pack"  ) }
+                >
+                   Pack
+                </h3>
+              </div>
+
+
+
+
 
 
       </RowChildrenAlignCenter>
@@ -164,7 +194,27 @@ const Topbar = () => {
         modalTitleIconUrl={""}
         />
 
-         <MenuPopupState/>
+
+         <div className={styles.navRight}>
+           {address && (
+            <Link 
+              className={styles.link} 
+          //   href={`/profile/${address}`}
+             to={`/profileWallet/${address}`}>
+             
+              <img
+              //  className={styles.profileImage}
+                src="/user-icon.png"
+                width={42}
+                height={42}
+                alt="Profile"
+              />
+            </Link>
+          )}
+        </div>
+
+
+         {/* <MenuPopupState/> */}
          {/* <ButtonOAuth/> */}
 
          </RowChildrenAlignCenter>
@@ -182,4 +232,7 @@ const Topbar = () => {
 };
 
 export default Topbar;
+
+//https://v5.reactrouter.com/web/api/Hooks/usehistory
+ 
 

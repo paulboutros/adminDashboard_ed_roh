@@ -4,7 +4,7 @@ import { Box , Typography, useTheme } from "@mui/material";
 import { DataGrid  } from "@mui/x-data-grid";
 import { text1,text2, tokens, DataGridStyle } from "../../theme";
  
-import {GetContractName} from "../../utils/GetMarketContractEventData.js"   
+import {GetContractName} from "../../util/GetMarketContractEventData.js"   
 
 import {  useContract, useContractEvents} from "@thirdweb-dev/react";  
 import DataGridHeader from "../DataGridHeader.jsx"

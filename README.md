@@ -20,3 +20,6 @@ https://blog.thirdweb.com/guides/create-a-shopify-theme-with-thirdweb/
 webpack issue when adding web3 librarries
 
 https://ethereum.stackexchange.com/questions/123530/module-not-found-error-cant-resolve-stream-in-react-project-including-web3
+
+React doc:
+//https://v5.reactrouter.com/web/example/animated-transitions

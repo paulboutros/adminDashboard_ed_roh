@@ -42,7 +42,7 @@ import NFTContratHeader from "../NFTcontractHeader.jsx"
 import { 
    MARKETPLACE_ADDRESS,
    TOOLS_ADDRESS 
-} from "../../const/addresses.js";
+} from "../../const/addresses.ts";
 //import {getSDK } from "../../utils/updateMetadata";
 import {text2, text1, tokens } from "../../theme.js";
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -242,15 +242,15 @@ const NFTListed =  ({  propContractAddress,
             return (
                 
 
-                     <Link
-                     to={linkPath(  NFT_CONTRACT , nft  ,  AuctionListingData   , AlllistingData    )  } 
-                       // to={`/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
-                         key={nft.metadata.id}
-                         className={stylesBuy.nftContainer}
-                      >    
-
+              <Link
+              to={linkPath(  NFT_CONTRACT , nft  ,  AuctionListingData   , AlllistingData    )  } 
+                // to={`/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
+                  key={nft.metadata.id}
+                  className={stylesBuy.nftContainer}
+                >    
+ 
   
-
+       
                   <ThirdwebNftMedia metadata={nft.metadata} className={styles.nftImage} />
                    <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
                   <p className={styles.nftName}>{nft.metadata.name}</p>

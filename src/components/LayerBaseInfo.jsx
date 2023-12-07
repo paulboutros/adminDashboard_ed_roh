@@ -9,7 +9,9 @@ import Card from '@mui/material/Card';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
- import { tokens } from "../theme";
+
+
+ import {tokens, themeSettings, cancelIconColor } from "../theme";
  
 
 /*
@@ -24,7 +26,7 @@ it  takes a list of layer object and display image, how many are owned  etc..
 
     const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
+ const element = themeSettings(theme.palette.mode);
 
      // console.log(   " LayerBaseInfo >  layerToChooseFrom"  ,  layerToChooseFrom  );
 
@@ -152,7 +154,7 @@ it  takes a list of layer object and display image, how many are owned  etc..
                             //color:  colors.primary[500]  
                             //color:  colors.grey[300]  
                             //color:  colors.redAccent[200]  
-                            color: colors.redAccent[500]
+                            color:   element.palette.cancelIconColor   //colors.redAccent[500]
                         
                         
                         }} />

@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import { Box , Typography, useTheme } from "@mui/material";
 import { DataGrid  } from "@mui/x-data-grid";
 
-import {GetContractName} from "../../utils/GetMarketContractEventData.js"   
+import {GetContractName} from "../../util/GetMarketContractEventData.js"   
 import DataGridHeader from "../DataGridHeader.jsx"
 
 
@@ -22,7 +22,7 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import { text1, tokens ,DataGridStyle } from "../../theme";
 import  { addressShortened } from "../../utils.js"
-import  {GetFromVAlue} from "../../utils/GetMarketContractEventData.js"
+import  {GetFromVAlue} from "../../util/GetMarketContractEventData.js"
 
 import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
     useMinimumNextBid, useValidDirectListings,

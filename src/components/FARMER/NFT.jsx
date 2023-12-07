@@ -3,7 +3,7 @@ import {  Web3Button,   useContract,ThirdwebNftMedia, useValidDirectListings, us
   
 } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS , MARKETPLACE_ADDRESS  } from "../../const/addresses";
-import {evolve} from "../../utils/updateMetadata"
+import {evolve} from "../../util/updateMetadata"
 
 import { MediaRenderer   } from "@thirdweb-dev/react";
 
@@ -15,9 +15,7 @@ import {VerticalStackAlignCenter ,
 
 } from "../../components/Layout.jsx"
  
-
-
- import { Box, Typography ,CardContent  ,Card , Grid, CardMedia,image   } from '@mui/material'; // Update this import
+import { Box, Typography ,CardContent  ,Card , Grid, CardMedia  } from '@mui/material'; // Update this import
 
 //import  Skeleton from '@material-ui/lab/Skeleton'
 

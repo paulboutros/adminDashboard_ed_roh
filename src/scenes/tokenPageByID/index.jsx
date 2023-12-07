@@ -1,8 +1,8 @@
 
-import { IconButton ,Paper, Button, TextField , CardMedia, Box, Grid, Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
+import { IconButton ,Paper, Button, TextField ,   Box,   Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
 
  import {CountdownTimerWithArg} from "../../components/CountdownTimer.jsx"
-import  { convertSecondsToDateString, formatTimestampToCustomFormat, addressShortened ,handleCopyClick} from "../../utils.js"
+import  { convertSecondsToDateString,   addressShortened ,handleCopyClick} from "../../utils.js"
 //https://chakra-ui.com/docs/components/button
 import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
     useMinimumNextBid, useValidDirectListings,
@@ -25,23 +25,22 @@ import { Avatar,
 } from "@chakra-ui/react";
 
 import {CopyText, CustomLinkWithLocalIcon,  CustomLinkWithIcon } from "../../components/LinkTextButton.jsx"
-import { RowChildrenAlignCenter,
-    VerticalStackAlignCenter ,
-    VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,VerticalStackAlign,
+import {  
+    
+    VerticalStackAlignLeft,  RowChildrenAlignTop,VerticalStackAlign,
     
     RowChildrenAlignLeft,RowChildrenAlignLeftBottom,
-    RowChildrenAlignRight,
+    
     VerticalSpace,
      RoundedBox,
-     BoxWithTopBar,
-     HorizontalSpace,
-     RoundedBoxInfo
+     
+     HorizontalSpace 
+      
    } from "../../components/Layout.jsx"  
 
-import NFTContratHeader from "../../components/NFTcontractHeader.jsx"
-import { 
+ import { 
    MARKETPLACE_ADDRESS,
-   TOOLS_ADDRESS 
+   
 } from "../../const/addresses.ts";
  import {text2, text1, tokens } from "../../theme.js";
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -666,12 +665,15 @@ return(
  function DisplayNFTimage( {nft}){
 
   return(
-    <div className={stylesBuy.nftContainer}> 
-           
-            <ThirdwebNftMedia metadata={nft.metadata} className={styles.nftImage} />
-                
-                    {/* <MediaRenderer src={nft.metadata.image} style={{ height: '100%', width: '100%' }}/> */}
-          
+    <div > 
+   {/* className={stylesBuy.nftContainer}  style={{ height: '600px', width: '600px' }}  */}
+         
+      <RoundedBox>   
+          <RoundedBox padding = "8px">
+                <ThirdwebNftMedia metadata={nft.metadata}  className={styles.largeImage}  />
+            </RoundedBox> 
+      </RoundedBox> 
+        
                 
         {/* </Box> */}
    
