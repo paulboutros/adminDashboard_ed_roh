@@ -1,176 +1,93 @@
-import { Box, Button, Card, Container, Flex, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
-import { ThirdwebNftMedia, lightTheme, useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
-import { useState, useEffect } from "react";
+import {
+    ThirdwebNftMedia,
+    useAddress,
+    useContract,
+    useOwnedNFTs,
+  } from "@thirdweb-dev/react";
+  import React, {useEffect, useState } from "react";
+  import Container from "../../components/Container/Container";
+  import NFTGrid from "../../components/NFTGrid";
+  import { TOOLS_ADDRESS } from "../../const/addresses";
+  import tokenPageStyles from "../../styles/Token.module.css";
+  //import { NFT as NFTType } from "@thirdweb-dev/sdk";
+  import SaleInfo from "../../components/SaleInfo/SaleInfo";
+import { BasicScrollable } from "../../components/Layout";
 
-import { 
-    MARKETPLACE_ADDRESS,
-    TOOLS_ADDRESS 
-} from "../../const/addresses";
-//import type { NFT as NFTType } from "@thirdweb-dev/sdk";
-//import type { NFT as NFTType } from "@thirdweb-dev/sdk";
-import NFTGrid from "../../components/NFTGrid";
-import SaleInfo from "../../components/SaleInfo";
-import { GetAllNFTfromSDK } from "../../data/API.js"
-
-import { useAllLayersContext } from '../../context/AllLayerAvailableContext.js'; // to get user data from context provider
-
-
-export default function Sell() {
+   
+  export default function Sell() {
+    // Load all of the NFTs from the NFT Collection
     const { contract } = useContract(TOOLS_ADDRESS);
     const address = useAddress();
+    const { data, isLoading } = useOwnedNFTs(contract, address);
+    const [selectedNft, setSelectedNft] = useState();
+  
+  
+    useEffect(()=>{
+      console.log( ">>  => contract = ", TOOLS_ADDRESS    );
+      console.log( ">>  => address = ", address    );
+      console.log( ">>  => ownedNfts = ", data    );
+   }, [data]);
+  
+  
+  
+  
+    return (
+      <BasicScrollable>
+      <Container maxWidth="lg">
+        <h1>Sell NFTs</h1>
+        { !selectedNft ? (
+          <>
+            <p>Select which NFT you&rsquo;d like to sell below.</p>
+            <NFTGrid
 
+            //   data={data}
+                isLoading={isLoading}
 
-
-     
-     const [selectedNFT, setSelectedNFT] = useState();
-
-    //const { ownedNftData } = useAllLayersContext();
-    const [ownedNfts, setOwnedNfts] = useState(null);
-    
-     const [allNFTs, setAllNFTs] = useState();
-
-
-     const { data, isLoading } = useOwnedNFTs(contract, address);
-     useEffect(()=>{
-
-        if ( isLoading)return;
-
-        /* // uncomment if you need to override the metadata with locally stored metadata
-       async function get(){
-           const result =  await  GetAllNFTfromSDK(data);
-          // setAllNFTs(result);
-           setOwnedNfts(result);
-
-
-           console.log( "contract = ", contract    );
-           console.log( "address = ", address    );
-        console.log( "ownedNfts = ", data    );
-      }
-      
-      get();
-      */
-      setOwnedNfts(data);
-    }, [data, isLoading]);
-
-
-
-     useEffect(()=>{ 
-        if ( !data)return;
-
-
-        data.forEach(element => {
+                //isLoading={loadingOwnedNfts} 
+                NFTdata={data} 
+                emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
+                overrideOnclickBehavior={(nft) => { setSelectedNft(nft); }}
+               
+              
              
-                if ( element.metadata.uri ===""){ 
-
-                    console.log( " missing uri for token id  = ",  element.metadata.id  );
-                    console.log( "element.metadata  = ",  element.metadata   );
-                }
-
-          });
-           
-       
-
-     }, [  data ]);
- 
- 
-      return (
-        // <div>  this was disabled to temporarily to fix the metadata nft bug, you can turn it back if fixed</div>
-      
-        ownedNfts   ?(
-            <Container maxW={"1200px"} p={5}>
-            <Heading>Sell NFTs</Heading>
-            <Text>Select which NFT to sell below.</Text>
-            {!selectedNFT ? (
-                <NFTGrid
-                    NFTdata={ownedNfts}
-                    isLoading={false}
-                    overrideOnclickBehavior={(nft) => {
-                        setSelectedNFT(nft);
-                    }}
-                    emptyText={"You don't own any NFTs yet from this collection."}
+            />
+          </>
+        ) : (
+          <div className={tokenPageStyles.container} style={{ marginTop: 0 }}>
+            <div className={tokenPageStyles.metadataContainer}>
+              <div className={tokenPageStyles.imageContainer}>
+                <ThirdwebNftMedia
+                  metadata={selectedNft.metadata}
+                  className={tokenPageStyles.image}
                 />
-            ) : (
-                <Flex justifyContent={"center"} my={10}>
-                    <Card w={"75%"}>
-                        <SimpleGrid columns={2} spacing={10} p={5}>
-                            <ThirdwebNftMedia
-                                metadata={selectedNFT.metadata}
-                                width="100%"
-                                height="100%"
-                            />
-                            <Stack>
-                                <Flex justifyContent={"right"}>
-                                    <Button
-                                        onClick={() => {
-                                            setSelectedNFT(undefined);
-                                        }}
-                                    >X</Button>
-                                </Flex>
-                                <Heading>{selectedNFT.metadata.name}</Heading>
-                                <SaleInfo
-                                    nft={selectedNFT}
-                                />
-                            </Stack>
-                        </SimpleGrid>
-                    </Card>
-                </Flex>
-            )}
-        </Container>
-        ):(
-          <div>  ccccc</div>
-        )
-       
-     )
- 
-
-     if (ownedNfts){
-        return (
-            <Container maxW={"1200px"} p={5}>
-                <Heading>Sell NFTs</Heading>
-                <Text>Select which NFT to sell below.</Text>
-                {!selectedNFT ? (
-                    <NFTGrid
-                        NFTdata={ownedNfts}
-                        isLoading={false}
-                        overrideOnclickBehavior={(nft) => {
-                            setSelectedNFT(nft);
-                        }}
-                        emptyText={"You don't own any NFTs yet from this collection."}
-                    />
-                ) : (
-                    <Flex justifyContent={"center"} my={10}>
-                        <Card w={"75%"}>
-                            <SimpleGrid columns={2} spacing={10} p={5}>
-                                <ThirdwebNftMedia
-                                    metadata={selectedNFT.metadata}
-                                    width="100%"
-                                    height="100%"
-                                />
-                                <Stack>
-                                    <Flex justifyContent={"right"}>
-                                        <Button
-                                            onClick={() => {
-                                                setSelectedNFT(undefined);
-                                            }}
-                                        >X</Button>
-                                    </Flex>
-                                    <Heading>{selectedNFT.metadata.name}</Heading>
-                                    <SaleInfo
-                                        nft={selectedNFT}
-                                    />
-                                </Stack>
-                            </SimpleGrid>
-                        </Card>
-                    </Flex>
-                )}
-            </Container>
-        )
-     }else{
-
-        return(
-
-            <></>
-        )
-     }
-    
-}
+                <button
+                  onClick={() => {
+                    setSelectedNft(undefined);
+                  }}
+                  className={tokenPageStyles.crossButton}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+  
+            <div className={tokenPageStyles.listingContainer}>
+              <p>You&rsquo;re about to list the following item for sale.</p>
+              <h1 className={tokenPageStyles.title}>
+                {selectedNft.metadata.name}
+              </h1>
+              <p className={tokenPageStyles.collectionName}>
+                Token ID #{selectedNft.metadata.id}
+              </p>
+  
+              <div className={tokenPageStyles.pricingContainer}>
+                <SaleInfo nft={selectedNft} />
+              </div>
+            </div>
+          </div>
+        )}
+      </Container>
+      </BasicScrollable>
+    );
+  }
+  

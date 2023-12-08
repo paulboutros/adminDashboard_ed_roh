@@ -126,8 +126,18 @@ export function RowChildrenAlignLeftBottom( {children} ){
      </Box>
 
     )
+ }
 
-}
+ export function BasicScrollable(  {children}  ){
+
+  return( 
+     <Box maxHeight="calc(87vh)"  overflow="auto">
+       {children}   
+    </Box> 
+     )
+  }
+
+
   export function VerticalStackAlignLeft(  {children  , fullWidth } ){
    
       return (
@@ -145,25 +155,22 @@ export function RowChildrenAlignLeftBottom( {children} ){
  
 }
 export function VerticalStackAlignTopLeft(  {children  , fullWidth } ){
-   
-  return (
+   return (
 
-    <Box
-    width={fullWidth ? '100%' : 'auto'}
-    display="flex" 
-    flexDirection="column"
+   <Box
+     width={fullWidth ? '100%' : 'auto'}
+     display="flex" 
+     flexDirection="column"
 
-    alignItems="flex-start" // horiz
-    justifyContent="flex-start" // vertical
+     alignItems="flex-start" // horiz
+     justifyContent="flex-start" // vertical
     
     >
     {children}
    </Box>
 
   )
-
-
-
+ 
 }
 
 
@@ -325,6 +332,7 @@ export function HorizontalSpace ( {space}){
   
  
  }
+ 
 
  
 

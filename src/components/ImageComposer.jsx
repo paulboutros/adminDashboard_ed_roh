@@ -170,7 +170,11 @@ import { RoundedBox } from './Layout';
       {/*The composed character image block*/}
       <Box gridColumn="span 8" gridRow="span 4" >  
            <RoundedBox>
-          <Box margin = {"8px"} backgroundColor = {'rgba(255, 255, 255, 0.04)'} borderRadius = {"10px"}  > 
+          <Box margin = {"8px"} 
+          
+          backgroundColor = {colors.primary[400]}   
+          
+          borderRadius = {"10px"}  > 
     
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
         

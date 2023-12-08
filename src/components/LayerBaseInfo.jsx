@@ -43,7 +43,10 @@ it  takes a list of layer object and display image, how many are owned  etc..
                  
                    <Grid item xs={12} sm={6} md={4} key={index} >
                       <Card
-                     sx={{  position: 'relative',   border: colors.grey[500],   backgroundColor: 'transparent',  }}
+                     sx={{  position: 'relative',   border: colors.grey[500], 
+                       backgroundColor:  colors.primary[400], // 'transparent',
+                        
+                      }}
                
                      >
    
@@ -95,7 +98,7 @@ it  takes a list of layer object and display image, how many are owned  etc..
                     
                         
                        style={{
-                        color: colors.grey[500],
+                        color:   colors.grey[500],
                         display: 'flex',
                         justifyContent: 'flex-end',
                         alignItems: 'flex-end',

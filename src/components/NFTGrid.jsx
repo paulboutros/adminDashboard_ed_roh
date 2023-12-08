@@ -1,35 +1,20 @@
 
-import Tooltip from '@mui/material/Tooltip';
-import {useEffect, useState} from "react";
-import axios from "axios";
+ import {useEffect, useState} from "react";
  
-import { evolve } from "../util/updateMetadata.js"
-import CardActions from '@mui/material/CardActions';
- 
-import  { Grid , Card, Box, Button } from '@mui/material';          
-        
-import ImageCard from "./ImageCard";
 
 import {useNotificationContext }   from '../context/NotificationContext.js'; // to get user data from context provider
-import {formatTimestampToCustomFormat,  formatMilliseconds} from  "../utils.js"
-
-import CardMedia from '@mui/material/CardMedia'; // Update this import
-
+ 
+ 
 import { tokens } from "../theme";
   
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
-
-
- import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';//@mui/lab/ToggleButtonGroup';
-
+ 
 
 import { useTheme } from "@mui/material";
  
 
 import styles from "../styles/Buy.module.css";
-import { useContract, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
-import {
+ import {
    // LAYER_EDITION_ADDRESS,
     TOOLS_ADDRESS ,
     
@@ -39,14 +24,9 @@ import {
 //import  { SetLayerSupply } from "../../data/API"
 //import Link from "next/link";
 import { Link } from 'react-router-dom';
- import { BigNumber, ethers } from "ethers";
-
-//import { Text, Skeleton ,  SimpleGrid } from "@chakra-ui/react";
-
+  
 import NFT from "./FARMER/NFT";
-
  
-
 /*
  Called from 
  1) All layer image
@@ -76,7 +56,7 @@ const { notification, setNotification } = useNotificationContext();
   
 useEffect(() => {
   
-  // console.log( ">>>>>>>>>>   NFTdata     =" , NFTdata ) ;    
+   console.log( "   >>>>>>>>>>   NFTdata     =" , NFTdata ) ;    
   
    
   if (!notification)return;
@@ -104,11 +84,9 @@ useEffect(() => {
         // WARNING REPO reffer to NFT data as "data" instead of "NFTdata" i our case
     ) : NFTdata && NFTdata.length > 0 ? (
             NFTdata.map((nft) =>
-            
-           
+         
             !overrideOnclickBehavior ? (
-  
-              
+     
                 <Link
                    to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
                    key={nft.metadata.id}
@@ -121,7 +99,7 @@ useEffect(() => {
             ) : (
              
                 <div
-                    key={nft.metadata.id}
+                    key={nft.metadata.id} // key is mendatory and should be added somewhere in a map loop
                     onClick={() => overrideOnclickBehavior(nft)}
                     className={styles.nftContainer}
                 >

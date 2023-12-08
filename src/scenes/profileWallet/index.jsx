@@ -21,6 +21,7 @@ import { useNavigate , Link, useParams} from 'react-router-dom';
  
 
 import NFTGrid from "../../components/NFTGrid";
+import { BasicScrollable } from "../../components/Layout";
 
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
@@ -74,6 +75,7 @@ export default function ProfilePage() {
 
        
         return (
+          <BasicScrollable>
             <Container maxWidth="lg">
               <div className={styles.profileHeader}>
                 <div
@@ -127,9 +129,13 @@ export default function ProfilePage() {
                 }`}
               >
                 <NFTGrid
-                  data={ownedNfts}
-                  isLoading={loadingOwnedNfts}
+                  isLoading={loadingOwnedNfts} 
+                  NFTdata={ownedNfts} 
                   emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
+
+                  // data={ownedNfts}
+                  // isLoading={loadingOwnedNfts}
+                  // emptyText=" "
                 />
               </div>
         
@@ -189,5 +195,6 @@ export default function ProfilePage() {
                 )}
               </div>
             </Container>
+           </BasicScrollable>
         );
 }

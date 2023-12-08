@@ -1,7 +1,10 @@
 import React from "react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
+
 //import { useRouter } from "next/router";
-import { NavigateFunction, useNavigate  } from 'react-router-dom';
+import {  useNavigate  } from 'react-router-dom';
+
+
 import { useForm } from "react-hook-form";
 import { Web3Button, useAddress ,useContract, useCreateAuctionListing, useCreateDirectListing } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS, REWARDS_ADDRESS } from "../const/addresses";
@@ -36,8 +39,11 @@ type AuctionFormData = {
 
 export default function SaleInfo({ nft }: Props) {
     const address = useAddress();
-    const navigate = useNavigate ();
+
+    const navigate = useNavigate();
     //const router = useRouter();
+
+
     const { contract: marketplace } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
 
     const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
@@ -211,16 +217,16 @@ export default function SaleInfo({ nft }: Props) {
                        }
                         
                        );
+
                        console.log(" sucess added listing: " , allListings );
-
-
-                       let lastListing;
+ 
+                         let lastListing;
                          if ( allListings ) {
                             lastListing =  allListings[  (allListings.length-1 ) ];
                          }
                           console.log(" sucess here is last listing: " , lastListing );
 
-                           navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${lastListing?.id}/NAN`);
+                            navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${lastListing?.id}/NAN`);
                                      //  navigate(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
                                 //navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
 
@@ -286,26 +292,15 @@ export default function SaleInfo({ nft }: Props) {
 
                           
                               //auction
-                       //to={`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/NAN/${AuctionListingData?.id}`}
-
-                                   const allAuctions = await marketplace?.englishAuctions.getAll({
-                                           tokenId: nft.metadata.id 
-                                    }
-                                        
-                                    );
+                             
+                                    const allAuctions = await marketplace?.englishAuctions.getAll({tokenId: nft.metadata.id } );
                                     console.log(" sucess added allAuctions: " , allAuctions );
  
                                     let lastAuction;
-                                        if ( allAuctions ) {
-                                            lastAuction =  allAuctions[  (allAuctions.length-1 ) ];
-                                        }
-                                        console.log(" sucess here is last listing: " , lastAuction );
-  
-
-                                  navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/NAN/${lastAuction?.id}`);
-                                     // navigate(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
-                               //  navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
-                               // router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                                     if ( allAuctions ) {lastAuction =  allAuctions[  (allAuctions.length-1 ) ];}
+                                     console.log(" sucess here is last listing: " , lastAuction );
+                                    navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/NAN/${lastAuction?.id}`);
+                                 // router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
                             }}
                         >Create Auction Listing</Web3Button>
                     </Stack>

@@ -52,14 +52,10 @@
        
           {/* <Shop display_mode='grid'/>  */}
          <NFTGrid
-        
-           
-        isLoading={isLoading} 
-        NFTdata={allNFTs} 
-        emptyText={"No NFTs found"}
-        
-        
-        />  
+            isLoading={isLoading} 
+            NFTdata={allNFTs} 
+            emptyText={"No NFTs found"}
+         />  
 
 
    

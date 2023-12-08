@@ -2,7 +2,7 @@ import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles/index.js";
 
 
-
+//https://uicolors.app/create
 // this is to replicate the css styles found in styles module of Thridweb market v 3
 export const styles = {
 
@@ -57,15 +57,26 @@ export const tokens = (mode) => ({
         },
         primary: { // for primary, we now the the daark grey palette instead
          
-          100: "#d0d0d0",
-          200: "#a1a1a1",
-          300: "#727272",
-          400: "#434343",
-          500: "#141414",
-          600: "#101010",
-          700: "#0c0c0c",
-          800: "#080808",
-          900: "#040404"
+          // 100: "#d0d0d0",
+          // 200: "#a1a1a1",
+          // 300: "#727272",
+          // 400: "#434343",
+          // 500: "#141414",
+          // 600: "#101010",
+          // 700: "#0c0c0c",
+          // 800: "#080808",
+          // 900: "#040404"
+          '50': '#98999a',
+          '100': '#868788',
+          '200': '#6a6b6c',
+          '300': '#4a4a4a',
+          '400': "#272828" ,//  '#2e2e2e',
+          '500': '#1e1f1f',
+          '600': '#0d0d0d',
+          '700': '#000000',
+          '800': '#000000',
+          '900': '#000000',
+          '950': '#000000',
  
         },
         /*
@@ -127,17 +138,42 @@ export const tokens = (mode) => ({
           800: "#c2c2c2",
           900: "#e0e0e0",
         },
+        // primary: {
+        //   100: "#040509",
+        //   200: "#080b12",
+        //   300: "#0c101b",
+        //   400: "#f2f0f0", // manually changed
+        //   500: "#141b2d",
+        //   600: "#1F2A40",
+        //   700: "#727681",
+        //   800: "#a1a4ab",
+        //   900: "#d0d1d5",
+        // },
         primary: {
-          100: "#040509",
-          200: "#080b12",
-          300: "#0c101b",
-          400: "#f2f0f0", // manually changed
-          500: "#141b2d",
-          600: "#1F2A40",
-          700: "#727681",
-          800: "#a1a4ab",
-          900: "#d0d1d5",
-        },
+          '50': '#ffffff',
+          '100': '#ffffff',
+          '200': '#eae9e6',
+          '300': '#cdc9c1',
+          '400': '#b3aca2',
+          '500': '#a59c93',
+          '600': '#95877e',
+          '700': '#83726d',
+          '800': '#766965',
+          '900': '#695a59',
+          '950': '#4e4341',
+        // '50': '#ffffff',
+        // '100': '#ffffff',
+        // '200': '#f3f1f2',
+        // '300': '#d4cecf',
+        // '400': '#aea2a3',
+        // '500': '#978787',
+        // '600': '#867574',
+        // '700': '#786a68',
+        // '800': '#6d625f',
+        // '900': '#655b58',
+        // '950': '#393432',
+      },
+
         greenAccent: {
           100: "#0f2922",
           200: "#1e5245",
@@ -198,6 +234,7 @@ export const themeSettings = (mode) => {
               default: colors.primary[500],
             },
             cancelIconColor: colors.grey[600], 
+            blueSelectedTab :"#0294fe", //blue from thirdweb marketpalce
           }
         : {
             // palette values for light mode
@@ -213,7 +250,7 @@ export const themeSettings = (mode) => {
               light: colors.grey[100],
             },
             background: {
-              default: "#fcfcfc",
+              default:  colors.primary[300],// "#fcfcfc",  // "#fcfcfc",
             },
             cancelIconColor: colors.grey[600],
           })

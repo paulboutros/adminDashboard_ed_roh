@@ -23,3 +23,7 @@ https://ethereum.stackexchange.com/questions/123530/module-not-found-error-cant-
 
 React doc:
 //https://v5.reactrouter.com/web/example/animated-transitions
+https://legacy.reactjs.org/docs/lists-and-keys.html#keys
+
+tailwind cokor generator
+https://uicolors.app/create

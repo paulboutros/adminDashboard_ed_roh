@@ -6,6 +6,8 @@ starts at 27:00min
 
 import Skeleton from "../../components/Skeleton/Skeleton";
 import stylesProfile from "../../styles/Profile.module.css";
+import stylesGlobals from "../../styles/globals.css";
+
 import randomColor from "../../util/randomColor";
 
 
@@ -19,6 +21,7 @@ import styles from "../../styles/Buy.module.css";
  //import { Box, Text, Button, Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
 import NFTListed from "../../components/FARMER/NFTlisted.jsx"  
 import { Box } from '@mui/material'; // Update this import
+import { BasicScrollable, HorizontalSpace } from "../../components/Layout";
 
 /*
 interface ShopProps {
@@ -93,8 +96,10 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
        }
    
        return (
-        <Container maxWidth="lg">
+        <BasicScrollable>
+        <Container maxWidth="lg">   
           <div 
+          
            //className={stylesProfile.profileHeader}
            >
             <div
@@ -154,9 +159,11 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
             ) : directListings && directListings.length === 0 ? (
               <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
             ) : (
-              directListings?.map((listing , index ) => (
+              directListings?.map((listing  ) => (
                 // <ListingWrapper listing={listing} key={listing.id} />
+                   
                         <NFTListed
+                        key={listing.id}
                         propContractAddress = {listing.assetContractAddress}
                         propTokenId = {listing.tokenId}
                         AlllistingData ={listing}
@@ -166,6 +173,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
                         NFT_CONTRACT ={NFT_CONTRACT}
                        /> 
+                     
               ))
             )}
           </div>
@@ -181,10 +189,13 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
             ) : auctionListing && auctionListing.length === 0 ? (
               <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
             ) : (
-                auctionListing?.map((listing , index ) => (
+                auctionListing?.map((listing) => (
                 // <ListingWrapper listing={listing} key={listing.id} />
-                <NFTListed
-                propContractAddress = {listing.assetContractAddress}
+               
+                   
+                   <NFTListed
+                   key={listing.id}
+                   propContractAddress = {listing.assetContractAddress}
                 propTokenId = {listing.tokenId}
 
                 AlllistingData ={null}
@@ -192,14 +203,16 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
                 displayMode = {display_mode}
 
-                NFT_CONTRACT ={NFT_CONTRACT}
-               /> 
+                   NFT_CONTRACT ={NFT_CONTRACT}
+                   /> 
+                 
 
 
               ))
             )}
           </div>
         </Container>
+       </BasicScrollable>
     );
 
 

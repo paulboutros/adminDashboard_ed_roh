@@ -64,7 +64,9 @@ import {useEffect, useState} from "react";
 import { Link, useParams } from 'react-router-dom';
 
 
-const NFTListed =  ({  propContractAddress, 
+const NFTListed =  ({  
+   // react "key" for map does not need to be added as prop
+     propContractAddress, 
      propTokenId, AlllistingData,
        AuctionListingData,  
           displayMode ,
