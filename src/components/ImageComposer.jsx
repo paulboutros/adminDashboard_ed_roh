@@ -2,7 +2,8 @@ import   { useEffect , useState } from 'react';
 
 import {  useAddress } from '@thirdweb-dev/react'
 
-import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
+
+import {  Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
 
 import CustomLegend from "./Legend"
 //import API from "../data/API"
@@ -12,7 +13,8 @@ import {sendTracking, GetRewardPrice } from "../data/API"
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
  
-import { tokens, styles } from "../theme";
+
+import { tokens  } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAllLayersContext } from '../context/AllLayerAvailableContext'; 
 
@@ -148,7 +150,7 @@ import { RoundedBox } from './Layout';
   
     return (
     
-    <Box m="20px" >
+    <Box margin="0 8px 20px 8px" >
    
     <div>
        {address && address === OWNER? (

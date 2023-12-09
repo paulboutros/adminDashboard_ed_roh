@@ -235,11 +235,14 @@ export const themeSettings = (mode) => {
             },
             cancelIconColor: colors.grey[600], 
             blueSelectedTab :"#0294fe", //blue from thirdweb marketpalce
+
+            nftImage:colors.primary[400],
+            nftContainer: colors.primary[400],
           }
         : {
             // palette values for light mode
             primary: {
-              main: colors.primary[100],
+              main: colors.primary[200],
             },
             secondary: {
               main: colors.greenAccent[500],
@@ -253,37 +256,61 @@ export const themeSettings = (mode) => {
               default:  colors.primary[300],// "#fcfcfc",  // "#fcfcfc",
             },
             cancelIconColor: colors.grey[600],
+            blueSelectedTab :"#0294fe", //blue from thirdweb marketpalce
+
+            nftImage:colors.primary[400],
+            nftContainer: colors.primary[500],
           })
 
           
           
     },
     
-    typography: {
-      fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+    // they were all:  "Source Sans Pro", "sans-serif" 
+    typography: {  
+      fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
       fontSize: 12,
       h1: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 40,
+        fontFamily: [ "Inter", "Helvetica", "Arial", "sans-serif" ].join(","),
+       // fontSize: 40,
+    
+        
+          fontSize: "2rem",
+          fontWeight: "700",
+          lineHeight: "16px", //"1.5",
+      
+  
+
       },
       h2: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
         fontSize: 32,
       },
       h3: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 24,
+        fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+         // fontSize: 24,
+    
+       // from ThirdWeb marketplacev3 global.css
+          fontSize:  "22px",
+          lineHeight: "28px",
+          fontWeight: "700",
+          marginBottom: "0px",
+       
+
+
+
+
       },
       h4: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
         fontSize: 20,
       },
       h5: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
         fontSize: 16,
       },
       h6: {
-        fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
+        fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
         fontSize: 14,
       },
     },

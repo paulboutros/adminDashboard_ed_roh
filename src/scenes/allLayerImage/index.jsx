@@ -5,14 +5,15 @@
  import { Box } from "@mui/material";
  //import dotenv from "dotenv";
  
- import { GetAllNFTfromSDK } from "../../data/API.js"
- import NFTGrid from "../../components/NFTGrid";
+  import NFTGrid from "../../components/NFTGrid";
   import ImageComposer from "../../components/ImageComposer";
  
- import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+ 
   
  import { TOOLS_ADDRESS } from "../../const/addresses";
  import { useContract, useNFTs } from "@thirdweb-dev/react";
+import { BasicScrollable } from '../../components/Layout';
+import Container from '../../components/Container/Container';
  
   
  //const API_URL = process.env.API_URL;
@@ -39,11 +40,11 @@
     !allNFTs ? (
       <div>alllayerimage.js allNFTs not loaded</div>
     ) : (
-      // <div> allNFTs loaded </div>
-      <Box margin="0px 20px 20px 20px"  maxHeight="calc(85vh)"  overflow="auto"  >  
-      
-      
-      <Box   >
+      //  <Container maxWidth="lg">
+      //<Box margin="0px 20px 20px 20px"  maxHeight="calc(85vh)"  overflow="auto"  >  
+      <BasicScrollable>
+        <Container  maxWidth="lg">
+           <Box>
      
       {/* {user ? ( <ImageComposer  queryId= {`&userId=${user.ID}&limit=1`}/>  ) : ( <div>User is not defined.</div> )} */}
  
@@ -60,8 +61,10 @@
 
    
 
-      </Box>
-    </Box>
+           </Box>
+        </Container>
+     </BasicScrollable> //</Box>
+
     )
   );
   

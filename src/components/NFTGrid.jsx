@@ -75,7 +75,7 @@ useEffect(() => {
 // 
   return (
     // <SimpleGrid columns={5} spacing={6} w={"100%"} padding={2.5} my={5}>
-   <div className={styles.nftGridContainer}  >
+   <div className={styles.nftGridContainer}   >
      {isLoading ? (
         // [...Array(20)].map((_, index) => (
         //     <Skeleton key={index} height={"312px"} width={"100%"} />
@@ -89,8 +89,8 @@ useEffect(() => {
      
                 <Link
                    to={`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`}
-                   key={nft.metadata.id}
-                   className={styles.nftContainer}
+                   key={nft.metadata.id}  
+                   className={styles.nftContainer} style={{outline: `1px solid ${theme.palette.nftContainer}` }}
                 >
                   <NFT nft={nft} />
  
@@ -101,8 +101,10 @@ useEffect(() => {
                 <div
                     key={nft.metadata.id} // key is mendatory and should be added somewhere in a map loop
                     onClick={() => overrideOnclickBehavior(nft)}
-                    className={styles.nftContainer}
+                    className={styles.nftContainer} style={{outline: `1px solid ${theme.palette.nftContainer}` }}
                 >
+
+                 
                      <NFT nft={nft} />
                 </div>
                

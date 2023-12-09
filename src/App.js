@@ -48,7 +48,7 @@ import NavBar from "./components/FARMER/NavBar.jsx";
 import FarmerPage from "./scenes/farmerPage/index.jsx";
 import Sell from "./scenes/sell/index.jsx";
 
-import Shop from        "./scenes/shop/index.jsx";
+import Shop from"./scenes/shop/index.jsx";
 //import ShopPack from    "./scenes/shopPack/index.jsx";  
 
 
@@ -57,8 +57,9 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 import { ChakraProvider } from "@chakra-ui/react";
-import {  TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
+import { TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
 
+import './styles/globals.css'; // Import the global CSS file
 
 function App() {
   const [theme, colorMode] = useMode();

@@ -20,7 +20,7 @@ import { Box, Typography ,CardContent  ,Card , Grid, CardMedia  } from '@mui/mat
 //import  Skeleton from '@material-ui/lab/Skeleton'
 
 import { ethers } from "ethers";
-import { Button } from "@chakra-ui/react";
+import { Button, background } from "@chakra-ui/react";
 import styles from "../../styles/NFT.module.css";
 /* 
 type Props = {
@@ -53,16 +53,17 @@ export default function NFTComponent({ nft } ) {
 
       return (
         <>
-          <ThirdwebNftMedia metadata={nft.metadata} className={styles.nftImage} />
+          <ThirdwebNftMedia metadata={nft.metadata} 
+          className={styles.nftImage}  style={{ background : theme.palette.nftImage  }} />
     
           <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
           <p className={styles.nftName}>{nft.metadata.name}</p>
     
-          <div className={styles.priceContainer}>
+          <div className={styles.priceContainer} style={{ background : theme.palette.nftImage  }} >
             {loadingMarketplace || loadingDirectListing || loadingAuction ? (
-               <div> loading  </div>   // <Skeleton width="100%" height="100%" />
+               <div> loading </div>   // <Skeleton width="100%" height="100%" />
             ) : directListing && directListing[0] ? (
-              <div className={styles.nftPriceContainer}>
+              <div className={styles.nftPriceContainer}   >
                 <div>
                   <p className={styles.nftPriceLabel}>Price</p>
                   <p className={styles.nftPriceValue}>
@@ -72,7 +73,7 @@ export default function NFTComponent({ nft } ) {
                 </div>
               </div>
             ) : auctionListing && auctionListing[0] ? (
-              <div className={styles.nftPriceContainer}>
+              <div className={styles.nftPriceContainer}   >
                 <div>
                   <p className={styles.nftPriceLabel}>Minimum Bid</p>
                   <p className={styles.nftPriceValue}>
@@ -82,10 +83,10 @@ export default function NFTComponent({ nft } ) {
                 </div>
               </div>
             ) : (
-              <div className={styles.nftPriceContainer}>
+              <div className={styles.nftPriceContainer}     >
                 <div>
-                  <p className={styles.nftPriceLabel}>Price</p>
-                  <p className={styles.nftPriceValue}>Not for sale</p>
+                  <p className={styles.nftPriceLabel} >Price</p>
+                  <p className={styles.nftPriceValue} >Not for sale</p>
                 </div>
               </div>
             )}

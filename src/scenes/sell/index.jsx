@@ -12,6 +12,7 @@ import {
   //import { NFT as NFTType } from "@thirdweb-dev/sdk";
   import SaleInfo from "../../components/SaleInfo/SaleInfo";
 import { BasicScrollable } from "../../components/Layout";
+import { Typography } from "@mui/material";
 
    
   export default function Sell() {
@@ -32,13 +33,15 @@ import { BasicScrollable } from "../../components/Layout";
   
   
     return (
-      <BasicScrollable>
+    <BasicScrollable>
       <Container maxWidth="lg">
-        <h1>Sell NFTs</h1>
+        {/* <Typography variant="h1" sx={{ margin:"24px 0 24px 0" }}> Sell NFTs </Typography> */}
+        <h1> Sell NFTs </h1>
         { !selectedNft ? (
           <>
+            {/* sx={{ margin:"16px 0 16px 0" }}   */}
             <p>Select which NFT you&rsquo;d like to sell below.</p>
-            <NFTGrid
+             <NFTGrid
 
             //   data={data}
                 isLoading={isLoading}

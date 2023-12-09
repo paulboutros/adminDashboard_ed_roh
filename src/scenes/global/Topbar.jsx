@@ -54,18 +54,16 @@ const Topbar = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="space-between" padding="0px 16px 0px 16px">
+    <Box display="flex" justifyContent="space-between"
+     padding="0px 20px 0px 20px" height={"70px"}
+     
+     >
        { /* SEARCH BAR */ }
        <RowChildrenAlignCenter>
        
 
          <Box  display="flex" >
-      
-      
-       
- 
-      
-
+    
     <RoundedBox> 
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
           <IconButton type="button" sx={{ p: 1 }}
@@ -84,7 +82,7 @@ const Topbar = () => {
       {/* <Button component={Link} to="/buy" variant="text" color={colors.grey[400]}  > */}
  
       
-      <RowChildrenAlignCenter padding={"15px 0 15px 0"} >
+      <RowChildrenAlignCenter  >  
       
         {/* <Button component={Link} to="/shop" variant="text"  >
         <Typography  color= {_textColor} >  Buy     </Typography>

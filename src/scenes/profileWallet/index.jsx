@@ -1,200 +1,170 @@
-import {
-    useContract,
-    useOwnedNFTs,
-    useValidDirectListings,
-    useValidEnglishAuctions,
-  } from "@thirdweb-dev/react"; 
-  import React, { useState } from "react";
-  import Container from "../../components/Container/Container";
-  //import ListingWrapper from "../../components/ListingWrapper/ListingWrapper";
-  import NFTListed from "../../components/FARMER/NFTlisted.jsx"  
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 
-
-  import Skeleton from "../../components/Skeleton/Skeleton";
-  import styles from "../../styles/Profile.module.css";
-  import randomColor from "../../util/randomColor";
-  import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS } from "../../const/addresses";
-
- 
-import { useNavigate , Link, useParams} from 'react-router-dom';
-//import { useRouter } from "next/router";
- 
-
-import NFTGrid from "../../components/NFTGrid";
-import { BasicScrollable } from "../../components/Layout";
-
-
-const [randomColor1, randomColor2, randomColor3, randomColor4] = [
-    randomColor(),
-    randomColor(),
-    randomColor(),
-    randomColor(),
-  ];
+import { tokens  } from "../../theme";
+import {Box, useTheme} from '@mui/material';
+import Container from '../../components/Container/Container';
+import { BasicScrollable } from '../../components/Layout';
 
 
 
-export default function ProfilePage() {
-
-    const [tab, setTab] = useState("nfts");  // <"nfts" | "listings" | "auctions"> (from typescript)
-    const { address } = useParams();
-    const navigate = useNavigate ();
-  //  const router = useRouter();
 
 
- // this is used in shop component as well and passed in the component props, 
- // but here in  Profile we currently hard code them as we think, a pack can not be listed by a user..
- // so there is no alternative and we
-  const display_mode="grid"; 
-  const NFT_CONTRACT= TOOLS_ADDRESS;
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-
-
-    const {contract: nftCollection} = useContract(TOOLS_ADDRESS);
-
-    const { contract: marketplace} = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");  
-
-    const {data: ownedNfts, isLoading: loadingOwnedNfts} = useOwnedNFTs(
-        nftCollection,
-        address
-        //router.query.address as string
-    );
-
- 
-    
-      const { data: directListings, isLoading: loadingDirects } =
-        useValidDirectListings(marketplace, {
-          seller:  address  ,
-        });
-    
-      const { data: auctionListings, isLoading: loadingAuctions } =
-        useValidEnglishAuctions(marketplace, {
-          seller: address ,
-      });
-
- 
-
-       
-        return (
-          <BasicScrollable>
-            <Container maxWidth="lg">
-              <div className={styles.profileHeader}>
-                <div
-                  className={styles.coverImage}
-                  style={{
-                    background: `linear-gradient(90deg, ${randomColor1}, ${randomColor2})`,
-                  }}
-                />
-                <div
-                  className={styles.profilePicture}
-                  style={{
-                    background: `linear-gradient(90deg, ${randomColor3}, ${randomColor4})`,
-                  }}
-                />
-                <h1 className={styles.profileName}>
-                  {address ? (
-                    address.toString().substring(0, 4) +
-                    "..." +
-                    address.toString().substring(38, 42)
-                  ) : (
-                    <Skeleton width="320" />
-                  )}
-                </h1>
-              </div>
-        
-
-              <div className={styles.tabs}>
-                <h3 className={`${styles.tab} ${tab === "nfts" ? styles.activeTab : ""}`}
-                   onClick={() => setTab("nfts")}
-                >
-                  NFTs
-                </h3>
-                <h3
-                  className={`${styles.tab}  ${tab === "listings" ? styles.activeTab : ""}`}
-                  onClick={() => setTab("listings")}
-                >
-                  Listings
-                </h3>
-                <h3
-                  className={`${styles.tab}  ${tab === "auctions" ? styles.activeTab : ""}`}
-                  onClick={() => setTab("auctions")}
-                >
-                  Auctions
-                </h3>
-              </div>
-              
-        
-              <div
-                className={`${
-                  tab === "nfts" ? styles.activeTabContent : styles.tabContent
-                }`}
-              >
-                <NFTGrid
-                  isLoading={loadingOwnedNfts} 
-                  NFTdata={ownedNfts} 
-                  emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
-
-                  // data={ownedNfts}
-                  // isLoading={loadingOwnedNfts}
-                  // emptyText=" "
-                />
-              </div>
-        
-              <div
-                className={`${
-                  tab === "listings" ? styles.activeTabContent : styles.tabContent
-                }`}
-              >
-                {loadingDirects ? (
-                  <p>Loading...</p>
-                ) : directListings && directListings.length === 0 ? (
-                  <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
-                ) : (
-                  directListings?.map((listing) => (
-                    // <ListingWrapper listing={listing} key={listing.id} />
-                        <NFTListed
-                        propContractAddress = {listing.assetContractAddress}
-                        propTokenId = {listing.tokenId}
-                        AlllistingData ={listing}
-                        AuctionListingData ={null}  
-
-                        displayMode = {display_mode}
-
-                        NFT_CONTRACT ={NFT_CONTRACT}
-                    /> 
-
-
-                  ))
-                )}
-              </div>
-        
-              <div
-                className={`${
-                  tab === "auctions" ? styles.activeTabContent : styles.tabContent
-                }`}
-              >
-                {loadingAuctions ? (
-                  <p>Loading...</p>
-                ) : auctionListings && auctionListings.length === 0 ? (
-                  <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
-                ) : (
-                  auctionListings?.map((listing) => (
-                    // <ListingWrapper listing={listing} key={listing.id} />
-                    <NFTListed
-                    propContractAddress = {listing.assetContractAddress}
-                    propTokenId = {listing.tokenId}
-    
-                    AlllistingData ={null}
-                    AuctionListingData = {listing}
-    
-                    displayMode = {display_mode}
-    
-                    NFT_CONTRACT ={NFT_CONTRACT}
-                   /> 
-
-                  ))
-                )}
-              </div>
-            </Container>
-           </BasicScrollable>
-        );
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
 }
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+export default function BasicTabs() {
+
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+ 
+  const tabStyle={
+     
+    '&:not(.hover)': { color: `${colors.primary[100]}`},
+    '&:hover': { color: `${colors.primary[50]}`},
+    '&.Mui-selected': { color: `${theme.palette.blueSelectedTab }`},
+  }  
+ 
+  return (
+    //<Box sx={{ width: '100%' }}>
+    <BasicScrollable>
+     <Container maxWidth="lg">   
+       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+         <Tabs value={value} onChange={handleChange} 
+             aria-label="basic tabs example"
+           
+            sx={{
+               '& .MuiTabs-indicator': {
+                  backgroundColor:  theme.palette.blueSelectedTab,  // colors.primary[600] 
+                  WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+                  transition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
+              },    
+            }}
+                      >
+          <Tab label="Item One"   {...a11yProps(0)}  disableRipple  sx={ tabStyle }   />
+          <Tab label="Item Two"   {...a11yProps(1)}  disableRipple  sx={ tabStyle }   />
+          <Tab label="Item Three" {...a11yProps(2)}  disableRipple  sx={ tabStyle }   />
+
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        Item One
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        Item Two
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        Item Three
+      </CustomTabPanel>
+     </Container>
+    </BasicScrollable>
+  );
+}
+
+
+/* from mui API doc
+  <Box sx={{ borderColor: 'primary.main' }} />
+// equivalent to borderColor: theme => theme.palette.primary.main
+
+  */
+/*
+
+<Typography
+  sx={
+    
+    [
+    {
+     // width: '300px', height: '50px',
+      '&:hover': {
+        color: `${colors.primary[200]}`,
+        // backgroundColor: 'white',
+      },
+    },
+    
+  ]}
+>
+    Some Text
+    </Typography>
+
+    //=================================
+css:
+.MuiTabs-indicator {
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    width: 100%;
+    -webkit-transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    background-color: #eae9e6;
+}
+ 
+
+*/
+
+
+// bezier visualization
+/*
+https://css-tricks.com/pure-css-bezier-curve-motion-paths/
+*/
+
+
+// array for multiple condition
+/*
+sx={
+     
+  [
+  {  
+   
+    // '& .css-l1edue-MuiTabs-indicator': { backgroundColor: colors.primary[600]  },
+     
+   
+  },
+  // foo && {
+  //   '&:hover': { backgroundColor: 'grey' },
+  // },
+  // bar && {
+  //   '&:hover': { backgroundColor: 'yellow' },
+  // },
+]}
+
+*/
