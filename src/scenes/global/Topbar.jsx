@@ -4,7 +4,7 @@
 import {   ethers } from "ethers";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { useContract, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
-import { TOOLS_ADDRESS , REWARDS_ADDRESS } from "../../const/addresses";
+import { TOOLS_ADDRESS , REWARDS_ADDRESS, PACK_ADDRESS } from "../../const/addresses";
 import { Link } from "react-router-dom";
 
 import { Box, IconButton, useTheme ,   Button, Typography } from "@mui/material";
@@ -36,7 +36,7 @@ const Topbar = () => {
    const navigate = useNavigate();
    const colors = tokens(theme.palette.mode);
    const colorMode = useContext(ColorModeContext);
-   const _textColor = colors.grey[200];
+    
    const address = useAddress();
 
   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
@@ -55,54 +55,33 @@ const Topbar = () => {
 
   return (
     <Box display="flex" justifyContent="space-between"
-     padding="0px 20px 0px 20px" height={"70px"}
+      padding="0px 90px 0px 90px" height={"68px"}
+
+      borderBottom={`1px solid ${colors.primary[300]}`}
      
      >
        { /* SEARCH BAR */ }
        <RowChildrenAlignCenter>
-       
-
+ 
          <Box  display="flex" >
     
-    <RoundedBox> 
+     <RoundedBox> 
         <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
           <IconButton type="button" sx={{ p: 1 }}
           
           >
            <SearchIcon />
           </IconButton>
-        </RoundedBox>
-      </Box>
+       </RoundedBox>
+         </Box>
 
       </RowChildrenAlignCenter>
-     
-
-
+      
+         <RowChildrenAlignCenter  >  
   
-      {/* <Button component={Link} to="/buy" variant="text" color={colors.grey[400]}  > */}
- 
-      
-      <RowChildrenAlignCenter  >  
-      
-        {/* <Button component={Link} to="/shop" variant="text"  >
-        <Typography  color= {_textColor} >  Buy     </Typography>
-        </Button>
-
-        <Divider  color=  {_textColor}  orientation="vertical" style={{ height: '50%', width: '2px' }} />
-
-        <Button component={Link} to="/sell" variant="text" color="primary">
-        <Typography  color={_textColor} >  Sell     </Typography>
-        </Button>
-
-        <Divider  color=  {_textColor}  orientation="vertical" style={{ height: '50%', width: '2px' }} />
-
-        <Button component={Link} to="/shopPack" variant="text" color="primary">
-        <Typography  color={_textColor} >  Packs     </Typography>
-        </Button> */}
- 
               <div className={stylesProfile.toptabs}>
                 <h3 className={`${stylesProfile.toptab} ${tab === "Buy" ? stylesProfile.topactiveTab : ""}`}
-                   onClick={() => OpenPage("shop", setTab, "Buy"  ) }
+                   onClick={() => OpenPage(`shop/${TOOLS_ADDRESS}/`, setTab, "Buy"  ) }
                 >
                   Buy
                </h3>
@@ -114,8 +93,8 @@ const Topbar = () => {
                 </h3>
                 <h3
                   className={`${stylesProfile.toptab}  ${tab === "Pack" ? stylesProfile.topactiveTab : ""}`}
-                  onClick={() => OpenPage("shopPack", setTab, "Pack"  ) }
-                >
+                  onClick={() => OpenPage(`shopPack/${PACK_ADDRESS}/`, setTab, "Pack"  ) }
+                >    
                    Pack
                 </h3>
               </div>
@@ -150,18 +129,9 @@ const Topbar = () => {
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>
-
-
-
-        <IconButton
-        onClick={() =>{
-         }}
-        >
-        
-        {/* <Link to={"/shop"} >Shop</Link> */}
-          <PersonOutlinedIcon />
-             
-        </IconButton>
+ 
+        {/* <IconButton onClick={() =>{ }}>    <PersonOutlinedIcon />   </IconButton> */}
+       
       
        <HorizontalSpace space={2}/>
        
@@ -191,8 +161,8 @@ const Topbar = () => {
         }}
         modalTitleIconUrl={""}
         />
-
-
+        
+         <HorizontalSpace space={2}/>         
          <div className={styles.navRight}>
            {address && (
             <Link 
@@ -203,7 +173,7 @@ const Topbar = () => {
               <img
               //  className={styles.profileImage}
                 src="/user-icon.png"
-                width={42}
+                width={42} // 42*42
                 height={42}
                 alt="Profile"
               />

@@ -165,13 +165,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-             <Item
+             {/* <Item
               title="Profile"
-              to="profile"//  "/userProfile"
+                to={`/profileWallet/${address}`}
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />   
+            />    */}
 
                <Item
               title="My Packs"

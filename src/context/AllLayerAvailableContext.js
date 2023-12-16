@@ -73,23 +73,14 @@ export function AllLayersProvider({ children }) {
  
 
     useEffect( ()=>{
-
-   //   console.log( "ownedNftData =", ownedNftData);
-   //   console.log( "NFTdata =", NFTdata);
-     
+  
        if (!ownedNftData){return;}
        if (!NFTdata){ return;} 
-
-
-      
-
-     
+ 
         // cretae basic layers available to choos efrom in the app
         const initialize = async ()=>{
-            const layers  = await Create_Initial_layerToChooseFrom( NFTdata, ownedNftData );
-
-           
-            setAllLayers(layers); 
+             const layers  = await Create_Initial_layerToChooseFrom( NFTdata, ownedNftData );
+             setAllLayers(layers); 
         }
         initialize();
 
@@ -99,7 +90,7 @@ export function AllLayersProvider({ children }) {
 
     useEffect( ()=>{
 
-    //  console.log( "  >>>>  >>>>    ownedNftData" ,  ownedNftData  , "address", address );
+     
       if (!ownedNftData)return;
 
       CheckOwnedNft(ownedNftData);

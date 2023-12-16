@@ -37,11 +37,17 @@ export const text1 ={
 export const text2 ={
   color:200,
   fontSize: 50
-};  
+}; 
+
+const _blueSelectedTab = "#0294fe";
+
+ 
 // type: control + K the control + G to generate the shades
 export const grayText = 100;
 // color design tokens export
 export const tokens = (mode) => ({
+
+ 
   ...(mode === "dark"
     ? {
         grey: {
@@ -208,11 +214,86 @@ export const tokens = (mode) => ({
           900: "#e1e2fe",
         },
       }),
+
+   
 });
+
+
+export const allCSS = (mode , _width, _margin) => {
+  const colors = tokens(mode);
+  const outline = {
+    light : colors.primary[500],
+    dark  : colors.primary[400]
+  };
+  const text1={
+    light : colors.grey[500],
+    dark  : colors.grey[400]
+  }; 
+
+
+   return {
+
+    nftContainer:{
+     
+      
+      width: `${_width}`,
+      margin: `${_margin}`, // "8px",
+
+      outline: `1px solid ${mode === "dark" ? outline.dark : outline.light }`, 
+      borderRadius: "8px",
+      flexDirection: "column",
+      padding: "8px",
+      maxHeight: "382px",
+      position: "relative",
+      overflow: "hidden",
+     
+      backfaceVisibility: "hidden",
+      backgroundColor :  `${ colors.primary[500]}`, 
+     
+      display: "flex",
+      
+      '&:not(.hover)': { 
+         transform: "translate3d(0px, 0px, 0px)",
+         WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+         transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms" 
+         //color: `${theme.palette.blueSelectedTab}`
+      },
+      '&:hover': {
+        cursor: "pointer",
+        transform: "translate3d(0px, -4px, 0px)",
+      //  color: `${theme.palette.blueSelectedTab}`,
+        WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+        transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
+        
+      } 
+      
+  
+    },
+
+    cardBack:{
+
+
+    }
+
+   }
+}
 
 // mui theme settings
 export const themeSettings = (mode) => {
+
   const colors = tokens(mode);
+
+  const outline = {
+    light : colors.primary[500],
+    dark  : colors.primary[400]
+  };
+  const text1={
+    light : colors.grey[500],
+    dark  : colors.grey[400]
+  }; 
+
+ 
   return {
     palette: {
       mode: mode,
@@ -234,7 +315,7 @@ export const themeSettings = (mode) => {
               default: colors.primary[500],
             },
             cancelIconColor: colors.grey[600], 
-            blueSelectedTab :"#0294fe", //blue from thirdweb marketpalce
+            blueSelectedTab : _blueSelectedTab, //blue from thirdweb marketpalce
 
             nftImage:colors.primary[400],
             nftContainer: colors.primary[400],
@@ -256,31 +337,153 @@ export const themeSettings = (mode) => {
               default:  colors.primary[300],// "#fcfcfc",  // "#fcfcfc",
             },
             cancelIconColor: colors.grey[600],
-            blueSelectedTab :"#0294fe", //blue from thirdweb marketpalce
+            blueSelectedTab :_blueSelectedTab, //blue from thirdweb marketpalce
 
             nftImage:colors.primary[400],
             nftContainer: colors.primary[500],
           })
-
-          
-          
+ 
     },
     
+    nftContainer:{
+     
+      
+        width: "17.8%",
+        margin: "8px",
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "8px",
+        outline: `1px solid ${mode === "dark" ? outline.dark : outline.light }`, 
+        backfaceVisibility: "hidden",
+        
+       
+        display: "flex",
+        flexDirection: "column",
+        padding: "8px",
+        maxHeight: "382px",
+  
+  
+        '&:not(.hover)': { 
+           transform: "translate3d(0px, 0px, 0px)",
+           WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+           transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms" 
+           //color: `${theme.palette.blueSelectedTab}`
+        },
+        '&:hover': {
+          cursor: "pointer",
+          transform: "translate3d(0px, -4px, 0px)",
+        //  color: `${theme.palette.blueSelectedTab}`,
+          WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+          transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
+          
+        } 
+        
+    
+    },
+ 
+ // from home.module
+    pack:{  
+       nftCard: {
+        padding: "8px",
+        borderRadius: "10px",
+        margin: "10px",
+       // border: "black",
+       outline: `1px solid ${mode === "dark" ? outline.dark : outline.light }`,  
+      },
+      myCardInfo: { 
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+      },
+       //.myCardInfo p (in css)
+      myCardInfo_p:{
+        color:  colors.grey[300], //"#333",
+        fontSize: "12px", fontWeight: "500",
+        border: `${mode === "dark" ? outline.dark : outline.light} solid 2px`, 
+        padding: "5px",
+        borderRadius: "10px",
+      },
+      name:{
+
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        maxWidth: "100%",
+        color: colors.grey[300],// `${mode === "dark" ? outline.dark : outline.light} solid 2px`,   // looks good >> "#615F5C",      
+        fontFamily: "inherit",
+        verticalAlign: "inherit",
+        fontSize: "15px",
+        lineHeight: "22px",
+        fontWeight: "700",
+        //margin: "0px",
+        margin: "20px 0 20px 0",
+        
+       }
+
+      
+    },
+      
+
+ 
+    tabsStyle:{ 
+      fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+
+
+      
+      '& .MuiButtonBase-root': {
+         textTransform: 'none',
+         fontSize: "0.9rem",
+         fontWeight: "600px",
+         minWidth:"30px", // if you set it to higher number... it spread on whole whidth , looks cool too.
+         padding:"19px 15px" // shorthand for : "19px 15px 19px 15px"
+
+      },
+      '& .MuiTabs-indicator': {
+         backgroundColor: _blueSelectedTab,  // colors.primary[600] 
+         WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+         transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
+     },    
+   },
+
+    tabStyle:{
+      
+      '&:not(.hover)': { color: `${colors.primary[100]}`},
+      '&:hover': { color: `${colors.primary[50]}`},
+      '&.Mui-selected': { color: `${  _blueSelectedTab }`},
+    } ,
+ 
+     title: {
+       fontSize: 24,//32, 
+       fontWeight: 700,
+       color: colors.grey[200],
+       fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+  
+       // marginTop: "40px",
+       m:  "30px 0 15px 8px " ,  // my top and bottom
+        
+   },
+   titleDescription: {
+    color: colors.grey[300],
+     fontSize: 16,     
+     fontWeight: 400,
+     fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+
+     m:  "0  0 15px 8px " ,  // my top and bottom
+     
+     
+   },
+ 
     // they were all:  "Source Sans Pro", "sans-serif" 
     typography: {  
       fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
       fontSize: 12,
       h1: {
         fontFamily: [ "Inter", "Helvetica", "Arial", "sans-serif" ].join(","),
-       // fontSize: 40,
-    
-        
-          fontSize: "2rem",
-          fontWeight: "700",
-          lineHeight: "16px", //"1.5",
-      
-  
-
+        fontSize: 40,
+ 
       },
       h2: {
         fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
@@ -288,18 +491,8 @@ export const themeSettings = (mode) => {
       },
       h3: {
         fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
-         // fontSize: 24,
-    
-       // from ThirdWeb marketplacev3 global.css
-          fontSize:  "22px",
-          lineHeight: "28px",
-          fontWeight: "700",
-          marginBottom: "0px",
-       
-
-
-
-
+          fontSize: 24,
+     
       },
       h4: {
         fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
@@ -376,7 +569,7 @@ export function DataGridStyle(theme , colors){
 
     "& .MuiDataGrid-footerContainer": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
      //  borderTop: "none",
-      backgroundColor: colors.primary[600],  
+      backgroundColor: colors.primary[600],   
     //  minHeight :"20px" // default is 52, see chrome element inspector
     },
     // .MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular, , .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolba

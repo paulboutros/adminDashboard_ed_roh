@@ -23,7 +23,7 @@ import LayerBaseInfo from "./LayerBaseInfo";
   
  import PopupButton  from "./popup"
 import { cookieStorageManager } from '@chakra-ui/react';
-import { CreateListing, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata';
+import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata';
 import { OWNER } from '../const/addresses';
 import { RoundedBox } from './Layout';
  
@@ -490,6 +490,13 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
                 onClick={() =>  CreateListing() } >   
                   CreateListing
             </Button>
+
+            <Button variant="contained" 
+              sx={{backgroundColor: colors.redAccent[500]  }}
+                onClick={() =>  CreateListingPack() } >   
+                  CreateListingPack
+            </Button>
+            
             
             <Button variant="contained" 
               sx={{backgroundColor: colors.redAccent[500]  }}

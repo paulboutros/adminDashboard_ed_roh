@@ -1,5 +1,43 @@
 import { Divider ,Box, IconButton, useTheme  , Button, Typography } from "@mui/material";
 import {text2, text1, tokens } from "../theme";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+export function TabsLayout( {children , value  } ){
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+
+  const handleChange = (event, newValue) => { 
+
+    console.log( "newValue >>>>>>>>>>>>>>>>>>>>   ");
+    
+ };
+
+  return(
+
+
+     
+       <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example"
+            
+           
+            sx={{
+               '& .MuiTabs-indicator': {
+                  backgroundColor:  theme.palette.blueSelectedTab,  // colors.primary[600] 
+                  WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+                  transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
+              },    
+            }}
+          >
+
+
+     
+     {children}
+    </Tabs>
+
+   )
+
+}
 
 
 export function RowChildrenAlignCenter( {children} ){
@@ -128,10 +166,10 @@ export function RowChildrenAlignLeftBottom( {children} ){
     )
  }
 
- export function BasicScrollable(  {children}  ){
+ export function BasicScrollable(  {children , _maxHeight="calc(87vh)" }  ){
 
   return( 
-     <Box maxHeight="calc(87vh)"  overflow="auto">
+     <Box maxHeight= {_maxHeight}  overflow="auto">
        {children}   
     </Box> 
      )
@@ -179,12 +217,9 @@ export function RoundedBoxInfo ( { name ,value, _height = "110px", _width = "60p
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const boxColor = colors.primary[400];
-  const  _borderColor = colors.primary[400]
+   const  _borderColor = colors.primary[400]
   const _borderRadius= "10px";
-   const  paddingPX = "0px";
-   const trait_margin = "15px";
-
+ 
 return(
   <Box  sx={{  height: _height, width: _width }} //,  width: "60px" 
   padding= {2}   border= {1}  borderColor={ _borderColor   }   borderRadius={_borderRadius}

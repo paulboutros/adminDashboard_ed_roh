@@ -126,7 +126,34 @@ export async function evolve(
 }
 
 
+export async function CreateListingPack(){
 
+   
+  const sdk =  getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
+ 
+   const marketContract = await sdk.getContract(MARKETPLACE_ADDRESS,"marketplace-v3" );
+
+// https://portal.thirdweb.com/typescript/sdk.englishauctions
+
+ 
+// direct listing a pack
+  console.log("start CreateListing Pack ");
+   
+  const txResult = await marketContract.directListings.createListing({
+      assetContractAddress: PACK_ADDRESS, // Required - smart contract address of NFT to sell
+      tokenId: 5 , // Required - token ID of the NFT to sell
+      pricePerToken: "0.076", // Required - price of each token in the listing
+      currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
+      isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
+      quantity: 55 ,  //  fianl real case is 11 
+      startTimestamp: new Date(), // Optional - when the listing should start (default is now)
+      endTimestamp: new Date(new Date().getTime() + 20 * 24 * 60 * 60 * 1000), // Optional - when the listing should end (default is 7 days from now)
+    });
+ 
+
+
+    console.log(">>>>>>    CreateListing    PACK     "   , txResult); 
+}
 
 export async function CreateListing(){
 

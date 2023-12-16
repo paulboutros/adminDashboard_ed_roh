@@ -21,7 +21,8 @@ import { Box, Typography ,CardContent  ,Card , Grid, CardMedia  } from '@mui/mat
 
 import { ethers } from "ethers";
 import { Button, background } from "@chakra-ui/react";
-import styles from "../../styles/NFT.module.css";
+import styles    from "../../styles/NFT.module.css";
+//import stylesBuy from "../../styles/Buy.module.css";
 /* 
 type Props = {
     nft: NFT;
@@ -53,6 +54,10 @@ export default function NFTComponent({ nft } ) {
 
       return (
         <>
+
+     {/* this nft container only works from grid component , do not add to individual NFT card */}
+    {/* <div  className={stylesBuy.nftContainer} style={{outline: `1px solid ${theme.palette.nftContainer}` }} >  */}
+        
           <ThirdwebNftMedia metadata={nft.metadata} 
           className={styles.nftImage}  style={{ background : theme.palette.nftImage  }} />
     
@@ -91,128 +96,13 @@ export default function NFTComponent({ nft } ) {
               </div>
             )}
           </div>
+
+          {/* </div> */}
         </>
       ) 
 
 
-      return (
-        <div>
- 
-          
-
-  
-           <RoundedBox  margin={1} _height={380}>
-
-            {/* <Typography margin={1} >  {nft.metadata.name} </Typography>   */}
-           
-            <ThirdwebNftMedia metadata={nft.metadata}  className={styles.nftImage}  />
-            <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
-            <p className={styles.nftName}>{nft.metadata.name}</p>
-             
-         <Box  margin={1} sx={{ position: 'relative', top:"-53px"  }}   >  
-         
-         
-           <RowChildrenAlignLeft >
-     
-          <Box>
-          <RoundedBoxInfo 
-            name={nft.metadata.attributes[0].trait_type}
-            value={nft.metadata.attributes[0].value}   _width = {"50px"}  _height = {"80px"} 
-            />       
-           </Box>
-           <Box >
-          
-
-          <RoundedBoxInfo 
-            name={"ID"}
-            value={nft.metadata.id}   _width = {"50px"}  _height = {"80px"}
-             />       
-           </Box>
-
-            <Box margin={1}>
-
-           <RoundedBoxInfo 
-            name={"sup"}
-            value={nft.metadata.supply}   _width = {"80px"}  _height = {"80px"}
-             />       
-            </Box>  
-           </RowChildrenAlignLeft>
-        </Box>  
-          </RoundedBox>
-         
-         
-          
-        </div>
-      )
-
-      return (
-        <Card key={nft.metadata.id} sx={{backgroundColor: colors.primary[500]  }}>
-        
-         
-        
-        <CardMedia
-                 
-                 component="img"
-                 alt={nft.metadata.id}
-                 height="80%"//"80%"
-                 image={nft.metadata.image}
-
-                 sx={{
-                 
-                     backgroundColor: colors.primary[500] 
-                  
-                }}
-  
-
-        />
-         <CardContent>
-    <Grid container spacing={2} alignItems="center">
-      <Grid item xs={6}>
-        
-        
-      <Box>
-      {loadingMarketplace || loadingDirectListing || loadingAuction ? (
-        <div> loading </div>  // <Skeleton />
-      ) : directListing && directListing[0] ? (
-        <Box>
-          <Box>
-            <Typography variant="body2">Price</Typography>
-            <Typography variant="body2">{`${directListing[0]?.currencyValuePerToken.displayValue} ${directListing[0]?.currencyValuePerToken.symbol}`}</Typography>
-          </Box>
-        </Box>
-      ) : auctionListing && auctionListing[0] ? (
-        <Box>
-          <Box>
-            <Typography variant="body2">Minimum Bid</Typography>
-            <Typography variant="body2">{`${auctionListing[0]?.minimumBidCurrencyValue.displayValue} ${auctionListing[0]?.minimumBidCurrencyValue.symbol}`}</Typography>
-          </Box>
-        </Box>
-      ) : (
-        <Box>
-          <Box>
-            <Typography variant="body2">Price</Typography>
-            <Typography variant="body2">Not Listed</Typography>
-          </Box>
-        </Box>
-      )}
-    </Box>
- 
-
-
-
-      </Grid>
-      <Grid item xs={6}>
-        {/* Right side with Typography */}
-        <Typography variant="h5" fontWeight="fontWeightBold" style={{ marginTop: '5px', textAlign: 'center' }}>
-          {nft.metadata.name}
-        </Typography>
-        
-      </Grid>
-    </Grid>
-  </CardContent>
-      </Card>
-    )
-
+       
  
 
 };

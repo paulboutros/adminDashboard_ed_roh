@@ -4,32 +4,42 @@ https://www.youtube.com/watch?v=8FRm_efm99o&t=1503s
 starts at 27:00min
 */
 
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+ 
+
+
 import Skeleton from "../../components/Skeleton/Skeleton";
+
 import stylesProfile from "../../styles/Profile.module.css";
-import stylesGlobals from "../../styles/globals.css";
+import stylesBuy from "../../styles/Buy.module.css";
+
 
 import randomColor from "../../util/randomColor";
 
 
 import {useEffect, useState} from "react";
 import { useContract, useValidEnglishAuctions, useValidDirectListings,
-    ConnectWallet,  useAddress , useMakeBid } from "@thirdweb-dev/react";
-import { MARKETPLACE_ADDRESS,TOOLS_ADDRESS,REWARDS_ADDRESS } from "../../const/addresses";
+    ConnectWallet,  useAddress ,   useNFTs   } from "@thirdweb-dev/react";
+import { MARKETPLACE_ADDRESS  } from "../../const/addresses";
  
 import Container from "../../components/Container/Container";
-import styles from "../../styles/Buy.module.css";
- //import { Box, Text, Button, Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
-import NFTListed from "../../components/FARMER/NFTlisted.jsx"  
-import { Box } from '@mui/material'; // Update this import
-import { BasicScrollable, HorizontalSpace } from "../../components/Layout";
+import NFTListed from "../../components/FARMER/NFTlisted.jsx"; 
+ 
+ 
+import { Box, Typography, useTheme } from '@mui/material'; // Update this import
+import { BasicScrollable  } from "../../components/Layout";
+import { tokens } from "../../theme";
+import { useNavigate } from "react-router";
+ 
+//import { useParams } from 'react-router-dom';
+//the provider is usually called for wrapping around compoenent
+// from App.js, but here we need to specify some prop defined in this component (tokenId)
 
-/*
-interface ShopProps {
-    display_mode: string;
-    filterTokenId: BigNumberish;
-    NFT_CONTRACT: string;
-}
-*/
+
+ import { useAllListingsContext } from '../../context/AllListingContext.js';  
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
     randomColor(),
@@ -37,55 +47,123 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
     randomColor(),
     randomColor(),
   ];
-// display mode, list for shop page, grid for composePage (more simple display)
- export default function Shop( { display_mode ,filterTokenId , NFT_CONTRACT  }   ) {
 
- /* from App.js shop or shop pack is called and "filterTokenId" is undefined
-  in that case,  filterTokenId will not be used in the filter of listing and will display all listing.
-  But in the case of showing the token detail page, a token ID will be provided so the ID filter will be displayed for display a 
-  specific token
- */
- const address = useAddress();  
- const [tab, setTab] = useState("listings"); //<"nfts" | "listings" | "auctions"> (type script)
-  // it can be the basci layers, but it can be the pak as well (both are ERC1155)
- 
-    const {
-        contract: marketplace,
-        isLoading: loadingMarketplace,
-    } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
 
-    const {
-        data: directListings,isLoading: loadingDirectListings,
-     } = useValidDirectListings(
-        marketplace,
-        {
-            tokenContract: NFT_CONTRACT,
-            tokenId: filterTokenId,
-
-        }
+  function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
     );
-
-    const { data: auctionListing, isLoading: loadingAuction } =
-    useValidEnglishAuctions(marketplace, {
-        tokenContract: NFT_CONTRACT,
-        tokenId: filterTokenId,
-    });
+  }
+  
+  CustomTabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  };
+  
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
  
- 
-        
- console.log( "display_mode"  , display_mode ) ;
+// display mode, list for shop page, grid for composePage (more simple display)
+ export default function Shop( {itemType} ) {
+   
+  
+  // itemType == "nfts" ot "packs"
+  let displayData={
+      title: "Buy NFTs",
+      description:"Browse which NFTs are available from the collection.",
+     // initialActiveTab:"listings",
+      initialState:0,
+      tabsNames : ["nfts", "listings","auctions"],
+   }
+  if( itemType === "packs"){
+    displayData={
+      title: "Buy Packs",
+      description:"Each packs contains 5 randomly picked Nfts.",
+     // initialActiveTab:"listings",
+      initialState:0,
+      tabsNames : [ "listings","auctions"],
+     }
 
- useEffect(() => {
-    // Function to fetch NFT data
-     if ( directListings ){
-        console.log( "directListings"  , directListings ) ;
-     }
-     if ( auctionListing ){
-        console.log( "auctionListing"  , auctionListing ) ;
-     }
+  }
+
+   
+  const [value, setValue] = React.useState(displayData.initialState);
+
+  const handleChange = (event, newValue) => {
+       setValue(newValue);
+
+       
+      setTab( displayData.tabsNames[newValue]    )
+  };
+
+
+
+  let { directListings, auctionListing, allNFTsWithListing, 
+    loadingDirectListings, loadingAuction, NFT_CONTRACT  } = useAllListingsContext();
+  const { contract } = useContract(NFT_CONTRACT);
+
+
+
+  useEffect(()=>{
+
+    
+    console.log( ">> SHOP => itemType",itemType  , "allNFTsWithListing  " , allNFTsWithListing );
+    
+ }, [ itemType , allNFTsWithListing ]);
+
+
+
+
+
+ const address = useAddress();  
+ const [tab, setTab] = useState(   displayData.tabsNames[  displayData.initialState ] ); //<"nfts" | "listings" | "auctions"> (type script)
+
+ 
+  
+ const { data: allNFTs, isLoading } = useNFTs(contract); // get all neft
+ const theme = useTheme();
+ const colors = tokens(theme.palette.mode);
+ const navigate = useNavigate();
+
+ const { contract: marketplace, isLoading: loadingMarketplace, } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
+ 
+
+  function linkPath( NFT_CONTRACT, nft,  allList  ){
+
+
      
-  }, [ directListings , auctionListing  ]);
-     
+   
+  
+
+    if ( allList.bidBufferBps ){ // AuctionListingData
+      return  `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${allList?.id}`;
+
+    }  else {
+     return   `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/${allList?.id}/NAN` ;
+
+    }
+  }
+ 
+
       if (!address){
         return (
             <div> 
@@ -94,85 +172,108 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
             </div> 
             )
        }
+       if (!allNFTs){
+        return (
+            <div> 
+                 <p> Loading NFTs metadata </p>
+                <ConnectWallet/>
+            </div> 
+            )
+       }
+       
+
    
        return (
-        <BasicScrollable>
-        <Container maxWidth="lg">   
-          <div 
+
+        
+       <BasicScrollable>
+         <Container maxWidth="lg">    
+
+         <Typography sx={ theme.title }> {displayData.title} </Typography>
+         <Typography sx={ theme.titleDescription }> {displayData.description} </Typography>
           
-           //className={stylesProfile.profileHeader}
-           >
-            <div
-              // className={stylesProfile.coverImage}  style={{  background: `linear-gradient(90deg, ${randomColor1}, ${randomColor2})`, }}
-             />
-            <div
-              // className={stylesProfile.profilePicture}  style={{  background: `linear-gradient(90deg, ${randomColor3}, ${randomColor4})`, }}
-             />
-            {/* <h1>  </h1> */}
+          
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: "20px" }}>
+
+          <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example" sx={theme.tabsStyle}>
             
+          
+              {
+                displayData.tabsNames.map((tabName, index ) => (
+                  <Tab key={index} label= {tabName}   {...a11yProps(index)}  disableRipple  sx={theme.tabStyle}   />
+                ))
+              }
+            
+          
+
            
-          </div>
-    
-          <div className={stylesProfile.tabs}>
+            {/* <Tab label= {tabsName[1]}   {...a11yProps(1)}  disableRipple  sx={  theme.tabStyle }   />
+            <Tab label= {tabsName[2]}   {...a11yProps(2)}  disableRipple  sx={ theme.tabStyle }   /> */}
+             
             
-            <h3
-              className={`${stylesProfile.tab} 
-            ${tab === "listings" ? stylesProfile.activeTab : ""}`}
-              onClick={() => setTab("listings")}
-            >
-              Listings
-            </h3>
-            <h3
-              className={`${stylesProfile.tab}
-            ${tab === "auctions" ? stylesProfile.activeTab : ""}`}
-              onClick={() => setTab("auctions")}
-            >
-              Auctions
-            </h3>
-          </div>
+           </Tabs>
+
+         </Box>
+ 
     
-          <div
-            className={`${
-              tab === "nfts" ? stylesProfile.activeTabContent : stylesProfile.tabContent
-            }`}
-          >
+  
+           {/* <div  className={`${  tab === "My Packs" ? stylesBuy.nftGridContainer : "" }`} > 
+          
+                
+            {loadingDirectListings || loadingAuction ? (  // || isLoading 
+              <p>Loading direct and auction...</p>
+            ) : tab !== "nfts" || (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
+              <p></p>
+            ) : (
+                 <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
+            
+            )}
+          
+           </div>   */}
 
-
-            {/*
-            we will to add this back on profile page
-            <NFTGrid
-              data={ownedNfts}
-              isLoading={loadingOwnedNfts}
-              emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
-            /> */}
-
-
-          </div>
+          <div  className={`${  tab === "nfts" ? stylesBuy.nftGridContainer : "" }`} > 
+          
+                
+            {loadingDirectListings || loadingAuction ? (  // || isLoading 
+              <p>Loading direct and auction...</p>
+            ) : tab !== "nfts" || (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
+              <p></p>
+            ) : (
+                 <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
+            
+            )}
+          
+           </div>
+ 
+        
     
-          <div
-            className={`${
-              tab === "listings" ? stylesProfile.activeTabContent : stylesProfile.tabContent
-            }`}
-          >
+          <div className={`${ tab === "listings" ? stylesProfile.activeTabContent : stylesProfile.tabContent }`}>
+          
             {loadingDirectListings ? (
               <p>Loading...</p>
             ) : directListings && directListings.length === 0 ? (
               <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
             ) : (
-              directListings?.map((listing  ) => (
-                // <ListingWrapper listing={listing} key={listing.id} />
-                   
-                        <NFTListed
-                        key={listing.id}
-                        propContractAddress = {listing.assetContractAddress}
-                        propTokenId = {listing.tokenId}
-                        AlllistingData ={listing}
-                        AuctionListingData ={null}  
 
-                        displayMode = {display_mode}
+              
+              directListings?.map((listing) => (
+                 <Box sx={theme.nftContainer}
 
-                        NFT_CONTRACT ={NFT_CONTRACT}
-                       /> 
+                    key={listing.id} // key is mendatory and should be added somewhere in a map loop
+                    onClick={() => {
+                       const selectedNFT = allNFTs.find((nft) => nft.metadata.id === listing.tokenId);
+                       navigate( linkPath( NFT_CONTRACT, selectedNFT, listing  )  )
+                    }
+                   }
+                 >
+                         <NFTListed
+                            propContractAddress = {listing.assetContractAddress}
+                            propTokenId = {listing.tokenId}
+                            AlllistingData ={listing}
+                            AuctionListingData ={null}
+                         /> 
+                  </Box>
+ 
                      
               ))
             )}
@@ -183,7 +284,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
               tab === "auctions" ? stylesProfile.activeTabContent : stylesProfile.tabContent
             }`}
             >
-
+ 
             {loadingAuction ? (
               <p>Loading...</p>
             ) : auctionListing && auctionListing.length === 0 ? (
@@ -191,103 +292,111 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
             ) : (
                 auctionListing?.map((listing) => (
                 // <ListingWrapper listing={listing} key={listing.id} />
-               
-                   
-                   <NFTListed
-                   key={listing.id}
-                   propContractAddress = {listing.assetContractAddress}
-                propTokenId = {listing.tokenId}
+                 <Box sx={theme.nftContainer}
 
-                AlllistingData ={null}
-                AuctionListingData = {listing}
+                key={listing.id}  
+                onClick={() => {
+                   const selectedNFT = allNFTs.find((nft) => nft.metadata.id === listing.tokenId);
+                   navigate( linkPath( NFT_CONTRACT, selectedNFT, listing   )  )
+                    }
+                }
+               > 
+                 <NFTListed
+                    key={listing.id}
+                    propContractAddress = {listing.assetContractAddress}
+                    propTokenId = {listing.tokenId}
 
-                displayMode = {display_mode}
-
-                   NFT_CONTRACT ={NFT_CONTRACT}
-                   /> 
-                 
-
+                   AlllistingData ={null}
+                   AuctionListingData = {listing}
+                    /> 
+                  </Box> 
 
               ))
             )}
           </div>
         </Container>
-       </BasicScrollable>
+          </BasicScrollable>
+       
     );
-
-
-
-        return (
-
-
-
-
-
-
-
-                 <>
-                     {!loadingDirectListings ? (
-                         directListings?.map((listing, index) => (
-                            < >
-                        
-                              <NFTListed
-                               propContractAddress = {listing.assetContractAddress}
-                               propTokenId = {listing.tokenId}
-                               AlllistingData ={listing}
-                               AuctionListingData ={null}  
-
-                               displayMode = {display_mode}
-
-                               NFT_CONTRACT ={NFT_CONTRACT}
-                              /> 
-
-                           
-                            </ >
-                        ))
-
-                    ) : (
-                        <p>Loading dire listing GRID...</p>
-                    )}
- 
-
-            <Box> 
-            <div className={styles.nftGridContainer}  >    
-              {!loadingAuction ? (
- 
-                    auctionListing?.map((listing, index) => (
-                        // <div key={index} className={styles.nftContainer}>
-                         <>
-                          <NFTListed
-                           propContractAddress = {listing.assetContractAddress}
-                           propTokenId = {listing.tokenId}
-
-                           AlllistingData ={null}
-                           AuctionListingData = {listing}
-
-                           displayMode = {display_mode}
-
-                           NFT_CONTRACT ={NFT_CONTRACT}
-                          /> 
- 
- 
-                        </ >
-                    ))
-
-            
-
-
-                ) : (
-                    <p>Loading auction GRID...</p>
-                )
-               
-                
-                }
-              </div>
-
-              </Box>
-  
-            </>
-           )
-
-     
+    
 };
+
+
+export function AllNFTWrapper( {  allNFTsWithListing, NFT_CONTRACT  } ){
+
+   const theme = useTheme();
+   const colors = tokens(theme.palette.mode);
+   const navigate = useNavigate();
+
+
+   function linkPath( NFT_CONTRACT, nft,  allList  ){
+ 
+  // if clicked on Not for sale NFT
+    if (!allList){
+       return  `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/NAN`;
+    }
+  
+    //auction
+    if ( allList.bidBufferBps    ){  
+      return  `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${allList?.id}`;
+
+    }else {
+      // listing
+     return   `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/${allList?.id}/NAN` ;
+
+    }
+  }
+ 
+
+   return (
+         <>
+            {allNFTsWithListing?.map((nft) => (
+                  
+                         nft.allListing?.length !== 0 ? ( 
+                         nft.allListing?.map((allList) => (
+                       
+                        <Box sx={theme.nftContainer}
+                           key={ allList.id }  
+                           onClick={() => {  navigate( linkPath( NFT_CONTRACT, nft,  allList )  ) }
+                         }
+                         > 
+        
+                            <NFTListed
+                              propContractAddress = { NFT_CONTRACT }
+                              propTokenId         = {nft.metadata.id }  
+                              AlllistingData      = {allList.bidBufferBps ? null    : allList }
+                              AuctionListingData  = {allList.bidBufferBps ? allList : null    }
+                            />   
+       
+                        </Box>
+        
+                        ))
+                     
+                    ):(  
+                      // this is the case the NFT is not listed.
+                      <Box sx={theme.nftContainer}
+                          key={nft.metadata.id }  
+                          onClick={() => {  // to do : not for sale... suggest buy package
+                             
+                               navigate( linkPath( NFT_CONTRACT,  nft,  null  )  )
+                            }
+                          }
+                     >
+                           
+                            <NFTListed
+                                propContractAddress = { NFT_CONTRACT }
+                                propTokenId = {nft.metadata.id } // 
+                              //  NFT ={nft}
+                            />   
+  
+                            
+                       </Box>
+                    )  
+                 ))
+             }
+        </>
+ 
+   )
+
+}
+ 

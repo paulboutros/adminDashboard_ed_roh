@@ -9,11 +9,13 @@
   import ImageComposer from "../../components/ImageComposer";
  
  
-  
+  import stylesBuy from "../../styles/Buy.module.css";
  import { TOOLS_ADDRESS } from "../../const/addresses";
  import { useContract, useNFTs } from "@thirdweb-dev/react";
 import { BasicScrollable } from '../../components/Layout';
 import Container from '../../components/Container/Container';
+import { useAllListingsContext } from '../../context/AllListingContext';
+import { AllNFTWrapper } from '../shop';
  
   
  //const API_URL = process.env.API_URL;
@@ -23,6 +25,11 @@ import Container from '../../components/Container/Container';
     const { data, isLoading } = useNFTs(contract);
    
     const { data: allNFTs } = useNFTs(contract); // get all neft
+
+    const { allNFTsWithListing  } = useAllListingsContext();
+     
+        
+      
    // const [allNFTs, setAllNFTs] = useState();
    useEffect(()=>{
     /*
@@ -52,14 +59,23 @@ import Container from '../../components/Container/Container';
           <ImageComposer/>  
        
           {/* <Shop display_mode='grid'/>  */}
-         <NFTGrid
-            isLoading={isLoading} 
-            NFTdata={allNFTs} 
-            emptyText={"No NFTs found"}
-         />  
+          {/* <NFTGrid  isLoading={isLoading}   NFTdata={allNFTs}  emptyText={"No NFTs found"} />   */}
 
+          {/* <Container maxWidth="lg">     */}
+          <div className={ stylesBuy.nftGridContainer } > 
+          
+                
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
+              <p></p>
+            ) : (
+               
+                 <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={TOOLS_ADDRESS} />
+            )}
+      
+            </div>
 
-   
 
            </Box>
         </Container>

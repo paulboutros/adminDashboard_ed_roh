@@ -9,10 +9,13 @@ import {
   import NFTGrid from "../../components/NFTGrid";
   import { TOOLS_ADDRESS } from "../../const/addresses";
   import tokenPageStyles from "../../styles/Token.module.css";
+  import headerStyle from "../../styles/header.module.css";
+
   //import { NFT as NFTType } from "@thirdweb-dev/sdk";
   import SaleInfo from "../../components/SaleInfo/SaleInfo";
 import { BasicScrollable } from "../../components/Layout";
-import { Typography } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
+import { tokens } from "../../theme";
 
    
   export default function Sell() {
@@ -22,6 +25,9 @@ import { Typography } from "@mui/material";
     const { data, isLoading } = useOwnedNFTs(contract, address);
     const [selectedNft, setSelectedNft] = useState();
   
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+
   
     useEffect(()=>{
       console.log( ">>  => contract = ", TOOLS_ADDRESS    );
@@ -35,18 +41,16 @@ import { Typography } from "@mui/material";
     return (
     <BasicScrollable>
       <Container maxWidth="lg">
-        {/* <Typography variant="h1" sx={{ margin:"24px 0 24px 0" }}> Sell NFTs </Typography> */}
-        <h1> Sell NFTs </h1>
+         <Typography sx={ theme.title }  > Sell NFTs </Typography>
         { !selectedNft ? (
           <>
             {/* sx={{ margin:"16px 0 16px 0" }}   */}
-            <p>Select which NFT you&rsquo;d like to sell below.</p>
+            <Typography sx={ theme.titleDescription }  >Select which NFT you&rsquo;d like to sell below.</Typography>
              <NFTGrid
-
-            //   data={data}
+ 
                 isLoading={isLoading}
-
-                //isLoading={loadingOwnedNfts} 
+               
+                NFT_contract={TOOLS_ADDRESS}
                 NFTdata={data} 
                 emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
                 overrideOnclickBehavior={(nft) => { setSelectedNft(nft); }}

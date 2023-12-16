@@ -1,0 +1,52 @@
+ 
+  
+  .card {
+    perspective: 1000px; /* Define the 3D space */
+    width: 200px;
+    height: 300px;
+  }
+  
+  .cardInner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s; /* Animation duration */
+  }
+  
+   /* turn only when hovering */
+    /* .card:hover .cardInner {
+    transform: rotateY(180deg);  
+  }   */
+  .spin .cardInner {
+    transform: rotateY(180deg);  
+  } 
+   
+
+
+  .card .cardInner { 
+    /* Add your existing card styles here */
+
+     margin: 8px;
+     transition: transform 0.6s;
+  }
+    
+
+  
+  .cardFront,
+  .cardBack {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+     backface-visibility: hidden;/* Hide the back face during rotation */
+  }
+  
+  .cardFront {
+    /* background-color: #3c3c3c; */
+  }
+  
+  .cardBack {
+    /* background-color: #2ecc71; */
+    transform: rotateY(180deg); /* Initially hide the back face */
+    /* color: #fff; */
+  }
+  

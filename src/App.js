@@ -19,7 +19,7 @@ import Line from "./scenes/line/index.jsx";
 import Pie from "./scenes/pie/index.jsx";
 import FAQ from "./scenes/faq/index.jsx";
 import Geography from "./scenes/geography/index.jsx";
-import MyPacks from "./scenes/myPacks/index.tsx";
+import MyPacks from "./scenes/myPacks/index.jsx";
 import Maintenance  from "./scenes/maintenance/index.jsx";
  
 import TokenPage from "./scenes/tokenPage/index.jsx";
@@ -32,7 +32,9 @@ import ProfileWallet from "./scenes/profileWallet/index.jsx";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
 
- import { UserProvider } from './context/UserContext.js';
+
+import { AllListingsProvider } from "./context/AllListingContext.js";
+import { UserProvider } from './context/UserContext.js';
 import { AllLayersProvider }  from './context/AllLayerAvailableContext.js';
 import { NotificationProvider }  from './context/NotificationContext.js'; 
 import { DropTimeProvider }  from './context/DropTimeContext.js'; 
@@ -59,7 +61,7 @@ import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 import { ChakraProvider } from "@chakra-ui/react";
 import { TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
 
-import './styles/globals.css'; // Import the global CSS file
+//import './styles/globals.css'; // Import the global CSS file
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -143,6 +145,7 @@ const testThirdWeb = false;
       <NotificationProvider>
 
      <AllLayersProvider>
+        {/* <AllListingsProvider>   */}
 
      <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -155,20 +158,28 @@ const testThirdWeb = false;
           {/* <Router> */}
             <Routes>
               
-              {/* <Route path="/" element={<AllLayerImage />} /> */}
+             
                
               
-              
-            
-              <Route path="/" element={<AllLayerImage />}/>
-              {/* <Route path="/" element={<Marketplace />}/> */}
-                 
-
               <Route path="/farmerPage" element={<FarmerPage/>} />
-              {/* <Route path="/shop" element={<Shop display_mode="list"/>} /> */}
-              <Route path="/shop"     element={<Shop display_mode="grid"  NFT_CONTRACT={TOOLS_ADDRESS} />} />
-              <Route path="/shopPack" element={<Shop display_mode="grid"  NFT_CONTRACT={PACK_ADDRESS}/>} />  
-               {/* <Route path="/shopPack" element={<ShopPack/>} /> */}
+            
+          
+              <Route path="/"                       element={
+                <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS}  > <AllLayerImage /> </AllListingsProvider>
+                 
+              }/>
+              <Route path="/shop/:NFT_CONTRACT"      element={ 
+                 <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
+                     <Shop key="1" itemType={"nfts"} />
+                 </AllListingsProvider>
+               }/>    
+              <Route path="/shopPack/:NFT_CONTRACT"  element={
+                 <AllListingsProvider  NFT_CONTRACT={PACK_ADDRESS} >  
+                    <Shop key="2" itemType={"packs"} />
+                </AllListingsProvider>  
+              }/> 
+
+               
 
               <Route path="/sell" element={<Sell/>} />
                
@@ -205,7 +216,8 @@ const testThirdWeb = false;
       </ThemeProvider>
      </ColorModeContext.Provider>
 
-     </AllLayersProvider>
+      {/* </AllListingsProvider>   */}
+    </AllLayersProvider>
 
 
      </NotificationProvider>
