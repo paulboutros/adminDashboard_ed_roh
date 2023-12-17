@@ -32,27 +32,7 @@ const Sidebar = () => {
 
   const { user } = useUserContext();
 
- function getAvatar(){
-
-   // discordata is custom and store discord user data after sucesfully auth
-  const discordData =  user.discordUserData;
- 
- 
-   
-  
-  if (discordData.avatar === null) {
-    // User has a default Discord avatar
-    return `https://cdn.discordapp.com/embed/avatars/0.png`;
-  } else {
-    // User has a custom avatar
-    avatarURL = discordData.avatar.startsWith('a_') // Check if it's a GIF avatar
-    ? `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.gif`
-    : `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.png`;
-   
-      return avatarURL;
-   }
-  }
- 
+    
  
 
   useEffect(() => {
@@ -60,9 +40,7 @@ const Sidebar = () => {
     // You can check if the user object is not null and perform actions accordingly
      
      
-    if (user) {
-      
-    }
+     
    
 
   }, [user]); // This effect will re-run when the 'user' value changes

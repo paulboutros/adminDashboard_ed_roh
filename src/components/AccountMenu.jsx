@@ -6,13 +6,32 @@ import MenuItem from      '@mui/material/MenuItem';
 import ListItemIcon from  '@mui/material/ListItemIcon';
 import Divider from       '@mui/material/Divider';
 import IconButton from    '@mui/material/IconButton';
-import Typography from    '@mui/material/Typography';
-import Tooltip    from    '@mui/material/Tooltip';
+ import Tooltip    from    '@mui/material/Tooltip';
 import PersonAdd  from    '@mui/icons-material/PersonAdd';
 import Settings from      '@mui/icons-material/Settings';
 import Logout from        '@mui/icons-material/Logout';
+import {   useNavigate } from 'react-router-dom';
+import { useAddress } from '@thirdweb-dev/react';
+ 
+
+
+import { useUserContext } from '../context/UserContext';
+import { useDebugModeContext } from '../context/DebugModeContext';
+
+import { getAvatar, openOAuth2Url } from '../data/API';
+import { OWNER } from '../const/addresses';
+
+  
 
 export default function AccountMenu() {
+
+const navigate = useNavigate();
+
+
+  const {user, setUser } = useUserContext();
+  const {debugMode, setDebugMode} =  useDebugModeContext();
+
+  const address = useAddress ();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -21,11 +40,44 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const switchDebugMode =() =>{
+      
+      setDebugMode(!debugMode);
+     
+};
+
+
+ const openProfilePage =() =>{
+      
+     handleClose();
+     navigate( `/profileWallet/${address}` )
+      
+ };
+ const DiscordLogin =() =>{
+  
+    // if user is null, it will open the discord authoraization and go through the login process
+      if (!user){
+         openOAuth2Url(null);
+      }else{
+        // if we are logged in (user is set already) that means we want to lgo out
+        openOAuth2Url(user, setUser );
+      }
+     
+    handleClose();
+    
+     
+};
+  
+ 
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
          {/* <Typography sx={{ minWidth: 100 }}>Contact</Typography>
         <Typography sx={{ minWidth: 100 }}>Profile</Typography> */}
+
+
+        {/* <ButtonOAuth/> */}
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -74,8 +126,28 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
+
+        {address && (   
+           <MenuItem onClick={openProfilePage}>
+           <Avatar/>  Profile 
+               
+          
+         </MenuItem>
+         )}
+
+         {(address && address === OWNER) && (   
+
+         <MenuItem onClick={ switchDebugMode }>
+             {debugMode ? ("Debug is:ON"):("Debug is:OFF")}    
+               
+          
+         </MenuItem>
+         )}
+
+         <MenuItem onClick={DiscordLogin}>
+          <Avatar  src= {!user ? ( null ):(  getAvatar(user)  )}   />
+          {!user ? (  "Discord Login"):(  "Discord Logout" )}
+           
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Avatar /> My account

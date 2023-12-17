@@ -11,21 +11,9 @@ import { Avatar,
    Tooltip
 } from "@chakra-ui/react";
 
+ 
 
-import { RowChildrenAlignCenter,
-     VerticalStackAlignCenter ,
-     VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,
-     VerticalSpace,
-      RoundedBox,
-      BoxWithTopBar,
-      HorizontalSpace
-    } from "./Layout.jsx"  
-
-
-import { 
-    MARKETPLACE_ADDRESS,
-    TOOLS_ADDRESS 
-} from "../const/addresses.ts";
+ 
 import {CopyToClipboard } from "../utils.js";
 import {buttonStyle, text2, text1, tokens } from "../theme.js";
    

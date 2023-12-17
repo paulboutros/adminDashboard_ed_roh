@@ -59,14 +59,14 @@ const address = useAddress();
   const [open, setOpen] = useState(false);
  
   
-  const filteredImages = GetfilteredImages(selectedImages);
+  let filteredImages; 
 
-  // this should be an Api call
- // user.address = address;
+   filteredImages = GetfilteredImages(selectedImages);
       
    useEffect(()=>{
     if (!address) return;
     
+   // filteredImages = GetfilteredImages(selectedImages);
     CheckComBoValidity(filteredImages ,user , address);
 
      
@@ -283,10 +283,9 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address}){
   //const { user } = useUserContext();
   const {allLayers} = useAllLayersContext();
   const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+  const colors = tokens(theme.palette.mode);
   
-//const filteredImages = GetfilteredImages(selectedImages);
-
+ 
     switch (status) {
       case 1:
         return (

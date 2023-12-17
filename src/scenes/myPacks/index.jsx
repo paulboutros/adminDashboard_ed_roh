@@ -11,12 +11,12 @@ import Container from "../../components/Container/Container";
 import { OWNER, PACK_ADDRESS, TOOLS_ADDRESS } from '../../const/addresses';
 import { useState, useEffect } from 'react';
 //import { PackRewards } from '@thirdweb-dev/sdk/dist/declarations/src/evm/schema';
-import { PackRewardCard } from '../../components/PackRewardCard';
-import { useTheme, Box, Typography, Button } from "@mui/material";
+ import { useTheme, Box, Typography, Button } from "@mui/material";
 import { allCSS, tokens } from "../../theme";
-import { BasicScrollable, RowChildrenAlignLeft } from '../../components/Layout';
+import {   RowChildrenAlignLeft } from '../../components/Layout';
 import NFTListed from '../../components/FARMER/NFTlisted';
 import { getSDK_fromPrivateKey } from '../../data/API';
+import { useDebugModeContext } from '../../context/DebugModeContext';
 
 export default function MyPacks() {
 
@@ -29,13 +29,11 @@ export default function MyPacks() {
     const { contract } = useContract(PACK_ADDRESS, "pack");
     const { data, isLoading } = useOwnedNFTs(contract, address);
 
-    const [openPackRewards, setOpenPackRewards] = useState(); // <PackRewards>
-    const [rewardNFTs, setRewardNFTs] = useState(); // <PackRewards>
- 
-
-    const [spinReady, setSpinReady] = useState([false,false,false,false,false,false]); // <PackRewards>
+    //const [openPackRewards, setOpenPackRewards] = useState(); // <PackRewards>
+     const [rewardNFTs, setRewardNFTs] = useState(); // <PackRewards>
+     const [spinReady, setSpinReady] = useState([false,false,false,false,false,false]); // <PackRewards>
     
-     
+     const {debugMode, setDebugMode} = useDebugModeContext();
   
     useEffect(() => {
          
@@ -60,13 +58,8 @@ export default function MyPacks() {
     
           // Log the new state before updating
           console.log("newState   ", newState );
-
-          setSpinReady( newState );
-
-
-          
-         
-
+           setSpinReady( newState );
+ 
           await new Promise(resolve => setTimeout(resolve, 500));
         }
       }
@@ -102,7 +95,7 @@ export default function MyPacks() {
              const sdk = getSDK_fromPrivateKey(); 
              const nftContract = await sdk.getContract(TOOLS_ADDRESS);
              const reward_NFTs = [];
-            for ( let i = 0; i <  cardRewards.erc1155Rewards.length; i++ )  { 
+             for ( let i = 0; i <  cardRewards.erc1155Rewards.length; i++ )  { 
                 const card      = cardRewards.erc1155Rewards[i];
                 const he_tokenId = parseInt(  card.tokenId  );  
                   const nftres  = await nftContract.erc1155.get( he_tokenId );
@@ -125,7 +118,7 @@ export default function MyPacks() {
          <Container maxWidth="lg">    
           <RowChildrenAlignLeft>
         <Typography sx={ theme.title }> My Packs </Typography>
-        <div style={ {
+              <div style={ {
                                         margin: 0,
                                         position: 'relative',
                                         // top: '50%',
@@ -133,7 +126,7 @@ export default function MyPacks() {
                                     }} >  
          
                     
-                     {address === OWNER && (
+                     { debugMode  && (
                         <>
                         <Button variant="contained" 
                           sx={{backgroundColor: colors.redAccent[500]  }}
@@ -151,8 +144,7 @@ export default function MyPacks() {
        </RowChildrenAlignLeft>
 
         <Typography sx={ theme.titleDescription }> Open your pack to reveal the NFT layers.</Typography>
-         
-         
+          
          <Box sx={{ borderBottom: 1, borderColor:  colors.grey[600] , margin: "40px 0px 20px 0px" }}/>
 
 

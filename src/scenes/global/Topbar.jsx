@@ -27,6 +27,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
  import styles from        "../../styles/Navbar.module.css"; 
  import stylesProfile from "../../styles/Profile.module.css"; 
+import AccountMenu from "../../components/AccountMenu";
 
 
 const Topbar = () => {
@@ -159,17 +160,16 @@ const Topbar = () => {
           title: "Get it at to Wuli.rocks",
           subtitle: "Just connect to get started",
         }}
-        modalTitleIconUrl={""}
+          modalTitleIconUrl={""}
         />
         
-         <HorizontalSpace space={2}/>         
-         <div className={styles.navRight}>
-           {address && (
-            <Link 
-              className={styles.link} 
-          //   href={`/profile/${address}`}
-             to={`/profileWallet/${address}`}>
-             
+         <HorizontalSpace space={2}/> 
+
+          {/*
+             <div className={styles.navRight}>
+             {address && (
+              <Link className={styles.link}  to={`/profileWallet/${address}`}>
+              
               <img
               //  className={styles.profileImage}
                 src="/user-icon.png"
@@ -179,8 +179,10 @@ const Topbar = () => {
               />
             </Link>
           )}
-        </div>
+         </div> 
+         */}
 
+            <AccountMenu/> 
 
          {/* <MenuPopupState/> */}
          {/* <ButtonOAuth/> */}

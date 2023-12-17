@@ -91,6 +91,8 @@ export async function  authorize   () {
   
    return resultsJson;
 } 
+
+let avatarURL="/he/1.png"; // add default avatar here
 let tempClickAmount = 0;
 const REACT_APP_YOUROAUTH2URL = process.env.REACT_APP_YOUROAUTH2URL; 
 // just check if current auth token ID match a user, if so th euser is logged in already
@@ -525,20 +527,44 @@ export async function  getData   () {
    } 
 
 
-   // Define your conditional function
-export const openOAuth2Url = (user) => {
+   // discord login
+export const openOAuth2Url = (user, setUser ) => {
   
    if (!user){
       window.open(REACT_APP_YOUROAUTH2URL, "_blank");
    }else{
+    // unfortunately we need to set the State of user, and that can only be done from react hook
     //logout
-
-    
+       document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+       setUser(null);
     
    }
     
    
 };
+
+
+export function getAvatar( user ){
+
+  // discordata is custom and store discord user data after sucesfully auth
+ const discordData =  user.discordUserData;
+
+
+  
+ 
+ if (discordData.avatar === null) {
+   // User has a default Discord avatar
+   return `https://cdn.discordapp.com/embed/avatars/0.png`;
+ } else {
+   // User has a custom avatar
+   avatarURL = discordData.avatar.startsWith('a_') // Check if it's a GIF avatar
+   ? `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.gif`
+   : `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.png`;
+  
+     return avatarURL;
+  }
+ }
+
 
 
 

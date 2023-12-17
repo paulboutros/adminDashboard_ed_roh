@@ -1,15 +1,33 @@
-import * as React from 'react';
+
+import Avatar from '@mui/material/Avatar';
+
+
+
+import React, { useState } from 'react';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+
+//import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 
 import { tokens  } from "../../theme";
-import {Box, useTheme} from '@mui/material';
+import {Box, Button, Icon, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
 import { BasicScrollable } from '../../components/Layout';
 import AppLinkDataBox from '../../components/AppLinkDataBox.jsx';
+
+//==============================================================
+import Backdrop from '@mui/material/Backdrop';
 import SpeedDialTooltipOpen from '../../components/SpeedDialTooltipOpen.jsx';
+import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import PrintIcon from '@mui/icons-material/Print';
+import ShareIcon from '@mui/icons-material/Share';
+//=============================================================
 
 import {
   ThirdwebNftMedia,
@@ -19,6 +37,11 @@ import {
 } from "@thirdweb-dev/react";
 import MyPacks from '../myPacks/index';
 import AccountMenu from '../../components/AccountMenu.jsx';
+import AccountMenuCustom from '../../components/AccountMenuCustom.jsx';
+
+
+import { useUserContext } from '../../context/UserContext';
+import { getAvatar } from '../../data/API';
 
 
 
@@ -60,7 +83,7 @@ export default function BasicTabs() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,9 +99,10 @@ export default function BasicTabs() {
  
   return (
     //<Box sx={{ width: '100%' }}>
-    <BasicScrollable>
+    < >
      <Container maxWidth="lg">   
-       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box >
+             {/*sx={{ borderBottom: 1, borderColor: 'divider' }} */}
 
          <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example"
             
@@ -107,8 +131,11 @@ export default function BasicTabs() {
 
       <CustomTabPanel value={value} index={2}>
        
-         <AccountMenu/>  
-        <SpeedDialTooltipOpen/>
+         <EarnBadges/>
+      {/* <Avatar  src= {!user ? ( null ):(  getAvatar(user)  )}   /> */}
+      
+        
+   
            {/* <AppLinkDataBox/>  */}
 
       </CustomTabPanel>
@@ -116,9 +143,187 @@ export default function BasicTabs() {
         Item Three
       </CustomTabPanel>
      </Container>
-    </BasicScrollable>
+    </ >
   );
 }
+
+
+ function EarnBadges(){
+
+  const theme = useTheme();
+
+ const colors = tokens(theme.palette.mode);
+ const address = useAddress();
+
+ const {user, setUser } = useUserContext();
+
+
+ function saveWalletAndDiscord(){
+
+
+ }
+
+   return (
+    < >    
+
+    {/* <Typography sx={ theme.title }> {displayData.title} </Typography>
+    <Typography sx={ theme.titleDescription }> {displayData.description} </Typography> */}
+     
+     <div style={{ 
+            fontWeight: "700px",
+             fontSize :"15px",
+            color: colors.grey[300],
+            display: "flex", 
+            flexDirection: "row",
+            alignItems: "center", 
+      }}>
+       
+ 
+   <AccountMenuCustom/>
+      <div style={{ position: 'relative', 
+     
+    //  outline: `1px solid ${ colors.blueAccent[200] }`,  // for debugging purposes
+      width: 56, height: 56,   // we want the same size as the speed dial position and anchor alignement matches
+      
+     }} >
+   
+
+     <Avatar 
+
+       src= {!user ? ( null ):(  getAvatar(user)  )} 
+       // we want the same size as the speed dial position and anchor alignement matches
+       sx={ {  
+        position: "absolute",
+         top: "50%",
+         left: "50%",
+         msTransform: "translate(-50%, -50%)", 
+         transform: "translate(-50%, -50%)" 
+
+       }}
+       />
+
+     <SpeedDialTooltipOpen />
+          
+    </div>
+
+
+    
+     {address && (   
+             <p style={{marginLeft :"50px"}} >    {address} </p> 
+          // <Typography> {address} </Typography> 
+      )}
+
+
+         <Button variant="contained" 
+               style={{marginLeft :"50px" , backgroundColor : colors.primary[600] }}
+             
+                onClick={() => saveWalletAndDiscord() } >   
+                 Save 
+            </Button> 
+ 
+
+     </div> 
+     <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: "20px" }}></Box>
+       
+   </ >
+   )
+ }
+ 
+
+
+const SpeedDialTrigger = ({ children }) => {
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const [open, setOpen] = useState(false);
+
+   const handleOpen = () => {setOpen(true); };
+   const handleClose = () => {setOpen(false);};
+    
+   const actions = [
+    { icon: <FileCopyIcon />, name: 'Copy' },
+    { icon: <SaveIcon />, name: 'Save' },
+    { icon: <PrintIcon />, name: 'Print' },
+    { icon: <ShareIcon />, name: 'Share' },
+  ];
+
+  return (
+    <div
+      onMouseEnter={handleOpen}
+      onMouseLeave={handleClose}
+      style={{
+        // Add your styling for the trigger component
+        padding: '10px',
+        border: '1px solid #ccc',
+        cursor: 'pointer',
+        display: 'inline-block',
+        overflow: 'visible', // Allow content to overflow
+        
+      }}
+    >
+      {children}
+      <Backdrop open={open} />
+      <SpeedDial
+        ariaLabel="SpeedDial example"
+        icon= {<SpeedDialIcon />}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        open={open}
+         
+        sx={{ 
+           
+           '& .MuiButtonBase-root': {
+              backgroundColor : colors.redAccent[300],
+             
+                position: 'relative',
+                top: 0, left: 0 
+               
+
+          }
+        
+        }}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+        
+
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            tooltipOpen
+            onClick={handleClose}
+
+            sx={{ 
+              
+             '& .MuiButtonBase-root': {
+                backgroundColor : colors.grey[700],
+               
+                  display: 'inline-block',
+                  overflow: 'visible', // Allow content to overflow
+                  
+                
+                }
+             }}
+
+          />
+        ))}
+      </SpeedDial>
+    </div>
+  );
+};
+
+const YourComponent = () => {
+  return (
+    <div>
+      {/* Use SpeedDialTrigger as a trigger component */}
+      <SpeedDialTrigger>Hover me to trigger SpeedDial</SpeedDialTrigger>
+      {/* Other content */}
+    </div>
+  );
+};
+ 
+
 
 
 /* from mui API doc

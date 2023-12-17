@@ -6,8 +6,7 @@ import {  useAddress } from '@thirdweb-dev/react'
 import {  Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
 
 import CustomLegend from "./Legend"
-//import API from "../data/API"
-
+ 
 import {sendTracking, GetRewardPrice } from "../data/API"
 
  
@@ -22,48 +21,42 @@ import { useAllLayersContext } from '../context/AllLayerAvailableContext';
 import LayerBaseInfo from "./LayerBaseInfo";
   
  import PopupButton  from "./popup"
-import { cookieStorageManager } from '@chakra-ui/react';
-import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata';
+ import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata';
 import { OWNER } from '../const/addresses';
 import { RoundedBox } from './Layout';
+import { useDebugModeContext } from '../context/DebugModeContext';
  
  
   const LayerSelector = (  {queryId="" }  ) => {
- 
+
+    const {debugMode, setDebugMode} = useDebugModeContext();
+
+    /*
     const fetchCategoryData = async (category  ) => {
-    
      
-   
         try {
           // Fetch data for the category
-            const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}${queryId}`;
+          const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}${queryId}`;
           const result = await fetch(endpoint);
           const resultsJson = await result.json();
-     
-
-        
-
+      
         //  setData(ownedLayers);
 
         } catch (error) {
           console.error(`Error fetching data for ${category}: ${error}`);
         }
-        
-       
+    
      };
-
 
     useEffect(() => {
         
         fetchCategoryData("he");  fetchCategoryData("we"); fetchCategoryData("sh"); 
     }, [ ]);
-     
- useEffect(() => {
-    
-}, [ ]); 
+     */
+  
 
       
-  const debugMode = false;
+  const debugModeLayout = false;
 
     
     const theme = useTheme();
@@ -77,7 +70,7 @@ import { RoundedBox } from './Layout';
         // Add more legend items as needed
       ];
  
-   const [RewardPrice, SetRewardPrice]= useState("0");  
+    const [RewardPrice, SetRewardPrice]= useState("0");  
     const [selectedImages, setSelectedImages] = useState(null);
      
 
@@ -153,15 +146,9 @@ import { RoundedBox } from './Layout';
     <Box margin="0 8px 20px 8px" >
    
     <div>
-       {address && address === OWNER? (
-        <div>
-           <EditorButton/>
-
-        </div>
-     ):(
-        <div></div>
-
-     ) }
+       { debugMode && ( // address && address === OWNER?
+        <div><EditorButton/></div>)  }
+         
  
     </div> 
       <Box display="flex" justifyContent="space-between" alignItems="center"> </Box>
@@ -237,9 +224,9 @@ import { RoundedBox } from './Layout';
                  </Box>  
              </Box>
 
-            <Box gridColumn="span 2" gridRow="span 6" style={debugMode ? { backgroundColor: colors.primary[100] } : {}} > </Box>
-            <Box gridColumn="span 2" gridRow="span 6" style={debugMode ? { backgroundColor: colors.primary[200] } : {}} > </Box>
-            <Box gridColumn="span 2" gridRow="span 2" style={debugMode ? { backgroundColor: colors.primary[300] } : {}} > </Box>
+            <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: colors.primary[100] } : {}} > </Box>
+            <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: colors.primary[200] } : {}} > </Box>
+            <Box gridColumn="span 2" gridRow="span 2" style={debugModeLayout ? { backgroundColor: colors.primary[300] } : {}} > </Box>
             <Box gridColumn="span 2" gridRow="span 2"  >
                 <CustomLegend legendItems={legendItems} />
             </Box>

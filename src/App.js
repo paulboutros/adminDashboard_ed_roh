@@ -26,13 +26,16 @@ import TokenPage from "./scenes/tokenPage/index.jsx";
 import TokenPageByID from "./scenes/tokenPageByID/index.jsx";
 
 import ProfileWallet from "./scenes/profileWallet/index.jsx";
-
-
+ 
 // provider
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
 
 
+
+
+
+// Context
 import { AllListingsProvider } from "./context/AllListingContext.js";
 import { UserProvider } from './context/UserContext.js';
 import { AllLayersProvider }  from './context/AllLayerAvailableContext.js';
@@ -40,10 +43,13 @@ import { NotificationProvider }  from './context/NotificationContext.js';
 import { DropTimeProvider }  from './context/DropTimeContext.js'; 
 import { DiscordProvider }  from './context/DiscordContext.js'; 
 import { AppLinkProvider }from './context/AppLinkContext.js'; 
+import { DebugModeProvider } from "./context/DebugModeContext.js";
+
+
+
 
 import Calendar from "./scenes/calendar/calendar.jsx";
-
- 
+  
 //web 3 market plce component:
 //import './App.css';
 import NavBar from "./components/FARMER/NavBar.jsx";
@@ -52,17 +58,14 @@ import Sell from "./scenes/sell/index.jsx";
 
 import Shop from"./scenes/shop/index.jsx";
 //import ShopPack from    "./scenes/shopPack/index.jsx";  
-
-
-  
+   
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
 
-//import './styles/globals.css'; // Import the global CSS file
-
+ 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -73,14 +76,12 @@ const testThirdWeb = false;
     return (  
      
       <ThirdwebProvider  activeChain={Sepolia} clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID} >
-       
       <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
       {/* <ChakraProvider> */}
+
          <NavBar/>  
-      
-         
-        <Routes>
+         <Routes>
           <Route path="/" element={<FarmerPage/>} />
           <Route path="/shop" element={<Shop display_mode="list"/>} />
          </Routes>
@@ -137,8 +138,8 @@ const testThirdWeb = false;
     <ThirdwebProvider activeChain={Sepolia}>
  <ChakraProvider>
        <UserProvider>
-
-   <DiscordProvider>
+         <DiscordProvider>
+           <DebugModeProvider>
     <AppLinkProvider>
    
       <DropTimeProvider>
@@ -224,7 +225,8 @@ const testThirdWeb = false;
      </DropTimeProvider>
      
      </AppLinkProvider>
-  </DiscordProvider>
+         </DebugModeProvider>
+    </DiscordProvider>
        </UserProvider>
     </ChakraProvider>
     </ThirdwebProvider>

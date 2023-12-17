@@ -1,4 +1,4 @@
-import {createContext, useContext,  useState, useEffect } from "react";
+import {createContext, useContext,  useState, useEffect, useRef } from "react";
 import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS  } from "../const/addresses.ts";
 import { useContract, useNFTs,    useValidDirectListings, useValidEnglishAuctions  } from "@thirdweb-dev/react";
   
@@ -30,8 +30,9 @@ const { data: auctionListing, isLoading: loadingAuction } =
 useValidEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT  });   //,tokenId: filterTokenId
  //================================================================================================================================================
   
-
-
+ // to compare which dependency has changed
+ const prevDirectListings = useRef(directListings);
+ const prevAuctionListing = useRef(auctionListing); 
 
 
 useEffect(() => {
@@ -59,8 +60,21 @@ useEffect(() => {
           });
          
            
-        // setAuctionAddedtoList(true);
-           console.log(  ">>>>>  added   >>>>    "  ,  allNFTs  );
+          
+          if (directListings !== prevDirectListings) {
+            console.log('directListings has changed');
+          }
+      
+          if (auctionListing !== prevAuctionListing) {
+            console.log('propB has changed');
+          }
+      
+          // Your side effect code here
+      
+          // Update previous values after the effect runs
+          prevDirectListings.current = directListings;
+          prevAuctionListing.current = auctionListing;
+          // console.log(  ">>>>>  added   >>>>    "  ,  allNFTs  );
           setAllNFTsWithListing(allNFTs);
      }
    
