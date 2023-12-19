@@ -78,18 +78,20 @@ export function formatTimestampToCustomFormat(timestamp) {
      return `${daysAgo} days ago`
     return daysAgo;
   }
-  
+  export async function copyTextToClipboard(text) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand('copy', true, text);
+    }
+  }
+
+
 export function CopyToClipboard(  copyText ) {
   
   console.log( " >>>>>>>>>>>>>.   copyText"  , copyText );
     // This is the function we wrote earlier
-    async function copyTextToClipboard(text) {
-      if ('clipboard' in navigator) {
-        return await navigator.clipboard.writeText(text);
-      } else {
-        return document.execCommand('copy', true, text);
-      }
-    }
+    
   
     // onClick handler function for the copy button
     const handleCopyClick = () => {

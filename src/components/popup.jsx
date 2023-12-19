@@ -232,7 +232,7 @@ const address = useAddress();
 function GetfilteredImages( selectedImages ){
 
 
-    console.log ( "POPUP: selectedImages",  selectedImages );
+  //  console.log ( "POPUP: selectedImages",  selectedImages );
 
 
 

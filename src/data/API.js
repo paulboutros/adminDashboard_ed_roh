@@ -139,20 +139,85 @@ export async function getAllLayersAvailable(){
 
 
 }
+
+export function createRedirectookie( redirectUrl){
+   const data={
+    
+    redirectUrl: redirectUrl  /*  2 is the tab index "referral we want as initial state on the page" */
+  }
+  document.cookie = "tempRedirect=" + encodeURIComponent(JSON.stringify(data)) +
+  "; max-age= 666060; samesite=None; secure; domain=" + document.domain + "; path=/";
+
+
+// set a redirect link on user profile so user a redirected to that page when done
+  //  setRedirectURL
+  //   openOAuth2Url(null);
+     
+  
+ 
+
+}
+// will be use by discord after authorization process is completed
+export function GetCookieRedirectURL(   address ){
+ 
+ 
+    var myCookie = getCookie("tempRedirect");
+
+    if (!myCookie  ) {
+        // do cookie doesn't exist stuff;
+
+     //   console.log(  "tempRedirect DOES  NOT  exist"   );
+
+        return null; 
+    }
+    else {
+    //  console.log(  "tempRedirect  exist"  , myCookie  );
+        // do cookie exists stuff
+        return myCookie;
+    }
+ 
+  
+
+
+
+
+
+/*
+  const dataToSend={ 
+  //  ID : user.ID,
+    redirectUrl: `profileWallet/${address}`
+  }
+
+const endpoint = `${process.env.REACT_APP_API_URL}setRedirectURL`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+console.log("data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;*/
+}
+export async function addorupdate( user , address ){
+ 
+    const dataToSend={ 
+      ID : user.ID,
+      id : user.id,
+      discord  : user.discord,
+      wallet   : address
+    }
+
+ const endpoint = `${process.env.REACT_APP_API_URL}addorupdate`; 
+ const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+  console.log("data response :" ,   resultsPostJson.data );
+  
+  return resultsPostJson.data;
+}
+
 export async function GetLayerSupply(){
   const endpoint = `${process.env.REACT_APP_API_URL}GetLayerSupply`;
   const result = await fetch(endpoint);
   let allSupply = await result.json();
  
-
- //const sdk =  getSDK_fromPrivateKey();
-
- //const contract = await sdk.getContract( TOOLS_ADDRESS );
-
- //console.log(">>>>>>>>>>>>>>>>>>contract     === " , contract);
-
- //const nfts = await  contract.ERC1155.GetAll();
-
+ 
 
   return allSupply;
 }
@@ -252,19 +317,17 @@ export async function myAppLink(user_ID){
           one_referral_Code: "xxx"
         }
 
-    const endpoint = `${process.env.REACT_APP_API_URL}generateReferralCode`; // make it specific (filter to twitter fields)
-    const resultsPostJson = await axios.post(endpoint, dataToSend);
+     const endpoint = `${process.env.REACT_APP_API_URL}generateReferralCode`; // make it specific (filter to twitter fields)
+     const resultsPostJson = await axios.post(endpoint, dataToSend);
 
-        console.log("referal :" ,   resultsPostJson.data.shareableLink);
+      console.log("referal :" ,   resultsPostJson.data.shareableLink);
      //  setReferralCode(result.data.shareableLink);
-       // setShowCopyButton(true);
+     // setShowCopyButton(true);
 
         // set the refferal code to the one we jsut generate
        resultsJson = resultsPostJson;
      }
-
-
-     
+ 
    // will be the one that exist or the one geenrate by the postrequest it it initially does not exist
      return resultsJson;
 } 
@@ -527,14 +590,17 @@ export async function  getData   () {
    } 
 
 
+   export function removeCookie( cookieName ){
+    document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+
+   }
    // discord login
 export const openOAuth2Url = (user, setUser ) => {
   
    if (!user){
       window.open(REACT_APP_YOUROAUTH2URL, "_blank");
    }else{
-    // unfortunately we need to set the State of user, and that can only be done from react hook
-    //logout
+     
        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
        setUser(null);
     
@@ -565,6 +631,50 @@ export function getAvatar( user ){
   }
  }
 
+ //https://www.tabnine.com/academy/javascript/how-to-get-cookies/
+ export function getCookie(cName) {
+  const name = cName + "=";
+  const cDecoded = decodeURIComponent(document.cookie); //to be careful
+  const cArr = cDecoded.split('; ');
+  let res;
+  cArr.forEach(val => {
+    if (val.indexOf(name) === 0){
+     res = val.substring(name.length);
+     try {
+      // Attempt to parse the cookie value as JSON
+      res = JSON.parse(res);
+    } catch (error) {
+      // If parsing fails, assume it's a regular string
+    }
+
+    } 
+  })
+
+ 
+
+
+  return res
+}
+ function getCookie_XXX(name) {
+  var dc = document.cookie;
+  var prefix = name + "=";
+  var begin = dc.indexOf("; " + prefix);
+  if (begin === -1) {
+      begin = dc.indexOf(prefix);
+      if (begin !== 0) return null;
+  }
+  else
+  {
+      begin += 2;
+      var end = document.cookie.indexOf(";", begin);
+      if (end === -1) {
+      end = dc.length;
+      }
+  }
+  // because unescape has been deprecated, replaced with decodeURI
+  //return unescape(dc.substring(begin + prefix.length, end));
+  return decodeURI(dc.substring(begin + prefix.length, end));
+} 
 
 
 

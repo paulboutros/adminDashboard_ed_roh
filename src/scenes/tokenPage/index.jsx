@@ -2,7 +2,7 @@
  
  
 import Shop from "../shop/index.jsx"
-import { Link, useParams } from 'react-router-dom';
+import {   useParams } from 'react-router-dom';
 
 
 const TokenPage =  ({  propContractAddress,  propTokenId, AlllistingData, displayMode  } ) => {

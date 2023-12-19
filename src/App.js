@@ -189,8 +189,8 @@ const testThirdWeb = false;
               
 
               <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
-
-               
+              <Route path="/profileWallet/:address/:initialTabIndex" element={<ProfileWallet/>} />
+              
             
               <Route path="/profile" element={<Profile/>} />
               <Route path="/discordBoard" element={<DiscordBoard/>} />

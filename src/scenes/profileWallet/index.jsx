@@ -1,6 +1,10 @@
 
 import Avatar from '@mui/material/Avatar';
 
+//Icon
+import TagFacesIcon from '@mui/icons-material/TagFaces';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import FaceIcon from '@mui/icons-material/Face';
 
 
 import React, { useState } from 'react';
@@ -14,10 +18,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 
-import { tokens  } from "../../theme";
-import {Box, Button, Icon, useTheme} from '@mui/material';
+import { allCSS, infoHeight, tokens  } from "../../theme";
+import {Box, Button, Chip, Icon, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
-import { BasicScrollable } from '../../components/Layout';
+import { BasicScrollable, HorizontalSpace } from '../../components/Layout';
 import AppLinkDataBox from '../../components/AppLinkDataBox.jsx';
 
 //==============================================================
@@ -32,6 +36,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import {
   ThirdwebNftMedia,
   useAddress,
+  useConnectionStatus,
   useContract,
   useOwnedNFTs,
 } from "@thirdweb-dev/react";
@@ -41,7 +46,10 @@ import AccountMenuCustom from '../../components/AccountMenuCustom.jsx';
 
 
 import { useUserContext } from '../../context/UserContext';
-import { getAvatar } from '../../data/API';
+import { addorupdate, getAvatar, openOAuth2Url,   GetCookieRedirectURL, createRedirectookie } from '../../data/API';
+import { addressShortened } from '../../utils';
+import { useDebugModeContext } from '../../context/DebugModeContext';
+import { useParams } from 'react-router';
 
 
 
@@ -57,9 +65,9 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
+        // <Box sx={{ p: 3 }}>
+          <>{children}</>
+        // </Box>
       )}
     </div>
   );
@@ -80,22 +88,27 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
 
+
+  const connectionStatus = useConnectionStatus();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+   
+    let {   initialTabIndex } = useParams();
+    if (initialTabIndex){
+      initialTabIndex = Number(initialTabIndex);
+    }else{
 
-  const [value, setValue] = useState(0);
+      initialTabIndex = 0;
+    }
+   
+
+  console.log("initialTabIndex  =",initialTabIndex);
+  const [value, setValue] = useState( initialTabIndex );
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
  
-  // const tabStyle={
-     
-  //   '&:not(.hover)': { color: `${colors.primary[100]}`},
-  //   '&:hover': { color: `${colors.primary[50]}`},
-  //   '&.Mui-selected': { color: `${theme.palette.blueSelectedTab }`},
-  // }  
  
   return (
     //<Box sx={{ width: '100%' }}>
@@ -116,22 +129,28 @@ export default function BasicTabs() {
            <Tab label="Token"     {...a11yProps(3)}  disableRipple  sx={ theme.tabStyle }   />  
 
         </Tabs>
-
-
-        
+         
       </Box>
       <CustomTabPanel value={value} index={0}> 
          Item One
       </CustomTabPanel>
        
-      
       <CustomTabPanel value={value} index={1}>
-          <MyPacks/>
+          <MyPacks/>  
       </CustomTabPanel>
 
       <CustomTabPanel value={value} index={2}>
        
+
+       <Box  sx={{  borderRadius: 4, backgroundColor: colors.primary[400] }} >
+         
+         
+        
+        
          <EarnBadges/>
+
+       </Box>
+
       {/* <Avatar  src= {!user ? ( null ):(  getAvatar(user)  )}   /> */}
       
         
@@ -150,45 +169,68 @@ export default function BasicTabs() {
 
  function EarnBadges(){
 
+ 
+
   const theme = useTheme();
 
  const colors = tokens(theme.palette.mode);
  const address = useAddress();
 
  const {user, setUser } = useUserContext();
+ const {debugMode } =  useDebugModeContext();
 
 
+  
+ async function disconnectWalletDiscord(){
+
+  const result = await addorupdate(user, "0000000" );
+
+    setUser(result.user);
+  //console.log(   "disconnectWalletDiscord  =" , result );
+
+}
+async function  linkAdressToDiscord(  user, address ){
+
+ 
+    // at this point the discord user is not connected, so we user the wallets collection, wallet as ID
+       if ( !user ){
+     // after discord athentication we need to come back to the same exact page,
+     // so we save the  route path in a cookie , th redirect will happen of the root route.    
+         createRedirectookie( `profileWallet/${address}/2` ); // is refferal tab
+         openOAuth2Url(null);
+         return;
+       }
+   
+      const result = await addorupdate(user,address);
+      setUser(result.user);
+     
+// update task completion on server
+ }
  function saveWalletAndDiscord(){
 
-
+    
  }
 
    return (
     < >    
 
-    {/* <Typography sx={ theme.title }> {displayData.title} </Typography>
-    <Typography sx={ theme.titleDescription }> {displayData.description} </Typography> */}
-     
-     <div style={{ 
-            fontWeight: "700px",
-             fontSize :"15px",
-            color: colors.grey[300],
-            display: "flex", 
-            flexDirection: "row",
-            alignItems: "center", 
+    
+     <Box sx={{ 
+             color: colors.grey[300], display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
+       
       }}>
        
  
    <AccountMenuCustom/>
-      <div style={{ position: 'relative', 
-     
-    //  outline: `1px solid ${ colors.blueAccent[200] }`,  // for debugging purposes
-      width: 56, height: 56,   // we want the same size as the speed dial position and anchor alignement matches
-      
-     }} >
-   
 
-     <Avatar 
+
+   
+  
+       <Box sx={{ position: 'relative',  width: infoHeight, height: infoHeight, 
+       // outline: `1px solid ${ colors.blueAccent[200] }`,  // for debugging purposes
+       
+     }} >
+      <Avatar 
 
        src= {!user ? ( null ):(  getAvatar(user)  )} 
        // we want the same size as the speed dial position and anchor alignement matches
@@ -197,34 +239,101 @@ export default function BasicTabs() {
          top: "50%",
          left: "50%",
          msTransform: "translate(-50%, -50%)", 
-         transform: "translate(-50%, -50%)" 
-
+         transform: "translate(-50%, -50%)" ,
+         width: infoHeight, height: infoHeight,
        }}
        />
 
-     <SpeedDialTooltipOpen />
+          <SpeedDialTooltipOpen  textToCopy={  user?.ID  } />
           
-    </div>
+      </Box>
 
-
+    <HorizontalSpace space={20}/> 
     
-     {address && (   
-             <p style={{marginLeft :"50px"}} >    {address} </p> 
-          // <Typography> {address} </Typography> 
+
+     {(user && address) ? (  
+     
+        <Box  sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
+             onClick={() => linkAdressToDiscord( user, address  )}
+        >
+      
+              <p> 
+               {  user.wallet.includes("0000000") ? (
+                  <>Click to link <span  >{addressShortened(address)}</span> to Discord</>
+                 ) : ( user.wallet )       } 
+              </p>
+             
+        </Box>
+            
+          
+      ):(  // connectionStatus === "disconnected"
+        <>
+         { !user && address && ( 
+           <Box sx={allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
+                   onClick={() => linkAdressToDiscord(user, address)}
+           >
+           <p>  <>Click to link <span  >{"Discord"}</span> account</> </p>
+           </Box>
+         )
+        }
+
+        {  user && !address && ( 
+           <Box sx={allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
+                   onClick={() => linkAdressToDiscord(user, address)}
+           >
+           <p>  <>Wallet <span  >{"Login"}</span></> </p>
+           </Box>
+         )
+        }
+
+        {  !user && !address && ( 
+           <Box sx={allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
+                   onClick={() => linkAdressToDiscord(user, address)}
+           >
+           <p>  <>Wallet<span  >{"Login"}</span></> </p>
+           </Box>
+         )
+        }
+         </>
       )}
 
-
-         <Button variant="contained" 
-               style={{marginLeft :"50px" , backgroundColor : colors.primary[600] }}
-             
-                onClick={() => saveWalletAndDiscord() } >   
+         <HorizontalSpace space={30}/> 
+        {/* <Box 
+          sx ={  allCSS( theme.palette.mode, "100px","0px" ).infoBox  }
+           
+                >   
                  Save 
-            </Button> 
- 
+       </Box>  */} 
+        {/* <Chip variant="outlined" color= "bl" icon={<TagFacesIcon/> }
 
-     </div> 
-     <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: "20px" }}></Box>
-       
+         label="To DO 0/3" */}
+         {/* <Chip icon={<TagFacesIcon />}  label="To DO 0/3"   */}
+         <Chip variant="outlined" color="warning" label="To DO 0 / 3"   icon={<FaceIcon />}  
+           sx={ {height :"30px" , borderRadius:"10px" }}
+        />
+          
+
+
+
+
+              {debugMode && (
+
+                  <Button variant="contained" 
+                  sx={{backgroundColor: theme.debugModeColor }}
+                    onClick={() => disconnectWalletDiscord() } >   
+                      disconnect 
+                  </Button>
+                  )}
+
+
+
+
+     </Box> 
+      
+     
+
+   
+
    </ >
    )
  }
@@ -248,11 +357,12 @@ const SpeedDialTrigger = ({ children }) => {
     { icon: <ShareIcon />, name: 'Share' },
   ];
 
+  
   return (
-    <div
+    <Box
       onMouseEnter={handleOpen}
       onMouseLeave={handleClose}
-      style={{
+      sx={{
         // Add your styling for the trigger component
         padding: '10px',
         border: '1px solid #ccc',
@@ -309,7 +419,7 @@ const SpeedDialTrigger = ({ children }) => {
           />
         ))}
       </SpeedDial>
-    </div>
+    </Box>
   );
 };
 

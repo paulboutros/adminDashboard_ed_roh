@@ -1,4 +1,14 @@
 import * as React from 'react';
+
+
+ 
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+//import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import Tooltip ,{ tooltipClasses }   from    '@mui/material/Tooltip';
+
+
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -6,7 +16,7 @@ import MenuItem from      '@mui/material/MenuItem';
 import ListItemIcon from  '@mui/material/ListItemIcon';
 import Divider from       '@mui/material/Divider';
 import IconButton from    '@mui/material/IconButton';
- import Tooltip    from    '@mui/material/Tooltip';
+
 import PersonAdd  from    '@mui/icons-material/PersonAdd';
 import Settings from      '@mui/icons-material/Settings';
 import Logout from        '@mui/icons-material/Logout';
@@ -20,16 +30,51 @@ import { useDebugModeContext } from '../context/DebugModeContext';
 
 import { getAvatar, openOAuth2Url } from '../data/API';
 import { OWNER } from '../const/addresses';
+import { useTheme } from '@emotion/react';
+import { allCSS, tokens } from '../theme';
+ 
 
-  
+
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}));
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default function AccountMenu() {
 
+
+  
+
+
 const navigate = useNavigate();
 
-
+const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const {user, setUser } = useUserContext();
   const {debugMode, setDebugMode} =  useDebugModeContext();
+
+ const { BootstrapTooltip } = allCSS(theme.palette.mode   );  
+
 
   const address = useAddress ();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -56,6 +101,9 @@ const navigate = useNavigate();
  };
  const DiscordLogin =() =>{
   
+ 
+
+
     // if user is null, it will open the discord authoraization and go through the login process
       if (!user){
          openOAuth2Url(null);
@@ -78,7 +126,11 @@ const navigate = useNavigate();
 
 
         {/* <ButtonOAuth/> */}
-        <Tooltip title="Account settings">
+        {/* <Tooltip title="Account settings" > */}
+        <BootstrapTooltip title="Account settings">
+           
+        
+        
           <IconButton
             onClick={handleClick}
             size="small"
@@ -89,7 +141,7 @@ const navigate = useNavigate();
           >
             <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
           </IconButton>
-        </Tooltip>
+        </BootstrapTooltip>
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -145,7 +197,7 @@ const navigate = useNavigate();
          )}
 
          <MenuItem onClick={DiscordLogin}>
-          <Avatar  src= {!user ? ( null ):(  getAvatar(user)  )}   />
+             <Avatar  src= {!user ? ( null ):(  getAvatar(user)  )}   />    
           {!user ? (  "Discord Login"):(  "Discord Logout" )}
            
         </MenuItem>

@@ -8,12 +8,14 @@ import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import PrintIcon from '@mui/icons-material/Print';
 import ShareIcon from '@mui/icons-material/Share';
+import { CopyToClipboard, copyTextToClipboard } from '../utils';
+import { infoHeight } from '../theme';
  
  
  
 
 
-export default function SpeedDialTooltipOpen(  ) {
+export default function SpeedDialTooltipOpen( {textToCopy}  ) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -21,7 +23,10 @@ export default function SpeedDialTooltipOpen(  ) {
 
   const actions = [
     { icon: <FileCopyIcon /> , name: 'Copy' , callBack: () => { 
-       console.log("  copy icon !!!");
+      
+      copyTextToClipboard( textToCopy );
+    // <CopyToClipboard copyText={referralData.shareableLink}  backgroundColor={colors.primary[400]}  textColor={colors.greenAccent[400]}/>
+     console.log( "textToCopy" , textToCopy  );
        handleClose();
      
       }},
@@ -48,15 +53,16 @@ export default function SpeedDialTooltipOpen(  ) {
           display: 'inline-block',
           overflow: 'visible', // Allow content to overflow
           zIndex: 1000, // Adjust the z-index based on your needs
-          top: 0,//"50%",
-          left:0,// "50%",
+          top: 0, //"25%",//"50%",
+          left:0,//"25%",// "50%",
+        
          
           
           // we want to make the button is invisible
            '& .MuiButtonBase-root.MuiFab-root.MuiSpeedDial-fab': {
-                color:'transparent', // hide the cross,
-              backgroundColor :'transparent', // color of the round buttom
-              boxShadow: 'none',
+                  color:'transparent', // hide the cross,
+             backgroundColor :'transparent',// 'rgba(255, 0, 0, 0.4)',//'transparent', // color of the round buttom
+              boxShadow: 'none', width: infoHeight, height: infoHeight,
            },
           
             

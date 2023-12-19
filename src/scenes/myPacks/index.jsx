@@ -118,7 +118,7 @@ export default function MyPacks() {
          <Container maxWidth="lg">    
           <RowChildrenAlignLeft>
         <Typography sx={ theme.title }> My Packs </Typography>
-              <div style={ {
+        <div style={ {
                                         margin: 0,
                                         position: 'relative',
                                         // top: '50%',
@@ -140,7 +140,7 @@ export default function MyPacks() {
                         > hide cards </Button>
                          </>
                      )}
-       </div>
+             </div>
        </RowChildrenAlignLeft>
 
         <Typography sx={ theme.titleDescription }> Open your pack to reveal the NFT layers.</Typography>

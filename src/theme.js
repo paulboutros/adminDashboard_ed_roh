@@ -2,6 +2,11 @@ import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles/index.js";
 
 
+import Tooltip ,{ tooltipClasses }   from    '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+//import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 //https://uicolors.app/create
 // this is to replicate the css styles found in styles module of Thridweb market v 3
 export const styles = {
@@ -23,7 +28,7 @@ export const styles = {
 
 
 
- 
+export const infoHeight = "30px"; 
 export const buttonStyle={
     colorBlue: 700, 
 
@@ -40,14 +45,15 @@ export const text2 ={
 }; 
 
 const _blueSelectedTab = "#0294fe";
-
+export const  debugModeColor ="#872b3f";
  
 // type: control + K the control + G to generate the shades
 export const grayText = 100;
 // color design tokens export
 export const tokens = (mode) => ({
 
- 
+  // this sites allow you to find colors in  betwwen 2 colors
+ //https://meyerweb.com/eric/tools/color-blend/#:::hex
   ...(mode === "dark"
     ? {
         grey: {
@@ -78,10 +84,10 @@ export const tokens = (mode) => ({
           '300': '#4a4a4a',
           '400': "#272828" ,//  '#2e2e2e',
           '500': '#1e1f1f',
-          '600': '#0d0d0d',
-          '700': '#000000',
-          '800': '#000000',
-          '900': '#000000',
+          '600': '#1A1B1B', //'#0d0d0d',
+          '700': '#161616', // #000000
+          '800': '#111212', // #000000
+          '900': '#0D0D0D', // #000000
           '950': '#000000',
  
         },
@@ -162,7 +168,7 @@ export const tokens = (mode) => ({
           '300': '#cdc9c1',
           '400': '#b3aca2',
           '500': '#a59c93',
-          '600': '#95877e',
+          '600': '#95877e', 
           '700': '#83726d',
           '800': '#766965',
           '900': '#695a59',
@@ -219,8 +225,36 @@ export const tokens = (mode) => ({
 });
 
 
+
+
+
+
+
+
+
+
 export const allCSS = (mode , _width, _margin) => {
   const colors = tokens(mode);
+
+ 
+  
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: colors.primary[600],
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: colors.primary[600],
+  
+      fontSize: 11,
+      padding: theme.spacing(1.2), // Adjust the padding as needed
+    },
+  }));
+
+ 
+
+
   const outline = {
     light : colors.primary[500],
     dark  : colors.primary[400]
@@ -232,6 +266,64 @@ export const allCSS = (mode , _width, _margin) => {
 
 
    return {
+    BootstrapTooltip,
+     infoBox: { 
+        
+       backgroundColor : colors.primary[500], 
+       width : `${_width}`,
+       height : "30px",
+     //  margin :"5px",
+        
+       // center with flex, there is a method to center without flex as well, (relative/absolute technic)
+       //https://www.w3schools.com/howto/howto_css_center-vertical.asp
+       display: "flex",
+       justifyContent: "center",
+       alignItems: "center",
+   
+       fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+    
+       color: colors.primary[100],
+      
+       '& span': {
+        color: _blueSelectedTab ,
+         } ,
+
+       '& .MuiButtonBase-root': {
+          textTransform: 'none',
+          fontSize: "10px",
+          fontWeight: "400px",
+       },
+
+
+       '&:not(.hover)': { 
+        outline: `1px solid ${mode === "dark" ? outline.dark : outline.light }`, 
+        // transform: "translate3d(0px, 0px, 0px)",
+       // backgroundColor :  colors.primary[500], 
+         WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+         transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms" 
+         
+      },
+      '&:hover': {
+        cursor: "pointer",
+       // transform: "translate3d(0px, -4px, 0px)",
+        outline: `1px solid ${ _blueSelectedTab }`, 
+      //  backgroundColor :  colors.primary[400], 
+        WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+        transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+      //  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
+        
+      } ,
+     
+ 
+
+
+
+
+
+     
+        borderRadius: "3px",
+        outline: `1px solid ${  colors.primary[400] }`  
+    },
 
     nftContainer:{
      
@@ -256,12 +348,12 @@ export const allCSS = (mode , _width, _margin) => {
          transform: "translate3d(0px, 0px, 0px)",
          WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
          transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms" 
-         //color: `${theme.palette.blueSelectedTab}`
+        
       },
       '&:hover': {
         cursor: "pointer",
         transform: "translate3d(0px, -4px, 0px)",
-      //  color: `${theme.palette.blueSelectedTab}`,
+      
         WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
         transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
@@ -367,12 +459,12 @@ export const themeSettings = (mode) => {
            transform: "translate3d(0px, 0px, 0px)",
            WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
            transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms" 
-           //color: `${theme.palette.blueSelectedTab}`
+           
         },
         '&:hover': {
           cursor: "pointer",
           transform: "translate3d(0px, -4px, 0px)",
-        //  color: `${theme.palette.blueSelectedTab}`,
+        
           WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
           transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
@@ -422,14 +514,13 @@ export const themeSettings = (mode) => {
         margin: "20px 0 20px 0",
         
        }
-
-      
+       
     },
       
 
  
     tabsStyle:{ 
-      fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+         fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
 
 
       

@@ -25,6 +25,10 @@ import SearchIcon from "@mui/icons-material/Search";
    HorizontalSpace
   } from "../../components/Layout"
 
+
+  
+  import styleWalletConnect  from "../../styles/walletConnect.module.css"; 
+
  import styles from        "../../styles/Navbar.module.css"; 
  import stylesProfile from "../../styles/Profile.module.css"; 
 import AccountMenu from "../../components/AccountMenu";
@@ -56,7 +60,7 @@ const Topbar = () => {
 
   return (
     <Box display="flex" justifyContent="space-between"
-      padding="0px 90px 0px 90px" height={"68px"}
+      padding="0px 20px 0px 20px" height={"46px"}
 
       borderBottom={`1px solid ${colors.primary[300]}`}
      
@@ -149,19 +153,28 @@ const Topbar = () => {
         <HorizontalSpace space={2}/>
 
 
-
+  
         <RowChildrenAlignCenter>
-        <ConnectWallet
-        theme={theme.palette.mode}
-        modalSize={"wide"}
-
-        style={{ height: buttonStyle.wallet.height }}
-        welcomeScreen={{
+        <ConnectWallet  theme={theme.palette.mode}  modalSize={"wide"}
+       
+       
+      /*  full connect button customization tutorial here
+       https://youtu.be/7IxMbJD6eQ0?t=2468
+      */
+          style={{  height: '40px'   }}
+         
+          welcomeScreen={{
           title: "Get it at to Wuli.rocks",
           subtitle: "Just connect to get started",
         }}
           modalTitleIconUrl={""}
-        />
+
+             
+
+         /> 
+              
+
+         
         
          <HorizontalSpace space={2}/> 
 

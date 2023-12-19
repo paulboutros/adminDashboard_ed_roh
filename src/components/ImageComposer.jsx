@@ -448,32 +448,32 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
         <div> 
                         
             <Button variant="contained" 
-              sx={{backgroundColor: colors.redAccent[500]  }}
+              sx={{backgroundColor: theme.debugModeColor }}
                 onClick={() => createBundle() } >   
                  createBundle
             </Button> 
  
             <Button variant="contained" 
-              sx={{backgroundColor: colors.redAccent[500]  }}
+              sx={{backgroundColor: theme.debugModeColor  }}
                 onClick={() => mintToCollection() } >   
                   mintToCollection
             </Button> 
  
             <Button variant="contained" 
-              sx={{backgroundColor: colors.redAccent[500]  }}
+              sx={{backgroundColor: theme.debugModeColor  }}
                 onClick={() => UpdateListing() } >   
                   UpdateListing
             </Button>
 
             <Button variant="contained" 
-              sx={{backgroundColor: colors.redAccent[500]  }}
+              sx={{backgroundColor: theme.debugModeColor }}
                 onClick={() => UpdatePackMetaData() } >   
                   UpdatePackMetaData
             </Button>
             
             
             <Button variant="contained" 
-              sx={{backgroundColor: colors.redAccent[500]  }}
+              sx={{backgroundColor: theme.debugModeColor  }}
                 onClick={() =>  CreateListing() } >   
                   CreateListing
             </Button>

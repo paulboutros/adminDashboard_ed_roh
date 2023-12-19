@@ -1,6 +1,6 @@
  // React Component for the Referred User
  
- import { useLocation } from 'react-router-dom';
+ import { useLocation, useNavigate } from 'react-router-dom';
  import {useEffect, useState} from "react";
  import { Box } from "@mui/material";
  //import dotenv from "dotenv";
@@ -16,33 +16,49 @@ import { BasicScrollable } from '../../components/Layout';
 import Container from '../../components/Container/Container';
 import { useAllListingsContext } from '../../context/AllListingContext';
 import { AllNFTWrapper } from '../shop';
+import { GetCookieRedirectURL, getCookie, removeCookie } from '../../data/API';
  
   
  //const API_URL = process.env.API_URL;
  const AllLayerImage = () => {
    
-   const { contract } = useContract(TOOLS_ADDRESS);
-    const { data, isLoading } = useNFTs(contract);
-   
-    const { data: allNFTs } = useNFTs(contract); // get all neft
-
-    const { allNFTsWithListing  } = useAllListingsContext();
-     
-        
-      
-   // const [allNFTs, setAllNFTs] = useState();
-   useEffect(()=>{
-    /*
-     async function get(){
-         const result =  await  GetAllNFTfromSDK();
-          setAllNFTs(result);
-     }
-    
-    get();
-     */
-  }, [   ]);
- 
+ const navigate = useNavigate();
   
+ const cookieName = "tempRedirect"; 
+ const redirectCookie = getCookie(cookieName);//GetCookieRedirectURL();
+ 
+ 
+
+    const { contract } = useContract(TOOLS_ADDRESS);
+    const { data, isLoading } = useNFTs(contract);
+    const { data: allNFTs } = useNFTs(contract); // get all neft
+    const { allNFTsWithListing  } = useAllListingsContext();
+    
+      
+  
+  if (redirectCookie){ 
+
+    const redirectUrl = redirectCookie.redirectUrl;
+     navigate(`/${ redirectUrl}`) ;
+
+    // for unknown reasons, without delay navivigate will not work.
+    // even when setting a later detah time in the cookie 
+    setTimeout(() => {
+      removeCookie( cookieName );
+  }, 250); // 4000 milliseconds = 4 seconds
+
+
+     
+    //removeCookie( cookieName )
+   // document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+   return (<>
+   
+   
+   </>)
+    
+   }
+
+
   return (
     !allNFTs ? (
       <div>alllayerimage.js allNFTs not loaded</div>
@@ -130,7 +146,7 @@ import { AllNFTWrapper } from '../shop';
  
            const REACT_APP_YOUROAUTH2URL = process.env.REACT_APP_YOUROAUTH2URL;
            window.location.href = REACT_APP_YOUROAUTH2URL;
-   
+         
  
  
          } else {
