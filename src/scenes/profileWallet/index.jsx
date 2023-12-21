@@ -7,7 +7,17 @@ import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import FaceIcon from '@mui/icons-material/Face';
 
 
-import React, { useState } from 'react';
+
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
+
+import React, { useEffect, useState } from 'react';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
@@ -18,10 +28,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 
-import { allCSS, infoHeight, tokens  } from "../../theme";
+import { allCSS, infoHeight, tokens, HtmlTooltip, BootstrapTooltip } from "../../theme";
 import {Box, Button, Chip, Icon, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
-import { BasicScrollable, HorizontalSpace } from '../../components/Layout';
+import { BasicScrollable, HorizontalSpace, VerticalSpace } from '../../components/Layout';
 import AppLinkDataBox from '../../components/AppLinkDataBox.jsx';
 
 //==============================================================
@@ -38,7 +48,7 @@ import {
   useAddress,
   useConnectionStatus,
   useContract,
-  useOwnedNFTs,
+  useOwnedNFTs, useConnect, metamaskWallet
 } from "@thirdweb-dev/react";
 import MyPacks from '../myPacks/index';
 import AccountMenu from '../../components/AccountMenu.jsx';
@@ -50,9 +60,16 @@ import { addorupdate, getAvatar, openOAuth2Url,   GetCookieRedirectURL, createRe
 import { addressShortened } from '../../utils';
 import { useDebugModeContext } from '../../context/DebugModeContext';
 import { useParams } from 'react-router';
+import ToDoList from '../../components/List/ToDoList';
 
 
+async function openOAuth2Url_whenUserNotConnected( address ){
 
+  // after discord athentication we need to come back to the same exact page,
+   // so we save the  route path in a cookie , th redirect will happen of the root route.    
+   createRedirectookie( `profileWallet/${address}/2` ); // is refferal tab
+   openOAuth2Url(null);
+}
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -86,8 +103,11 @@ function a11yProps(index) {
   };
 }
 
+
+const walletConfig = metamaskWallet();
 export default function BasicTabs() {
 
+  
 
   const connectionStatus = useConnectionStatus();
     const theme = useTheme();
@@ -109,6 +129,8 @@ export default function BasicTabs() {
     setValue(newValue);
   };
  
+  
+
  
   return (
     //<Box sx={{ width: '100%' }}>
@@ -142,16 +164,16 @@ export default function BasicTabs() {
       <CustomTabPanel value={value} index={2}>
        
 
-       <Box  sx={{  borderRadius: 4, backgroundColor: colors.primary[400] }} >
-         
-         
+       
+          <EarnBadges/>
+          
+       
+       <VerticalSpace space={1}/>
         
+         <AppLinkDataBox/>
         
-         <EarnBadges/>
 
-       </Box>
-
-      {/* <Avatar  src= {!user ? ( null ):(  getAvatar(user)  )}   /> */}
+     
       
         
    
@@ -169,6 +191,19 @@ export default function BasicTabs() {
 
  function EarnBadges(){
 
+  const [tasks, setTasks] = useState([
+    { description: 'login with Discord',     completed: false, callBack:  openOAuth2Url_whenUserNotConnected },
+    { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
+    { description: 'validate', completed: false },
+  ]);
+  const updateTask = (index , completed ) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task, i) =>
+        i === index ? { ...task, completed:  completed } : task
+      )
+    );
+  };
+
  
 
   const theme = useTheme();
@@ -179,8 +214,23 @@ export default function BasicTabs() {
  const {user, setUser } = useUserContext();
  const {debugMode } =  useDebugModeContext();
 
-
+ //const {  HtmlTooltip } =  allCSS(theme.palette.mode   );   
   
+
+ useEffect(()=>{
+  
+  const state = user ? true:false; 
+  updateTask(0,state )
+
+  const state1 = walletAndDiscordAreConnected(user);// true:false; 
+  updateTask(1, state1 )
+
+
+}, [user ]);
+ 
+
+   
+
  async function disconnectWalletDiscord(){
 
   const result = await addorupdate(user, "0000000" );
@@ -189,15 +239,25 @@ export default function BasicTabs() {
   //console.log(   "disconnectWalletDiscord  =" , result );
 
 }
+
+  function walletAndDiscordAreConnected(user){
+
+   
+ // console.log(  " >>>>>>>>>>>>>>>>>>>>     user="   , user);
+  if (!user || user === undefined){return false;}
+ // console.log(  "user.wallet "   ,user.wallet);
+
+  return !user.wallet.includes("0000000");
+}
+
 async function  linkAdressToDiscord(  user, address ){
 
  
     // at this point the discord user is not connected, so we user the wallets collection, wallet as ID
        if ( !user ){
-     // after discord athentication we need to come back to the same exact page,
-     // so we save the  route path in a cookie , th redirect will happen of the root route.    
-         createRedirectookie( `profileWallet/${address}/2` ); // is refferal tab
-         openOAuth2Url(null);
+
+        openOAuth2Url_whenUserNotConnected( address );
+   
          return;
        }
    
@@ -206,33 +266,39 @@ async function  linkAdressToDiscord(  user, address ){
      
 // update task completion on server
  }
- function saveWalletAndDiscord(){
+ 
+ function getCompletion() {
+  
+   
+  let task = 0;
+  if ( user ){ task+=1;    console.log(  "complete  1 "); } // we are connected to discord
+  if (  walletAndDiscordAreConnected(user)  ){  console.log(  "complete  2 " , user);   task+=1; }  // there is wallet associated with discord account
+  
 
-    
+return  (`To DO ${task} / 2`)   ;
+
  }
 
-   return (
-    < >    
+ const [isTooltipOpen, setTooltipOpen] = useState(false);
 
-    
-     <Box sx={{ 
+   return (
+    <>   
+
+    <Box  sx={{  borderRadius: 4, backgroundColor: colors.primary[400] }} > 
+      <Box sx={{ 
              color: colors.grey[300], display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
        
       }}>
        
  
-   <AccountMenuCustom/>
-
-
-   
-  
-       <Box sx={{ position: 'relative',  width: infoHeight, height: infoHeight, 
+        <AccountMenuCustom/>
+          <Box sx={{ position: 'relative',  width: infoHeight, height: infoHeight, 
        // outline: `1px solid ${ colors.blueAccent[200] }`,  // for debugging purposes
        
      }} >
       <Avatar 
 
-       src= {!user ? ( null ):(  getAvatar(user)  )} 
+       src= {!user ? ( null ):(  getAvatar( user.discordUserData )  )} 
        // we want the same size as the speed dial position and anchor alignement matches
        sx={ {  
         position: "absolute",
@@ -253,18 +319,38 @@ async function  linkAdressToDiscord(  user, address ){
 
      {(user && address) ? (  
      
-        <Box  sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
-             onClick={() => linkAdressToDiscord( user, address  )}
-        >
+    
       
-              <p> 
-               {  user.wallet.includes("0000000") ? (
-                  <>Click to link <span  >{addressShortened(address)}</span> to Discord</>
-                 ) : ( user.wallet )       } 
-              </p>
              
-        </Box>
-            
+        
+      
+              <> 
+               { !walletAndDiscordAreConnected(user) ? (
+                 <BootstrapTooltip 
+                  title="Only 1 wallet can be associated with Discord profile on this DAPP" placement="left-start" >
+
+                   <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  } onClick={() => linkAdressToDiscord( user, address  )}  >
+                      <p>Click to link <span  >{addressShortened(address)}</span> to Discord</p>
+                  </Box>
+
+                 </BootstrapTooltip>
+                 ) : (
+                  <BootstrapTooltip 
+                   title="Your wallet is successfully associated with your Discord profile"  placement="left-start">
+
+
+                  <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  } onClick={() => linkAdressToDiscord( user, address  )}  >
+
+                          <p style={{fontWeight:"500px" }}>   {user.wallet}    </p>
+                  </Box>
+
+
+                  </BootstrapTooltip>
+                  )       } 
+              </>
+             
+       
+      
           
       ):(  // connectionStatus === "disconnected"
         <>
@@ -290,7 +376,8 @@ async function  linkAdressToDiscord(  user, address ){
            <Box sx={allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
                    onClick={() => linkAdressToDiscord(user, address)}
            >
-           <p>  <>Wallet<span  >{"Login"}</span></> </p>
+             <p>  <>Click to link <span  >{"Discord"}</span> account</> </p>
+             {/* <p>  <>Wallet<span  >{"Login"}</span></> </p> */}
            </Box>
          )
         }
@@ -298,24 +385,41 @@ async function  linkAdressToDiscord(  user, address ){
       )}
 
          <HorizontalSpace space={30}/> 
-        {/* <Box 
-          sx ={  allCSS( theme.palette.mode, "100px","0px" ).infoBox  }
-           
-                >   
-                 Save 
-       </Box>  */} 
-        {/* <Chip variant="outlined" color= "bl" icon={<TagFacesIcon/> }
+        
+         
+          <HtmlTooltip
 
-         label="To DO 0/3" */}
-         {/* <Chip icon={<TagFacesIcon />}  label="To DO 0/3"   */}
-         <Chip variant="outlined" color="warning" label="To DO 0 / 3"   icon={<FaceIcon />}  
-           sx={ {height :"30px" , borderRadius:"10px" }}
-        />
-          
+        //  open={true} // for debugging
+        //    onClose={() => setTooltipOpen(true)}
+        //   onOpen={() => setTooltipOpen(true)}
 
 
+        //     onMouseEnter={() => setTooltipOpen(true)}
+        //    onMouseLeave={() => setTooltipOpen(true)}
+ 
+
+           title={
+            <React.Fragment>
+              <Typography color="inherit">Requirement</Typography>
+
+              <Typography fontSize={"15px"}>{"Link your Wallet to your Discord"}</Typography> 
+            
+
+                        <Box>
+                           
+                          <ToDoList tasks={tasks}/>
+                        </Box>
 
 
+            </React.Fragment>
+          }
+        >
+           <Chip variant="outlined" color="warning" label= { getCompletion()}   icon={<FaceIcon />}  
+           sx={ {height :"30px" , borderRadius:"10px" }}/>
+        
+         </HtmlTooltip>  
+
+         
               {debugMode && (
 
                   <Button variant="contained" 
@@ -324,15 +428,9 @@ async function  linkAdressToDiscord(  user, address ){
                       disconnect 
                   </Button>
                   )}
-
-
-
-
+ 
      </Box> 
-      
-     
-
-   
+     </Box>    
 
    </ >
    )
@@ -448,7 +546,7 @@ const YourComponent = () => {
     
     [
     {
-     // width: '300px', height: '50px',
+     
       '&:hover': {
         color: `${colors.primary[200]}`,
         // backgroundColor: 'white',

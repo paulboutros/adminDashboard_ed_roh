@@ -211,7 +211,7 @@ const navigate = useNavigate();
          )}
 
          <MenuItem onClick={DiscordLogin}>
-          <Avatar  src= {!user ? ( null ):(  getAvatar(user)  )}   />
+          <Avatar  src= {!user ? ( null ):(  getAvatar(user.discordUserData)  )}   />
           {!user ? (  "Discord Login"):(  "Discord Logout" )}
            
         </MenuItem>

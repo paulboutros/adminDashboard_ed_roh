@@ -8,7 +8,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import PrintIcon from '@mui/icons-material/Print';
 import ShareIcon from '@mui/icons-material/Share';
-import { CopyToClipboard, copyTextToClipboard } from '../utils';
+import {   copyTextToClipboard } from '../utils';
 import { infoHeight } from '../theme';
  
  

@@ -134,6 +134,41 @@ export async function  getUserMe   () {
 
 } 
 
+export async function  getUser   () {
+ 
+  const endpoint = `${process.env.REACT_APP_API_URL}user/me`; // make it specific (filter to twitter fields)
+
+ 
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      credentials: 'include' // This sets the 'withCredentials' option to true (automatically include coolies in header)
+      , headers: {
+        //'Referral-Code': myCookieValue,
+      }
+    });
+  
+    if (!response.ok) {
+      console.log("!response.ok: User is not connected to discord.")
+     // throw new Error(`user/me Error: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+
+  if ( data) 
+      
+    return data.user;
+
+  } catch (error) {
+     
+    console.error('user/me Error:', error);
+    throw error; // You can handle the error further as needed
+  }
+ 
+
+} 
+
 export async function getAllLayersAvailable(){
 
 
@@ -431,7 +466,19 @@ export async function ERC20claim_discord_login_required(ID, filteredImages_arg ,
 
 
 
+export async function getManyUserData( IDlist  ){
+ 
+   const dataToSend={ 
+    IDlist : IDlist,
+   }
 
+const endpoint = `${process.env.REACT_APP_API_URL}getManyUserData`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+console.log("data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+}
 
 
 export async function  myDiscordInfo   (user_ID) {
@@ -444,9 +491,9 @@ export async function  myDiscordInfo   (user_ID) {
   const endpoint = `${process.env.REACT_APP_API_URL}myDiscordInfo?ID=${user_ID}`; // make it specific (filter to twitter fields)
   const result  = await fetch(endpoint);
  
- const resultsJson = await result.json();
+ const resultsJson = await result.json();   
   
-/* //  response
+/* //  response struct
  {    provider<discordresult>  scoreData.discord.invite_code   scoreData.discord.invite_use
         "ID": "423608837900206091",
         "discord": "Wulirocks",
@@ -610,10 +657,10 @@ export const openOAuth2Url = (user, setUser ) => {
 };
 
 
-export function getAvatar( user ){
+export function getAvatar(  discordUserData ){
 
   // discordata is custom and store discord user data after sucesfully auth
- const discordData =  user.discordUserData;
+ const discordData =  discordUserData;
 
 
   

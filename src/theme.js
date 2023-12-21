@@ -232,29 +232,50 @@ export const tokens = (mode) => ({
 
 
 
+export const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+    ))(({ theme }) => ({
 
-export const allCSS = (mode , _width, _margin) => {
-  const colors = tokens(mode);
-
- 
-  
-  const BootstrapTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} arrow classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.arrow}`]: {
-      color: colors.primary[600],
-    },
+      
+     [`& .${tooltipClasses.arrow}`]: {
+      color:  tokens(theme.palette.mode).primary[600],
+     },
     [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: colors.primary[600],
+      backgroundColor: tokens(theme.palette.mode).primary[600],
   
-      fontSize: 11,
-      padding: theme.spacing(1.2), // Adjust the padding as needed
+       color:   tokens(theme.palette.mode).grey[300],  
+      fontSize: 14,
+      fontWeight: 400,
+      padding: theme.spacing(1.3), // Adjust the padding as needed
     },
   }));
 
+
+
+
+  export const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor:  tokens(theme.palette.mode).primary[600], 
+      color:  tokens(theme.palette.mode).primary[100], 
+      fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+      
+      borderRadius : "8px",
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+       border: '2px solid  rgba(150, 150, 150, 0.2)',
+    },
+  }));
+
+
+
+  
+
+export const allCSS = (mode , _width, _margin) => {
+  const colors = tokens(mode);
  
-
-
+  
   const outline = {
     light : colors.primary[500],
     dark  : colors.primary[400]
@@ -266,6 +287,7 @@ export const allCSS = (mode , _width, _margin) => {
 
 
    return {
+   // HtmlTooltip,
     BootstrapTooltip,
      infoBox: { 
         
@@ -281,7 +303,6 @@ export const allCSS = (mode , _width, _margin) => {
        alignItems: "center",
    
        fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
-    
        color: colors.primary[100],
       
        '& span': {
