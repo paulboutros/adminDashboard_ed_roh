@@ -211,24 +211,8 @@ export function GetCookieRedirectURL(   address ){
         return myCookie;
     }
  
-  
+   
 
-
-
-
-
-/*
-  const dataToSend={ 
-  //  ID : user.ID,
-    redirectUrl: `profileWallet/${address}`
-  }
-
-const endpoint = `${process.env.REACT_APP_API_URL}setRedirectURL`; 
-const resultsPostJson = await axios.post(endpoint, dataToSend);
-
-console.log("data response :" ,   resultsPostJson.data );
-
-return resultsPostJson.data;*/
 }
 export async function addorupdate( user , address ){
  
@@ -252,8 +236,6 @@ export async function GetLayerSupply(){
   const result = await fetch(endpoint);
   let allSupply = await result.json();
  
- 
-
   return allSupply;
 }
 
@@ -323,18 +305,40 @@ export async function  Add_owning_and_otherLayerInfo( user , layerToChooseFrom )
 
 }
 */
+ 
+ 
+export async function myDiscordInvite(user_ID){
+ 
+  // we do not want to regenrate an invite as it will override previous one
+  // so we check first if one exist
+  // referralcode is an array, but for now we only use 1 element. 1 code per user.
+   const endpointG = `${process.env.REACT_APP_API_URL}GetDiscordInviteCode?ID=${user_ID}`; // make it specific (filter to twitter fields)
+   const resultG = await fetch(endpointG);
+   let resultsJson = await resultG.json();
+    
+
+   console.log( "response resultsJson    "  , resultsJson);
+   // if no referral link has been created we generate one
+   //  if (resultsJson.referralCode.length === 0){
+    if ( !resultsJson.referralCode ){
+
+       
+
+    const endpoint = `${process.env.REACT_APP_API_URL}discord_invite_create`; // make it specific (filter to twitter fields)
+    const resultsPostJson =await fetch(endpoint);
+
+    // console.log("referal :" ,   resultsPostJson.data.shareableLink);
+    
+       // set the refferal code to the one we jsut generate
+      resultsJson = resultsPostJson;
+    }
+
+  // will be the one that exist or the one geenrate by the postrequest it it initially does not exist
+    return resultsJson;
+} 
 
 
-
-
-
-
-
-
-
-
-
-export async function myAppLink(user_ID){
+export async function myAppLink (user_ID){
      
 
    // we do not want to regenrate an invite as it will override previous one
@@ -356,9 +360,7 @@ export async function myAppLink(user_ID){
      const resultsPostJson = await axios.post(endpoint, dataToSend);
 
       console.log("referal :" ,   resultsPostJson.data.shareableLink);
-     //  setReferralCode(result.data.shareableLink);
-     // setShowCopyButton(true);
-
+     
         // set the refferal code to the one we jsut generate
        resultsJson = resultsPostJson;
      }
@@ -371,7 +373,7 @@ export async function myAppLink(user_ID){
 export async function  GetRewardPrice(dataToSend   /*he,sh,we,be,kn*/ ){
   
  
-
+  
        /*
        "he":   {  "layerNumber": 4, "tokenID": 4 } ,
          "sh":  {  "layerNumber": 4, "tokenID": 4 } ,
@@ -511,13 +513,20 @@ export async function  myDiscordInfo   (user_ID) {
    return resultsJson;
 } 
 
+export async function  globalData_setDebugMode   ( value ) {
+  
+ 
+ const dataToSend= { value:value };
+   
 
-export async function  globalData   () {
-
-
+ console.log("dataToSend:" ,  dataToSend);
+const endpoint = `${process.env.REACT_APP_API_URL}globalData_setDebugMode`; // make it specific (filter to twitter fields)
+const resultsPostJson = await axios.post(endpoint, dataToSend);
     
-
-
+   return resultsPostJson;
+} 
+export async function  globalData   () {
+ 
     //const getData_enpPoint = API_URL + "getData";
     const endpoint = `${process.env.REACT_APP_API_URL}globalData`; // make it specific (filter to twitter fields)
     const result  = await fetch(endpoint);

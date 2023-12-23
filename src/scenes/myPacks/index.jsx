@@ -33,7 +33,7 @@ export default function MyPacks() {
      const [rewardNFTs, setRewardNFTs] = useState(); // <PackRewards>
      const [spinReady, setSpinReady] = useState([false,false,false,false,false,false]); // <PackRewards>
     
-     const {debugMode, setDebugMode} = useDebugModeContext();
+     const {debugMode, set_DebugMode} = useDebugModeContext();
   
     useEffect(() => {
          

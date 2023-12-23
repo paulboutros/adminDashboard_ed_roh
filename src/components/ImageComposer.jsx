@@ -29,7 +29,7 @@ import { useDebugModeContext } from '../context/DebugModeContext';
  
   const LayerSelector = (  {queryId="" }  ) => {
 
-    const {debugMode, setDebugMode} = useDebugModeContext();
+    const {debugMode, set_DebugMode} = useDebugModeContext();
 
     /*
     const fetchCategoryData = async (category  ) => {

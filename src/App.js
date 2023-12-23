@@ -41,8 +41,11 @@ import { UserProvider } from './context/UserContext.js';
 import { AllLayersProvider }  from './context/AllLayerAvailableContext.js';
 import { NotificationProvider }  from './context/NotificationContext.js'; 
 import { DropTimeProvider }  from './context/DropTimeContext.js'; 
-import { DiscordProvider }  from './context/DiscordContext.js'; 
+import { DiscordProvider }  from './context/DiscordContext.js';
+
 import { AppLinkProvider }from './context/AppLinkContext.js'; 
+import { DiscordInviteProvider } from "./context/DiscordInviteContext.js";
+
 import { DebugModeProvider } from "./context/DebugModeContext.js";
 
 
@@ -64,6 +67,7 @@ import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
+
 
  
 function App() {
@@ -140,7 +144,9 @@ const testThirdWeb = false;
        <UserProvider>
          <DiscordProvider>
            <DebugModeProvider>
-    <AppLinkProvider>
+
+     <DiscordInviteProvider> 
+        <AppLinkProvider>
    
       <DropTimeProvider>
       <NotificationProvider>
@@ -224,7 +230,9 @@ const testThirdWeb = false;
      </NotificationProvider>
      </DropTimeProvider>
      
-     </AppLinkProvider>
+     </AppLinkProvider> 
+        </DiscordInviteProvider>
+     
          </DebugModeProvider>
     </DiscordProvider>
        </UserProvider>

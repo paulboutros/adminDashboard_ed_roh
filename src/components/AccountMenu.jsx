@@ -53,7 +53,7 @@ const navigate = useNavigate();
 const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const {user, setUser } = useUserContext();
-  const {debugMode, setDebugMode} =  useDebugModeContext();
+  const {debugMode, set_DebugMode} =  useDebugModeContext();
 
   
  
@@ -70,7 +70,7 @@ const theme = useTheme();
 
   const switchDebugMode =() =>{
       
-      setDebugMode(!debugMode);
+      set_DebugMode(!debugMode);
      
 };
 

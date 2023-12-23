@@ -25,7 +25,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { tokens } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAppLinkContext } from '../context/AppLinkContext.js';
-import {sendTracking, openOAuth2Url, ERC20claim , testSDK } from "../data/API";
+import {sendTracking, openOAuth2Url, ERC20claim  } from "../data/API";
 
 import {  Box ,Button,   Typography, useTheme  } from "@mui/material";
 
@@ -35,7 +35,7 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import LayerBaseInfo from  "./LayerBaseInfo";
     
 import ReferrerComponent from "./ReferrerComponent"
-import AppLinkDataBox from "./AppLinkDataBox";
+import AppLinkDataBox from "./Badges/AppLinkDataBox";
 import { useAllLayersContext } from '../context/AllLayerAvailableContext';
 
 

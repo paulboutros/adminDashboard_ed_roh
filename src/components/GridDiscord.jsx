@@ -63,7 +63,7 @@ useEffect(()=>{
    //const result  = await fetch("/api/findUsersWithNonZeroProperties");
     let resultsJson = await result.json();
     
-
+ //https://discord.com/invite/TZszHsf92c
 
      console.log(  "resultsJson"  ,resultsJson);
      

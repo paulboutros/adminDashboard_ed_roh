@@ -66,7 +66,7 @@ const navigate = useNavigate();
 
 
   const {user, setUser } = useUserContext();
-  const {debugMode, setDebugMode} =  useDebugModeContext();
+  const {debugMode, set_DebugMode} =  useDebugModeContext();
 
   const address = useAddress ();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -80,7 +80,7 @@ const navigate = useNavigate();
 
   const switchDebugMode =() =>{
       
-      setDebugMode(!debugMode);
+    set_DebugMode(!debugMode);
      
 };
 

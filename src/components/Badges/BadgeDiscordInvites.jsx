@@ -1,22 +1,21 @@
 import React from 'react';
 import {Box, Divider,Grid, Typography , useTheme, Chip,  } from '@mui/material';
-import { BootstrapTooltip, HtmlTooltip, allCSS, tokens } from "../theme";
-import CopyToClipboard  from './CopyToClipboard'; // to get user data from context provider
- import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
+import { BootstrapTooltip, HtmlTooltip, allCSS, tokens } from "../../theme";
+  import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
- import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import {useEffect, useState} from "react";
-import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+ import {useEffect, useState} from "react";
  
  
-import { HorizontalSpace } from './Layout';
+ 
+import { HorizontalSpace } from '../Layout';
 import FaceIcon from '@mui/icons-material/Face';
-import ReferredFriendsList from './List/ReferredFriendsList.jsx';
+import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
  
-import { copyTextToClipboard } from '../utils';
-import { getAvatar, getManyUserData } from '../data/API';
+import { copyTextToClipboard } from '../../utils';
+import { getAvatar, getManyUserData } from '../../data/API';
+import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
   
-   const ReferralLinkGrid = (    ) => {
+   const BadgeDiscordInvites = (    ) => {
 
  
     const [tasks, setTasks] = useState([
@@ -51,42 +50,19 @@ import { getAvatar, getManyUserData } from '../data/API';
 
     };
  
-
+      const { discordInvite } =  useDiscordInviteContext();
      const { user } = useUserContext();
      
   const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
   //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
   
-  const [TempGiveAway, setTempGiveAway] = useState(); // gieaway recived but not revealed yet, and not added to layers count
-
+ 
   const GetReferralCodeData = async () => {
     
     if (!user){return;}
-
-    const userID =  user.ID;
-    const endpoint = `${process.env.REACT_APP_API_URL}GetReferralCode?ID=${userID}`; // make it specific (filter to twitter fields)
-     const result = await fetch(endpoint);
-     let response = await result.json();
-     
-
-   // if no one has accepted yet
-      if (response.referralCode.referredUser.length === 0 ){
-      response.referralCode.referredUser=[
-        "not accepted yet"
-       ]
-    }
-
-      setReferralCode(response.referralCode);
-
-
-      const endpoint_t = `${process.env.REACT_APP_API_URL}GetTempGiveAway?ID=${userID}`; // make it specific (filter to twitter fields)
-      const result_t = await fetch(endpoint_t);
-      let response_t = await result_t.json();
-      
-      
-      setTempGiveAway(response_t.tempGiveAway );
-
-              
+       console.log( "Badge discordInvite =",  discordInvite  );
+      setReferralCode(discordInvite.referralCode);
+ 
 
   };  
   
@@ -127,7 +103,7 @@ import { getAvatar, getManyUserData } from '../data/API';
  // if ( user ){ task+=1;    console.log(  "complete  1 "); } // we are connected to discord
  // if (  walletAndDiscordAreConnected(user)  ){  console.log(  "complete  2 " , user);   task+=1; }  // there is wallet associated with discord account
   
- 
+ return  (`ACCEPTED:WIP`)   ;
   return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
 return  (`To DO ${task} / 2`)   ;
    }
@@ -193,9 +169,9 @@ return  (`To DO ${task} / 2`)   ;
      
           <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
 
-            <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord(  )}
+            <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
               
-            >
+            {/* discordInvite */}
             <Box onClick={ () => copyTextToClipboard ( referralData?.shareableLink )} > 
                  <p> <>Share link <span style={{fontWeight:"700px"}} >{ referralData?.code}</span> with friends</></p>
             </Box>
@@ -211,7 +187,7 @@ return  (`To DO ${task} / 2`)   ;
         <HorizontalSpace space={30}/> 
  
         <HtmlTooltip
-     open={true} // for debugging
+         // open={true} // for debugging
        
 
              
@@ -238,7 +214,7 @@ return  (`To DO ${task} / 2`)   ;
      
   };
   
-  export default ReferralLinkGrid;
+  export default BadgeDiscordInvites;
    
 const mockreferred= 
   [

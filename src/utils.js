@@ -57,6 +57,23 @@ export function formatTimestampToCustomFormat(timestamp) {
 
     return readableTimestamp;
   }
+
+
+  export function timeAgo(timestamp) {
+    const currentDate = new Date();
+    const pastDate = new Date(timestamp);
+  
+    const timeDifference = currentDate - pastDate;
+    const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  
+    if (daysAgo === 0) {
+      return 'today';
+    } else if (daysAgo === 1) {
+      return 'yesterday';
+    } else {
+      return `${daysAgo} days ago`;
+    }
+  }
   
   export function hexToDaysAgo(hexTimestamp) {
     // Convert hex to decimal

@@ -31,8 +31,11 @@ import Typography from '@mui/material/Typography';
 import { allCSS, infoHeight, tokens, HtmlTooltip, BootstrapTooltip } from "../../theme";
 import {Box, Button, Chip, Icon, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
-import { BasicScrollable, HorizontalSpace, VerticalSpace } from '../../components/Layout';
-import AppLinkDataBox from '../../components/AppLinkDataBox.jsx';
+import {  HorizontalSpace, VerticalSpace } from '../../components/Layout';
+import AppLinkDataBox from '../../components/Badges/AppLinkDataBox.jsx';
+import JoinServer from '../../components/Badges/BadgeJoinServer.jsx';
+
+
 
 //==============================================================
 import Backdrop from '@mui/material/Backdrop';
@@ -61,6 +64,7 @@ import { addressShortened } from '../../utils';
 import { useDebugModeContext } from '../../context/DebugModeContext';
 import { useParams } from 'react-router';
 import ToDoList from '../../components/List/ToDoList';
+import BadgeDiscordInvites from '../../components/Badges/BadgeDiscordInvites';
 
 
 async function openOAuth2Url_whenUserNotConnected( address ){
@@ -164,19 +168,24 @@ export default function BasicTabs() {
       <CustomTabPanel value={value} index={2}>
        
 
-       
+       {/*   TO DO, add a server join reward status (show if user is a member of not)
+         since we have direct access to bot. see if we can access message and content in some channel...
+        */}
           <EarnBadges/>
-          
-       
-       <VerticalSpace space={1}/>
+        
+          <VerticalSpace space={1}/>
         
          <AppLinkDataBox/>
+         
+          
+         <VerticalSpace space={1}/>
         
+         <JoinServer/>
 
-     
-      
-        
-   
+         <BadgeDiscordInvites/>
+
+      {/* result  = {  partOfGuild :true, joinedAt: userJoinTime  }; */}
+       
            {/* <AppLinkDataBox/>  */}
 
       </CustomTabPanel>
@@ -210,12 +219,19 @@ export default function BasicTabs() {
 
  const colors = tokens(theme.palette.mode);
  const address = useAddress();
-
+                
  const {user, setUser } = useUserContext();
  const {debugMode } =  useDebugModeContext();
 
  //const {  HtmlTooltip } =  allCSS(theme.palette.mode   );   
   
+
+
+ 
+ useEffect(()=>{
+     console.log("  profile wallet  : debugMode   = ", debugMode );
+
+}, [ debugMode   ]);
 
  useEffect(()=>{
   
@@ -243,7 +259,7 @@ export default function BasicTabs() {
   function walletAndDiscordAreConnected(user){
 
    
- // console.log(  " >>>>>>>>>>>>>>>>>>>>     user="   , user);
+   //console.log(  " >>>>>>>>>>>>>>>>>>>>     user="   , user);
   if (!user || user === undefined){return false;}
  // console.log(  "user.wallet "   ,user.wallet);
 
