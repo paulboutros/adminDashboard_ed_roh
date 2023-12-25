@@ -251,8 +251,7 @@ if (listingId){
       
         {/* height= {_height} */}
       {newDataList ? (
-
-
+ 
          <div>
 
         <DataGridHeader  title={title} /> 

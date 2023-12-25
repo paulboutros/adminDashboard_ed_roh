@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Divider,Grid, Typography , useTheme, Chip,  } from '@mui/material';
+import {Box, Divider,Grid, Typography , useTheme, Chip, Button,  } from '@mui/material';
 import { BootstrapTooltip, HtmlTooltip, allCSS, tokens } from "../../theme";
   import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -12,46 +12,42 @@ import FaceIcon from '@mui/icons-material/Face';
 import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
  
 import { copyTextToClipboard } from '../../utils';
-import { getAvatar, getManyUserData } from '../../data/API';
+import { deleteDiscordInvite, getAvatar, getManyUserData } from '../../data/API';
 import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
+import { useDebugModeContext } from '../../context/DebugModeContext';
   
    const BadgeDiscordInvites = (    ) => {
 
- 
+    const {debugMode }     = useDebugModeContext();
     const [tasks, setTasks] = useState([
       // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
       // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
       // { description: 'validate', completed: false },
-      {global_name:"", src:""}, 
-      {global_name:"", src:""}, 
-      {global_name:"", src:""}  
+      {global_name:"", src:"", verified:null, email:null }, 
+       
     ]);
 
     const updateTask = async ( ) => {
      
-     let referredUserListDetails  = await getManyUserData(  referralData.referredUser   );
-     
-      //mockreferred isc opied from  postman /getManyUserData response
-        //referredUserListDetails =mockreferred;
-
-
+        let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
+      
         const referredUsers =[];
         referredUserListDetails.forEach(data => {
-          console.log ( " >>>>>>>  data  : "  , data  );
+         
           const src = getAvatar(data.discordUserData );
-         const elData = { global_name : data.discordUserData.global_name,  src:src };
+         const elData = { global_name : data.discordUserData.username,  src:src, verified:data.discordUserData.verified };
          referredUsers.push(elData) 
  
        });
         
        setTasks(referredUsers);
       
-       console.log ( " referredUsers  : "  ,  referredUsers  );
+       console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
 
     };
  
-      const { discordInvite } =  useDiscordInviteContext();
-     const { user } = useUserContext();
+      const { discordInvite ,  setdiscordInviteLoaded } =  useDiscordInviteContext();
+     const { user, setUser } = useUserContext();
      
   const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
   //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
@@ -59,29 +55,31 @@ import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
  
   const GetReferralCodeData = async () => {
     
-    if (!user){return;}
-       console.log( "Badge discordInvite =",  discordInvite  );
-      setReferralCode(discordInvite.referralCode);
+   // if (!user){return;}
+     
+      //setReferralCode(discordInvite);
  
 
   };  
   
 
   useEffect(  ()=> {
-   console.log( "referralData     ",  referralData  );
-     if (!referralData)return;
+   
+   //  if (!referralData)return;
       updateTask();
 
-     
-  }  , [ referralData  ]);
+   console.log( "Badge discordInvite =",  discordInvite  );
+   console.log( "discordInvite?.invite =",  discordInvite?.invite  );
+   
+  }  , [ discordInvite  ]);
 
   useEffect( ()=>{
      
-    if (!user)return;
+    
          GetReferralCodeData();
    
 
-  }, [ user  ]);
+  }, [ discordInvite  ]);
 
    
    
@@ -91,9 +89,40 @@ import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
     function linkAdressToDiscord(){
    
    }
+
+
+ 
+/*
+   this is just for testing and simulate a situation where a user just registered.
+   in such scenario, the discord invite is null (not created yet), and it will trigger the code that automatically
+   create an invite and assign it to this user
+*/
+ async function  deleteInvite(){
+    const MongoDeleteResult = await deleteDiscordInvite(user.ID);
+
+     // so it can reload after we changed it on the server
+    // setdiscordInviteLoaded(false);
+    //setUser(user);
+    console.log( "MongoDeleteResult    = " , MongoDeleteResult);
+ }
+
+
+ function onClickInvite(){ 
+    // to do:
+    /*
+    add toast, copied to clip board
+    */
+ 
+
+     copyTextToClipboard ( discordInvite?.shareableLink )
+
+
+ 
+ }
+
    function getCompletion(){
 
-      if ( !referralData ){
+      if ( !discordInvite ){
 
         return  (`ACCEPTED: ${"0"}`)   ;
       }
@@ -104,7 +133,7 @@ import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
  // if (  walletAndDiscordAreConnected(user)  ){  console.log(  "complete  2 " , user);   task+=1; }  // there is wallet associated with discord account
   
  return  (`ACCEPTED:WIP`)   ;
-  return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
+//   return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
 return  (`To DO ${task} / 2`)   ;
    }
 
@@ -147,11 +176,7 @@ return  (`To DO ${task} / 2`)   ;
              icon={<ErrorOutlineIcon />} sx={ {height :"30px" , borderRadius:"10px" }}/> 
             */}
 
-    {/* <Chip
-        avatar={<Avatar alt="Natacha" src="/icon/discord-round-color-icon.jpg" />}
-        label="Avatar"
-        variant="outlined"
-      /> */}
+   
 
               
           </Box>
@@ -168,25 +193,21 @@ return  (`To DO ${task} / 2`)   ;
       
      
           <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
-
-            <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
+             <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
               
             {/* discordInvite */}
-            <Box onClick={ () => copyTextToClipboard ( referralData?.shareableLink )} > 
-                 <p> <>Share link <span style={{fontWeight:"700px"}} >{ referralData?.code}</span> with friends</></p>
+            <Box onClick={ () => onClickInvite() }> 
+                 <p> <>Share link <span style={{fontWeight:"700px"}} >{ discordInvite?.invite}</span> with friends</></p>
             </Box>
  
           </Box>
     
-            
-         </BootstrapTooltip>
-             {/* <p> <>Share your <span  >{ " ref link "}</span> with friends</></p> */}
-            
-            
+          </BootstrapTooltip>
+          
        
         <HorizontalSpace space={30}/> 
  
-        <HtmlTooltip
+                 <HtmlTooltip
          // open={true} // for debugging
        
 
@@ -203,6 +224,19 @@ return  (`To DO ${task} / 2`)   ;
             >
             <Chip variant="outlined" color="warning" label= { getCompletion()}   icon={<FaceIcon />}   sx={ {height :"30px" , borderRadius:"10px" }}/>
                </HtmlTooltip>
+
+
+               {debugMode && (
+
+                    <Button variant="contained" 
+                    sx={{backgroundColor: theme.debugModeColor }}
+                    onClick={() => deleteInvite() } >   delete inv  
+                    
+                    </Button>
+                )}
+ 
+
+
             </Box> </Box>
          )}
         </>

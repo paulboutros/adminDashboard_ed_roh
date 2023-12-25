@@ -1,5 +1,5 @@
  
- import { globalData   } from "../data/API.js";
+ import { getAvatar, getManyUserData, globalData   } from "../data/API.js";
  import FavoriteIcon from '@mui/icons-material/Favorite';
  
 import StatBox from "./StatBox";
@@ -10,15 +10,14 @@ import { useUserContext } from '../context/UserContext.js'; // to get user data 
 
 import {useEffect, useState} from "react";
 
-import { Box , Typography, useTheme } from "@mui/material";
+import { Avatar, Box , Typography, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../theme";
+import { DataGridStyle, tokens } from "../theme";
 import Grid from '@mui/material/Grid';
 
 import ProgressBar from 'react-bootstrap/ProgressBar';
-
-const debugMode = true;
- 
+let totalInvite=0;
+  
 const grid_gap ="20px";
 
 const box_horiz_align =
@@ -50,62 +49,109 @@ const DiscordGrid = ( { isDashboard = false }  ) => {
    
 //==========================================================================
 // pb added to fetch data
-const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+//const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Objects, one Object per Row
 
 useEffect(()=>{
   (async ()=> {
     
     const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScore`; 
-   // const endpoint = `${process.env.REACT_APP_API_URL}getSocialData?source=discord&limit=${60}`; // make it specific (filter to discord fields)
-    const result  = await fetch(endpoint);
-    console.log(  "result"  ,result);
-   //const result  = await fetch("/api/findUsersWithNonZeroProperties");
+     const result  = await fetch(endpoint);
+     
     let resultsJson = await result.json();
+ 
+    console.log(  "resultsJson"  ,resultsJson);
+ 
+     const listOfID = resultsJson.map(item => item.id);
+     let referredUserListDetails  = await getManyUserData(  listOfID   );
     
- //https://discord.com/invite/TZszHsf92c
+// to do , should be in a debugMode option etc...
+    const useMockData = true;
+    if (useMockData){
 
-     console.log(  "resultsJson"  ,resultsJson);
+
+    }
      
 
 
-    let temp = resultsJson.map((item) => ({
+    const invite_use =[];
+     let ss = resultsJson.map((item, index ) => {
 
+      const invite_use_value = useMockData ? Math.floor(Math.random() * 21)  : item.data.invite_use;
+      invite_use.push(invite_use_value)  ;
+      totalInvite += invite_use_value;
+     });
+
+
+    let temp = resultsJson.map((item, index ) =>  {
+
+     // const invite_use = useMockData ? Math.floor(Math.random() * 31)  : item.data.invite_use;
+     const invite_share = ( (invite_use[index] / totalInvite) * 100 ).toFixed(4);
+
+     const nextInviteMaxThreshhold =  invite_use[index]<=10 ? 10 : 20
+      return {
       discord: item.discord,
       invite_code : item.invite_code,
 
       id: item.id,
-      data: { ...item },
+      data: { ...item,
+      
+        invite_use:invite_use[index],
+        invite_share:invite_share,
+        nextInviteMaxThreshhold: nextInviteMaxThreshhold
 
+      },  //... spreading it just for creating a shallow copy (Not reference)
+      discordUserData:  referredUserListDetails[index].discordUserData ,
+      invite_share: invite_share,
+      tokenClaimPerDay:  invite_use[index]<=10 ? 100 : 200
      
-    }));
+      };
+
+
+    } );
  
 
     
 
 
     temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
- console.log  ("disocrd temp    =",temp) ;
+ //console.log  (" sorted temp    =",temp) ;
       setNewDataList(temp);
 
+       console.log( "newDataList     "   ,  newDataList  );
+ 
+  
 
-   setRowData(resultsJson );
+//   setRowData(resultsJson );
  
    })();
 
 }, [ ]);
 
-useEffect(() => {
-  
-}, [data]);
+ 
   
 const columns = [
  
   {
-    field: "discord",
+    field: "discordUserData", //(params.value)
     headerName: "Discord",
     flex: 2,
-    cellClassName: "name-column--cell",
+   // cellClassName: "name-column--cell",
+    width: 200,
+    renderCell: (params) => { // (params.value   = field )
+       
+      return (
+        <>
+      {/* src= {!user ? ( null ):(  getAvatar( user.discordUserData )  )}  */}
+          <Avatar  src= { getAvatar( params.value ) } />  
+          <p> {params.value.username}  </p>
+          {/* getAvatar( user.discordUserData ) <Avatar src={params.value.avatar} /> */}
+         
+        
+        </>
+      );
+    }
+
     
   } ,
     
@@ -117,64 +163,49 @@ const columns = [
     
   } ,
   {
-    field: "data",
+    field: "data", // stores from items (params.value)
     headerName: "Invites",
-    flex: 15,
+    flex: 2,
     renderCell: (params) => {
       return (
         <Box>
          
         {/* <Typography >  {params.value.id} </Typography>    */}
-           
-         <RenderCellA debugMode ={true}   colors={colors}  data={params.value}  /> 
+
+          {/* <ProgressBarB totalInvite={totalInvite}
+           invite_use={params.value.invite_use} invite_share={params.value.invite_share} 
+           barWidth={ 50 } /> */}
+          
+          
+            <p> { params.value.invite_use}  /   {  params.value.nextInviteMaxThreshhold }  </p>    
+             {/* <p> { params.value.invite_use}  /   { totalInvite }  </p>     */}
+           {/* <p> { params.value.invite_share}   </p>   */}
+
+           <HorizontalBars  invite_use={ params.value.invite_use } />
+          {/* <RenderCellA debugMode ={true}   colors={colors}  data={params.value}  />   */}
   
         
         </Box>
       );
     },
   },
+  {
+    field:  "tokenClaimPerDay", // "invite_share", // stores from items (params.value)
+    headerName: "TKN per day",
+    flex: 2,
+    renderCell: (params) => {
+      return (
+        <Box>
+         
+        {/* <Typography >  {params.value.id} </Typography>    */}
+        <p> { params.value }   </p> 
+         {/* <RenderCellA debugMode ={true}   colors={colors}  data={params.value}  />  */}
   
-  
-  /*
-    {
-      field: "walletShort",
-      headerName: "Wallet",
-      flex: 1,
-      cellClassName: "name-column--cell" 
-      
-  
-      
-    } ,
-    */
-  
-  
-     
-     
-    {
-      field: "total",   
-      headerName: "Discord Score",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      
-    } , 
-    {
-      field: "scoreShareAbsolute",   
-      headerName: "Score share",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      
-    }  
-  
-    
-    /*
-    {
-      field: "discord",
-      headerName: "Discord",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      
-    } 
-  */
+        
+        </Box>
+      );
+    },
+  } 
   
   ];
 
@@ -189,83 +220,11 @@ const columns = [
     <Box  >
       
         {/* <OneBar useCursor={true} data={20} text ={"REWARD PRIZE POOL"}  colors ={ colors.greenAccent[600] } /> */}
-         <PoolRewardInfo/> 
+         {/* <PoolRewardInfo/>  */}
          {/* <CustomLegend legendItems={legendItems} orientation="horizontal" />     */}
         <Box
         
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-             
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-
-          "& .MuiDataGrid-footerContainer": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],  
-          //  minHeight :"20px" // default is 52, see chrome element inspector
-          },
-          // .MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular, , .css-78c6dr-MuiToolbar-root-MuiTablePagination-toolba
-          "& .MuiTablePagination-toolbar, .MuiDataGrid-footerContainer": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-            
-            minHeight :"10px" // default is 52, see chrome element inspector
-          },
-          // the area where it is written "row per page"| block 1 page out of X page
-          
-          "& .MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows ": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-            marginBottom :"0px" ,marginTop :"0px"  // these affect pagination bar heights
-            //marginBottom :"5px" ,marginTop :"5px"  // these affect pagination bar heights
-          },
-          // to go to next pagination page
-          "& .MuiButtonBase-root ": { // class="MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-            paddingBottom :"0px" ,paddingTop :"0px"  // initial was 8 (affect pagination bar height)
-           
-          },
-           //  MuiTablePagination-select MuiSelect-standard MuiInputBase-input
-           "& .MuiSelect-select": {
-            paddingBottom :"0px" ,paddingTop :"0px"  // initial was 8 (affect pagination bar height)
-           },
-           "& .css-pwwg96": {
-            marginTop :"0px"  // initial was 40 (affect distance with title)
-           },
-           
-          
-            //MuiButtonBase-root
-
-/*
-          MuiToolbar-root 
-          MuiToolbar-gutters 
-          MuiToolbar-regular 
-          MuiTablePagination-toolbar 
-          css-bvbdia-MuiTablePagination-root
-          css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar
-*/
-     //MuiDataGrid-footerContainer css-n830jf-MuiDataGrid-footerContainer
-     "& .MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar": {
-      //minHeight: `10px !important`,
-      // height: `30px !important`
-    },
-            
-           
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
+         sx={DataGridStyle(theme, colors)}
       >
 
       {newDataList ? (
@@ -302,312 +261,212 @@ const columns = [
 
 export default DiscordGrid;
 
-function GetLegendColor(  type){    
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+// function GetLegendColor(  type){    
+//   const theme = useTheme();
+//   const colors = tokens(theme.palette.mode);
 
-    if (type === "message"){
+//     if (type === "message"){
 
-      return colors.grey[500];
-    }
+//       return colors.grey[500];
+//     }
 
-     return  null;
+//      return  null;
 
-}
+// }
 
-const RenderCellA = ({ debugMode , colors , data }) => {
-  return (
+ 
 
+const HorizontalBars = ( { invite_use }) => {
+
+  const _width= '100px';
+  const _height = "10px";
+  const containerStyle = {
+    position: 'relative',
+    height: _height,
+    width: '100px',
+  };
+
+  const barStyle = {
+    height: _height,
+    width: _width ,
+    backgroundColor: "#2a2a2a",
+    position: 'absolute',
+    top: '0',
+    left: '0',
+  };
+
+  const overlappingBarStyle = {
+    height: _height,
+   // width:  `${invite_use}px`  , //{ invite_use }    '100px' ,
+   width:  `${(invite_use / 100) * 10 * 100}px`,
+
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    backgroundColor: 'blue',
      
-
-   <Box
-    
-  
-  >
-       <Box
-    // key={0}
-    sx={{ marginLeft: '5px' }}
-    display="flex"
-   
-    alignItems="center"
-    height="100%"
-  
-  >
-     {/* invite use  stacked */}
-     <OneBar data={data.invite_use} text ={"used"}  colors ={ colors.greenAccent[600] } />
-      {/* invite_sent  stacked */}
-     {/* <OneBar data={data.invite_sent} text ={""}  colors ={ colors.blueAccent[600] }  minus={data.invite_use} /> */}
-     
-     </Box>
-  
-     <Box  sx={{ marginLeft: '5px' }}>
-    
-    {/* message */}
-     {/* <OneBar data={data.message} text ={""}  colors ={  GetLegendColor("message")  } /> */}
-     </Box>
-
-    </Box>
-    
- 
-
-
-
- )
-
-}
-
-function OneBar( {data , text,  colors , minus = 0, useCursor = false , barScaleFactor  = 20}) { 
-  return (
-
-    <div> 
-      
-    <Box
-    sx={{  width: (data - minus ) * barScaleFactor,   height: 10,  backgroundColor:   colors,
-
-top: 0, // Position it at the same level as the background bar
-left: 0, // Offset it by the width of the background bar
-   }}
-
->
-
-<Typography  display="flex" justifyContent="flex-end" alignItems="center" height="100%"  >
-{data <= 3 ? "" : `${text}`}  {data}
-</Typography>
-
-
-
- 
-{data > 3 && useCursor ? (
-
-    
-            <div
-              style={{
-                position: 'relative',
-                top: -25,
-                
-                left: (data - minus ) * barScaleFactor     - 10,
-                width: 10,
-                height: 10,
-                // backgroundColor: 'red',
-              }}
-            >
-                 
-                {/* <FavoriteIcon   sx={{ color:  colors, fontSize: "26px" }} /> */}
-                <FavoriteIcon   sx={{ color:  colors, fontSize: "15px" }} /> 
-           
-
-
-              {/* You can place an icon or text here */}
-            </div>
-          ) : null}
-  
-
-
-</Box>
-</div>
-  );
-}
- 
-
-function PoolRewardInfo() {
- 
-  const { user } = useUserContext();
-
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-
-  const legendItems = [ 
-    { color:  GetLegendColor("message") , label:  'messages' },
-    
-   { color: colors.blueAccent[500], label: 'sent Invites' },
-   { color: colors.greenAccent[400], label: 'Used Invites' } 
-   
-   // Add more legend items as needed
- ];
-  const [glData, setGlobalData] = useState(); // Set rowData to Array of Objects, one Object per Row
-  async function GetData(){
-
-
-    const resultsJson= await globalData();
-        setGlobalData(resultsJson );
-  
-   }
-  
-    useEffect(()=>{
-       //if (!user)return;
-      GetData();
-    }, [   ]);
-
- 
-  return (
-     
-    <Box
-    display="grid"
-    gridTemplateColumns="repeat(12, 1fr)"
-    gridAutoRows="60px"
-    gap= {grid_gap}  
-  >
-    {/* ROW 1 */}
-    
-    
-    <Box
-      gridColumn="span 4"
-      gridRow="span 2"
-      backgroundColor={colors.primary[400]}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <StatBoxDiscord
-       title={glData && glData.length > 0 ? glData[0].all_invites_used : "Default Value"}
-
-        subtitle="total Invite used"
-        progress="0.30"
-        increase="+5%"
-        icon={
-          <PersonAddIcon
-            sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-          />
-        }
-        discordLegend ={
-
-          <CustomLegend legendItems={legendItems}   />    
-        }
-      />
-    </Box>
-
-     {/* Reward pool begin */}
-    <Box
-      gridColumn="span 2"
-      gridRow="span 2"
-      backgroundColor={colors.primary[400]}
-    >
-      <Box
-        mt="25px"
-        p="0 30px"
-        display="flex "
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Box>
-          <Typography   variant="h5"  fontWeight="600"  color={colors.grey[100]}  >
-          
-            Reward Pool
-          </Typography>
-          <Typography  variant="h3"  fontWeight="bold"  color={colors.greenAccent[500]}  >
-
-           $1000    
-           {/* {glData && glData.length > 0 ? `$${glData[0].reward_pool}` : "Default Value"} */}
-             
-          </Typography>
-           
-      {/* box just for space */}
-          <Box height="5px" /> 
- 
-
-        </Box>
-        
-      </Box>
-      <Box height="250px" m="-20px 0 0 0">
-        
-      </Box>
-    </Box>
-  {/* Reward pool End */}
-   
-
-
-      
-     {/* Smart contract number */}
-    <Box
-      gridColumn="span 6"
-      gridRow="span 2"
-      backgroundColor={colors.primary[400]}
-    >
-      <Box
-        mt="25px"
-        p="0 30px"
-        display="flex "
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Box>
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            color={colors.grey[100]}
-          >
-          Smart Contract # (Mock Data)
-          </Typography>
-          <Typography
-            variant="h3"
-            fontWeight="bold"
-            color={colors.greenAccent[500]}
-          >
-             {/* {glData && glData.length > 0 ?glData[0].all_retweets : "Default Value"} */}
-             {"0x4eba90B4124DA7240C7Cd36A9EFE7Ff9F81Cf601"  }
-              
-          </Typography>
-        </Box>
-        
-      </Box>
-      <Box height="250px" m="-20px 0 0 0">
-        
-      </Box>
-    </Box>
- 
-  </Box>
-
-
-  );
-}
-
-
-
-
-const RewardBox = ({ title, subtitle, icon, progress, increase }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  };
 
   return (
-    <Box width="100%" m="0 30px">
-      <Box display="flex" justifyContent="space-between">
-        <Box>
-          {icon}
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            sx={{ color: colors.grey[100] }}
-          >
-            {title}
-          </Typography>
-        </Box>
-        <Box>
-          {/* <ProgressCircle progress={progress} /> */}
-        </Box>
-      </Box>
-      <Box display="flex" justifyContent="space-between" mt="2px">
-        <Typography variant="h5" sx={{ color: colors.greenAccent[500] }}>
-          {subtitle}
-        </Typography>
-        <Typography
-          variant="h5"
-          fontStyle="italic"
-          sx={{ color: colors.greenAccent[600] }}
-        >
-          {increase}
-        </Typography>
-      </Box>
-    </Box>
+    <div style={containerStyle}>
+      <div style={barStyle}></div>
+      <div style={overlappingBarStyle}></div>
+    </div>
   );
 };
+ 
+ 
+
+// function PoolRewardInfo() {
+ 
+//   const { user } = useUserContext();
+
+//   const theme = useTheme();
+//   const colors = tokens(theme.palette.mode);
+
+//   const legendItems = [ 
+//     { color:  GetLegendColor("message") , label:  'messages' },
+    
+//    { color: colors.blueAccent[500], label: 'sent Invites' },
+//    { color: colors.greenAccent[400], label: 'Used Invites' } 
+   
+//    // Add more legend items as needed
+//  ];
+//   const [glData, setGlobalData] = useState(); // Set rowData to Array of Objects, one Object per Row
+//   async function GetData(){
 
 
-function StackedExample() {
-  return (
-    <ProgressBar>
-      <ProgressBar striped variant="success" now={35} key={1} />
-      <ProgressBar variant="warning" now={20} key={2} />
-      <ProgressBar striped variant="danger" now={10} key={3} />
-    </ProgressBar>
-  );
-}
+//     const resultsJson= await globalData();
+//         setGlobalData(resultsJson );
+  
+//    }
+  
+//     useEffect(()=>{
+//        //if (!user)return;
+//       GetData();
+//     }, [   ]);
+
+ 
+//   return (
+     
+//     <Box
+//     display="grid"
+//     gridTemplateColumns="repeat(12, 1fr)"
+//     gridAutoRows="60px"
+//     gap= {grid_gap}  
+//   >
+//     {/* ROW 1 */}
+    
+    
+//     <Box
+//       gridColumn="span 4"
+//       gridRow="span 2"
+//       backgroundColor={colors.primary[400]}
+//       display="flex"
+//       alignItems="center"
+//       justifyContent="center"
+//     >
+//       <StatBoxDiscord
+//        title={glData && glData.length > 0 ? glData[0].all_invites_used : "Default Value"}
+
+//         subtitle="total Invite used"
+//         progress="0.30"
+//         increase="+5%"
+//         icon={
+//           <PersonAddIcon
+//             sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+//           />
+//         }
+//         discordLegend ={
+
+//           <CustomLegend legendItems={legendItems}   />    
+//         }
+//       />
+//     </Box>
+
+//      {/* Reward pool begin */}
+//     <Box
+//       gridColumn="span 2"
+//       gridRow="span 2"
+//       backgroundColor={colors.primary[400]}
+//     >
+//       <Box
+//         mt="25px"
+//         p="0 30px"
+//         display="flex "
+//         justifyContent="space-between"
+//         alignItems="center"
+//       >
+//         <Box>
+//           <Typography   variant="h5"  fontWeight="600"  color={colors.grey[100]}  >
+          
+//             Reward Pool
+//           </Typography>
+//           <Typography  variant="h3"  fontWeight="bold"  color={colors.greenAccent[500]}  >
+
+//            $1000    
+//            {/* {glData && glData.length > 0 ? `$${glData[0].reward_pool}` : "Default Value"} */}
+             
+//           </Typography>
+           
+//       {/* box just for space */}
+//           <Box height="5px" /> 
+ 
+
+//         </Box>
+        
+//       </Box>
+//       <Box height="250px" m="-20px 0 0 0">
+        
+//       </Box>
+//     </Box>
+//   {/* Reward pool End */}
+   
+
+
+      
+//      {/* Smart contract number */}
+//     <Box
+//       gridColumn="span 6"
+//       gridRow="span 2"
+//       backgroundColor={colors.primary[400]}
+//     >
+//       <Box
+//         mt="25px"
+//         p="0 30px"
+//         display="flex "
+//         justifyContent="space-between"
+//         alignItems="center"
+//       >
+//         <Box>
+//           <Typography
+//             variant="h5"
+//             fontWeight="600"
+//             color={colors.grey[100]}
+//           >
+//           Smart Contract # (Mock Data)
+//           </Typography>
+//           <Typography
+//             variant="h3"
+//             fontWeight="bold"
+//             color={colors.greenAccent[500]}
+//           >
+//              {/* {glData && glData.length > 0 ?glData[0].all_retweets : "Default Value"} */}
+//              {"0x4eba90B4124DA7240C7Cd36A9EFE7Ff9F81Cf601"  }
+              
+//           </Typography>
+//         </Box>
+        
+//       </Box>
+//       <Box height="250px" m="-20px 0 0 0">
+        
+//       </Box>
+//     </Box>
+ 
+//   </Box>
+
+
+//   );
+// }
+
+ 

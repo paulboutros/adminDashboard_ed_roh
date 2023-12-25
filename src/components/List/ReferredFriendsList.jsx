@@ -8,7 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 import React, { useEffect, useState } from 'react';
  
@@ -85,19 +85,15 @@ export default function ToDoList ({ tasks    }) {
              } 
            }
           >
-            <ListItemIcon  sx={{ minWidth :"54px" }}  >
- 
-                <Avatar 
+             <ListItemIcon  sx={{ minWidth :"54px" }}  >
+                 <Avatar 
                   sx = {{ height : "30px", width:"30px"}}
                   src= { task.src } /> 
- 
-               {/* {task.completed ? (
-                <CheckCircleIcon style={{ color: theme.palette.blueSelectedTab }} />
-              ) : (
-                <CancelIcon style={{ color: colors.grey[400] }} />
-              )} */}
-            </ListItemIcon>
+             </ListItemIcon>
             <ListItemText primary={task.global_name} />
+            
+            {task.verified ? (   <VerifiedIcon  style={{ marginLeft: "5px", color: colors.greenAccent[400] }} /> ) : ( <> </> )}  
+
           </ListItem>
         ))}
       </List>

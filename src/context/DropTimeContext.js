@@ -52,8 +52,8 @@ export function DropTimeProvider({ children }) {
        //   setNotification(new Date());
    
         
-           console.log("NextGiveAwayTime ",  timing_response.giveAwayTiming.NextGiveAway );
-            console.log("frequency        ",  timing_response.giveAwayTiming.frequency );
+        //   console.log("NextGiveAwayTime ",  timing_response.giveAwayTiming.NextGiveAway );
+       //     console.log("frequency        ",  timing_response.giveAwayTiming.frequency );
   
   
     const lastGiveAway =  formatTimestampToCustomFormat( timing_response.giveAwayTiming.lastGiveAway  );

@@ -291,14 +291,9 @@ export async function  Add_owning_and_otherLayerInfo( user , layerToChooseFrom )
         
         //  console.log( "FINAL  category  =" , category,  "   layer=" ,  allSupply[0].layers[category] );
          // console.log( "FINAL >>>>>> ",category," updatedLayerToChooseFrom", updatedLayerToChooseFrom[category]);
-          
-         
-          
+        
        }
-      
- 
- 
-
+       
 
        console.log( "FINAL      updatedLayerToChooseFrom", updatedLayerToChooseFrom);
     return updatedLayerToChooseFrom;
@@ -307,34 +302,42 @@ export async function  Add_owning_and_otherLayerInfo( user , layerToChooseFrom )
 */
  
  
+// this mostly for testing purposes
+export async function deleteDiscordInvite(user_ID){
+ 
+  const endpoint = `${process.env.REACT_APP_API_URL}discord_invite_delete?ID=${user_ID}`; // make it specific (filter to twitter fields)
+  const resultsPostJson = await fetch(endpoint);
+  let MongoDeleteResult = await resultsPostJson.json();
+  return MongoDeleteResult;
+}
+
 export async function myDiscordInvite(user_ID){
  
-  // we do not want to regenrate an invite as it will override previous one
+  // we do not want to regenerate an invite as it will override previous one
   // so we check first if one exist
   // referralcode is an array, but for now we only use 1 element. 1 code per user.
    const endpointG = `${process.env.REACT_APP_API_URL}GetDiscordInviteCode?ID=${user_ID}`; // make it specific (filter to twitter fields)
-   const resultG = await fetch(endpointG);
-   let resultsJson = await resultG.json();
-    
-
-   console.log( "response resultsJson    "  , resultsJson);
+   const dataResponse = await fetch(endpointG);
+   let resultsJson = await dataResponse.json();
+ 
+   
    // if no referral link has been created we generate one
    //  if (resultsJson.referralCode.length === 0){
-    if ( !resultsJson.referralCode ){
+    if ( !resultsJson.inviteData ){
+ 
+    const endpoint = `${process.env.REACT_APP_API_URL}discord_invite_create?ID=${user_ID}`; // make it specific (filter to twitter fields)
+    const resultsPostJson = await fetch(endpoint);
+    resultsJson = await resultsPostJson.json();
 
-       
+    console.log( "API myDiscordInvite: inviteData is NULL so we create one "  , resultsJson);
+    }else{
+      console.log( "API myDiscordInvite: inviteData EXIST so we ue "  , resultsJson);
 
-    const endpoint = `${process.env.REACT_APP_API_URL}discord_invite_create`; // make it specific (filter to twitter fields)
-    const resultsPostJson =await fetch(endpoint);
-
-    // console.log("referal :" ,   resultsPostJson.data.shareableLink);
-    
-       // set the refferal code to the one we jsut generate
-      resultsJson = resultsPostJson;
     }
 
+    
   // will be the one that exist or the one geenrate by the postrequest it it initially does not exist
-    return resultsJson;
+    return resultsJson.inviteData   ;
 } 
 
 
@@ -470,14 +473,14 @@ export async function ERC20claim_discord_login_required(ID, filteredImages_arg ,
 
 export async function getManyUserData( IDlist  ){
  
-   const dataToSend={ 
-    IDlist : IDlist,
-   }
+   const dataToSend={ IDlist : IDlist }
+    
+   
 
 const endpoint = `${process.env.REACT_APP_API_URL}getManyUserData`; 
 const resultsPostJson = await axios.post(endpoint, dataToSend);
 
-console.log("data response :" ,   resultsPostJson.data );
+ //console.log("data response :" ,   resultsPostJson.data );
 
 return resultsPostJson.data;
 }

@@ -184,13 +184,10 @@ const columns = [
     <Box  >
       
        
-        <Box
+      <Box sx={DataGridStyle(theme, colors)} >
         
-        sx={DataGridStyle(theme, colors)}
-        
-      >
 
-      {newDataList ? (
+        {newDataList ? (
 
       <div> 
          <DataGridHeader  title={"Activity"} /> 

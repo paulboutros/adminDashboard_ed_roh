@@ -1,13 +1,10 @@
 import React from 'react';
-import {Box, Divider,Grid, Typography , useTheme, Chip,  } from '@mui/material';
+import {Box,   Typography , useTheme, Chip,  } from '@mui/material';
 import { BootstrapTooltip, HtmlTooltip, allCSS, tokens } from "../../theme";
-import CopyToClipboard  from '../CopyToClipboard'; // to get user data from context provider
- import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+  import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
- import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import {useEffect, useState} from "react";
-import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
- 
+ import {useEffect, useState} from "react";
+  
  
 import { HorizontalSpace } from '../Layout';
 import FaceIcon from '@mui/icons-material/Face';
@@ -17,7 +14,7 @@ import { copyTextToClipboard } from '../../utils';
 import { getAvatar, getManyUserData } from '../../data/API';
 import { useAppLinkContext } from '../../context/AppLinkContext';
   
-   const ReferralLinkGrid = (    ) => {
+   const ReferralLinkGrid = ( ) => {
  
     const { appLink } = useAppLinkContext();
     const [tasks, setTasks] = useState([
@@ -32,27 +29,20 @@ import { useAppLinkContext } from '../../context/AppLinkContext';
     const updateTask = async ( ) => {
      
      let referredUserListDetails  = await getManyUserData(  referralData.referredUser   );
-     
-      //mockreferred isc opied from  postman /getManyUserData response
-        //referredUserListDetails =mockreferred;
-
-
+   
         const referredUsers =[];
         referredUserListDetails.forEach(data => {
           
           const src = getAvatar(data.discordUserData );
-         const elData = { global_name : data.discordUserData.global_name,  src:src };
-         referredUsers.push(elData) 
+          const elData = { global_name : data.discordUserData.global_name,  src:src };
+          referredUsers.push(elData) 
  
        });
         
        setTasks(referredUsers);
-      
-       
-
+ 
     };
  
-
      const { user } = useUserContext();
      
   const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row

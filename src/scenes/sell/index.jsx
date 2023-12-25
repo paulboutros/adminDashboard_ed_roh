@@ -9,7 +9,7 @@ import {
   import NFTGrid from "../../components/NFTGrid";
   import { TOOLS_ADDRESS } from "../../const/addresses";
   import tokenPageStyles from "../../styles/Token.module.css";
-  import headerStyle from "../../styles/header.module.css";
+   
 
   //import { NFT as NFTType } from "@thirdweb-dev/sdk";
   import SaleInfo from "../../components/SaleInfo/SaleInfo";

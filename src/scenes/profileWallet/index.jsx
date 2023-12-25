@@ -181,7 +181,7 @@ export default function BasicTabs() {
          <VerticalSpace space={1}/>
         
          <JoinServer/>
-
+         <VerticalSpace space={1}/>
          <BadgeDiscordInvites/>
 
       {/* result  = {  partOfGuild :true, joinedAt: userJoinTime  }; */}
@@ -221,12 +221,8 @@ export default function BasicTabs() {
  const address = useAddress();
                 
  const {user, setUser } = useUserContext();
- const {debugMode } =  useDebugModeContext();
-
- //const {  HtmlTooltip } =  allCSS(theme.palette.mode   );   
-  
-
-
+ const {debugMode }     = useDebugModeContext();
+ 
  
  useEffect(()=>{
      console.log("  profile wallet  : debugMode   = ", debugMode );
@@ -443,7 +439,7 @@ return  (`To DO ${task} / 2`)   ;
                     onClick={() => disconnectWalletDiscord() } >   
                       disconnect 
                   </Button>
-                  )}
+              )}
  
      </Box> 
      </Box>    
