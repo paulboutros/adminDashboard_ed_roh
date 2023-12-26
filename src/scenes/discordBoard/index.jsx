@@ -8,20 +8,29 @@ import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
 
 import GridDiscord from "../../components/GridDiscord";
+import Container from "../../components/Container/Container";
 
 const DiscordBoard = () => {
-  
-   
-  
+  const theme = useTheme();
+  //   const colors = tokens(theme.palette.mode);
 
   return (
-    <Box m="20px">
-      <Header title="Discord Board" subtitle="Discord Leader Board" />
-      <Box m="40px 0 0 0"height="75vh">
+   
+    <Container maxWidth="lg">
+
+    <Typography sx={ theme.title }  > Discord Leader Board </Typography>
+ 
+
+      {/* <Header title="Discord Board" subtitle="Discord Leader Board" /> */}
+     
          <GridDiscord/>
        {/* <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} /> */}
-      </Box>
-    </Box>
+      
+   
+   
+    </Container>
+
+
   );
 };
 

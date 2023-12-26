@@ -67,10 +67,6 @@ useEffect(()=>{
     
 // to do , should be in a debugMode option etc...
     const useMockData = true;
-    if (useMockData){
-
-
-    }
      
 
 
@@ -110,9 +106,7 @@ useEffect(()=>{
 
     } );
  
-
-    
-
+ 
 
     temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
  //console.log  (" sorted temp    =",temp) ;
@@ -217,6 +211,8 @@ const columns = [
   const _headerHeight = isDashboard ?  20: 40 ;
   const _footerHeight = isDashboard ?  20: 40 ;
   return (
+   
+
     <Box  >
       
         {/* <OneBar useCursor={true} data={20} text ={"REWARD PRIZE POOL"}  colors ={ colors.greenAccent[600] } /> */}

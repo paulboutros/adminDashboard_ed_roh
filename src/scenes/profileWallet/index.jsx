@@ -29,7 +29,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 
 import { allCSS, infoHeight, tokens, HtmlTooltip, BootstrapTooltip } from "../../theme";
-import {Box, Button, Chip, Icon, useTheme} from '@mui/material';
+import {Box, Button, Chip, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
 import {  HorizontalSpace, VerticalSpace } from '../../components/Layout';
 import AppLinkDataBox from '../../components/Badges/AppLinkDataBox.jsx';
@@ -65,6 +65,7 @@ import { useDebugModeContext } from '../../context/DebugModeContext';
 import { useParams } from 'react-router';
 import ToDoList from '../../components/List/ToDoList';
 import BadgeDiscordInvites from '../../components/Badges/BadgeDiscordInvites';
+import RewardTokenTab from '../RewardTokenTab/index.jsx';
 
 
 async function openOAuth2Url_whenUserNotConnected( address ){
@@ -143,11 +144,8 @@ export default function BasicTabs() {
         <Box >
              {/*sx={{ borderBottom: 1, borderColor: 'divider' }} */}
 
-         <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example"
-            
-           
-           sx={theme.tabsStyle}
-                      >
+         <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example" sx={theme.tabsStyle}>
+                       
            <Tab label="My NFTs"   {...a11yProps(0)}  disableRipple  sx={  theme.tabStyle }   />
            <Tab label="My Packs"  {...a11yProps(1)}  disableRipple  sx={  theme.tabStyle }   />
 
@@ -190,7 +188,10 @@ export default function BasicTabs() {
 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        Item Three
+       
+       
+       <RewardTokenTab/>
+
       </CustomTabPanel>
      </Container>
     </ >
@@ -239,10 +240,7 @@ export default function BasicTabs() {
 
 
 }, [user ]);
- 
-
-   
-
+  
  async function disconnectWalletDiscord(){
 
   const result = await addorupdate(user, "0000000" );
@@ -296,9 +294,11 @@ return  (`To DO ${task} / 2`)   ;
    return (
     <>   
 
-    <Box  sx={{  borderRadius: 4, backgroundColor: colors.primary[400] }} > 
+    <Box    sx={ theme.basicRoundedBox1 } > 
       <Box sx={{ 
-             color: colors.grey[300], display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
+           color: colors.grey[300], display: "flex",
+           flexDirection: "row",  alignItems: "center",
+           height: "50px", 
        
       }}>
        

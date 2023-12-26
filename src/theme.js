@@ -457,6 +457,8 @@ export const themeSettings = (mode) => {
           })
  
     },
+
+   
     
     nftContainer:{
      
@@ -539,7 +541,12 @@ export const themeSettings = (mode) => {
     },
       
 
- 
+    basicRoundedBox1:{
+
+        borderRadius: 4 ,
+        backgroundColor: colors.primary[400]  
+    },
+  
     tabsStyle:{ 
          fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
 
