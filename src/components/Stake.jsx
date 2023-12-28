@@ -26,6 +26,7 @@ import {
     Skeleton,
     Box,
     TextField,
+   /// makeStyles,
   } from '@mui/material';
 
 
@@ -48,14 +49,20 @@ import {
   import React, { useEffect, useState } from "react";
   import { ethers } from "ethers";
 import { useTheme } from "@emotion/react";
-import { tokens } from "../theme";
-  
+import { allCSS, basicRoundedBox1, tokens } from "../theme";
+import { getSDK_fromPrivateKey } from "../data/API";
+ 
+
+ 
+
+
+
   export default function Stake() {
     const address = useAddress();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-
+     
 
     const { contract: stakeTokenContract } = useContract(
         Discord_invite_stake_token,
@@ -91,6 +98,15 @@ import { tokens } from "../theme";
     const [stakeAmount, setStakeAmount] = useState("0");
     const [unstakeAmount, setUnstakeAmount] = useState("0");
   
+
+
+  //  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    
+   // const handleClick = 
+
+
+
+
     function resetValue() {
       setStakeAmount("0");
       setUnstakeAmount("0");
@@ -98,13 +114,12 @@ import { tokens } from "../theme";
   
      const toast = useToast();
   
-    return (
-        <Card variant="outlined" sx={{ 
+    return (  
+       
             
-            borderRadius: 4 ,
-            backgroundColor: colors.primary[400],  
+          <Box sx={{padding: "20px"  }}  > 
 
-            padding: "20px", marginTop: "10px" }}>
+
           <Typography variant="h4" gutterBottom>
             Earn Reward Token
           </Typography>
@@ -176,17 +191,26 @@ import { tokens } from "../theme";
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={async () => {
-                        await stakeTokenContract?.erc20.setAllowance(Discord_stake_contract, stakeAmount);
-                        await stakeTokenContract?.call('stake', [stakeAmount]);
-                        resetValue();
-                      }}
-                    >
-                      Stake
-                    </Button>
+                    
+                  <CustWeb3Button
+                   fullWidth ={true} 
+               //   contractAddress={Discord_stake_contract}
+                  action={async (contract) => {
+                      await stakeTokenContract?.erc20.setAllowance( Discord_stake_contract, stakeAmount );
+                      const transactionResult = await stakeContract.call("stake", [ethers.utils.parseEther(stakeAmount),]);
+                     
+                     resetValue();
+                     return transactionResult;
+                  }}
+                  onSuccess={() =>
+                    toast({
+                      title: "Stake Successful",status: "success",  duration: 5000, isClosable: true,
+                    })
+                  }
+                >
+                  Stake
+                </CustWeb3Button>
+ 
                   </Grid>
                 </Grid>
                 </Grid>
@@ -204,34 +228,46 @@ import { tokens } from "../theme";
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={async () => {
-                        await stakeTokenContract?.call('withdraw', [unstakeAmount]);
-                      }}
-                    >
-                      Unstake
-                    </Button>
+
+ 
+                  <CustWeb3Button 
+                     fullWidth ={true} 
+                     action={
+                        async () => {
+                            const transactionResult =await stakeContract.call('withdraw', [ethers.utils.parseEther(unstakeAmount)]);
+                            resetValue();
+                            return transactionResult;
+                           }
+                      }
+                     onSuccess={() =>
+                        toast({
+                          title: "Unstake Successful",status: "success", duration: 5000, isClosable: true, })
+                        }
+                     >
+                       Unstake
+                    </CustWeb3Button>
+ 
                   </Grid>
-                </Grid>
-                </Grid>
-                </Grid>
-
-
-
+ 
+                  </Grid>
+                 </Grid>
+               </Grid>
+ 
               </Card>
             </Grid>
 
 
            
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}
+               sx={{ height: '400px', display: 'flex', flexDirection: 'column' }}
+            >
               <Card variant="outlined"  
                   sx={{
                 
                     borderRadius: 2 ,
                     backgroundColor: colors.primary[600],
-                    padding: "20px", margin: "10px"
+                    padding: "20px", margin: "10px",
+                     height :"100%"
                    }}  
               
               
@@ -264,16 +300,20 @@ import { tokens } from "../theme";
 
 
                  {/* </Skeleton> */}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={async () => {
-                      await stakeTokenContract?.call('claimRewards');
-                      resetValue();
-                    }}
-                  >
-                    Claim
-                  </Button>
+                 <CustWeb3Button
+              //  contractAddress={Discord_stake_contract}
+                action={async () => {
+                  const trx = await stakeContract.call("claimRewards");
+                  resetValue();
+                  return trx;
+                }}
+                onSuccess={() =>
+                   toast({title: "Rewards Claimed", status: "success",duration: 5000,isClosable: true,})
+                 }
+               // isDisabled={( !address) }
+              >
+                Claim
+              </CustWeb3Button>
                 </Box>
               </Card>
             </Grid>  
@@ -297,9 +337,9 @@ import { tokens } from "../theme";
 
 
 
+          </Box>
 
-
-        </Card>
+        
       );
     /*
     return (
@@ -433,3 +473,58 @@ import { tokens } from "../theme";
 
 
   }
+
+   function CustWeb3Button( {children, action, onSuccess, ...props }){
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const handleClick = async () => {
+        // Disable the button
+        setIsButtonDisabled(true);
+ 
+            try {
+            // Call the user-defined action
+               if (typeof action === 'function') {
+
+                
+                const result = await action();
+                
+             // at the moment action() should only return a transaction, if not we will get an error
+                 if (result && result.receipt && result.receipt.status === 1) {
+                //if ( receipt && receipt.status === 1) {
+                    const receipt = result.receipt;
+                    console.log(">>>>>>>>  receipt   " , receipt);
+                    onSuccess();
+                 }else{
+
+                     console.log("something went wrong");  
+                 }
+
+
+               }
+            } catch (error) {
+            // Handle errors, such as transaction failure or user rejection
+                console.error('Transaction error:', error.message);
+            } finally {
+            // Enable the button after the action is completed or in case of an error
+                 setIsButtonDisabled(false);
+            }
+  
+      };
+ 
+     return(
+      <>
+       <Button 
+       variant="contained" color="secondary"
+       {...props} 
+        onClick={handleClick}
+        
+        disabled={isButtonDisabled}
+       
+       >{children}
+       </Button>
+ 
+      
+      </>
+
+     )
+   }

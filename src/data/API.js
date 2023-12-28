@@ -653,6 +653,9 @@ export async function  getData   () {
     document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
 
    }
+
+   
+
    // discord login
 export const openOAuth2Url = (user, setUser ) => {
   
@@ -668,6 +671,14 @@ export const openOAuth2Url = (user, setUser ) => {
    
 };
 
+
+export async function openOAuth2Url_whenUserNotConnected( address ){
+
+  // after discord athentication we need to come back to the same exact page,
+   // so we save the  route path in a cookie , th redirect will happen of the root route.    
+   createRedirectookie( `profileWallet/${address}/2` ); // is refferal tab
+   openOAuth2Url(null);
+}
 
 export function getAvatar(  discordUserData ){
 

@@ -150,10 +150,7 @@ return  (`To DO ${task} / 2`)   ;
                    }} 
                     /> 
              </BootstrapTooltip> 
-             {/* <Chip variant="outlined" color="default" label= {"Discord connection required"}
-          
-             icon={<ErrorOutlineIcon />} sx={ {height :"30px" , borderRadius:"10px" }}/> 
-            */}
+           
 
     {/* <Chip
         avatar={<Avatar alt="Natacha" src="/icon/discord-round-color-icon.jpg" />}

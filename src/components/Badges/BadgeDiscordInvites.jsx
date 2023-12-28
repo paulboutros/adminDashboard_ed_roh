@@ -146,7 +146,7 @@ return  (`To DO ${task} / 2`)   ;
          <Box  sx={{ 
            borderRadius: 4,
         //  backgroundColor: colors.primary[400]
-          border: `2px dashed ${theme.palette.blueSelectedTab}`,
+             border: `2px dashed ${theme.palette.blueSelectedTab}`,
           }} > 
 
           <Box sx={{ 
@@ -193,7 +193,8 @@ return  (`To DO ${task} / 2`)   ;
       
      
           <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
-             <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
+             <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  
+              onClick={() => linkAdressToDiscord()}>
               
             {/* discordInvite */}
             <Box onClick={ () => onClickInvite() }> 

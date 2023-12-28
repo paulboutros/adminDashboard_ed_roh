@@ -269,7 +269,25 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
   }));
 
 
+export function basicRoundedBox1( address , theme){
 
+  let sx;
+
+  sx = address ?  
+    { 
+     borderRadius: 4,
+     backgroundColor: tokens(theme.palette.mode).primary[400],
+   
+      // border: `2px dashed ${theme.palette.blueSelectedTab}` 
+    }:{
+      borderRadius: 4,
+      //  backgroundColor: colors.primary[400]
+          border: `2px dashed ${ _blueSelectedTab }` 
+        };
+
+    return sx;
+
+}
   
 
 export const allCSS = (mode , _width, _margin) => {
@@ -289,9 +307,36 @@ export const allCSS = (mode , _width, _margin) => {
    return {
    // HtmlTooltip,
     BootstrapTooltip,
+
+     taskSelection: {
+             
+      '&:not(.hover)': { 
+        
+         outline: `1px solid rgba(102,178,255,0.0)`, 
+         WebkitTransition: "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+         transition:       "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+         borderRadius:"8px",
+      },
+      '&:hover': {
+
+        cursor:"pointer",
+        outline: `1px solid rgba(102,178,255,0.4)`, 
+        borderRadius:"8px",
+        backgroundColor: "rgba(102,178,255,0.2)" ,
+        filter: "brightness(1.85)",
+      //  color: `${colors.redAccent[200]}`,
+        WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+        transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
+        
+      },
+      
+     },
+
+
+
      infoBox: { 
         
-       backgroundColor : colors.primary[500], 
+       backgroundColor :  colors.primary[500], 
        width : `${_width}`,
        height : "30px",
      //  margin :"5px",
@@ -547,6 +592,19 @@ export const themeSettings = (mode) => {
         backgroundColor: colors.primary[400]  
     },
   
+
+    web3Button1 :{
+
+      
+      fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+     // color: colors.primary[600],
+       
+     // '&:not(.hover)': { backgroundColor: `${colors.greenAccent[400]}`},
+     '&:hover': { backgroundColor: `${colors.greenAccent[200]}`},
+
+      backgroundColor: `${colors.greenAccent[200]}`
+    },
+
     tabsStyle:{ 
          fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
 
@@ -567,6 +625,7 @@ export const themeSettings = (mode) => {
      },    
    },
 
+      
     tabStyle:{
       
       '&:not(.hover)': { color: `${colors.primary[100]}`},

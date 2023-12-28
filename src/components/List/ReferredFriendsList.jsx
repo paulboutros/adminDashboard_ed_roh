@@ -13,7 +13,7 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import React, { useEffect, useState } from 'react';
  
 
-import { tokens  } from "../../theme";
+import { allCSS, tokens  } from "../../theme";
 import { Avatar, useTheme} from '@mui/material';
   
  
@@ -59,30 +59,8 @@ export default function ToDoList ({ tasks    }) {
         {tasks.map((task, index) => (
           <ListItem key={index} 
              onClick={() => taskHandleClick(index)}
-           sx={
-            {
-             
-              '&:not(.hover)': { 
-                
-                 outline: `1px solid rgba(102,178,255,0.0)`, 
-                 WebkitTransition: "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
-                 transition:       "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
-                 borderRadius:"8px",
-              },
-              '&:hover': {
-  
-                cursor:"pointer",
-                outline: `1px solid rgba(102,178,255,0.4)`, 
-                borderRadius:"8px",
-                backgroundColor: "rgba(102,178,255,0.2)" ,
-                filter: "brightness(1.85)",
-              //  color: `${colors.redAccent[200]}`,
-                WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
-                transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
-                
-              },
-              
-             } 
+           sx={  
+               allCSS( theme.palette.mode ).taskSelection  
            }
           >
              <ListItemIcon  sx={{ minWidth :"54px" }}  >
