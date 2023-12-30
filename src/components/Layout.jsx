@@ -129,12 +129,39 @@ export function RowChildrenAlignLeftBottom( {children} ){
   
   }
   
- export function VerticalStackAlignCenter(  {children} ){
+
+  
+
+  export function VerticalStackAlignCenterTest(  {children } ){
+
+    const theme = useTheme()
+    const colors = tokens(theme.palette.mode);
+
+   //https://www.w3schools.com/cssref/playdemo.php?filename=playcss_align-content
+    return (
+      <Box 
+      backgroundColor =  {colors.primary[400]}
+      height={"300px"}
+      display="flex" 
+      flexDirection="row"
+      alignItems="center"
+     // alignContent="space-between" 
+       justifyContent="space-between"
+      >
+      {children}
+     </Box>
+
+    )
+
+
+}
+
+ export function VerticalStackAlignCenter(  {children, ...props } ){
    
   
       return (
         <Box 
-       
+        {...props}
         display="flex" 
         flexDirection="column"
         alignItems="center"

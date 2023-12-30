@@ -226,10 +226,33 @@ export const tokens = (mode) => ({
 
 
 
+/*
+
+
+export const StyledDiv = styled('div')(({ theme }) => ({
+  color: 'blue',
+  fontSize: '16px',
+
+  // backgroundColor: theme.palette.mode === 'dark' 
+  //   ? theme.palette.primary[900] // dark mode color
+  //   : theme.palette.primary[600], // light mode color
+
+    backgroundColor: theme.palette.primary[900] 
+}
 
 
 
+));
 
+
+*/
+
+
+export const StyledDiv = styled('div')({
+  color: 'blue',
+  fontSize: '16px',
+  backgroundColor: "red"
+});
 
 
 export const BootstrapTooltip = styled(({ className, ...props }) => (

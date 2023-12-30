@@ -16,18 +16,12 @@ import {  RowChildrenAlignLeft } from "../../components/Layout.jsx"
 
 
 
-import BuildIcon from '@mui/icons-material/Build';
-import PersonIcon from '@mui/icons-material/Person';
-
+ 
 
 import { text1, tokens ,DataGridStyle } from "../../theme";
-import  { addressShortened } from "../../utils.js"
-import  {GetFromVAlue} from "../../util/GetMarketContractEventData.js"
-
-import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
-    useMinimumNextBid, useValidDirectListings,
-     useValidEnglishAuctions , useMakeBid,
-     useContractEvents, useNFTs, useNFT
+  
+import {  useContract,
+    
     
    } from "@thirdweb-dev/react";    
 import { 
@@ -37,8 +31,7 @@ import {
    
  
   
-const grid_gap ="20px";
-  
+   
 
 const Activity = ( { nft ,listingID,  isDashboard = false }  ) => {
   const theme = useTheme();
@@ -57,8 +50,7 @@ const Activity = ( { nft ,listingID,  isDashboard = false }  ) => {
    
 //==========================================================================
 // pb added to fetch data
- const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
-const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Objects, one Object per Row
+ const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Objects, one Object per Row
 
 useEffect (()=>{
 
@@ -229,41 +221,4 @@ const columns = [
 export default Activity;
   
   
-
-  // function GetEtherValue( element , eventName ){
-
-  //    // for bugs related to  ethers.utils.formatEther(amountDecimal);
-  //       //  /https://github.com/ethers-io/ethers.js/discussions/2814 for Big Number bugs
-  //   let amountHex;
-  //   let amountDecimal;
-
-  //   let ethValue;
-  //   switch (eventName ){
-  //       case "NewBid": 
-  //       amountHex =  element.data.bidAmount._hex;
-  //       amountDecimal = parseInt(amountHex, 16);
-  //       ethValue = amountDecimal  / 1000000000000000000;// ethers.utils.formatEther(amountDecimal);
-  //   ;break;  
-
-  //   case "NewSale":        
-  //       amountHex  =  element.data.totalPricePaid._hex;
-  //        amountDecimal = parseInt(amountHex, 16);
-  //          ethValue =  amountDecimal  / 1000000000000000000;//   ethers.utils.formatEther(amountDecimal);
-         
-  //    break; 
-
-  //    case "NewListing":        
-  //       amountHex  =  element.data.listing.pricePerToken._hex;
-  //        amountDecimal = parseInt(amountHex, 16);
-  //         ethValue =  amountDecimal  / 1000000000000000000;//   ethers.utils.formatEther(amountDecimal);
-         
-  //    break; 
-       
-  //      default:  ethValue="" ; break;  
-  //     }
-
-  
-
-  //     return ethValue;
-  // }
-  
+ 

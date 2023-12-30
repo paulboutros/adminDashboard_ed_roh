@@ -51,25 +51,22 @@ const DiscordGrid = ( { isDashboard = false }  ) => {
 // pb added to fetch data
 //const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Objects, one Object per Row
-
+/*
 useEffect(()=>{
   (async ()=> {
     
-    const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScore`; 
+    const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScore`;  //getDiscordScore
      const result  = await fetch(endpoint);
-     
+    //========
     let resultsJson = await result.json();
  
     console.log(  "resultsJson"  ,resultsJson);
  
      const listOfID = resultsJson.map(item => item.id);
      let referredUserListDetails  = await getManyUserData(  listOfID   );
-    
-// to do , should be in a debugMode option etc...
+  
     const useMockData = true;
-     
-
-
+ 
     const invite_use =[];
      let ss = resultsJson.map((item, index ) => {
 
@@ -105,22 +102,53 @@ useEffect(()=>{
 
 
     } );
- 
- 
-
-    temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
- //console.log  (" sorted temp    =",temp) ;
-      setNewDataList(temp);
-
-       console.log( "newDataList     "   ,  newDataList  );
- 
   
-
-//   setRowData(resultsJson );
+//===========================
+    temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
+  
+      setNewDataList(temp);
+      
+  
  
    })();
 
 }, [ ]);
+*/
+
+
+useEffect(()=>{
+  (async ()=> {
+    
+    const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScoreMOCK`;  //getDiscordScore
+     const result  = await fetch(endpoint);
+    //========
+    let resultsJson = await result.json();
+ 
+    //console.log(  "resultsJson"  ,resultsJson);
+ 
+     const listOfID = resultsJson.map(item => item.id);
+     let referredUserListDetails  = await getManyUserData(  listOfID   );
+ 
+    let temp = resultsJson.map((item, index ) =>  {
+      return {
+        ...item, // Copy existing properties from resultsJson
+        discordUserData: referredUserListDetails[index].discordUserData,
+      } 
+     });
+  
+//===========================
+    temp.sort((a, b) => b.data.invite_use - a.data.invite_use);
+  
+      setNewDataList(temp);
+      
+      console.log(  "temp"  ,temp);
+ 
+   })();
+
+}, [ ]);
+
+
+
 
  
   

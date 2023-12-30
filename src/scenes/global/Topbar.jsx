@@ -2,7 +2,7 @@
 //https://portal.thirdweb.com/connect/connect-wallet/class-name
   //web3
 import {   ethers } from "ethers";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import {darkTheme, lightTheme, ConnectWallet } from "@thirdweb-dev/react";
 import { useContract, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS , REWARDS_ADDRESS, PACK_ADDRESS } from "../../const/addresses";
 import { Link } from "react-router-dom";
@@ -25,7 +25,7 @@ import SearchIcon from "@mui/icons-material/Search";
    HorizontalSpace
   } from "../../components/Layout"
 
-
+  import stylesBuy from "../../styles/Buy.module.css";
   
   import styleWalletConnect  from "../../styles/walletConnect.module.css"; 
 
@@ -57,6 +57,17 @@ const Topbar = () => {
  
       
   };
+  const customDarkTheme = darkTheme({
+    fontFamily: "Inter, sans-serif",
+    colors: {
+      modalBg: "#000000",
+      accentText: "red",
+      // ... etc
+    },
+  });
+
+
+
 
   return (
     <Box display="flex" justifyContent="space-between"
@@ -157,7 +168,7 @@ const Topbar = () => {
         <RowChildrenAlignCenter>
         <ConnectWallet  theme={theme.palette.mode}  modalSize={"wide"}
        
-       
+        
       /*  full connect button customization tutorial here
        https://youtu.be/7IxMbJD6eQ0?t=2468
       */
@@ -169,9 +180,25 @@ const Topbar = () => {
         }}
           modalTitleIconUrl={""}
 
-             
+            // button when connected already
+          detailsBtn={() => {
+            return <button> hello </button>;
+          }}
 
          /> 
+
+
+<ConnectWallet     modalSize={"wide"}
+       
+       className={stylesBuy.logButton}
+       btnTitle="wallet login"
+       theme={customDarkTheme}
+             // button when connected already
+           detailsBtn={() => {
+             return <button> hello </button>;
+           }}
+ 
+          /> 
               
 
          

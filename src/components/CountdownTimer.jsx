@@ -105,11 +105,129 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 
 
 
-  export function CountdownTimerWithArg({ startTime, endTime , color }) {
-    let endTimeInSecondsX = endTime - startTime;
+
+  export function CountdownEndTime({ startTime, endTime , color ,   endTimeInSecondsX    }) {
+ 
+ 
+ 
+ 
+      let dayText;
+      const calculateTimeLeft = (endTimeInSec ) => {
+
+        const days = Math.floor(endTimeInSec / (24 * 60 * 60));
+        const hours = Math.floor((endTimeInSec % (24 * 60 * 60)) / 3600);
+        const minutes = Math.floor((endTimeInSec % 3600) / 60);
+        const remainingSeconds =Math.floor(endTimeInSec % 60); 
+     
+        dayText  = days > 1 ? 'Days' : 'Day'; 
   
-     const currentTimestamp = new Date().getTime() /1000;
-     endTimeInSecondsX = endTime - currentTimestamp;
+        if ( endTimeInSec <=0 ){
+  
+          return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+        }
+  
+          return { days, hours, minutes, seconds: remainingSeconds }
+      };
+   
+     const [timeLeft, setTimeLeft] = useState( calculateTimeLeft( endTimeInSecondsX  ) );
+   
+   const _variant1 ='h3';
+   const _variant2 ='h5';
+    
+ 
+     useEffect(() => {
+       
+      //  const timer = setInterval(() => {
+          setTimeLeft(calculateTimeLeft( endTimeInSecondsX  ));
+      //  }, 1000);
+   
+      // return () => clearInterval(timer);
+     }, [endTimeInSecondsX]);
+   
+     return (
+       <div  >
+        
+         <div>
+          
+          <RowChildrenAlignLeft>
+           {/* =================================================================================== */}
+ 
+     {timeLeft.days >0  && (
+        <div>
+         <VerticalStackAlignLeft> 
+ 
+            <Typography color={color} variant= {_variant1} >   {timeLeft.days} </Typography>
+ 
+            <VerticalSpace space={2}/>  
+            <Typography color={color} variant= {_variant2}  >   {dayText.toString().padStart(2, '0')}   </Typography>
+            
+           </VerticalStackAlignLeft>
+ 
+          
+        
+         </div>)}
+ {/* =================================================================================== */}
+           <HorizontalSpace space={3}/> 
+  
+ 
+             <VerticalStackAlignLeft> 
+              <Typography color={color} variant= {_variant1} >   {timeLeft.hours.toString().padStart(2, '0')   }  </Typography>
+             <VerticalSpace space={2}/> 
+             <Typography color={color} variant= {_variant2} >   Hours  </Typography>
+             
+             </VerticalStackAlignLeft>
+ 
+         <HorizontalSpace space={3}/> 
+ 
+ {/* =================================================================================== */}
+            <VerticalStackAlignLeft> 
+              <Typography color={color} variant= {_variant1} >   {timeLeft.minutes.toString().padStart(2, '0') } </Typography>
+             <VerticalSpace space={2}/> 
+             <Typography color={color} variant= {_variant2} >   Minutes  </Typography>
+             
+             </VerticalStackAlignLeft>
+ 
+           <HorizontalSpace space={3}/>         
+ {/* =================================================================================== */}
+ <VerticalStackAlignLeft> 
+              <Typography color={color} variant= {_variant1} >  {timeLeft.seconds.toString().padStart(2, '0') } </Typography>
+             <VerticalSpace space={2}/> 
+             <Typography color={color} variant= {_variant2} >   Secondes  </Typography>
+             
+             </VerticalStackAlignLeft>
+ 
+           <HorizontalSpace space={3}/>         
+ {/* =================================================================================== */}
+ 
+ 
+ 
+             </RowChildrenAlignLeft>
+ 
+           
+  
+            
+         </div>
+       </div>
+     );
+   }
+  
+
+
+
+  export function CountdownTimerWithArg({ startTime, endTime , color ,   endTimeInSecondsX    }) {
+
+
+   // let endTimeInSecondsX = endTime - startTime;
+   if (!endTimeInSecondsX){
+      const currentTimestamp = new Date().getTime() /1000;
+      endTimeInSecondsX = endTime - currentTimestamp;
+    } 
+
+     
+
+
+
+
 
      let dayText;
      const calculateTimeLeft = () => {
@@ -136,6 +254,9 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
    
 
     useEffect(() => {
+ 
+    
+
       const timer = setInterval(() => {
         setTimeLeft(calculateTimeLeft());
       }, 1000);

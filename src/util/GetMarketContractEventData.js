@@ -3,9 +3,9 @@ import  { addressShortened, hexToDaysAgo, hexToReadableTimestamp
 } from "../utils.js"
 import { convertEthToUsd } from "../data/API.js";
 
-
+ 
 let ethToUsdRate;
-export function GetFromVAlue( element , eventName  ){
+  function GetFromVAlue( element , eventName  ){
     let amountHex;
     let amountDecimal;
      let ethValue;   
@@ -95,35 +95,92 @@ export function GetFromVAlue( element , eventName  ){
       return data;
   
    }
+   function GetStakingEventVAlue( element , eventName  ){
+      let amountHex;
+      let amountDecimal;
+       let ethValue;   
+       let dataHex;
+    
+      let data = {from:"", to:"",ethValue:"", date:"", bidder:"", expiration:"", listingID:"", auctionId:"", tokenId:"" };
+        switch (eventName ){
+            
+    
+          case "NewAuction": //( from creation of a bidder); 
+          data.from =  addressShortened( element.data.auctionCreator);
+          data.to = "Market contract";
+    
+         
+    
+          amountHex =  element.data.auction.minimumBidAmount._hex;
+          amountDecimal = parseInt(amountHex, 16);
+          data.ethValue = (amountDecimal  / 1000000000000000000);
+    
+          dataHex = element.data.auction.startTimestamp._hex;
+          data.date = hexToReadableTimestamp(dataHex);// hexToDaysAgo(dataHex);
+          break;  
+    
+          case "NewListing":  
+          data.from =  addressShortened( element.data.listingCreator);
+          data.to = "Market contract";
+    
+          amountHex  =  element.data.listing.pricePerToken._hex;
+          amountDecimal = parseInt(amountHex, 16);
+          data.ethValue =  amountDecimal  / 1000000000000000000;//   ethers.utils.formatEther(amountDecimal);
+    
+          dataHex = element.data.listing.startTimestamp._hex;
+         //  data.date = hexToReadableTimestamp(dataHex);
+           data.date = hexToReadableTimestamp(dataHex);// hexToDaysAgo(dataHex);
+            
+      
+    
+         default:  data="" ; break;  
+     
+        }
+     
+    
+    return data;
+    
+ }
 
 
+export async function  GetStakingEvent (contract,  boardtype ){
+   const events = await contract.events.getAllEvents();
+   for (let i = 0; i < events.length; i++) {
+      const element = events[i];
+      const eventName = element.eventName;
+      console.log(  "get staking event = "  , element  );
+      if ( eventName === "TokensStaked" ){
+
+         console.log(  "TokensStaked >>>> = "  , element  );
+
+      }
+
+
+   }
+}
     
 export async function  GetContractName (contract , nft, auctionIdArg ,listingId,   boardtype ){
    // auctionIdArg=1;
     const events = await contract.events.getAllEvents();
-    const eventNames = events.map(event => event.eventName);
+    //const eventNames = events.map(event => event.eventName);
     
-    //console.log( "  events = " , events  );
-
+     
+    // to make sure it is defined once
     if (ethToUsdRate === undefined){
         console.log("ethToUsdRate  is now defined ");
         ethToUsdRate = await convertEthToUsd( );  
     }
      
 
-    //const ethToUsdRate = await convertEthToUsd( );  
+   
  
    let gridData = new Array();
   let index =0;
-  //events.forEach(element => {
+   
     for (let i = 0; i < events.length; i++) {
         const element = events[i];
-
-
-  
-       const eventName = element.eventName;
-     
-        
+        const eventName = element.eventName;
+       
        // const ethValue = GetEtherValue(element , eventName); 
         const cellData = GetFromVAlue(element , eventName); 
        // const USDPrice = ethValue * ethToUsdRate; 

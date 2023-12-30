@@ -1,16 +1,16 @@
  
 import Container from "../../components/Container/Container";
  
-import StakeToken from '../../components/StakeToken';
+ 
 import RewardToken from '../../components/RewardToken';
-import { Grid, Paper, Box } from '@mui/material';
+import { Grid, Paper, Box, Typography } from '@mui/material';
 import  Stake from '../../components/Stake';
 import { tokens ,basicRoundedBox1 } from '../../theme';
 import { useTheme } from '@emotion/react';
 
  import { Discord_invite_stake_token,REWARDS_ADDRESS } from "../../const/addresses";
 import { useAddress } from "@thirdweb-dev/react";
-import { VerticalSpace } from "../../components/Layout";
+import { VerticalSpace, VerticalStackAlignCenter , VerticalStackAlignCenterTest} from "../../components/Layout";
 
 export default function RewardTokenTab() {
   const theme = useTheme();
@@ -20,6 +20,8 @@ export default function RewardTokenTab() {
     return (
         
        <> 
+ 
+
          <Container maxWidth="lg">   
                        
            <Grid container spacing={4}>
