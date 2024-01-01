@@ -3,10 +3,12 @@ import { createTheme } from "@mui/material/styles/index.js";
 
 
 import Tooltip ,{ tooltipClasses }   from    '@mui/material/Tooltip';
-import { styled } from '@mui/material/styles';
+import { styled , alpha} from '@mui/material/styles';
 import Button from '@mui/material/Button';
 //import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { ConnectWallet } from "@thirdweb-dev/react";
+import { Avatar, Box, Chip } from "@mui/material";
 //https://uicolors.app/create
 // this is to replicate the css styles found in styles module of Thridweb market v 3
 export const styles = {
@@ -225,27 +227,41 @@ export const tokens = (mode) => ({
 });
 
 
-
-/*
-
-
-export const StyledDiv = styled('div')(({ theme }) => ({
-  color: 'blue',
-  fontSize: '16px',
-
-  // backgroundColor: theme.palette.mode === 'dark' 
-  //   ? theme.palette.primary[900] // dark mode color
-  //   : theme.palette.primary[600], // light mode color
-
-    backgroundColor: theme.palette.primary[900] 
-}
-
-
-
-));
-
-
-*/
+export const CustomChip = ( {theme, label, icon, color }) => {
+ 
+   const backgroundColorWithOpacity =     alpha(color, 0.08); // `rgba(255, 193, 7, ${0.08} )`;
+  const outLineColor =   alpha(color,0.65);
+  
+  return (
+     
+      <Box sx={{
+      height:"30px",
+       outline: `1px solid  ${ outLineColor  }`, 
+      borderRadius: '8px', // Set your desired border-radius
+      backgroundColor: backgroundColorWithOpacity,
+      color: color, // Text color
+      fontWeight: 400,
+      fontSize:'12px', // Set your desired border-radius
+     
+       display: "flex",
+      flexDirection: "row",
+    
+       alignItems:"center" 
+    }}>
+          
+       <span style={{ marginLeft: '5px' }}></span>
+       {icon}
+       <span style={{ marginLeft: '5px' }}></span>
+       <p> {label} </p>
+       <span style={{ marginRight: '11px' }}></span>
+      
+      </Box >
+   
+  );
+ 
+ 
+  
+};
 
 
 export const StyledDiv = styled('div')({
@@ -272,6 +288,56 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
       padding: theme.spacing(1.3), // Adjust the padding as needed
     },
   }));
+
+  export const StyledConnectWallet = styled(({ className, ...props }) => (
+    <ConnectWallet {...props}
+     className={className}
+     modalTitleIconUrl="" modalTitle="Pixels"  
+     />
+  ))(({ theme }) => ({
+ 
+    '&:not(.hover)': { 
+
+      height: "32px",
+    // backgroundColor:  tokens(theme.palette.mode).primary[400] ,
+      outline: `1px solid  ${ tokens(theme.palette.mode).primary[300]   }`, 
+      WebkitTransition: "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+      transition:       "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+      borderRadius:"8px",
+   },
+   '&:hover': {
+     height: "32px",
+     
+     cursor:"pointer",
+     outline: `1px solid ${ _blueSelectedTab }`,   
+     borderRadius:"8px",
+     backgroundColor:  tokens(theme.palette.mode).primary[600],// "#8a2be2",
+    //  backgroundColor: "rgba(102,178,255,0.2)" ,
+      filter: "brightness(1.85)",
+      color: `${ _blueSelectedTab }`,
+     WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+     transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
+     
+   } 
+ 
+  }));
+
+
+  export const StyledConnectWallet2 = styled(({ className, ...props }) => (
+    <ConnectWallet {...props}
+     className={className}
+     btnTitle= { <p>  <>Wallet <span  >{"Login"}</span></> </p>}
+     modalTitleIconUrl="" modalTitle="Wulirocks"  
+     />
+  ))(({ theme }) => (
+    
+     
+       allCSS( theme.palette.mode, "400px","0px" ).infoBox 
+  
+  ));
+
+
+
 
 
 
@@ -319,7 +385,7 @@ export const allCSS = (mode , _width, _margin) => {
   
   const outline = {
     light : colors.primary[500],
-    dark  : colors.primary[400]
+    dark  : colors.primary[300]
   };
   const text1={
     light : colors.grey[500],
@@ -332,7 +398,10 @@ export const allCSS = (mode , _width, _margin) => {
     BootstrapTooltip,
 
      taskSelection: {
-             
+          
+          
+ 
+
       '&:not(.hover)': { 
         
          outline: `1px solid rgba(102,178,255,0.0)`, 
@@ -356,13 +425,17 @@ export const allCSS = (mode , _width, _margin) => {
      },
 
 
+     taskBar:  {  //borderRadius: 4,  
+       backgroundColor: colors.primary[500] ,
+       borderBottom: `1px solid ${ colors.primary[400]}`
+     },
 
      infoBox: { 
-        
+      borderRadius:"4px",
        backgroundColor :  colors.primary[500], 
        width : `${_width}`,
        height : "30px",
-     //  margin :"5px",
+       filter: "brightness(1.15)", // "brightness(1.85)",
         
        // center with flex, there is a method to center without flex as well, (relative/absolute technic)
        //https://www.w3schools.com/howto/howto_css_center-vertical.asp
@@ -400,7 +473,7 @@ export const allCSS = (mode , _width, _margin) => {
         WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
         transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
       //  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
-        
+       filter: "brightness(1.55)", // "brightness(1.85)",
       } ,
      
  
@@ -497,6 +570,8 @@ export const themeSettings = (mode) => {
             },
             cancelIconColor: colors.grey[600], 
             blueSelectedTab : _blueSelectedTab, //blue from thirdweb marketpalce
+            chipYellow : `rgba(255, 193, 7, 1)`, 
+            chipGreen : `rgba(0,161,134,1)`,  
 
             nftImage:colors.primary[400],
             nftContainer: colors.primary[400],
@@ -519,6 +594,8 @@ export const themeSettings = (mode) => {
             },
             cancelIconColor: colors.grey[600],
             blueSelectedTab :_blueSelectedTab, //blue from thirdweb marketpalce
+            chipYellow : `rgba(255, 193, 7, 1)`, 
+            chipGreen : `rgba(0,161,134,1)`,  
 
             nftImage:colors.primary[400],
             nftContainer: colors.primary[500],

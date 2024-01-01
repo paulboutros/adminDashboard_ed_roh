@@ -1,6 +1,6 @@
 import React from 'react';
-import {Box,   Typography , useTheme, Chip,  } from '@mui/material';
-import { BootstrapTooltip, HtmlTooltip, allCSS, tokens } from "../../theme";
+import {Box,   Typography , useTheme, Chip, Tooltip,  } from '@mui/material';
+import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../../theme";
   import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
  import {useEffect, useState} from "react";
@@ -14,7 +14,7 @@ import { copyTextToClipboard } from '../../utils';
 import { getAvatar, getManyUserData } from '../../data/API';
 import { useAppLinkContext } from '../../context/AppLinkContext';
   
-   const ReferralLinkGrid = ( ) => {
+   const ReferralLinkGrid = ( {sp}  ) => {
  
     const { appLink } = useAppLinkContext();
     const [tasks, setTasks] = useState([
@@ -53,32 +53,10 @@ import { useAppLinkContext } from '../../context/AppLinkContext';
     
     if (!user){return;}
     if (!appLink){return;}
-    
-    /*
-    const userID =  user.ID;
-    const endpoint = `${process.env.REACT_APP_API_URL}GetReferralCode?ID=${userID}`; // make it specific (filter to twitter fields)
-     const result = await fetch(endpoint);
-     let response = await result.json();
  
-   // if no one has accepted yet
-      if (response.referralCode.referredUser.length === 0 ){
-      response.referralCode.referredUser=[
-        "not accepted yet"
-       ]
-    }
-*/
-
-
         setReferralCode(appLink.referralCode);
-   //   setReferralCode(response.referralCode);
-
-
-    //  const endpoint_t = `${process.env.REACT_APP_API_URL}GetTempGiveAway?ID=${userID}`; // make it specific (filter to twitter fields)
-    //  const result_t = await fetch(endpoint_t);
-   //   let response_t = await result_t.json();
-     
-              
-
+      
+ 
   };  
   
 
@@ -109,19 +87,9 @@ import { useAppLinkContext } from '../../context/AppLinkContext';
    }
    function getCompletion(){
 
-      if ( !referralData ){
-
-        return  (`ACCEPTED: ${"0"}`)   ;
-      }
-
-
-  let task = 0;
- // if ( user ){ task+=1;    console.log(  "complete  1 "); } // we are connected to discord
- // if (  walletAndDiscordAreConnected(user)  ){  console.log(  "complete  2 " , user);   task+=1; }  // there is wallet associated with discord account
-  
- 
-  return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
-return  (`To DO ${task} / 2`)   ;
+     if ( !referralData ){ return   (`ACCEPTED : ${"0"}`); }
+     
+     return  (`ACCEPTED : ${referralData.referredUser.length}`)   ;
    }
 
 
@@ -174,22 +142,38 @@ return  (`To DO ${task} / 2`)   ;
            
           </Box>
         ):(
-          <Box  sx={{  borderRadius: 4, backgroundColor: colors.primary[400] }} > 
+          <Box  sx={    allCSS( theme.palette.mode  ).taskBar  
+             
+             
+          } > 
           <Box sx={{ 
-            color: colors.grey[300], display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
+            color: colors.grey[100],
+             display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
       
          }}>
-      <HorizontalSpace space={30}/>
+      <HorizontalSpace space={  sp[0] }/>
 
-      
-     
           <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
 
             <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
               
             
             <Box onClick={ () => copyTextToClipboard ( referralData?.shareableLink )} > 
-                 <p> <>Share link <span style={{fontWeight:"700px"}} >{ referralData?.code}</span> with friends</></p>
+
+                   {/* <p> <>Share link <span style={{fontWeight:"700px"}} >{ referralData?.code}</span> with friends</></p>   */}
+                 
+                   <p> <>Share link with friends  
+                   <span style={{
+                      marginRight: '10px',
+                    fontWeight:"700px",  borderRadius:"3px", padding:"3px",
+                  //  outline: `1px solid ${ colors.primary[300] }`,   
+                    }}
+                     >
+                    { referralData?.code}</span></></p>  
+              {/* <Chip variant="outlined" color="info" size="small"  label=  { referralData?.code} icon={<FaceIcon />} /> */}
+               
+             
+
             </Box>
  
           </Box>
@@ -203,11 +187,7 @@ return  (`To DO ${task} / 2`)   ;
         <HorizontalSpace space={30}/> 
  
         <HtmlTooltip
-         // open={true} // for debugging
-       
-
-             
-         title={
+          title={
             <React.Fragment>
                <Typography color="inherit">Referred friends</Typography>
                 <Typography fontSize={"15px"}>{ tasks[0].global_name }</Typography> 
@@ -215,13 +195,17 @@ return  (`To DO ${task} / 2`)   ;
 
                 <Box>  <ReferredFriendsList tasks={tasks} /> </Box>  
                </React.Fragment>
-             }
-            >
-            <Chip variant="outlined" color="warning" label= { getCompletion()}   icon={<FaceIcon />}   sx={ {height :"30px" , borderRadius:"10px" }}/>
+             } >
+ 
+         <Box >
+           <CustomChip theme={theme} label= { getCompletion()}  icon={<FaceIcon />} color=  {theme.palette.chipYellow} />
+          </Box >
+   
                </HtmlTooltip>
-            </Box> </Box>
+            </Box>
+          </Box>
          )}
-        </>
+       </>
    
         
     )

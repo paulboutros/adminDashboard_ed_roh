@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box,  Typography , useTheme, Chip,  } from '@mui/material';
-import { BootstrapTooltip, HtmlTooltip, allCSS, tokens } from "../../theme";
+import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../../theme";
   import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
  import {useEffect, useState} from "react";
@@ -13,7 +13,7 @@ import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
 import { copyTextToClipboard, timeAgo } from '../../utils';
 import { getAvatar, getManyUserData } from '../../data/API';
   
-   const BadgeJoinServer = () => {
+   const BadgeJoinServer = (  { sp } ) => {
 
  
     const [tasks, setTasks] = useState([
@@ -101,19 +101,9 @@ import { getAvatar, getManyUserData } from '../../data/API';
    }
    function getCompletion(){
 
-      if ( !joinedServerData ){
-
-        return  (`JOINED: ${"0"}`)   ;
-      }
-
-
-  let task = 0;
- // if ( user ){ task+=1;    console.log(  "complete  1 "); } // we are connected to discord
- // if (  walletAndDiscordAreConnected(user)  ){  console.log(  "complete  2 " , user);   task+=1; }  // there is wallet associated with discord account
-      
+      if (!joinedServerData ){return  (`JOINED: ${"0"}`);}
+      return  (`JOINED : ${joinedServerData.status}`)   ;
  
-  return  (`JOINED: ${joinedServerData.status}`)   ;
-return  (`To DO ${task} / 2`)   ;
    }
 
 
@@ -151,24 +141,18 @@ return  (`To DO ${task} / 2`)   ;
                     /> 
              </BootstrapTooltip> 
            
-
-    {/* <Chip
-        avatar={<Avatar alt="Natacha" src="/icon/discord-round-color-icon.jpg" />}
-        label="Avatar"
-        variant="outlined"
-      /> */}
-
+ 
               
           </Box>
            
           </Box>
         ):(
-          <Box  sx={{  borderRadius: 4, backgroundColor: colors.primary[400] }} > 
+          <Box  sx={  allCSS( theme.palette.mode  ).taskBar } > 
           <Box sx={{ 
             color: colors.grey[300], display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
       
          }}>
-      <HorizontalSpace space={30}/>
+      <HorizontalSpace space={ sp[0] }/>
 
       
      
@@ -203,9 +187,7 @@ return  (`To DO ${task} / 2`)   ;
  
         <HtmlTooltip
          // open={true} // for debugging
-       
-
-             
+              
          title={
             <React.Fragment>
                <Typography color="inherit">Referred friends</Typography>
@@ -216,8 +198,22 @@ return  (`To DO ${task} / 2`)   ;
                </React.Fragment>
              }
             >
-            <Chip variant="outlined" color="warning" label= { getCompletion()}   icon={<FaceIcon />}   sx={ {height :"30px" , borderRadius:"10px" }}/>
+                <Box >
+             <CustomChip theme={theme} label= { getCompletion()}  icon={<FaceIcon />} color= {theme.palette.chipYellow} />
+          </Box >
+ 
+
                </HtmlTooltip>
+
+
+         <HorizontalSpace space={3}/> 
+         <Box >
+             <CustomChip theme={theme} label= { getCompletion()}  icon={<FaceIcon />} color= {theme.palette.chipGreen} />
+          </Box >
+              
+
+
+
             </Box> </Box>
          )}
         </>

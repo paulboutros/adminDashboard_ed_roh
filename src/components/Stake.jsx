@@ -488,18 +488,18 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
                 // Assuming startTime is the timestamp of the past start time in seconds
                      startTime = timeOfLastUpdate;// 2000;// in second
    
-                   console.log(  ">>> Hard coded startTime   =  "  , startTime);
+                //   console.log(  ">>> Hard coded startTime   =  "  , startTime);
 
 
                    const timeOfLastUpdate_date = new Date( (timeOfLastUpdate *1000));
 
                    
-                   console.log(  ">>> real   startTime   =  "  ,  (timeOfLastUpdate  ) , "   "  , timeOfLastUpdate_date.toLocaleString());
+                //   console.log(  ">>> real   startTime   =  "  ,  (timeOfLastUpdate  ) , "   "  , timeOfLastUpdate_date.toLocaleString());
 
                   
                    // Assuming eventInterval is the time interval between events in seconds
                    const eventInterval =  parseInt(  stakeGetTimeUnit._hex , 16);
-                   console.log(  ">>> eventInterval  =  "  , eventInterval);
+                  // console.log(  ">>> eventInterval  =  "  , eventInterval);
                    // Assuming currentTime is the current timestamp in seconds
                    const currentTime = Date.now() / 1000;
    
@@ -516,7 +516,7 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
                         refetchStakeInfo();
                       }
                       setTimeRemaining(timeRemainingTemp);
-                   console.log(`Time remaining for the next event: ${timeRemainingTemp} seconds`);
+                 //  console.log(`Time remaining for the next event: ${timeRemainingTemp} seconds`);
     
    
          

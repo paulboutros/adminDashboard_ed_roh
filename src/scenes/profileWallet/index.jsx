@@ -40,18 +40,14 @@ import {
    metamaskWallet
 } from "@thirdweb-dev/react";
 import MyPacks from '../myPacks/index';
- import AccountMenuCustom from '../../components/AccountMenuCustom.jsx';
+ 
 
-
-import { useUserContext } from '../../context/UserContext';
-import { addorupdate, getAvatar,   openOAuth2Url_whenUserNotConnected , createRedirectookie } from '../../data/API';
-import { addressShortened } from '../../utils';
-import { useDebugModeContext } from '../../context/DebugModeContext';
-import { useParams } from 'react-router';
-import ToDoList from '../../components/List/ToDoList';
-import BadgeDiscordInvites from '../../components/Badges/BadgeDiscordInvites';
+ import { setUserTask   } from '../../data/API';
+ import { useParams } from 'react-router';
+ import BadgeDiscordInvites from '../../components/Badges/BadgeDiscordInvites';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
 import { EarnBadges } from '../../components/Badges/EarnBadges';
+import { useUserContext } from '../../context/UserContext';
 
 
 function CustomTabPanel(props) {
@@ -87,14 +83,13 @@ function a11yProps(index) {
   };
 }
 
-
-const walletConfig = metamaskWallet();
+// horizontal space between  elements of the badges
+  const sp = [20];
 export default function BasicTabs() {
 
-  
+  const {user  } = useUserContext();
 
-  const connectionStatus = useConnectionStatus();
-    const theme = useTheme();
+     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
    
     let {   initialTabIndex } = useParams();
@@ -113,8 +108,23 @@ export default function BasicTabs() {
     setValue(newValue);
   };
  
-  
+     
+   
+   useEffect(()=>{
+    if (!user)return;
+    const fetchData = async ( ) => {
 
+
+         console.log( " setUserTask(); setUserTask(); setUserTask();");
+        await setUserTask(user);
+
+
+    }
+    fetchData();
+    
+      
+  
+   }, [ user ]);
  
   return (
     //<Box sx={{ width: '100%' }}>
@@ -152,12 +162,12 @@ export default function BasicTabs() {
         
           <VerticalSpace space={1}/>
         
-         <AppLinkDataBox/>
+         <AppLinkDataBox  sp={sp}  />
          
           
          <VerticalSpace space={1}/>
         
-         <JoinServer/>
+         <JoinServer   sp={sp}   />
          <VerticalSpace space={1}/>
          <BadgeDiscordInvites/>
 

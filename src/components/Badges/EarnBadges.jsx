@@ -1,12 +1,12 @@
 
  
 import  React,{ useEffect, useState } from "react";
-import { BootstrapTooltip, HtmlTooltip, allCSS, infoHeight, tokens } from "../../theme";
+import { BootstrapTooltip, HtmlTooltip, StyledConnectWallet2, allCSS, infoHeight, tokens } from "../../theme";
 import { useTheme } from "@emotion/react";
 import { useAddress } from "@thirdweb-dev/react";
 import { useUserContext } from "../../context/UserContext";
 import { useDebugModeContext } from "../../context/DebugModeContext";
-import { addorupdate, getAvatar, openOAuth2Url_whenUserNotConnected } from "../../data/API";
+import { addorupdate, getAvatar, openOAuth2Url_whenUserNotConnected, setWallet } from "../../data/API";
 import { Avatar, Box, Button, Chip, Typography } from "@mui/material";
 import AccountMenu from "../AccountMenuCustom";
 import SpeedDialTooltipOpen from "../SpeedDialTooltipOpen";
@@ -45,7 +45,7 @@ export function EarnBadges(){
    
    
    useEffect(()=>{
-       console.log("  profile wallet  : debugMode   = ", debugMode );
+      
   
   }, [ debugMode   ]);
   
@@ -53,11 +53,12 @@ export function EarnBadges(){
     
     const state = user ? true:false; 
     updateTask(0,state )
-  
     const state1 = walletAndDiscordAreConnected(user);// true:false; 
+ 
+
+
     updateTask(1, state1 )
-  
-  
+   
   }, [user ]);
     
    async function disconnectWalletDiscord(){
@@ -65,19 +66,15 @@ export function EarnBadges(){
     const result = await addorupdate(user, "0000000" );
   
       setUser(result.user);
-    //console.log(   "disconnectWalletDiscord  =" , result );
-  
-  }
-  
-    function walletAndDiscordAreConnected(user){
-  
      
-     //console.log(  " >>>>>>>>>>>>>>>>>>>>     user="   , user);
-    if (!user || user === undefined){return false;}
-   // console.log(  "user.wallet "   ,user.wallet);
   
-    return !user.wallet.includes("0000000");
   }
+  
+   function walletAndDiscordAreConnected(user){
+   
+    if (!user || user === undefined){return false;}
+         return !user.wallet.includes("0000000");
+   }
   
   async function  linkAdressToDiscord(  user, address ){
   
@@ -90,20 +87,27 @@ export function EarnBadges(){
            return;
          }
      
-        const result = await addorupdate(user,address);
+         const result = await setWallet(user,address);
+       // const result = await addorupdate(user,address);
         setUser(result.user);
-       
-  // update task completion on server
+        
    }
    
    function getCompletion() {
     
      
     let task = 0;
-    if ( user ){ task+=1;    console.log(  "complete  1 "); } // we are connected to discord
-    if (  walletAndDiscordAreConnected(user)  ){  console.log(  "complete  2 " , user);   task+=1; }  // there is wallet associated with discord account
+    if ( user ){ task+=1; 
+        
+        
+        } // we are connected to discord
+    if (  walletAndDiscordAreConnected(user)  ){  
+      
+     
+      
+      task+=1; }  // there is wallet associated with discord account
     
-  
+    return  (`1`)   ;
   return  (`To DO ${task} / 2`)   ;
   
    }
@@ -112,7 +116,7 @@ export function EarnBadges(){
      return (
       <>   
   
-      <Box    sx={ theme.basicRoundedBox1 } > 
+      <Box    sx={  allCSS( theme.palette.mode  ).taskBar } > 
         <Box sx={{ 
              color: colors.grey[300], display: "flex",
              flexDirection: "row",  alignItems: "center",
@@ -189,13 +193,16 @@ export function EarnBadges(){
            )
           }
   
-          {  user && !address && ( 
-             <Box sx={allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
-                     onClick={() => linkAdressToDiscord(user, address)}
-             >
-             <p>  <>Wallet <span  >{"Login"}</span></> </p>
-             </Box>
+          {  user && !address && (
+
+                  <StyledConnectWallet2/>
+            //  <Box sx={allCSS( theme.palette.mode, "400px","0px" ).infoBox  } 
+            //          onClick={() => linkAdressToDiscord(user, address)}
+            //  >
+            //  <p>  <>Wallet <span  >{"Login"}</span></> </p>
+            //  </Box>
            )
+
           }
   
           {  !user && !address && ( 
@@ -211,6 +218,9 @@ export function EarnBadges(){
         )}
   
            <HorizontalSpace space={30}/> 
+          
+
+ 
           
            
             <HtmlTooltip

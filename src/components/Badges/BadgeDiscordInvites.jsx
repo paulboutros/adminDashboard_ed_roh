@@ -42,7 +42,7 @@ import { useDebugModeContext } from '../../context/DebugModeContext';
         
        setTasks(referredUsers);
       
-       console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
+     //  console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
 
     };
  
@@ -67,9 +67,7 @@ import { useDebugModeContext } from '../../context/DebugModeContext';
    
    //  if (!referralData)return;
       updateTask();
-
-   console.log( "Badge discordInvite =",  discordInvite  );
-   console.log( "discordInvite?.invite =",  discordInvite?.invite  );
+ 
    
   }  , [ discordInvite  ]);
 
@@ -182,8 +180,8 @@ return  (`To DO ${task} / 2`)   ;
           </Box>
            
           </Box>
-        ):(
-          <Box  sx={{  borderRadius: 4, backgroundColor: colors.primary[400] }} > 
+        ):(  
+          <Box  sx={  allCSS( theme.palette.mode  ).taskBar  } > 
           <Box sx={{ 
             color: colors.grey[300], display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
       

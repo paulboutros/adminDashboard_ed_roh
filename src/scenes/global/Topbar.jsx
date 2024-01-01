@@ -1,4 +1,4 @@
- 
+ //https://blog.thirdweb.com/guides/reactnative-sdk-full-theme-customization/
 //https://portal.thirdweb.com/connect/connect-wallet/class-name
   //web3
 import {   ethers } from "ethers";
@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { Box, IconButton, useTheme ,   Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {   useContext, useEffect, useState  } from "react";
-import { ColorModeContext, tokens, buttonStyle } from "../../theme";
+import { ColorModeContext, tokens, buttonStyle, StyledConnectWallet  } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -32,6 +32,16 @@ import SearchIcon from "@mui/icons-material/Search";
  import styles from        "../../styles/Navbar.module.css"; 
  import stylesProfile from "../../styles/Profile.module.css"; 
 import AccountMenu from "../../components/AccountMenu";
+
+import styled from 'styled-components';
+
+export const StyledDiv = styled('div')({
+  color: 'blue',
+  fontSize: '16px',
+  backgroundColor: 'red',
+});
+
+
 
 
 const Topbar = () => {
@@ -66,6 +76,11 @@ const Topbar = () => {
     },
   });
 
+  const customStyles = {
+   // color: 'green', // Override the color
+    backgroundColor: "green"
+    // Add more style overrides as needed
+  };
 
 
 
@@ -164,14 +179,32 @@ const Topbar = () => {
         <HorizontalSpace space={2}/>
 
 
-  
-        <RowChildrenAlignCenter>
-        <ConnectWallet  theme={theme.palette.mode}  modalSize={"wide"}
-       
-        
-      /*  full connect button customization tutorial here
+   {  /*  full connect button customization tutorial here
        https://youtu.be/7IxMbJD6eQ0?t=2468
-      */
+      */}
+
+    <RowChildrenAlignCenter>
+
+    { address ? (
+
+<ConnectWallet
+theme={theme.palette.mode}  modalSize={"wide"}
+    style={{  height: '40px'   }}
+         
+    welcomeScreen={{
+    title: "Get it at to Wuli.rocks",
+    subtitle: "Just connect to get started",
+  }}
+    modalTitleIconUrl={""}
+
+
+/>
+):(
+<StyledConnectWallet />
+)}
+        {/* <ConnectWallet  theme={theme.palette.mode}  modalSize={"wide"}
+        
+     
           style={{  height: '40px'   }}
          
           welcomeScreen={{
@@ -185,24 +218,13 @@ const Topbar = () => {
             return <button> hello </button>;
           }}
 
-         /> 
+         />  */}
 
-
-<ConnectWallet     modalSize={"wide"}
-       
-       className={stylesBuy.logButton}
-       btnTitle="wallet login"
-       theme={customDarkTheme}
-             // button when connected already
-           detailsBtn={() => {
-             return <button> hello </button>;
-           }}
  
-          /> 
-              
-
-         
         
+
+    
+
          <HorizontalSpace space={2}/> 
 
           {/*

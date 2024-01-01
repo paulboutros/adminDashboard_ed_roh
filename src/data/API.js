@@ -214,8 +214,44 @@ export function GetCookieRedirectURL(   address ){
    
 
 }
-export async function addorupdate( user , address ){
+
  
+export async function setUserTask( user , address ){
+ 
+  const dataToSend={ 
+    ID : user.ID 
+     
+  }
+  
+const endpoint = `${process.env.REACT_APP_API_URL}setUserTask`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+console.log("setUserTask  >>> response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+}
+
+export async function setWallet( user , address ){
+ 
+  const dataToSend={ 
+    ID : user.ID,
+     wallet   : address
+  }
+  console.log("   function de merde   e :"   );
+const endpoint = `${process.env.REACT_APP_API_URL}setWallet`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+console.log("data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+}
+
+
+
+export async function addorupdate( user , address ){
+  
+
+
     const dataToSend={ 
       ID : user.ID,
       id : user.id,
