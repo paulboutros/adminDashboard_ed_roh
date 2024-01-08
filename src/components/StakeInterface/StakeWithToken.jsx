@@ -1,16 +1,6 @@
  
 import {
-    /*
-    Box,
-    Card,
-    Flex,
-    Heading,
-    Input,
-    SimpleGrid,
-    Skeleton,
-    Stack,
-    Text,
-*/
+   
     useToast,
 
 
@@ -28,38 +18,36 @@ import {
     TextField,
    /// makeStyles,
   } from '@mui/material';
-
-
-
-
-
-
+ 
   import {
-    Web3Button,
+    
     useAddress,
     useContract,
     useContractRead,
     useTokenBalance,
   } from "@thirdweb-dev/react";
   import {
+    Discord_tokenLess_stakinContract,
     REWARDS_ADDRESS,
-    Discord_stake_contract,
+    
     Discord_invite_stake_token,
   } from "../const/addresses";
   import React, { useEffect, useState } from "react";
   import { ethers } from "ethers";
 import { useTheme } from "@emotion/react";
-import { allCSS, basicRoundedBox1, text2, tokens } from "../theme";
-import { getSDK_fromPrivateKey } from "../data/API";
-import { formatMilliseconds, hexToReadableTimestamp } from "../utils";
-import { GetStakingEvent } from "../util/GetMarketContractEventData";
-import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
+import {  text2, tokens } from "../theme";
+ import { CountdownEndTime  } from "./CountdownTimer";
+import { CustWeb3Button } from "./Buttons/buttons";
  
 
  //let timeRemaining;
  let startTime;
  let myInterval;
  const _boxHeight ="270px";
+
+
+
+ 
   export default function Stake() {
     const address = useAddress();
     const theme = useTheme();
@@ -76,7 +64,7 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
       "token"
     );
     const { contract: stakeContract } = useContract(
-        Discord_stake_contract,
+      Discord_tokenLess_stakinContract,
       "custom"
     );
   
@@ -153,63 +141,7 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
       
 
   }
-
-   function CustWeb3Button( {children, action, onSuccess, ...props }){
-
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const handleClick = async () => {
-        // Disable the button
-        setIsButtonDisabled(true);
  
-            try {
-            // Call the user-defined action
-               if (typeof action === 'function') {
-
-                
-                const result = await action();
-                
-             // at the moment action() should only return a transaction, if not we will get an error
-                 if (result && result.receipt && result.receipt.status === 1) {
-                //if ( receipt && receipt.status === 1) {
-                    const receipt = result.receipt;
-                    console.log(">>>>>>>>  receipt   " , receipt);
-                    onSuccess();
-                 }else{
-
-                     console.log("something went wrong");  
-                 }
-
-
-               }
-            } catch (error) {
-            // Handle errors, such as transaction failure or user rejection
-                console.error('Transaction error:', error.message);
-            } finally {
-            // Enable the button after the action is completed or in case of an error
-                 setIsButtonDisabled(false);
-            }
-  
-      };
- 
-     return(
-      <>
-       <Button 
-       variant="contained" color="secondary"
-       {...props} 
-        onClick={handleClick}
-        
-        disabled={isButtonDisabled}
-       
-       >{children}
-       </Button>
- 
-      
-      </>
-
-     )
-   }
-
-
 
  function StakeToken(){
     
@@ -227,7 +159,7 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
       "token"
     );
     const { contract: stakeContract } = useContract(
-        Discord_stake_contract,
+      Discord_tokenLess_stakinContract,
       "custom"
     );
   
@@ -342,9 +274,9 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
                     
                   <CustWeb3Button
                    fullWidth ={true} 
-               //   contractAddress={Discord_stake_contract}
+                
                   action={async (contract) => {
-                      await stakeTokenContract?.erc20.setAllowance( Discord_stake_contract, stakeAmount );
+                      await stakeTokenContract?.erc20.setAllowance( Discord_tokenLess_stakinContract, stakeAmount );
                       const transactionResult = await stakeContract.call("stake", [ethers.utils.parseEther(stakeAmount),]);
                      
                      resetValue();
@@ -426,7 +358,7 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
       "token"
     );
     const { contract: stakeContract } = useContract(
-        Discord_stake_contract,
+      Discord_tokenLess_stakinContract,
       "custom"
     );
   
@@ -455,7 +387,7 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
         data: stakeGetTimeUnit,
         // refetch: refetchStakeInfo,
         isLoading: loadingRatioStakeInfo,
-      } = useContractRead(stakeContract, "getTimeUnit" );
+      } = useContractRead(stakeContract, "getTimeUnit_Over" );
       const {
         data: stakersVar,
         // refetch: refetchStakeInfo,
@@ -481,25 +413,25 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
 
            
             
-          //  console.log(" stakersVar  ================= " , stakersVar.timeOfLastUpdate._hex );
+            console.log(" stakersVar  ================= " , stakersVar.timeOfLastUpdate._hex );
            
           // timestamp time IN SECOND = time of update - time in second since //January 1, 1970, 00:00:00 UTC
              const  timeOfLastUpdate =   parseInt(   stakersVar.timeOfLastUpdate._hex );
                 // Assuming startTime is the timestamp of the past start time in seconds
                      startTime = timeOfLastUpdate;// 2000;// in second
    
-                //   console.log(  ">>> Hard coded startTime   =  "  , startTime);
+                 console.log(  ">>> Hard coded startTime   =  "  , startTime);
 
 
                    const timeOfLastUpdate_date = new Date( (timeOfLastUpdate *1000));
 
                    
-                //   console.log(  ">>> real   startTime   =  "  ,  (timeOfLastUpdate  ) , "   "  , timeOfLastUpdate_date.toLocaleString());
+                 console.log(  ">>> real   startTime   =  "  ,  (timeOfLastUpdate  ) , "   "  , timeOfLastUpdate_date.toLocaleString());
 
                   
                    // Assuming eventInterval is the time interval between events in seconds
                    const eventInterval =  parseInt(  stakeGetTimeUnit._hex , 16);
-                  // console.log(  ">>> eventInterval  =  "  , eventInterval);
+                   console.log(  ">>> eventInterval  =  "  , eventInterval);
                    // Assuming currentTime is the current timestamp in seconds
                    const currentTime = Date.now() / 1000;
    
@@ -558,41 +490,11 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
        
       
 
-
-      
-
-    // GetStakingEvent(  stakeContract );
-        /*
-         async function getInfo(){
-
-            const result  = await stakeContract.call("getTimeUnit");
-
-            console("stakeGetTimeUnit  ================= " , stakeGetTimeUnit );
-         }
-
-         getInfo();
-      */
+ 
       }, [stakeGetTimeUnit]);
    
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+     
 
   
     const [stakeAmount, setStakeAmount] = useState("0");
@@ -656,7 +558,7 @@ import { CountdownEndTime, CountdownTimerWithArg } from "./CountdownTimer";
               <Skeleton/> 
            )}
             <CustWeb3Button
-              //  contractAddress={Discord_stake_contract}
+             
                 action={async () => {
                   const trx = await stakeContract.call("claimRewards");
                   resetValue();

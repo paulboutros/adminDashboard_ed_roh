@@ -11,10 +11,18 @@ import {
 from "../const/addresses";
 
 
+import { HiOutlineChevronRight } from "react-icons/hi";
+import { FaLink } from "react-icons/fa";
+import { FaEthereum } from "react-icons/fa";
+
+
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import Avatar from '@mui/material/Avatar';
 
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { useContract, useAddress, Web3Button } from "@thirdweb-dev/react";
- 
+import styles    from "../styles/NFT.module.css";
 
 import React, { useState , useEffect } from 'react';
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -22,21 +30,19 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
   
-import { tokens } from "../theme";
+import { allCSS, tokens } from "../theme";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAppLinkContext } from '../context/AppLinkContext.js';
-import {sendTracking, openOAuth2Url, ERC20claim  } from "../data/API";
+import {sendTracking, openOAuth2Url, ERC20claim, getAvatar  } from "../data/API";
 
-import {  Box ,Button,   Typography, useTheme  } from "@mui/material";
+import {  Box ,Button,   Divider,   Typography, useTheme  } from "@mui/material";
 
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
  
 import LayerBaseInfo from  "./LayerBaseInfo";
     
-import ReferrerComponent from "./ReferrerComponent"
-import AppLinkDataBox from "./Badges/AppLinkDataBox";
-import { useAllLayersContext } from '../context/AllLayerAvailableContext';
+ import { useAllLayersContext } from '../context/AllLayerAvailableContext';
 
 
 
@@ -138,7 +144,7 @@ const address = useAddress();
         <DialogContent     
         sx={{
           backgroundColor: colors.primary[400],
-        //  padding: "20px 40px 0px 40px",
+       
          
           display: 'flex',
           flexDirection: 'column',
@@ -406,5 +412,109 @@ for (const category in filteredImages) {
   }
 
 
+
+
+
+ 
+
+
+  export const PopupLinkWalletDiscord = ({ walletAddress, user, open, onClose, onConfirm }) => {
+
+
+    
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+   const popUpColor = colors.primary[700]  ;
+   const popUpColor2 = colors.primary[600]  ;
+
+    return (
+      <Dialog open={open} onClose={onClose} PaperProps={{ 
+        
+        style: {  
+          borderRadius: 8,
+          border: `${colors.primary[400] } solid 2px`, 
+
+        } 
+      
+        }}>
+        <Box sx={{ 
+          padding:"20px",
+          // textAlign: 'center' ,
+           backgroundColor: popUpColor 
+          }}>
+
+            <p style={{ ...theme.titleDescription, 
+              display: 'flex', alignItems: 'center',
+              
+              margin: "0 0 10px 5px",
+              color: colors.grey[1000],
+              fontWeight:"50px"
+              }}>
+                
+               {/* <FaLink  style={{  color: colors.grey[400], }} /> */}
+                Link wallet to discord
+                
+                </p>
+         
+
+
+           <Box sx={ allCSS( theme.palette.mode).basicTextWithAddress  } >
+           {/* <p>You are about to connect this address <span  >  {walletAddress}  </span>  </p> */}
+
+          
+           
+           <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  >
+
+          <p style={{fontWeight:"500px" }}>   {walletAddress}    </p>
+          </Box>
+
+
+
+         </Box>
+          {/* <br /> 
+           <p className={styles.nftPriceLabel} > to: </p>  */}
+          
+        </Box>
+
+        <Divider orientation="horizontal"  />
+
+        <DialogContent 
+           sx={{ backgroundColor: popUpColor, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+          
+        >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+
+          <FaEthereum  style={{   height:"25px", color: colors.grey[400],marginRight:"10px" }} />  
+          <HiOutlineChevronRight 
+           style={{ color: colors.grey[400], marginRight:"10px" }} /> 
+            <Avatar src={!user ? null : getAvatar(user.discordUserData)} />
+            <span 
+            style={{
+              ...theme.titleDescription,
+               marginLeft: 15, 
+                }}>  
+                {user?.discordUserData?.global_name}
+                </span>
+          </div>
+        </DialogContent>
+
+        <Divider orientation="horizontal"  />
+
+
+        <DialogActions style={{
+           justifyContent: 'center' ,
+           backgroundColor: popUpColor2  
+           }}>
+          <Button variant="contained" onClick={onClose} color="primary">
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={onConfirm} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+ 
 
    

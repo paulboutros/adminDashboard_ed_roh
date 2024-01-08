@@ -11,17 +11,12 @@ export function useDebugModeContext() {
  
 // Remember to add this as a wrapper to the App.js
 export function DebugModeProvider({ children }) {
+
     const [debugMode, setDebugMode] = useState(false);
+ 
+    useEffect(() => {
 
-
-    function set_DebugMode( value ){
-
-         globalData_setDebugMode( value);
-    }
-
-     useEffect(() => {
-
-      const fetchAppLinkData = async () => {
+      const fetch_debugMode = async () => {
           try {
             const response = await globalData();
             
@@ -31,11 +26,11 @@ export function DebugModeProvider({ children }) {
             console.error('Error fetching appLink data:', error);
           }
       };
-      fetchAppLinkData();
+      fetch_debugMode();
      }, []); // Empty dependency array runs the effect once
 
     return (
-      <DebugModeContext.Provider value={{ debugMode, set_DebugMode }}>
+      <DebugModeContext.Provider value={{ debugMode,   setDebugMode   }}>
         {children}
       </DebugModeContext.Provider>
     );

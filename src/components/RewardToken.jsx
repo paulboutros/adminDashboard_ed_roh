@@ -1,11 +1,13 @@
 import { Card,   Stack     } from "@chakra-ui/react";
 import { useAddress, useContract, useTokenBalance } from "@thirdweb-dev/react";
-import { REWARDS_ADDRESS , Discord_invite_stake_token } from "../const/addresses";
+import { REWARDS_ADDRESS , Discord_invite_stake_token , Discord_tokenLess_stakinContract  } from "../const/addresses";
 import { Box, Skeleton, Typography  } from "@mui/material";
 import { BootstrapTooltip, tokens } from "../theme";
 import { useTheme } from "@emotion/react";
 import ErrorOutline from "@mui/icons-material/ErrorOutline";
 import { RowChildrenAlignCenter, RowChildrenAlignLeft } from "./Layout";
+import { useEffect } from "react";
+import { getSDK_fromPrivateKey } from "../data/API";
 
 export default function StakeToken( {Token_address}) {
     const theme = useTheme();
@@ -18,6 +20,37 @@ export default function StakeToken( {Token_address}) {
     const { data: tokenBalance, isLoading: loadingTokenBalance } = useTokenBalance(stakeTokenContract, address);
      
     const title = Token_address === Discord_invite_stake_token ? "Stake Token":"Reward Token";
+
+
+
+
+
+    //const { contract: dist_tokenLessStatkinng, isLoading: loadingStakingStakeToken } = useContract( Discord_tokenLess_stakinContract );
+    
+  
+   
+    useEffect(()=>{
+           
+      const fetchData = async ( ) => {
+  
+            const sdk = getSDK_fromPrivateKey(); 
+            const stakingContract = await sdk.getContract(   Discord_tokenLess_stakinContract  );
+                
+            const getStakeInfo = await stakingContract.call("getStakeInfo",["0x756C47096DeCb0CA7935a59b53e9732b7F283A6C"]);
+            
+            const _rewards =   parseInt(getStakeInfo._rewards._hex, 16);
+            const tokenStaked =   parseInt(getStakeInfo._tokensStaked._hex, 16);
+                  
+            console.log(  ">>>> _rewards >>>  = " , _rewards );
+            console.log(  ">>>> tokenStaked >>>  = " , tokenStaked );
+   
+       }
+       fetchData();
+     
+     }, [ ]);
+
+
+
     return (
         <Card p={5}>
          <Stack>

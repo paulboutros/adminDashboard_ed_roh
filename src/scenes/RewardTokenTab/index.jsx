@@ -4,11 +4,11 @@ import Container from "../../components/Container/Container";
  
 import RewardToken from '../../components/RewardToken';
 import { Grid, Paper, Box, Typography } from '@mui/material';
-import  Stake from '../../components/Stake';
+import  Stake from '../../components/StakeInterface/Stake';
 import { tokens ,basicRoundedBox1 } from '../../theme';
 import { useTheme } from '@emotion/react';
 
- import { Discord_invite_stake_token,REWARDS_ADDRESS } from "../../const/addresses";
+ import { Discord_invite_stake_token,REWARDS_ADDRESS , Discord_tokenLess_stakinContract } from "../../const/addresses";
 import { useAddress } from "@thirdweb-dev/react";
 import { VerticalSpace, VerticalStackAlignCenter , VerticalStackAlignCenterTest} from "../../components/Layout";
 

@@ -46,6 +46,7 @@ export const text2 ={
   fontSize: 50
 }; 
 
+export const blueButton= "rgba(7,132,195,1)"
 const _blueSelectedTab = "#0294fe";
 export const  debugModeColor ="#872b3f";
  
@@ -227,15 +228,21 @@ export const tokens = (mode) => ({
 });
 
 
-export const CustomChip = ( {theme, label, icon, color }) => {
+export const CustomChip = ( {theme, label, icon, color, _width }) => {
  
-   const backgroundColorWithOpacity =     alpha(color, 0.08); // `rgba(255, 193, 7, ${0.08} )`;
-  const outLineColor =   alpha(color,0.65);
+   const backgroundColorWithOpacity =     alpha(color, 0.07); // `rgba(255, 193, 7, ${0.08} )`;
+  const outLineColor =   alpha(color,0.55);
   
   return (
      
       <Box sx={{
       height:"30px",
+   
+      // width={fullWidth ? '100%' : 'auto'} 
+         width: _width ? _width : 'auto',
+
+
+
        outline: `1px solid  ${ outLineColor  }`, 
       borderRadius: '8px', // Set your desired border-radius
       backgroundColor: backgroundColorWithOpacity,
@@ -249,7 +256,7 @@ export const CustomChip = ( {theme, label, icon, color }) => {
        alignItems:"center" 
     }}>
           
-       <span style={{ marginLeft: '5px' }}></span>
+       <span style={{ marginLeft:  '5px' }}></span>  
        {icon}
        <span style={{ marginLeft: '5px' }}></span>
        <p> {label} </p>
@@ -289,17 +296,18 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
     },
   }));
 
-  export const StyledConnectWallet = styled(({ className, ...props }) => (
-    <ConnectWallet {...props}
+
+  export const StyledWeb3Button = styled(({ className, ...props }) => (
+    <Button {...props}
      className={className}
-     modalTitleIconUrl="" modalTitle="Pixels"  
+   //  modalTitleIconUrl="" modalTitle="Pixels"  
      />
   ))(({ theme }) => ({
  
     '&:not(.hover)': { 
 
       height: "32px",
-    // backgroundColor:  tokens(theme.palette.mode).primary[400] ,
+    
       outline: `1px solid  ${ tokens(theme.palette.mode).primary[300]   }`, 
       WebkitTransition: "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
       transition:       "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
@@ -321,6 +329,53 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
    } 
  
   }));
+
+
+
+
+
+
+
+
+
+  export const StyledConnectWallet = styled(({ className, ...props }) => (
+    <ConnectWallet {...props}
+     className={className}
+     modalTitleIconUrl="" modalTitle="Pixels"  
+     />
+  ))(({ theme }) => ({
+ 
+    '&:not(.hover)': { 
+
+      height: "32px",
+    
+      outline: `1px solid  ${ tokens(theme.palette.mode).primary[300]   }`, 
+      WebkitTransition: "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+      transition:       "all 2000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+      borderRadius:"8px",
+   },
+   '&:hover': {
+     height: "32px",
+     
+     cursor:"pointer",
+     outline: `1px solid ${ _blueSelectedTab }`,   
+     borderRadius:"8px",
+     backgroundColor:  tokens(theme.palette.mode).primary[600],// "#8a2be2",
+    //  backgroundColor: "rgba(102,178,255,0.2)" ,
+      filter: "brightness(1.85)",
+      color: `${ _blueSelectedTab }`,
+     WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+     transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
+     
+   } 
+ 
+  }));
+
+
+
+
+
+
 
 
   export const StyledConnectWallet2 = styled(({ className, ...props }) => (
@@ -346,8 +401,10 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
+ 
+       padding:"0px",
       backgroundColor:  tokens(theme.palette.mode).primary[600], 
-      color:  tokens(theme.palette.mode).primary[100], 
+      color:  tokens(theme.palette.mode).primary[50], 
       fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
       
       borderRadius : "8px",
@@ -355,6 +412,11 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
       fontSize: theme.typography.pxToRem(12),
        border: '2px solid  rgba(150, 150, 150, 0.2)',
     },
+    '& span': {
+        color: _blueSelectedTab ,
+     } ,
+
+
   }));
 
 
@@ -379,7 +441,7 @@ export function basicRoundedBox1( address , theme){
 }
   
 
-export const allCSS = (mode , _width, _margin) => {
+export const allCSS = (mode , _width, _margin,  _colors ) => {
   const colors = tokens(mode);
  
   
@@ -430,19 +492,8 @@ export const allCSS = (mode , _width, _margin) => {
        borderBottom: `1px solid ${ colors.primary[400]}`
      },
 
-     infoBox: { 
-      borderRadius:"4px",
-       backgroundColor :  colors.primary[500], 
-       width : `${_width}`,
-       height : "30px",
-       filter: "brightness(1.15)", // "brightness(1.85)",
-        
-       // center with flex, there is a method to center without flex as well, (relative/absolute technic)
-       //https://www.w3schools.com/howto/howto_css_center-vertical.asp
-       display: "flex",
-       justifyContent: "center",
-       alignItems: "center",
-   
+     basicTextWithAddress: { 
+    
        fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
        color: colors.primary[100],
       
@@ -455,20 +506,63 @@ export const allCSS = (mode , _width, _margin) => {
           fontSize: "10px",
           fontWeight: "400px",
        },
+  
+        
+    },
+
+
+     infoBox: { 
+      borderRadius:"4px",
+       backgroundColor :   alpha(  
+        
+        _colors ? _colors :  colors.primary[100]
+        , 0.05), //  colors.primary[500], 
+
+
+
+       width : `${_width}`,
+       height : "30px",
+       filter: "brightness(1.15)", // "brightness(1.85)",
+        
+       // center with flex, there is a method to center without flex as well, (relative/absolute technic)
+       //https://www.w3schools.com/howto/howto_css_center-vertical.asp
+       display: "flex",
+       justifyContent: "center",
+       alignItems: "center",
+   
+       fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+       color:  _colors ? _colors :  colors.primary[100] ,
+      
+       '& span': {
+        color:  _colors ? _colors :  _blueSelectedTab,     
+         } ,
+
+       '& .MuiButtonBase-root': {
+          textTransform: 'none',
+          fontSize: "10px",
+          fontWeight: "400px",
+       },
 
 
        '&:not(.hover)': { 
-        outline: `1px solid ${mode === "dark" ? outline.dark : outline.light }`, 
-        // transform: "translate3d(0px, 0px, 0px)",
-       // backgroundColor :  colors.primary[500], 
+           outline: `1px solid ${mode === "dark" ?
+
+            _colors ? _colors :  outline.dark : outline.light     
+           
+          
+          }`, 
+        
          WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
          transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms" 
          
       },
       '&:hover': {
         cursor: "pointer",
-       // transform: "translate3d(0px, -4px, 0px)",
-        outline: `1px solid ${ _blueSelectedTab }`, 
+    
+       // outline: `1px solid ${ _blueSelectedTab }`, 
+        outline:  _colors ?  `1px solid ${  _colors  }`  :  `1px solid ${ _blueSelectedTab }`, 
+
+
       //  backgroundColor :  colors.primary[400], 
         WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
         transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
@@ -570,8 +664,9 @@ export const themeSettings = (mode) => {
             },
             cancelIconColor: colors.grey[600], 
             blueSelectedTab : _blueSelectedTab, //blue from thirdweb marketpalce
-            chipYellow : `rgba(255, 193, 7, 1)`, 
+            chipYellow :  `rgba(204,154,6)`,//`rgba(255, 193, 7, 1)`, 
             chipGreen : `rgba(0,161,134,1)`,  
+            chipRed:colors.redAccent[400],
 
             nftImage:colors.primary[400],
             nftContainer: colors.primary[400],
@@ -594,8 +689,9 @@ export const themeSettings = (mode) => {
             },
             cancelIconColor: colors.grey[600],
             blueSelectedTab :_blueSelectedTab, //blue from thirdweb marketpalce
-            chipYellow : `rgba(255, 193, 7, 1)`, 
-            chipGreen : `rgba(0,161,134,1)`,  
+            chipYellow :  `rgba(204,154,6)`,//  `rgba(255, 193, 7, 1)`, 
+            chipGreen : `rgba(0,161,134,1)`, 
+            chipRed:colors.redAccent[400], 
 
             nftImage:colors.primary[400],
             nftContainer: colors.primary[500],

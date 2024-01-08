@@ -27,7 +27,7 @@ export function DiscordInviteProvider({ children }) {
           if (!user)return;
         //  if (!discordInviteLoaded)return;
            //   setdiscordInviteLoaded(true);
-          let discordInvite_response 
+          let discordInvite_response ;
           
          //  if (!callInProgress){
             console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  context:  discordInvite:',  discordInvite);

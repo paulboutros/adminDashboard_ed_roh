@@ -2,11 +2,7 @@ import * as React from 'react';
 
 
  
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-//import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import Tooltip ,{ tooltipClasses }   from    '@mui/material/Tooltip';
+ 
 
 
 import Box from '@mui/material/Box';
@@ -28,8 +24,8 @@ import { useAddress } from '@thirdweb-dev/react';
 import { useUserContext } from '../context/UserContext';
 import { useDebugModeContext } from '../context/DebugModeContext';
 
-import { getAvatar, openOAuth2Url } from '../data/API';
-import { OWNER } from '../const/addresses';
+import { getAvatar, globalData_setDebugMode, openOAuth2Url } from '../data/API';
+import { OWNER, OWNER2 } from '../const/addresses';
 import { useTheme } from '@emotion/react';
 import { allCSS, tokens , BootstrapTooltip  } from '../theme';
  
@@ -53,7 +49,7 @@ const navigate = useNavigate();
 const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const {user, setUser } = useUserContext();
-  const {debugMode, set_DebugMode} =  useDebugModeContext();
+  const {debugMode,  setDebugMode } =  useDebugModeContext();
 
   
  
@@ -70,7 +66,8 @@ const theme = useTheme();
 
   const switchDebugMode =() =>{
       
-      set_DebugMode(!debugMode);
+    globalData_setDebugMode(   !debugMode, setDebugMode   );
+      //set_DebugMode(!debugMode);
      
 };
 
@@ -165,7 +162,10 @@ const theme = useTheme();
          </MenuItem>
          )}
 
-         {(address && address === OWNER) && (   
+
+      {/*Owner 1 0x75 is also signed of transaction, which is a problem when testing transaction
+      as it send the funds to it self . OWNER2 is never use as signer so this is a more realistic test   */}
+         {(address && address === OWNER2) && (   
 
          <MenuItem onClick={ switchDebugMode }>
              {debugMode ? ("Debug is:ON"):("Debug is:OFF")}    

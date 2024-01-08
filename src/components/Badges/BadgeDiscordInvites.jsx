@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Divider,Grid, Typography , useTheme, Chip, Button,  } from '@mui/material';
-import { BootstrapTooltip, HtmlTooltip, allCSS, tokens } from "../../theme";
+import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../../theme";
   import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
  import {useEffect, useState} from "react";
@@ -16,7 +16,7 @@ import { deleteDiscordInvite, getAvatar, getManyUserData } from '../../data/API'
 import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
 import { useDebugModeContext } from '../../context/DebugModeContext';
   
-   const BadgeDiscordInvites = (    ) => {
+   const BadgeDiscordInvites = (  {sp}  ) => {
 
     const {debugMode }     = useDebugModeContext();
     const [tasks, setTasks] = useState([
@@ -46,21 +46,10 @@ import { useDebugModeContext } from '../../context/DebugModeContext';
 
     };
  
-      const { discordInvite ,  setdiscordInviteLoaded } =  useDiscordInviteContext();
+    const { discordInvite ,  setdiscordInviteLoaded } =  useDiscordInviteContext();
      const { user, setUser } = useUserContext();
-     
-  const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-  //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-  
+      
  
-  const GetReferralCodeData = async () => {
-    
-   // if (!user){return;}
-     
-      //setReferralCode(discordInvite);
- 
-
-  };  
   
 
   useEffect(  ()=> {
@@ -71,23 +60,14 @@ import { useDebugModeContext } from '../../context/DebugModeContext';
    
   }  , [ discordInvite  ]);
 
-  useEffect( ()=>{
-     
     
-         GetReferralCodeData();
-   
-
-  }, [ discordInvite  ]);
 
    
    
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
   
-    function linkAdressToDiscord(){
-   
-   }
-
+     
 
  
 /*
@@ -118,23 +98,7 @@ import { useDebugModeContext } from '../../context/DebugModeContext';
  
  }
 
-   function getCompletion(){
-
-      if ( !discordInvite ){
-
-        return  (`ACCEPTED: ${"0"}`)   ;
-      }
-
-
-  let task = 0;
- // if ( user ){ task+=1;    console.log(  "complete  1 "); } // we are connected to discord
- // if (  walletAndDiscordAreConnected(user)  ){  console.log(  "complete  2 " , user);   task+=1; }  // there is wallet associated with discord account
-  
- return  (`ACCEPTED:WIP`)   ;
-//   return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
-return  (`To DO ${task} / 2`)   ;
-   }
-
+    
 
     return (
       <>
@@ -169,12 +133,7 @@ return  (`To DO ${task} / 2`)   ;
                    }} 
                     /> 
              </BootstrapTooltip> 
-             {/* <Chip variant="outlined" color="default" label= {"Discord connection required"}
-          
-             icon={<ErrorOutlineIcon />} sx={ {height :"30px" , borderRadius:"10px" }}/> 
-            */}
-
-   
+            
 
               
           </Box>
@@ -186,43 +145,18 @@ return  (`To DO ${task} / 2`)   ;
             color: colors.grey[300], display: "flex",  flexDirection: "row",  alignItems: "center", height: "50px", 
       
          }}>
-      <HorizontalSpace space={30}/>
+      <HorizontalSpace space={ sp[0] }/>
 
-      
-     
-          <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
-             <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  
-              onClick={() => linkAdressToDiscord()}>
-              
-            {/* discordInvite */}
-            <Box onClick={ () => onClickInvite() }> 
-                 <p> <>Share link <span style={{fontWeight:"700px"}} >{ discordInvite?.invite}</span> with friends</></p>
-            </Box>
- 
-          </Box>
-    
-          </BootstrapTooltip>
+       
+         <TaskForReward4/> 
+         
           
        
         <HorizontalSpace space={30}/> 
  
-                 <HtmlTooltip
-         // open={true} // for debugging
-       
 
-             
-         title={
-            <React.Fragment>
-               <Typography color="inherit">Referred friends</Typography>
-                <Typography fontSize={"15px"}>{ tasks[0].global_name }</Typography> 
-                     
-
-                <Box>  <ReferredFriendsList tasks={tasks} /> </Box>  
-               </React.Fragment>
-             }
-            >
-            <Chip variant="outlined" color="warning" label= { getCompletion()}   icon={<FaceIcon />}   sx={ {height :"30px" , borderRadius:"10px" }}/>
-               </HtmlTooltip>
+             <TaskStatus4/>
+              
 
 
                {debugMode && (
@@ -319,6 +253,292 @@ const mockreferred=
 
 
  
+ export function TaskForReward4(){
+  
+  const {debugMode }     = useDebugModeContext();
+  const [tasks, setTasks] = useState([
+    // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
+    // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
+    // { description: 'validate', completed: false },
+    {global_name:"", src:"", verified:null, email:null }, 
+     
+  ]);
+
+  const updateTask = async ( ) => {
+   
+      let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
+    
+      const referredUsers =[];
+      referredUserListDetails.forEach(data => {
+       
+        const src = getAvatar(data.discordUserData );
+       const elData = { global_name : data.discordUserData.username,  src:src, verified:data.discordUserData.verified };
+       referredUsers.push(elData) 
+
+     });
+      
+     setTasks(referredUsers);
+    
+   //  console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
+
+  };
+
+    const { discordInvite ,  setdiscordInviteLoaded } =  useDiscordInviteContext();
+   const { user, setUser } = useUserContext();
+   
+const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
+//const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
+
+
+const GetReferralCodeData = async () => {
+  
+ // if (!user){return;}
+   
+    //setReferralCode(discordInvite);
+
+
+};  
+
+
+useEffect(  ()=> {
+ 
+ //  if (!referralData)return;
+    updateTask();
+
+ 
+}  , [ discordInvite  ]);
+
+useEffect( ()=>{
+   
+  
+       GetReferralCodeData();
+ 
+
+}, [ discordInvite  ]);
+
+ 
+ 
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  function linkAdressToDiscord(){
+ 
+ }
+
+
+
+/*
+ this is just for testing and simulate a situation where a user just registered.
+ in such scenario, the discord invite is null (not created yet), and it will trigger the code that automatically
+ create an invite and assign it to this user
+*/
+async function  deleteInvite(){
+  const MongoDeleteResult = await deleteDiscordInvite(user.ID);
+
+   // so it can reload after we changed it on the server
+  // setdiscordInviteLoaded(false);
+  //setUser(user);
+  console.log( "MongoDeleteResult    = " , MongoDeleteResult);
+}
+
+
+function onClickInvite(){ 
+  // to do:
+  /*
+  add toast, copied to clip board
+  */
+
+
+   copyTextToClipboard ( discordInvite?.shareableLink )
+
+
+
+}
+
+ function getCompletion(){
+
+    if ( !discordInvite ){
+
+      return  (`ACCEPTED: ${"0"}`)   ;
+    }
+
+
+let task = 0;
+ 
+return  (`ACCEPTED:${discordInvite?.acceptedUsers.length}`);  
+//   return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
+return  (`To DO ${task} / 2`)   ;
+ }
+
+
+   return(
+    <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
+    <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  
+     onClick={() => linkAdressToDiscord()}>
+     
+   {/* discordInvite */}
+   <Box onClick={ () => onClickInvite() }> 
+        <p> <>Share link <span style={{fontWeight:"700px"}} >{ discordInvite?.invite}</span> with friends</></p>
+   </Box>
+
+ </Box>
+
+ </BootstrapTooltip>
+
+   )
+ }
+
+ export function TaskStatus4(){
+
+    
+  const {debugMode }     = useDebugModeContext();
+  const [tasks, setTasks] = useState([
+    // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
+    // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
+    // { description: 'validate', completed: false },
+    {global_name:"", src:"", verified:null, email:null }, 
+     
+  ]);
+
+  const updateTask = async ( ) => {
+   
+      let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
+    
+      const referredUsers =[];
+      referredUserListDetails.forEach(data => {
+       
+        const src = getAvatar(data.discordUserData );
+       const elData = { global_name : data.discordUserData.username,  src:src, verified:data.discordUserData.verified };
+       referredUsers.push(elData) 
+
+     });
+      
+     setTasks(referredUsers);
+    
+   //  console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
+
+  };
+
+    const { discordInvite ,  setdiscordInviteLoaded } =  useDiscordInviteContext();
+   const { user, setUser } = useUserContext();
+   
+const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
+//const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
+
+
+const GetReferralCodeData = async () => {
+  
+ // if (!user){return;}
+   
+    //setReferralCode(discordInvite);
+
+
+};  
+
+
+useEffect(  ()=> {
+ 
+ //  if (!referralData)return;
+    updateTask();
+
+ 
+}  , [ discordInvite  ]);
+
+useEffect( ()=>{
+   
+  
+       GetReferralCodeData();
+ 
+
+}, [ discordInvite  ]);
+
+ 
+ 
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  function linkAdressToDiscord(){
+ 
+ }
+
+
+
+/*
+ this is just for testing and simulate a situation where a user just registered.
+ in such scenario, the discord invite is null (not created yet), and it will trigger the code that automatically
+ create an invite and assign it to this user
+*/
+async function  deleteInvite(){
+  const MongoDeleteResult = await deleteDiscordInvite(user.ID);
+
+   // so it can reload after we changed it on the server
+  // setdiscordInviteLoaded(false);
+  //setUser(user);
+  console.log( "MongoDeleteResult    = " , MongoDeleteResult);
+}
+
+
+function onClickInvite(){ 
+  // to do:
+  /*
+  add toast, copied to clip board
+  */
+
+
+   copyTextToClipboard ( discordInvite?.shareableLink )
+
+
+
+}
+
+ function getCompletion(){
+
+    if ( !discordInvite ){
+
+      return  (`ACCEPTED: ${"0"}`)   ;
+    }
+
+
+let task = 0;
+ 
+return  (`ACCEPTED:${discordInvite?.acceptedUsers.length}`);  
+//   return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
+return  (`To DO ${task} / 2`)   ;
+ }
+
+
+
+
+
+      return(
+        <HtmlTooltip
+        // open={true} // for debugging
+      
+
+            
+        title={
+           <React.Fragment>
+              <Typography color="inherit">Referred friends</Typography>
+               <Typography fontSize={"15px"}>{ tasks[0].global_name }</Typography> 
+                    
+
+               <Box>  <ReferredFriendsList tasks={tasks} /> </Box>  
+              </React.Fragment>
+            }
+           >
+
+            
+           <Box >
+             <CustomChip theme={theme} label= { getCompletion()}  icon={<FaceIcon />} color=  {theme.palette.chipYellow} />
+         </Box >
+
+             
+              </HtmlTooltip>
+
+           
+      )
+
+ }
  
 
  

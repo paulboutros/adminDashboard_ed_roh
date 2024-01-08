@@ -110,7 +110,7 @@ export async function  getUserMe   () {
       method: 'GET',
       credentials: 'include' // This sets the 'withCredentials' option to true (automatically include coolies in header)
       , headers: {
-        //'Referral-Code': myCookieValue,
+       
       }
     });
   
@@ -215,6 +215,22 @@ export function GetCookieRedirectURL(   address ){
 
 }
 
+
+ 
+export const setDebugMode = async (  setDebugModeContext ) => {
+  try {
+    const response = await globalData();
+    
+    console.log(" globalData >>   response[0]     " , response[0] );
+      // setDebugModeContext(response[0].debugMode);
+       setDebugModeContext( response[0].debugMode );   // setDebugMode
+  } catch (error) {
+   
+    console.error('Error fetching appLink data:', error);
+  }
+};
+
+
  
 export async function setUserTask( user , address ){
  
@@ -231,13 +247,47 @@ console.log("setUserTask  >>> response :" ,   resultsPostJson.data );
 return resultsPostJson.data;
 }
 
+
+
+
+export async function emit_guildMemberAdd( user , discordInvite ){
+
+ 
+const endpoint = `${process.env.REACT_APP_API_URL}emit/guildMemberAdd?modifiedInviteCode=${discordInvite}`; // make it specific (filter to twitter fields)
+const resultsPostJson = await fetch(endpoint);
+const resultsJson = await resultsPostJson.json();
+
+
+return resultsJson ;
+}
+
+
+export async function setRewardStatusAndaddDist( user , taskID ){
+ 
+  const dataToSend={ 
+     ID : user.ID,
+     taskID   : taskID
+  }
+  
+ // const endpoint = `${process.env.REACT_APP_API_URL}guildMemberAdd?ID=969712435869122560`; 
+ // const endpoint = `${process.env.REACT_APP_API_URL}/emit/guildMemberAdd?modifiedInviteCode=4ymvf9xGY`; 
+const endpoint = `${process.env.REACT_APP_API_URL}setRewardStatusAndaddDist`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+console.log("data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+}
+
+
+
 export async function setWallet( user , address ){
  
   const dataToSend={ 
     ID : user.ID,
      wallet   : address
   }
-  console.log("   function de merde   e :"   );
+ 
 const endpoint = `${process.env.REACT_APP_API_URL}setWallet`; 
 const resultsPostJson = await axios.post(endpoint, dataToSend);
 
@@ -359,6 +409,7 @@ export async function myDiscordInvite(user_ID){
    
    // if no referral link has been created we generate one
    //  if (resultsJson.referralCode.length === 0){
+    /*
     if ( !resultsJson.inviteData ){
  
     const endpoint = `${process.env.REACT_APP_API_URL}discord_invite_create?ID=${user_ID}`; // make it specific (filter to twitter fields)
@@ -369,7 +420,7 @@ export async function myDiscordInvite(user_ID){
     }else{
       console.log( "API myDiscordInvite: inviteData EXIST so we ue "  , resultsJson);
 
-    }
+    }*/
 
     
   // will be the one that exist or the one geenrate by the postrequest it it initially does not exist
@@ -552,7 +603,7 @@ export async function  myDiscordInfo   (user_ID) {
    return resultsJson;
 } 
 
-export async function  globalData_setDebugMode   ( value ) {
+export async function  globalData_setDebugMode   ( value , setDebugMode ) {
   
  
  const dataToSend= { value:value };
@@ -562,6 +613,10 @@ export async function  globalData_setDebugMode   ( value ) {
 const endpoint = `${process.env.REACT_APP_API_URL}globalData_setDebugMode`; // make it specific (filter to twitter fields)
 const resultsPostJson = await axios.post(endpoint, dataToSend);
     
+ 
+
+setDebugMode(  value  );
+
    return resultsPostJson;
 } 
 export async function  globalData   () {
@@ -724,7 +779,7 @@ export function getAvatar(  discordUserData ){
 
   
  
- if (discordData.avatar === null) {
+ if (!discordData || discordData.avatar === null) {
    // User has a default Discord avatar
    return `https://cdn.discordapp.com/embed/avatars/0.png`;
  } else {

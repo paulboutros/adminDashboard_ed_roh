@@ -145,8 +145,7 @@ export function RowChildrenAlignLeftBottom( {children} ){
       display="flex" 
       flexDirection="row"
       alignItems="center"
-     // alignContent="space-between" 
-       justifyContent="space-between"
+        justifyContent="space-between"
       >
       {children}
      </Box>
@@ -223,7 +222,7 @@ export function VerticalStackAlignTopLeft(  {children  , fullWidth } ){
    return (
 
    <Box
-     width={fullWidth ? '100%' : 'auto'}
+     width={fullWidth ? '100%' : 'auto'}   
      display="flex" 
      flexDirection="column"
 

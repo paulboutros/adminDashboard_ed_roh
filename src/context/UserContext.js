@@ -1,7 +1,8 @@
 import {createContext, useContext,    useState, useEffect } from "react";
 import { getUserMe  } from "../data/API.js";
 
-
+export const DISTStakeInfo ="DISTStakeInfo";
+export const DISTStakeInfoGeneral ="DISTStakeInfoGeneral";
 
  
 
@@ -15,6 +16,15 @@ export function useUserContext() {
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
   
+    const addDataToUser = (dataSource, data) => {
+      setUser((prevUser) => ({
+        ...prevUser,
+        [dataSource]: data,
+      }));
+    };
+
+
+
     useEffect(() => {
       // Fetch user data from the API
       const fetchUserData = async () => {
@@ -31,7 +41,7 @@ export function UserProvider({ children }) {
     }, []); // Empty dependency array runs the effect once
   
     return (
-      <UserContext.Provider value={{ user, setUser }}>
+      <UserContext.Provider value={{ user, setUser, addDataToUser }}>
         {children}
       </UserContext.Provider>
     );

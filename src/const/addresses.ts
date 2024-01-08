@@ -6,6 +6,9 @@ export const REWARDS_ADDRESS = "0x7b9e863B9BDF4aa08686C531ceA6353f363E9d57"; //s
 export const STAKING_ADDRESS ="farmer game";// "0xeA5Dc787B867D98B0C67C714594a10D3BaDdED85"; 
 
 
+
+export const Discord_tokenLess_stakinContract ="0x5F85d6Cfcab7b2628dD18E1F638fA70264FA5Fa4";
+
 export const Discord_stake_contract ="0x7027758481Ab9490c74336eB8F06e5a02a7f44a6";
 export const Discord_invite_stake_token = "0x87b875631cA5f598A7e2a7a90bebA2e5B690F45E";
  
@@ -13,7 +16,10 @@ export const Discord_invite_stake_token = "0x87b875631cA5f598A7e2a7a90bebA2e5B69
  export const MARKETPLACE_ADDRESS ="0x032453F4Eb720280230AE123E3262234f21b0323" //sepolia
 //"0xd4Ff56c5225F4339Ca68bd1843bBF31C4D40904C"; go erli
 
+// owner 1 is also signed of thransaction which make it imparactical for testing transaction to this account
+// it would send the funds to itself...
  export const OWNER ="0x756C47096DeCb0CA7935a59b53e9732b7F283A6C";
+ export const OWNER2 ="0x043FA25248878B33c8D2567cbe62f4921FFD8A4C";
 
    export const TOOLS_ADDRESS ="0x06a33CD093aDD0C6A8F685888f1B3E0C119b2461";// sepolia
  // "0x3048709af5ce45E90632A70BAA1B1EeEbC1BD957"; go erli

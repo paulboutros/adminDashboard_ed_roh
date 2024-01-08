@@ -16,38 +16,56 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 
 import { allCSS, infoHeight, tokens, HtmlTooltip, BootstrapTooltip } from "../../theme";
-import {Box, Button, Chip, useTheme} from '@mui/material';
+import {Box, Button, Chip, Tooltip, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
 import {  HorizontalSpace, VerticalSpace } from '../../components/Layout';
-import AppLinkDataBox from '../../components/Badges/AppLinkDataBox.jsx';
-import JoinServer from '../../components/Badges/BadgeJoinServer.jsx';
 
+ 
 
 
 //==============================================================
-import Backdrop from '@mui/material/Backdrop';
-import SpeedDialTooltipOpen from '../../components/SpeedDialTooltipOpen.jsx';
-import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
+ 
 //=============================================================
 
 import {
    
   useAddress,
   useConnectionStatus,
-   metamaskWallet
+   metamaskWallet,
+   useContract
 } from "@thirdweb-dev/react";
 import MyPacks from '../myPacks/index';
  
 
- import { setUserTask   } from '../../data/API';
+ import { emit_guildMemberAdd, getSDK_fromPrivateKey, setRewardStatusAndaddDist, setUserTask, setWallet   } from '../../data/API';
  import { useParams } from 'react-router';
- import BadgeDiscordInvites from '../../components/Badges/BadgeDiscordInvites';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
-import { EarnBadges } from '../../components/Badges/EarnBadges';
-import { useUserContext } from '../../context/UserContext';
+
+
+import { EarnBadges,
+   TaskForReward,TaskForRewardLabel,
+     TaskStatus,TaskStatusLabel,
+     RewardInfo,RewardInfoLabel, RewardValue, WURewardInfoLabel, ClaimButton
+    } from '../../components/Badges/EarnBadges';
+
+import   { TaskForReward2, TaskStatus2 } from '../../components/Badges/AppLinkDataBox.jsx';
+import   { TaskForReward3, TaskStatus3 } from '../../components/Badges/BadgeJoinServer.jsx';
+import   { TaskForReward4, TaskStatus4 } from '../../components/Badges/BadgeDiscordInvites';
+
+import { DISTStakeInfo, DISTStakeInfoGeneral, useUserContext } from '../../context/UserContext';
+import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
+import { useDebugModeContext } from '../../context/DebugModeContext.js';
+import { taskBadge } from '../../const/various.js';
+import { CustWeb3Button, ServerButton } from '../../components/Buttons/buttons.jsx';
+import { useDiscordInviteContext } from '../../context/DiscordInviteContext.js';
+import { useNotificationContext } from '../../context/NotificationContext.js';
+import { ethers } from 'ethers';
+import { PopRewardDiscordInviteContent,
+   PopRewardServerMemberContent,
+   PopRewardInfoLoginContent
+  
+  
+  } from '../../components/TooltipContent/content.jsx';
 
 
 function CustomTabPanel(props) {
@@ -87,7 +105,9 @@ function a11yProps(index) {
   const sp = [20];
 export default function BasicTabs() {
 
-  const {user  } = useUserContext();
+
+  const { notification , setNotification } = useNotificationContext();
+  const {user, addDataToUser  } = useUserContext();
 
      const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -100,30 +120,116 @@ export default function BasicTabs() {
       initialTabIndex = 0;
     }
    
+    const { contract: dist_tokenLessContract, isLoading: loading_dist_tokenLess } = useContract( Discord_tokenLess_stakinContract );
+    
+
+
+ // TO DO: we could use address from useParams().. especially if you want other user to see other people profile
+    const address = useAddress();
 
   console.log("initialTabIndex  =",initialTabIndex);
   const [value, setValue] = useState( initialTabIndex );
+
+
+  const [DISTstakedAmount      , setDIST] = useState( 0 );
+  const [DISTReward, setDISTReward] = useState( 0 );
+  
+ 
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
  
-     
+
+  useEffect(()=>{
+       
+    if (  loading_dist_tokenLess ) return;
+    const fetchData = async ( ) => {
+
+         // the following data is not related to the staker, they are general info about the contract
+         // therefore, they need to be loaded ONLY ONCE  (unlike getStakeInfo for example)
+          const ratioInfo = await dist_tokenLessContract.call("getRewardRatio_Over");
+          const timeUnit = await dist_tokenLessContract.call("getTimeUnit_Over");
+          
+          
+        //  console.log( "PPPPPPP   timeUnit   " , timeUnit );
+
+          // the balance will need to be fetched again, everytime a user claim reward
+          // so let us consider this to be the initial balance only  
+          const Initialbalance = await dist_tokenLessContract.call("TEST_getBalance");
+         // console.log( "PPPPPPP   balance   " , Initialbalance );
+
+         const  InitialbalanceRes  = (+ethers.utils.formatEther(  Initialbalance._hex     )).toFixed(1);
+          const generalInfo ={
+            _denominator: parseInt(  ratioInfo._denominator._hex , 16),
+            _numerator: parseInt(  ratioInfo._numerator._hex , 16),
+             timeUnit: parseInt(  timeUnit._hex , 16),
+             initialBalance:  InitialbalanceRes
+
+          }
+          console.log( ">>>      generalInfo   " , generalInfo );
+
+
+          addDataToUser(DISTStakeInfoGeneral , generalInfo );
+          /*
+          TEST_getBalance();
+          getTimeUnit_Over();
+          getRewardRatio_Over();
+
+          addDataToUser(DISTStakeInfo , getStakeInfo );
+          console.log(  ">>>> getStakeInfo >>>  = " , getStakeInfo );
+               
+          const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
+ 
+          const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(4);
+
+          setDIST( tokenStaked );  setDISTReward( _rewards );
+      */
+
+         
+
+ 
+     }
+     fetchData();
+   
+   }, [    loading_dist_tokenLess  ]);
+
+  useEffect(()=>{
+       
+    if (!address || loading_dist_tokenLess ) return;
+    const fetchData = async ( ) => {
+
+        //  const sdk = getSDK_fromPrivateKey(); 
+         // const dist_tokenLessContractXX = await sdk.getContract(   Discord_tokenLess_stakinContract  );
+           const getStakeInfo = await dist_tokenLessContract.call("getStakeInfo",[ address]);
+          
+
+          addDataToUser(DISTStakeInfo , getStakeInfo );
+         // console.log(  ">>>> getStakeInfo >>>  = " , getStakeInfo );
+               
+          const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
+ 
+          const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(4);
+
+          setDIST( tokenStaked );  setDISTReward( _rewards );
+  
+ 
+     }
+     fetchData();
+   
+   }, [  address, loading_dist_tokenLess, notification ]);
+       
    
    useEffect(()=>{
     if (!user)return;
     const fetchData = async ( ) => {
-
-
-         console.log( " setUserTask(); setUserTask(); setUserTask();");
+          
         await setUserTask(user);
-
-
+ 
     }
     fetchData();
-    
-      
-  
+   
    }, [ user ]);
  
   return (
@@ -138,7 +244,7 @@ export default function BasicTabs() {
            <Tab label="My NFTs"   {...a11yProps(0)}  disableRipple  sx={  theme.tabStyle }   />
            <Tab label="My Packs"  {...a11yProps(1)}  disableRipple  sx={  theme.tabStyle }   />
 
-           <Tab label="Referal"   {...a11yProps(2)}  disableRipple  sx={ theme.tabStyle }   />
+           <Tab label="Referal Reward"   {...a11yProps(2)}  disableRipple  sx={ theme.tabStyle }   />
            <Tab label="Token"     {...a11yProps(3)}  disableRipple  sx={ theme.tabStyle }   />  
 
         </Tabs>
@@ -158,22 +264,79 @@ export default function BasicTabs() {
        {/*   TO DO, add a server join reward status (show if user is a member of not)
          since we have direct access to bot. see if we can access message and content in some channel...
         */}
-          <EarnBadges/>
+
+         <EarnBadges  sp={sp}  useAvatar={false}  taskForReward={<TaskForRewardLabel/>}  taskStatus={<TaskStatusLabel/>} 
+                      rewardInfo={<RewardInfoLabel/>} 
+
+                      rewardValue={<WURewardInfoLabel/>} 
+                      
+                      rewardIndex={-1} 
+                       />
+        
+        <VerticalSpace space={1}/>
+
+          <EarnBadges  sp={sp} useAvatar={true} taskForReward={<TaskForReward/>} 
+                       taskStatus={<TaskStatus/>} // no need for argument each task are different object(very different from each other) 
+                       rewardInfo={<RewardInfo stakedAmount={0}/> } 
+                       rewardValue={<RewardValue rewardAmount={0}/>} 
+                       rewardIndex={
+                        taskBadge.discordAndWalletRegistration
+                       }
+                    />
         
           <VerticalSpace space={1}/>
-        
-         <AppLinkDataBox  sp={sp}  />
-         
-          
-         <VerticalSpace space={1}/>
-        
-         <JoinServer   sp={sp}   />
-         <VerticalSpace space={1}/>
-         <BadgeDiscordInvites/>
 
-      {/* result  = {  partOfGuild :true, joinedAt: userJoinTime  }; */}
+          <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForReward2/>} 
+                      taskStatus={<TaskStatus2/>}   
+                       rewardInfo={<RewardInfo stakedAmount={0}/>}
+                       rewardValue={<RewardValue rewardAmount={0}/>} 
+                       rewardIndex={ taskBadge.appLinkInvite  } 
+                        />
+           
+         <VerticalSpace space={1}/>
+        
+         <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForReward3/>}   taskStatus={<TaskStatus3/>}  
+                          rewardInfo ={   <RewardInfo stakedAmount={0}  popupContent={ <PopRewardServerMemberContent/> }     />     }  
+                          rewardValue={<RewardValue rewardAmount={0}/>}       
+                          rewardIndex={ taskBadge.guildMember_index }
+                        />
        
-           {/* <AppLinkDataBox/>  */}
+         <VerticalSpace space={1}/>
+ 
+         <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForReward4/>}
+           
+                        taskStatus={<TaskStatus4/>}
+                        rewardInfo={ <RewardInfo stakedAmount={  DISTstakedAmount  } popupContent={ <PopRewardDiscordInviteContent/> }   />}
+                        rewardValue={<RewardValue rewardAmount={DISTReward}/>}  
+
+                     
+
+                        rewardIndex={ taskBadge.invite_index } 
+                        
+                        claimButton={
+                          
+                          <CustWeb3Button
+                          //  contractAddress={Discord_stake_contract}
+                            action={ async () => {
+                              const trx = await dist_tokenLessContract.call("claimRewards");// stakeContract.call("claimRewards");
+                           //   resetValue();
+                              return trx;
+                            }}
+                            onSuccess={() =>
+                               console.log("sucess") 
+                            //   toast({title: "Rewards Claimed", status: "success",duration: 5000,isClosable: true,})
+                             }
+                           // isDisabled={( !address) }
+                          >
+                            Claim
+                        </CustWeb3Button>
+                         
+                        
+                        
+                        }
+                        
+                        />
+ 
 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
@@ -182,206 +345,132 @@ export default function BasicTabs() {
        <RewardTokenTab/>
 
       </CustomTabPanel>
+
+
+
      </Container>
+
+      <DebugPanel DISTstakedAmount={DISTstakedAmount} />
     </ >
   );
 }
 
  
- 
+function DebugPanel( {DISTstakedAmount}){
 
-
-const SpeedDialTrigger = ({ children }) => {
-
+  const { notification , setNotification } = useNotificationContext();
+  const { discordInvite   } =  useDiscordInviteContext();
+  const {debugMode }     = useDebugModeContext();
+  const {user, setUser } = useUserContext();
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
 
-  const [open, setOpen] = useState(false);
-
-   const handleOpen = () => {setOpen(true); };
-   const handleClose = () => {setOpen(false);};
-    
-   const actions = [
-    { icon: <FileCopyIcon />, name: 'Copy' },
-    { icon: <SaveIcon />, name: 'Save' },
-    { icon: <PrintIcon />, name: 'Print' },
-    { icon: <ShareIcon />, name: 'Share' },
-  ];
-
-  
-  return (
-    <Box
-      onMouseEnter={handleOpen}
-      onMouseLeave={handleClose}
-      sx={{
-        // Add your styling for the trigger component
-        padding: '10px',
-        border: '1px solid #ccc',
-        cursor: 'pointer',
-        display: 'inline-block',
-        overflow: 'visible', // Allow content to overflow
-        
-      }}
-    >
-      {children}
-      <Backdrop open={open} />
-      <SpeedDial
-        ariaLabel="SpeedDial example"
-        icon= {<SpeedDialIcon />}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        open={open}
-         
-        sx={{ 
-           
-           '& .MuiButtonBase-root': {
-              backgroundColor : colors.redAccent[300],
-             
-                position: 'relative',
-                top: 0, left: 0 
-               
-
-          }
-        
-        }}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-        
-
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            tooltipOpen
-            onClick={handleClose}
-
-            sx={{ 
-              
-             '& .MuiButtonBase-root': {
-                backgroundColor : colors.grey[700],
-               
-                  display: 'inline-block',
-                  overflow: 'visible', // Allow content to overflow
-                  
-                
-                }
-             }}
-
-          />
-        ))}
-      </SpeedDial>
-    </Box>
-  );
-};
-
-const YourComponent = () => {
-  return (
-    <div>
-      {/* Use SpeedDialTrigger as a trigger component */}
-      <SpeedDialTrigger>Hover me to trigger SpeedDial</SpeedDialTrigger>
-      {/* Other content */}
-    </div>
-  );
-};
- 
-
-
-
-/* from mui API doc
-  <Box sx={{ borderColor: 'primary.main' }} />
-// equivalent to borderColor: theme => theme.palette.primary.main
-
-  */
-/*
-
-<Typography
-  sx={
-    
-    [
-    {
+  async function disconnectWalletDiscord(){
      
-      '&:hover': {
-        color: `${colors.primary[200]}`,
-        // backgroundColor: 'white',
-      },
-    },
-    
-  ]}
->
-    Some Text
-    </Typography>
-
-    //=================================
-css:
-.MuiTabs-indicator {
-    position: absolute;
-    height: 2px;
-    bottom: 0;
-    width: 100%;
-    -webkit-transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    background-color: #eae9e6;
-}
- 
-
-*/
-
-
-// bezier visualization
-/*
-https://css-tricks.com/pure-css-bezier-curve-motion-paths/
-*/
-
-/*
-//other basic example, text move up an down on Hover/not Hover
-
-
-<Typography
-  sx={
-    
-    
-    {
-      '&:not(.hover)': { 
-         transform: "translate3d(0px, 0px, 0px)",
-         WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
-         transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
-         color: `${colors.primary[100]}`},
-      '&:hover': {
-
-        transform: "translate3d(0px, 5px, 0px)",
-        color: `${colors.redAccent[200]}`,
-        WebkitTransition: "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
-        transition:       "all 1000ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms"
-        
-      },
-    } 
-    
-  
+    const nullAdress = null;
+     
+    const result = await setWallet(user, nullAdress);
+     /*
+    When working with React state,
+     it's important to note that React relies on
+      shallow comparisons to determine whether the state has changed
+      To properly trigger the useEffect when a property inside the user object changes, 
+      you should create a new object with the updated property. Here's how you can do it:
+    */
+    const modifUser = { ...user, wallet: nullAdress };
+     
+    setUser( modifUser );
+   
   }
->
-    Some Text
-    </Typography>
-)
 
-*/
 
-// array for multiple condition
-/*
-sx={
-     
-  [
-  {  
+
+
+     return(
+      <>  
+          {debugMode && (
+                   <>
+
+                  <Tooltip  title={"disconnect, as if user did not completed this task" } >
+                    <Button variant="contained" 
+                      sx={{backgroundColor: theme.debugModeColor }}
+                       onClick={() => disconnectWalletDiscord() } >   
+                        {"[X]"} 
+                    </Button>
+                    </Tooltip> 
+
+
+ {/* ====================================================================================== */}
+       <HtmlTooltip //open={true} 
+              title={
+              <React.Fragment>
    
-    // '& .css-l1edue-MuiTabs-indicator': { backgroundColor: colors.primary[600]  },
-     
-   
-  },
-  // foo && {
-  //   '&:hover': { backgroundColor: 'grey' },
-  // },
-  // bar && {
-  //   '&:hover': { backgroundColor: 'yellow' },
-  // },
-]}
+                   <Typography fontSize={"15px"}>{"Simulate a join Server using your invite code"}</Typography> 
+                  
+                          <Box>
+                            <p> - In real, this event is called by Discord server when someone join using your invite code </p>
+                            <p> - this simulates a Discord join event with this invite code </p>
+                            <p> - then increase the stakedAmount on invites stacking smart contract </p>
+                            <p> - this can not and will not modify the real Discord invite uses! </p>
+                             </Box>
+                  </React.Fragment>
+              }
+          >
+          
+                        <Button variant="contained" 
+                          sx={{backgroundColor: theme.debugModeColor }}
+                          onClick={() => 
+                            emit_guildMemberAdd(user, discordInvite?.invite) 
+                         
+                          
+                          } >   
+                          add invite 
+                         </Button>
+ 
+            
+           </HtmlTooltip>  
 
-*/
+        {/* ====================================================================================== */}
+ 
+        <ServerButton  
+                          user = {user} 
+                          discordInvite = {discordInvite}  
+                          tokenStakedBeforeClicking = {DISTstakedAmount}
+                          action ={ () => 
+                            emit_guildMemberAdd(user, discordInvite?.invite) 
+                           }
+                         
+                           onConditionMet ={ (  ) =>
+                             {
+                               
+                               const modifUser = { ...user  };
+                                setUser( modifUser ); // trigger useEffet discord Invites in discord context provider
+                                //const modif_notification = { ...notification  };
+                                setNotification( {message: "server button completed"} );// trigger useEffet for staking info 
+                               
+                             }
+                           // emit_guildMemberAdd(user, discordInvite?.invite) 
+                           }
+                          
+                          > 
+                           serverButton
+                         </ServerButton>
+
+
+
+
+
+                     
+                  </>
+                )} 
+        
+         
+          
+      </>
+
+
+
+     )
+
+
+}
+  

@@ -37,3 +37,7 @@ https://mui.com/material-ui/api/
 Css alignemnt with great visual
 https://blog.bitsrc.io/mastering-css-properties-a-deep-dive-into-align-content-justify-content-align-items-and-342c47858ea8
 https://blog.thirdweb.com/guides/reactnative-sdk-full-theme-customization/
+
+
+Many icons for react:
+https://javascript.plainenglish.io/top-10-library-for-icons-in-react-22265f47094
