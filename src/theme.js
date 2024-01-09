@@ -404,12 +404,12 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
  
        padding:"0px",
       backgroundColor:  tokens(theme.palette.mode).primary[600], 
-      color:  tokens(theme.palette.mode).primary[50], 
+      color:   tokens(theme.palette.mode).primary[50], 
       fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
       
       borderRadius : "8px",
       maxWidth: 220,
-      fontSize: theme.typography.pxToRem(12),
+      fontSize: "12px",// theme.typography.pxToRem(12),
        border: '2px solid  rgba(150, 150, 150, 0.2)',
     },
     '& span': {

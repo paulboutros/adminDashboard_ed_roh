@@ -16,7 +16,12 @@ export function useUserContext() {
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
   
+
+
     const addDataToUser = (dataSource, data) => {
+      // if user is not loaded (==null) , adding data will make other hook think the "user" is not null
+      // where it is actually null (if logged out or not authenticated)
+      if (!user)return 
       setUser((prevUser) => ({
         ...prevUser,
         [dataSource]: data,
@@ -30,11 +35,16 @@ export function UserProvider({ children }) {
       const fetchUserData = async () => {
         try {
           const response = await getUserMe();
+ 
+          console.log('  User context : response.data is null  >>>   setUser(null); ', response );
           setUser(response);
         } catch (error) {
+
+          setUser(null);
           // Handle errors if the API call fails
-          console.error('Error fetching user data:', error);
-        }
+          console.log(' setUser(null);; '  );
+        //  console.error('Error fetching user data:', error);
+         }
       };
   
       fetchUserData();

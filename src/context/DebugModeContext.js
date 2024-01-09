@@ -1,5 +1,6 @@
 import {createContext, useContext,    useState, useEffect } from "react";
 import { globalData, globalData_setDebugMode } from "../data/API";
+import { useUserContext } from "./UserContext";
  
 const DebugModeContext = createContext();
 
@@ -12,9 +13,13 @@ export function useDebugModeContext() {
 // Remember to add this as a wrapper to the App.js
 export function DebugModeProvider({ children }) {
 
+    
+  const {user} = useUserContext();
+
     const [debugMode, setDebugMode] = useState(false);
  
     useEffect(() => {
+      if (!user)return;
 
       const fetch_debugMode = async () => {
           try {
@@ -27,7 +32,7 @@ export function DebugModeProvider({ children }) {
           }
       };
       fetch_debugMode();
-     }, []); // Empty dependency array runs the effect once
+     }, [ user ]); // Empty dependency array runs the effect once
 
     return (
       <DebugModeContext.Provider value={{ debugMode,   setDebugMode   }}>

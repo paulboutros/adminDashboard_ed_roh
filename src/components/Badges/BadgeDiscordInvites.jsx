@@ -15,6 +15,7 @@ import { copyTextToClipboard } from '../../utils';
 import { deleteDiscordInvite, getAvatar, getManyUserData } from '../../data/API';
 import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
 import { useDebugModeContext } from '../../context/DebugModeContext';
+import { PopTaskStatusDiscordInviteContent } from '../TooltipContent/content.jsx';
   
    const BadgeDiscordInvites = (  {sp}  ) => {
 
@@ -402,20 +403,27 @@ return  (`To DO ${task} / 2`)   ;
 
   const updateTask = async ( ) => {
    
+
+       //discordInvite?.acceptedUsers contains list of ID (discord ID) who accepted the invite
+       // getManyUserData > to get avatar and other info to display
       let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
     
-      const referredUsers =[];
+      const referredUsers = [];
       referredUserListDetails.forEach(data => {
        
         const src = getAvatar(data.discordUserData );
-       const elData = { global_name : data.discordUserData.username,  src:src, verified:data.discordUserData.verified };
+        const elData = {
+         global_name : data.discordUserData.username, 
+         src:src, verified:data.discordUserData.verified,
+         mockMember: (discordInvite.mockMember &&  discordInvite.mockMember.includes(data.ID) ) ? true: false  
+        };
        referredUsers.push(elData) 
 
      });
       
      setTasks(referredUsers);
     
-   //  console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
+     console.log ( " >>>>>>>>>>>.   referredUsers  : "  ,  referredUsers  );
 
   };
 
@@ -515,15 +523,19 @@ return  (`To DO ${task} / 2`)   ;
         // open={true} // for debugging
       
 
-            
+            placement="right" 
         title={
-           <React.Fragment>
-              <Typography color="inherit">Referred friends</Typography>
-               <Typography fontSize={"15px"}>{ tasks[0].global_name }</Typography> 
-                    
 
-               <Box>  <ReferredFriendsList tasks={tasks} /> </Box>  
-              </React.Fragment>
+           <PopTaskStatusDiscordInviteContent tasksArg={tasks}/>
+          //  <React.Fragment>
+
+             
+
+          //    <Typography color="inherit">Referred friends</Typography>
+          //      <Typography fontSize={"15px"}>{ tasks[0].global_name }</Typography> 
+ 
+          //      <Box>  <ReferredFriendsList tasks={tasks} /> </Box>    
+          //     </React.Fragment>
             }
            >
 

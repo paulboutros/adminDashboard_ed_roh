@@ -72,8 +72,11 @@ export default function ToDoList ({ tasks    }) {
             
             {task.verified ? (   <VerifiedIcon  style={{ marginLeft: "5px", color: colors.greenAccent[400] }} /> ) : ( <> </> )}  
 
+            {/* <ListItemText secondary = "Additional Text" /> */}
+            {task.mockMember ? (   <VerifiedIcon  style={{ marginLeft: "5px", color: colors.redAccent[400] }} /> ) : ( <> </> )}  
+
           </ListItem>
-        ))}
+         ))}
       </List>
     );
   };

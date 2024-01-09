@@ -18,12 +18,14 @@ export function AppLinkProvider({ children }) {
   
     useEffect(() => {
 
+      console.log('>>>>>>  fetching appLink data for user:', user);
+       if (!user)return;
         
       // Fetch appLink data from the API
       const fetchAppLinkData = async () => {
         try {
 
-          if (!user)return;
+         
           const response = await myAppLink(user.ID);
           setAppLink(response);
         } catch (error) {

@@ -18,13 +18,13 @@ export function DiscordInviteProvider({ children }) {
     const [discordInviteLoaded, setdiscordInviteLoaded] = useState(false);
   
     useEffect(() => {
-
+      if (!user)return;
         
       // Fetch discordInvite data from the API
       const fetchDiscordInviteData = async () => {
         try {
 
-          if (!user)return;
+         
         //  if (!discordInviteLoaded)return;
            //   setdiscordInviteLoaded(true);
           let discordInvite_response ;

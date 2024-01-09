@@ -113,13 +113,25 @@ export async function  getUserMe   () {
        
       }
     });
-  
+
+    
+    //  ok means > response falls within the range of 200-299
     if (!response.ok) {
-      console.log("!response.ok: User is not connected to discord.")
-     // throw new Error(`user/me Error: ${response.status} ${response.statusText}`);
+ 
+    
+       console.log("!response.ok: User is not connected to discord.")
+      const errorData = await response.json();
+      console.log("!response.ok:   response.message " ,  errorData.message   )
+      //return null;
+      removeCookie( "token" );
+       throw new Error(` !response.ok user/me Error: `);
     }
   
     const data = await response.json();
+
+
+    console.error('const response = await fetch(endpoint,  :', response);
+    
 
   if ( data) 
       
@@ -127,8 +139,11 @@ export async function  getUserMe   () {
 
   } catch (error) {
      
-    console.error('user/me Error:', error);
-    throw error; // You can handle the error further as needed
+    console.log( "API.js > catch user/me Error "  + error);
+  //  console.error('user/me Error:', error);
+   // throw error; // You can handle the error further as needed
+
+    return null;
   }
  
 
@@ -154,16 +169,18 @@ export async function  getUser   () {
      // throw new Error(`user/me Error: ${response.status} ${response.statusText}`);
     }
   
-    const data = await response.json();
+    let data = await response.json();
 
   if ( data) 
       
     return data.user;
 
   } catch (error) {
-     
-    console.error('user/me Error:', error);
-    throw error; // You can handle the error further as needed
+    
+  //  console.error('user/me Error:', error);
+    console.log('user/me Error:  data: return null', error);
+    return null;
+  //  throw error; // You can handle the error further as needed
   }
  
 
@@ -249,7 +266,16 @@ return resultsPostJson.data;
 
 
 
+export async function emit_guildMemberRemove( mock_leavingrMember_ID , discordInvite ){
 
+ 
+  const endpoint = `${process.env.REACT_APP_API_URL}emit/emit_guildMemberRemove?modifiedInviteCode=${discordInvite}&mock_leavingrMember_ID=${mock_leavingrMember_ID}`; // make it specific (filter to twitter fields)
+  const resultsPostJson = await fetch(endpoint);
+  const resultsJson = await resultsPostJson.json();
+  
+  
+  return resultsJson ;
+  }
 export async function emit_guildMemberAdd( user , discordInvite ){
 
  
@@ -463,17 +489,7 @@ export async function myAppLink (user_ID){
 export async function  GetRewardPrice(dataToSend   /*he,sh,we,be,kn*/ ){
   
  
-  
-       /*
-       "he":   {  "layerNumber": 4, "tokenID": 4 } ,
-         "sh":  {  "layerNumber": 4, "tokenID": 4 } ,
-         "we":   {  "layerNumber": 1, "tokenID": 4 } ,
-        "be":   {  "layerNumber": 1, "tokenID": 4 } ,
-        
-        "kn": {  "layerNumber": 3, "tokenID": 4 } 
-       
-       
-        */
+   
   const endpoint = `${process.env.REACT_APP_API_URL}GetReward`;
   const result = await axios.post(endpoint, dataToSend);
   //const rewardPrizeObject = await result.json();
@@ -753,7 +769,7 @@ export const openOAuth2Url = (user, setUser ) => {
    if (!user){
       window.open(REACT_APP_YOUROAUTH2URL, "_blank");
    }else{
-     
+     // this will log out
        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
        setUser(null);
     
@@ -779,7 +795,7 @@ export function getAvatar(  discordUserData ){
 
   
  
- if (!discordData || discordData.avatar === null) {
+ if (!discordData ||discordData.avatar === null) {
    // User has a default Discord avatar
    return `https://cdn.discordapp.com/embed/avatars/0.png`;
  } else {
@@ -816,26 +832,6 @@ export function getAvatar(  discordUserData ){
 
   return res
 }
- function getCookie_XXX(name) {
-  var dc = document.cookie;
-  var prefix = name + "=";
-  var begin = dc.indexOf("; " + prefix);
-  if (begin === -1) {
-      begin = dc.indexOf(prefix);
-      if (begin !== 0) return null;
-  }
-  else
-  {
-      begin += 2;
-      var end = document.cookie.indexOf(";", begin);
-      if (end === -1) {
-      end = dc.length;
-      }
-  }
-  // because unescape has been deprecated, replaced with decodeURI
-  //return unescape(dc.substring(begin + prefix.length, end));
-  return decodeURI(dc.substring(begin + prefix.length, end));
-} 
-
+  
 
 

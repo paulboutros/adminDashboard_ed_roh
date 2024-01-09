@@ -37,7 +37,7 @@ import {
 import MyPacks from '../myPacks/index';
  
 
- import { emit_guildMemberAdd, getSDK_fromPrivateKey, setRewardStatusAndaddDist, setUserTask, setWallet   } from '../../data/API';
+ import { emit_guildMemberAdd,emit_guildMemberRemove, setUserTask, setWallet   } from '../../data/API';
  import { useParams } from 'react-router';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
 
@@ -131,7 +131,7 @@ export default function BasicTabs() {
   const [value, setValue] = useState( initialTabIndex );
 
 
-  const [DISTstakedAmount      , setDIST] = useState( 0 );
+  const [DISTstakedAmount      , setDISTAmount] = useState( 0 );
   const [DISTReward, setDISTReward] = useState( 0 );
   
  
@@ -193,7 +193,7 @@ export default function BasicTabs() {
      }
      fetchData();
    
-   }, [    loading_dist_tokenLess  ]);
+    }, [    loading_dist_tokenLess,  ]);
 
   useEffect(()=>{
        
@@ -210,9 +210,9 @@ export default function BasicTabs() {
                
           const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
  
-          const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(4);
+          const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(0);
 
-          setDIST( tokenStaked );  setDISTReward( _rewards );
+          setDISTAmount( tokenStaked );  setDISTReward( _rewards );
   
  
      }
@@ -307,7 +307,7 @@ export default function BasicTabs() {
            
                         taskStatus={<TaskStatus4/>}
                         rewardInfo={ <RewardInfo stakedAmount={  DISTstakedAmount  } popupContent={ <PopRewardDiscordInviteContent/> }   />}
-                        rewardValue={<RewardValue rewardAmount={DISTReward}/>}  
+                        rewardValue={<RewardValue rewardAmount={DISTReward}/>}  // reward in $WU from Dist staking contract
 
                      
 
@@ -416,7 +416,7 @@ function DebugPanel( {DISTstakedAmount}){
               }
           >
           
-                        <Button variant="contained" 
+                        {/* <Button variant="contained" 
                           sx={{backgroundColor: theme.debugModeColor }}
                           onClick={() => 
                             emit_guildMemberAdd(user, discordInvite?.invite) 
@@ -424,14 +424,14 @@ function DebugPanel( {DISTstakedAmount}){
                           
                           } >   
                           add invite 
-                         </Button>
+                         </Button> */}
  
             
            </HtmlTooltip>  
 
         {/* ====================================================================================== */}
  
-        <ServerButton  
+                       <ServerButton  
                           user = {user} 
                           discordInvite = {discordInvite}  
                           tokenStakedBeforeClicking = {DISTstakedAmount}
@@ -441,20 +441,50 @@ function DebugPanel( {DISTstakedAmount}){
                          
                            onConditionMet ={ (  ) =>
                              {
-                               
-                               const modifUser = { ...user  };
+                                const modifUser = { ...user  };
                                 setUser( modifUser ); // trigger useEffet discord Invites in discord context provider
-                                //const modif_notification = { ...notification  };
+                               
                                 setNotification( {message: "server button completed"} );// trigger useEffet for staking info 
                                
                              }
-                           // emit_guildMemberAdd(user, discordInvite?.invite) 
+                          
                            }
                           
                           > 
-                           serverButton
+                           Add Invitee
                          </ServerButton>
 
+                         <ServerButton  
+                          user = {user} 
+                          discordInvite = {discordInvite}  
+                          tokenStakedBeforeClicking = {DISTstakedAmount}
+                          action ={ () => 
+                            {
+                             // pick whoever is the first member pretends that is the one who leave the server
+                              const mock_leavingrMember_ID =  discordInvite?.acceptedUsers[0];
+                                emit_guildMemberRemove(mock_leavingrMember_ID,  discordInvite?.invite) // /emit/guildMemberRemove
+                            }
+                          
+
+
+                           }
+                         
+                           onConditionMet ={ (  ) =>
+                             {
+                                const modifUser = { ...user  };
+                                setUser( modifUser ); // trigger useEffet discord Invites in discord context provider
+                               
+                                setNotification( {message: "server button completed"} );// trigger useEffet for staking info 
+                               
+                             }
+                          
+                           }
+                          
+                          > 
+                           remove Invitee
+                         </ServerButton>
+                 
+               
 
 
 

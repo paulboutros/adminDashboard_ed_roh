@@ -8,8 +8,7 @@ import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../..
  
 import { HorizontalSpace } from '../Layout';
 import FaceIcon from '@mui/icons-material/Face';
-import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
- 
+  
 import { copyTextToClipboard } from '../../utils';
 import { getAvatar, getManyUserData } from '../../data/API';
 import { useAppLinkContext } from '../../context/AppLinkContext';

@@ -29,7 +29,7 @@ import { BiCoinStack } from "react-icons/bi";
 import { BiLogoDiscordAlt } from "react-icons/bi";
 import { FaDiscord } from "react-icons/fa";
 import { TbExternalLink } from "react-icons/tb";
-import { PopRewardDiscordInviteContent, PopTaskStatusLoginContent } from "../TooltipContent/content.jsx";
+import { PopRewardDiscordInviteContent, PopTaskStatusLoginContent, PopWuRewardFomInviteStakingContent } from "../TooltipContent/content.jsx";
 
 
 const first_space =1;
@@ -710,19 +710,8 @@ useEffect(()=>{
          <>  
              <HtmlTooltip //open={true} 
               title={
-              <React.Fragment>
-                <Typography color="inherit">Requirement</Typography>
-  
-                <Typography fontSize={"15px"}>{"Link your Wallet to your Discord"}</Typography> 
+                 <PopWuRewardFomInviteStakingContent/>
               
-  
-                          <Box>
-                             
-                             <p>Amount rewarded in $DIST</p>
-                          </Box>
-  
-  
-              </React.Fragment>
             }
           >
            <Box> 

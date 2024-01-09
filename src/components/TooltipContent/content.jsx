@@ -16,7 +16,7 @@ import { useUserContext } from "../../context/UserContext";
 import ToDoList from "../List/ToDoList";
 import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
 
-
+const size1 = "12px";
 const pad ="15px";
 export function PopRewardDiscordInviteContent(){
 
@@ -38,7 +38,7 @@ export function PopRewardDiscordInviteContent(){
 
         <Box padding ={pad}  >
         
-        <p style={ {fontSize:"12px"} } > 
+        <p style={ {fontSize:size1} } > 
           <span>$DIST</span> <b>{"(Discord Invites)"}</b> are auto-staked for <span>$WU</span> 
         </p> 
 
@@ -107,7 +107,7 @@ return(
 
       <Box padding ={pad}  >
       
-      <p style={ {fontSize:"12px"} } > 
+      <p style={ {fontSize:size1} } > 
         <span>$DIST</span> <b>{"(Discord Invites)"}</b> are auto-staked for <span>$WU</span> 
        
        </p> 
@@ -144,6 +144,42 @@ initialBalance:  InitialbalanceRes */}
 
 }
  
+
+export function PopWuRewardFomInviteStakingContent(){
+ 
+   return(
+    <React.Fragment>
+       <Box padding={pad} > 
+           <p style={ {fontSize:"12px"} } > 
+             <span>$WU</span> reward (Unclaimed) from Discord Invite Staking contract <span>$DIST</span>. 
+           </p>
+       </Box>
+    </React.Fragment>
+
+
+   )
+}
+
+// task status: shows a list of invitee (real) and {mock data}
+export function PopTaskStatusDiscordInviteContent ( {tasksArg} ){
+  
+
+  
+  return(
+    <React.Fragment>
+
+      <PopUpTitle title= "Referred friends"/>       
+
+     {/* <Typography color="inherit">Referred friends</Typography>
+      <Typography fontSize={"15px"}>{ tasksArg[0].global_name }</Typography>  */}
+
+      <Box>  <ReferredFriendsList tasks={tasksArg} /> </Box>    
+     </React.Fragment>
+
+
+  )
+}
+
 export function PopTaskStatusLoginContent ( {tasksArg} ){
   
 
@@ -153,7 +189,7 @@ export function PopTaskStatusLoginContent ( {tasksArg} ){
                    <PopUpTitle title= "Login Tasks"/>
                  {/* <Typography fontSize={"15px"}>{"Link your Wallet to your Discord"}</Typography>  */}
                       <Box >
-                         {/* <p style={ {fontSize:"12px"} } > 
+                         {/* <p style={ {fontSize:size1} } > 
                              <span>Connect</span> your <b>Wallet</b> to your <b>Discord</b>
                         </p>  */}
                         <Box> <ToDoList tasks={tasksArg}/>  </Box>  
