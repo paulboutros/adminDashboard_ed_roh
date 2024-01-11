@@ -18,7 +18,7 @@ export function AppLinkProvider({ children }) {
   
     useEffect(() => {
 
-      console.log('>>>>>>  fetching appLink data for user:', user);
+      //console.log('>>>>>>  fetching appLink data for user:', user);
        if (!user)return;
         
       // Fetch appLink data from the API

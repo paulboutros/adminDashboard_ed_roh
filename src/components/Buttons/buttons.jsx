@@ -1,54 +1,35 @@
-import {
-   
-    useToast,
-
-
-  } from "@chakra-ui/react";
+ 
  
 import {
-    Card,
-    CardContent,
-    Typography,
-    Input,
-    Grid,
+    
     Button,
-    Skeleton,
-    Box,
-    TextField,
+     
+    CircularProgress,
+    LinearProgress,
    /// makeStyles,
   } from '@mui/material';
-
-
-
-
-
-
-  import {
-     
-    useAddress,
-    
-  } from "@thirdweb-dev/react";
-  import {
-    Discord_tokenLess_stakinContract,
-     
-  } from "../../const/addresses";
+ 
   import React, { useEffect, useState } from "react";
  import { useTheme } from "@emotion/react";
-import { StyledWeb3Button   } from "../../theme";
-import { getSDK_fromPrivateKey  } from "../../data/API";
+import { StyledCircularProgress, StyledWeb3Button, tokens   } from "../../theme";
+ 
+ 
    
   
 let intervalId;
   // a button that locks until the return has fully finished a set of API calls
   export function ServerButton({children,
-      tokenStakedBeforeClicking,
+      
        action,
-       onConditionMet 
+       onConditionMet,
+       checkCondition,
+       ...props 
        
         }) {
 
-    const address = useAddress();
+   
     const theme = useTheme(); 
+    const colors = tokens(theme.palette.mode);
     const [isButtonDisabled, setButtonDisabled] = useState(false);
   
     useEffect(() => {
@@ -57,15 +38,15 @@ let intervalId;
       };
     }, []); // Empty dependency array ensures the cleanup runs once when the component unmounts
   
-    const buttonClicked =   ()  => {
+    const buttonClicked = () => {
       action();
       // Your existing logic for buttonClicked
-       console.log( "calling server button function current: DISTstakedAmount = " , tokenStakedBeforeClicking );
+      // console.log( "calling server button function current: DISTstakedAmount = " , tokenStakedBeforeClicking );
       // Disable the button on click
       setButtonDisabled(true);
   
       // Set an interval to check the condition every 4 seconds
-        intervalId = setInterval( async () => {
+      intervalId = setInterval( async () => {
         // Call your API endpoint and check the condition
         // For illustration purposes, assume your API call is a function checkCondition()
          const conditionMet = await checkCondition();
@@ -76,6 +57,7 @@ let intervalId;
           // If condition is met, do nothing and clear the interval
           clearInterval(intervalId);
   
+          onConditionMet(  conditionMet  );
           // Enable the button
           setButtonDisabled(false);
         }
@@ -84,46 +66,25 @@ let intervalId;
     };
   
     // Replace this with your actual condition check logic
-    const checkCondition = async () => {
-     
-      
-       const sdk = getSDK_fromPrivateKey(); 
-       const dist_tokenLessContract = await sdk.getContract(   Discord_tokenLess_stakinContract  );
-              
-       const getStakeInfo = await dist_tokenLessContract.call("getStakeInfo",[ address]);
-          
-       const _rewards   =    parseInt ( getStakeInfo._rewards._hex, 16);
-       const tokenStaked =   parseInt ( getStakeInfo._tokensStaked._hex, 16);
-           
- // console.log("compare tokenStakedBeforeClicking =", 
-//  tokenStakedBeforeClicking  , " with NEW value : "  , tokenStaked);
- 
-       if (tokenStaked !== tokenStakedBeforeClicking){
-
-         
-        onConditionMet();
-        return true;
-       }else{
-        return false;
-       }
-      //
-      // console.log(  ">>>> _rewards >>>  = " , _rewards );
-    //   console.log(  ">>>> tokenStaked >>>  = " , tokenStaked );
-        
-
-
-      // Replace this with your actual condition logic
-      
-    };
+  
   
     return (
       <Button
+
         variant="contained"
-        sx={{ backgroundColor: theme.debugModeColor }}
+        sx={{ backgroundColor: theme.debugModeColor , width: props.width  }}
         onClick={buttonClicked}
         disabled={isButtonDisabled}
+         
       >
-        {children}
+
+        { }
+        {/* {!isButtonDisabled ?  <CircularProgress size='20px'  variant="indeterminate" color="success"    /> : children   }   */}
+        {isButtonDisabled ?  <StyledCircularProgress size='20px'  variant="indeterminate"  /> : children   }  
+        
+        {/* {!isButtonDisabled ?  <LinearProgress   variant="indeterminate" color="success" /> : children   }   */}
+
+
       </Button>
     );
   }

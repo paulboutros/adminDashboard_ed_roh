@@ -283,7 +283,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
          
         <> 
         {
-            !walletSaved(user) ? (
+            !isWalletSaved_OnServer(user) ? (
             <BootstrapTooltip 
                 title="Only 1 wallet can be associated with Discord profile on this DAPP" placement="left-start" >
                   <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }
@@ -316,7 +316,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
                         <p style={{fontWeight:"500px" }}> 
                           {
                           
-                          walletSaved(user)  ?  user.wallet : address
+                          isWalletSaved_OnServer(user)  ?  user.wallet : address
                          
                           
                           } 
@@ -376,7 +376,8 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
     <div>
  
       <PopupLinkWalletDiscord
-        walletAddress={address}
+      
+        connectedWalletAddress={address}
         user={user}
         open={isPopupOpen}
         onClose={() => setPopupOpen(false)}
@@ -513,7 +514,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
   const loggedInWithDiscord = user ? true:false; 
   updateTask(0,loggedInWithDiscord )
  
-  const walletSavedOnServer =  walletSaved(user) ;
+  const walletSavedOnServer =  isWalletSaved_OnServer(user) ;
    updateTask(1, walletSavedOnServer )
 
   const connectedWallet_match =  connectedWallet_match_savedWallet(user,address)    ;
@@ -528,7 +529,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
    
   let task = 0;
   if ( user ){ task+=1; } // we are connected to discord
-  if (   walletSaved(user)  ){  task+=1; }
+   if (   isWalletSaved_OnServer(user)  ){  task+=1; }
   if (   connectedWallet_match_savedWallet(user,address)  ){  task+=1; }
   
   
@@ -785,7 +786,7 @@ function connectedWallet_match_savedWallet ( user , address ){
   return   address === user.wallet? true:false
 }
 
-function walletSaved( user ){
+function isWalletSaved_OnServer( user ){
      if (!user)return false;
  return (  !user.wallet ||  user.wallet.includes("0000000")  )? false:true
 }

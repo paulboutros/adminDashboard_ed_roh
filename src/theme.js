@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 //import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { ConnectWallet } from "@thirdweb-dev/react";
-import { Avatar, Box, Chip } from "@mui/material";
+import { Avatar, Box, Chip, CircularProgress } from "@mui/material";
 //https://uicolors.app/create
 // this is to replicate the css styles found in styles module of Thridweb market v 3
 export const styles = {
@@ -294,6 +294,20 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
       fontWeight: 400,
       padding: theme.spacing(1.3), // Adjust the padding as needed
     },
+  }));
+
+
+  
+
+  export const StyledCircularProgress = styled(({ className, ...props }) => (
+    <CircularProgress {...props}
+     className={className}
+       
+     />
+  ))(({ theme }) => ({
+    // Add your custom styles here
+    color: _blueSelectedTab,// tokens(theme.palette.mode).blueAccent[300],
+    thickness: 10, // Change thickness to your desired thickness
   }));
 
 

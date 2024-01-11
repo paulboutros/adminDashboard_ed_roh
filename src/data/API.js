@@ -268,8 +268,8 @@ return resultsPostJson.data;
 
 export async function emit_guildMemberRemove( mock_leavingrMember_ID , discordInvite ){
 
- 
-  const endpoint = `${process.env.REACT_APP_API_URL}emit/emit_guildMemberRemove?modifiedInviteCode=${discordInvite}&mock_leavingrMember_ID=${mock_leavingrMember_ID}`; // make it specific (filter to twitter fields)
+   
+  const endpoint = `${process.env.REACT_APP_API_URL}emit/guildMemberRemove?modifiedInviteCode=${discordInvite}&mock_leavingrMember_ID=${mock_leavingrMember_ID}`; // make it specific (filter to twitter fields)
   const resultsPostJson = await fetch(endpoint);
   const resultsJson = await resultsPostJson.json();
   

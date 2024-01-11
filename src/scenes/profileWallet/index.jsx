@@ -13,10 +13,9 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 
-import { allCSS, infoHeight, tokens, HtmlTooltip, BootstrapTooltip } from "../../theme";
-import {Box, Button, Chip, Tooltip, useTheme} from '@mui/material';
+import { allCSS, infoHeight, tokens, BootstrapTooltip } from "../../theme";
+import {Box, Chip, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
 import {  HorizontalSpace, VerticalSpace } from '../../components/Layout';
 
@@ -37,7 +36,7 @@ import {
 import MyPacks from '../myPacks/index';
  
 
- import { emit_guildMemberAdd,emit_guildMemberRemove, setUserTask, setWallet   } from '../../data/API';
+ import { getSDK_fromPrivateKey, setUserTask   } from '../../data/API';
  import { useParams } from 'react-router';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
 
@@ -54,10 +53,8 @@ import   { TaskForReward4, TaskStatus4 } from '../../components/Badges/BadgeDisc
 
 import { DISTStakeInfo, DISTStakeInfoGeneral, useUserContext } from '../../context/UserContext';
 import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
-import { useDebugModeContext } from '../../context/DebugModeContext.js';
 import { taskBadge } from '../../const/various.js';
-import { CustWeb3Button, ServerButton } from '../../components/Buttons/buttons.jsx';
-import { useDiscordInviteContext } from '../../context/DiscordInviteContext.js';
+import { CustWeb3Button } from '../../components/Buttons/buttons.jsx';
 import { useNotificationContext } from '../../context/NotificationContext.js';
 import { ethers } from 'ethers';
 import { PopRewardDiscordInviteContent,
@@ -66,6 +63,7 @@ import { PopRewardDiscordInviteContent,
   
   
   } from '../../components/TooltipContent/content.jsx';
+import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
 
 
 function CustomTabPanel(props) {
@@ -136,7 +134,6 @@ export default function BasicTabs() {
   
  
 
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -193,33 +190,53 @@ export default function BasicTabs() {
      }
      fetchData();
    
-    }, [    loading_dist_tokenLess,  ]);
+    }, [    loading_dist_tokenLess   ]);
+
+
+//====================================================================================================================
+//====================================================================================================================
+    const fetchDataStakeInfo = async ( ) => {
+
+
+      try {
+        
+        let res;
+      const sdk = getSDK_fromPrivateKey(); 
+      const dist_tokenLessContract = await sdk.getContract(   Discord_tokenLess_stakinContract  );
+      const getStakeInfo = await dist_tokenLessContract.call("getStakeInfo",[ address]);
+    
+  
+        addDataToUser(DISTStakeInfo , getStakeInfo );
+         
+              
+        const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
+      
+        const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(0);
+      
+        setDISTAmount( tokenStaked );  setDISTReward( _rewards );
+
+        console.log(  ">>>> tokenStaked >>>  = " , tokenStaked , "_rewards ", _rewards);
+          res = { tokenStaked :tokenStaked , _rewards:_rewards };
+        return res;
+
+      } catch (error) {
+        console.error('Error  fetchDataStakeInfo   :', error.message);
+        throw error;
+      }
+      
+   }
 
   useEffect(()=>{
-       
-    if (!address || loading_dist_tokenLess ) return;
-    const fetchData = async ( ) => {
-
-        //  const sdk = getSDK_fromPrivateKey(); 
-         // const dist_tokenLessContractXX = await sdk.getContract(   Discord_tokenLess_stakinContract  );
-           const getStakeInfo = await dist_tokenLessContract.call("getStakeInfo",[ address]);
-          
-
-          addDataToUser(DISTStakeInfo , getStakeInfo );
-         // console.log(  ">>>> getStakeInfo >>>  = " , getStakeInfo );
-               
-          const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
- 
-          const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(0);
-
-          setDISTAmount( tokenStaked );  setDISTReward( _rewards );
-  
- 
-     }
-     fetchData();
+      
+  if (!address ) return;// || loading_dist_tokenLess
+       fetchDataStakeInfo();
    
-   }, [  address, loading_dist_tokenLess, notification ]);
-       
+  }, [  address ]);  // , loading_dist_tokenLess, notification 
+   
+  //====================================================================================================================
+//====================================================================================================================
+
+
    
    useEffect(()=>{
     if (!user)return;
@@ -350,157 +367,10 @@ export default function BasicTabs() {
 
      </Container>
 
-      <DebugPanel DISTstakedAmount={DISTstakedAmount} />
+      <DebugPanel DISTstakedAmount={DISTstakedAmount} 
+       setDISTAmount={setDISTAmount} />
     </ >
   );
 }
 
  
-function DebugPanel( {DISTstakedAmount}){
-
-  const { notification , setNotification } = useNotificationContext();
-  const { discordInvite   } =  useDiscordInviteContext();
-  const {debugMode }     = useDebugModeContext();
-  const {user, setUser } = useUserContext();
-  const theme = useTheme();
-
-  async function disconnectWalletDiscord(){
-     
-    const nullAdress = null;
-     
-    const result = await setWallet(user, nullAdress);
-     /*
-    When working with React state,
-     it's important to note that React relies on
-      shallow comparisons to determine whether the state has changed
-      To properly trigger the useEffect when a property inside the user object changes, 
-      you should create a new object with the updated property. Here's how you can do it:
-    */
-    const modifUser = { ...user, wallet: nullAdress };
-     
-    setUser( modifUser );
-   
-  }
-
-
-
-
-     return(
-      <>  
-          {debugMode && (
-                   <>
-
-                  <Tooltip  title={"disconnect, as if user did not completed this task" } >
-                    <Button variant="contained" 
-                      sx={{backgroundColor: theme.debugModeColor }}
-                       onClick={() => disconnectWalletDiscord() } >   
-                        {"[X]"} 
-                    </Button>
-                    </Tooltip> 
-
-
- {/* ====================================================================================== */}
-       <HtmlTooltip //open={true} 
-              title={
-              <React.Fragment>
-   
-                   <Typography fontSize={"15px"}>{"Simulate a join Server using your invite code"}</Typography> 
-                  
-                          <Box>
-                            <p> - In real, this event is called by Discord server when someone join using your invite code </p>
-                            <p> - this simulates a Discord join event with this invite code </p>
-                            <p> - then increase the stakedAmount on invites stacking smart contract </p>
-                            <p> - this can not and will not modify the real Discord invite uses! </p>
-                             </Box>
-                  </React.Fragment>
-              }
-          >
-          
-                        {/* <Button variant="contained" 
-                          sx={{backgroundColor: theme.debugModeColor }}
-                          onClick={() => 
-                            emit_guildMemberAdd(user, discordInvite?.invite) 
-                         
-                          
-                          } >   
-                          add invite 
-                         </Button> */}
- 
-            
-           </HtmlTooltip>  
-
-        {/* ====================================================================================== */}
- 
-                       <ServerButton  
-                          user = {user} 
-                          discordInvite = {discordInvite}  
-                          tokenStakedBeforeClicking = {DISTstakedAmount}
-                          action ={ () => 
-                            emit_guildMemberAdd(user, discordInvite?.invite) 
-                           }
-                         
-                           onConditionMet ={ (  ) =>
-                             {
-                                const modifUser = { ...user  };
-                                setUser( modifUser ); // trigger useEffet discord Invites in discord context provider
-                               
-                                setNotification( {message: "server button completed"} );// trigger useEffet for staking info 
-                               
-                             }
-                          
-                           }
-                          
-                          > 
-                           Add Invitee
-                         </ServerButton>
-
-                         <ServerButton  
-                          user = {user} 
-                          discordInvite = {discordInvite}  
-                          tokenStakedBeforeClicking = {DISTstakedAmount}
-                          action ={ () => 
-                            {
-                             // pick whoever is the first member pretends that is the one who leave the server
-                              const mock_leavingrMember_ID =  discordInvite?.acceptedUsers[0];
-                                emit_guildMemberRemove(mock_leavingrMember_ID,  discordInvite?.invite) // /emit/guildMemberRemove
-                            }
-                          
-
-
-                           }
-                         
-                           onConditionMet ={ (  ) =>
-                             {
-                                const modifUser = { ...user  };
-                                setUser( modifUser ); // trigger useEffet discord Invites in discord context provider
-                               
-                                setNotification( {message: "server button completed"} );// trigger useEffet for staking info 
-                               
-                             }
-                          
-                           }
-                          
-                          > 
-                           remove Invitee
-                         </ServerButton>
-                 
-               
-
-
-
-
-                     
-                  </>
-                )} 
-        
-         
-          
-      </>
-
-
-
-     )
-
-
-}
-  

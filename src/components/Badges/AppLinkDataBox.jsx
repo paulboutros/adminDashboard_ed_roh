@@ -271,9 +271,9 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
 
 <Box onClick={ () => copyTextToClipboard ( referralData?.shareableLink )} > 
 
-       {/* <p> <>Share link <span style={{fontWeight:"700px"}} >{ referralData?.code}</span> with friends</></p>   */}
+       
      
-       <p> <>Share link with friends  
+       <p> <>Share link with friends 
        <span style={{
           marginRight: '10px',
         fontWeight:"700px",  borderRadius:"3px", padding:"3px",

@@ -7,7 +7,7 @@ export const STAKING_ADDRESS ="farmer game";// "0xeA5Dc787B867D98B0C67C714594a10
 
 
 
-export const Discord_tokenLess_stakinContract ="0x5F85d6Cfcab7b2628dD18E1F638fA70264FA5Fa4";
+ export const Discord_tokenLess_stakinContract ="0xbfD443FFdF54B3B7b722a5fCB86Ec6B759AF7b62";
 
 export const Discord_stake_contract ="0x7027758481Ab9490c74336eB8F06e5a02a7f44a6";
 export const Discord_invite_stake_token = "0x87b875631cA5f598A7e2a7a90bebA2e5B690F45E";

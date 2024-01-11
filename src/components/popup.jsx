@@ -11,6 +11,8 @@ import {
 from "../const/addresses";
 
 
+import { IoArrowDown } from "react-icons/io5";
+import { IoWarningOutline } from "react-icons/io5";
 import { HiOutlineChevronRight } from "react-icons/hi";
 import { FaLink } from "react-icons/fa";
 import { FaEthereum } from "react-icons/fa";
@@ -35,7 +37,7 @@ import { useUserContext } from '../context/UserContext.js'; // to get user data 
 import { useAppLinkContext } from '../context/AppLinkContext.js';
 import {sendTracking, openOAuth2Url, ERC20claim, getAvatar  } from "../data/API";
 
-import {  Box ,Button,   Divider,   Typography, useTheme  } from "@mui/material";
+import {  Box ,Button,   Divider,   LinearProgress,   Typography, useTheme  } from "@mui/material";
 
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
@@ -43,6 +45,9 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import LayerBaseInfo from  "./LayerBaseInfo";
     
  import { useAllLayersContext } from '../context/AllLayerAvailableContext';
+import { addressShortened } from "../utils.js";
+import { VerticalSpace } from "./Layout.jsx";
+import { ServerButton } from "./Buttons/buttons.jsx";
 
 
 
@@ -410,17 +415,11 @@ for (const category in filteredImages) {
  
 
   }
-
-
-
-
-
  
 
+  export const PopupLinkWalletDiscord = ({  connectedWalletAddress, user, open, onClose, onConfirm }) => {
 
-  export const PopupLinkWalletDiscord = ({ walletAddress, user, open, onClose, onConfirm }) => {
-
-
+  
     
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -437,6 +436,8 @@ for (const category in filteredImages) {
         } 
       
         }}>
+
+
         <Box sx={{ 
           padding:"20px",
           // textAlign: 'center' ,
@@ -455,27 +456,108 @@ for (const category in filteredImages) {
                 Link wallet to discord
                 
                 </p>
-         
+        
+            { user?.wallet !== connectedWalletAddress && (
+                 <>
 
+        
+        
+                   <p style={
+                    {
+                      padding:"5px 5px 5px 5px",
+                       width:"400px", 
+                      fontSize:"12px",
+                      fontWeight:"700px",
+                       color: colors.grey[400]
+                    }
+                  }  > 
+                  
+                  
+                 {/* The wallet you are <b>connected</b> to is not the one  
+                  associated with Discord on this DAPP <br /> 
+                    
+                  To use  {addressShortened(connectedWalletAddress)} instead, 
+                   simply press confirm.
+                  
+                   
 
-           <Box sx={ allCSS( theme.palette.mode).basicTextWithAddress  } >
-           {/* <p>You are about to connect this address <span  >  {walletAddress}  </span>  </p> */}
+                  You agree that your $DIST staking and unclaimed $WU reward, will be transfered
+                  to the newly register address. */}
+                   If you press confirm, your connected wallet will be used as primary for this app. <br />
+                    <li>All staking will be transfered to the new address</li> 
+                  
+                  </p>
+                   
+                
+                  </>
 
+            )}
+       
+
+             
           
-           
-           <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  >
-
-          <p style={{fontWeight:"500px" }}>   {walletAddress}    </p>
-          </Box>
-
-
-
-         </Box>
-          {/* <br /> 
-           <p className={styles.nftPriceLabel} > to: </p>  */}
           
         </Box>
 
+        <Divider orientation="horizontal"  />
+        <Box sx={{ 
+          padding:"20px",
+          // textAlign: 'center' ,
+           backgroundColor: popUpColor 
+          }}>
+ 
+        
+            { user?.wallet !== connectedWalletAddress ? (
+                 <>
+                    <p style={
+                    {
+                      padding:"5px 5px 5px 5px",
+                       width:"400px", 
+                      fontSize:"12px",
+                      fontWeight:"700px",
+                       color: colors.grey[400]
+                    }
+                  }  > 
+                     current will replace the red one
+                  
+                  </p>
+
+                  <Box sx={ allCSS( theme.palette.mode).basicTextWithAddress  } >
+              
+                    <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  >
+                    <p style={{fontWeight:"500px" }}>   {connectedWalletAddress}    </p>
+                  </Box>
+                   </Box>
+ 
+                        <Box
+                        sx ={{  justifyContent: 'center' , }} >
+                            <Box  sx={{   display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                          <VerticalSpace  space={1}/>
+                          <IoArrowDown/>
+                          <VerticalSpace  space={1}/>
+                          </Box>
+                        </Box>
+ 
+                 <Box sx={  allCSS( theme.palette.mode, "400px","0px", colors.redAccent[300]    ).infoBox  }  >
+                    <p style={{fontWeight:"500px" }}>   {user?.wallet}    </p>
+                  </Box>
+                  </>
+
+            ):(
+           <React.Fragment> 
+           
+             <Box sx={ allCSS( theme.palette.mode).basicTextWithAddress  } >
+  
+                  <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  >
+                  <p style={{fontWeight:"500px" }}>   {connectedWalletAddress}    </p>
+                 </Box>
+             </Box>
+             </React.Fragment>
+          )}
+          
+        </Box>
+
+        
         <Divider orientation="horizontal"  />
 
         <DialogContent 
@@ -508,9 +590,50 @@ for (const category in filteredImages) {
           <Button variant="contained" onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button variant="contained" onClick={onConfirm} color="primary">
+
+
+
+             {/* 
+           <Button variant="contained" onClick={onConfirm} color="primary">
             Confirm
-          </Button>
+          </Button>   */}
+        
+
+          <ServerButton
+                
+
+                action={  onConfirm }
+
+                onConditionMet={async (result) => {
+              //   console.log("onConditionMet={async (result) =>", result);
+
+                 // setDISTAmount(result.tokenStaked);
+
+                //  let discordInvite_response = await myDiscordInvite(user.ID);
+                //  setDiscordInvite(discordInvite_response);
+
+                //  console.log("let discordInvite_response = await myDiscordInvite(user.ID", discordInvite_response);
+
+                }}
+
+                 checkCondition =  {   async (result) => { return null } } 
+
+                 width={"100px"}
+              >
+ 
+                
+                Confirm
+               
+
+
+              </ServerButton>
+
+
+
+
+
+
+
         </DialogActions>
       </Dialog>
     );
