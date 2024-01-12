@@ -248,6 +248,18 @@ export const setDebugMode = async (  setDebugModeContext ) => {
 };
 
 
+// web2 custom bundle pack
+export async function CreateBundlePackWEB2(  ){
+ 
+  const dataToSend = {  ID : "" }
+   
+   const endpoint = `${process.env.REACT_APP_API_URL}CreateBundlePack`; 
+   const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+   console.log("data response :" ,   resultsPostJson.data );
+   return resultsPostJson.data;
+}
+
  
 export async function setUserTask( user , address ){
  
@@ -264,6 +276,42 @@ console.log("setUserTask  >>> response :" ,   resultsPostJson.data );
 return resultsPostJson.data;
 }
 
+ /*
+ export async function openPackServer( packID){
+
+   
+  const endpoint = `${process.env.REACT_APP_API_URL}openPack`; // make it specific (filter to twitter fields)
+  const resultsPostJson = await fetch(endpoint);
+  const resultsJson = await resultsPostJson.json();
+  
+  
+  return resultsJson ;
+}
+*/
+
+export async function openPackServer(  openerAddress){
+ 
+  const dataToSend={ 
+    openerAddress : openerAddress
+     
+  }
+  
+ // const endpoint = `${process.env.REACT_APP_API_URL}guildMemberAdd?ID=969712435869122560`; 
+ // const endpoint = `${process.env.REACT_APP_API_URL}/emit/guildMemberAdd?modifiedInviteCode=4ymvf9xGY`; 
+const endpoint = `${process.env.REACT_APP_API_URL}openPack`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+//console.log("data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+}
+
+
+
+
+
+
+
 
 
 export async function emit_guildMemberRemove( mock_leavingrMember_ID , discordInvite ){
@@ -275,7 +323,8 @@ export async function emit_guildMemberRemove( mock_leavingrMember_ID , discordIn
   
   
   return resultsJson ;
-  }
+}
+
 export async function emit_guildMemberAdd( user , discordInvite ){
 
  

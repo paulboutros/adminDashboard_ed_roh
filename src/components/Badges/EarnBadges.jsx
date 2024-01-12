@@ -30,6 +30,7 @@ import { BiLogoDiscordAlt } from "react-icons/bi";
 import { FaDiscord } from "react-icons/fa";
 import { TbExternalLink } from "react-icons/tb";
 import { PopRewardDiscordInviteContent, PopTaskStatusLoginContent, PopWuRewardFomInviteStakingContent } from "../TooltipContent/content.jsx";
+import { useDISTContext } from "../../context/DISTstakingContext.js";
 
 
 const first_space =1;
@@ -225,33 +226,34 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
    const {user, setUser } = useUserContext();
    const {debugMode }     = useDebugModeContext();
    
-   
-   useEffect(()=>{
-      
-  
-  }, [ debugMode   ]);
-  
-   useEffect(()=>{
      
-
-  //  updateTask(1, state1 )
-   
-  }, [user , address]);
-    
   
-
+  const {    setReFetch } = useDISTContext(); 
  
   const [isPopupOpen, setPopupOpen] = useState(false);
    //// this is an exact copy of popupHandleConfirm_TaskStatus
   const popupHandleConfirm_TaskForReward =  async ()  => {
-  
+   
+
+        console.log (  "started:    popupHandleConfirm_TaskForReward ");
+     
      
     const result = await setWallet(user,address);
 
     //create a new object by shallow copy so react can detect a change 
-    const modifUser = { ...user, wallet: address };
+    
+     console.log( ">>>>>>>>>>>>>>>>>>>>>>>>   setReFetch(true) "   );
+     setReFetch(true);
+
+
+     // we modify the wallet on user profile so it matches the one we changed on the data base
+     const modifUser = { ...user, wallet: address };
      console.log( "  modifUser.wallet ="  ,   modifUser.wallet  );
      setUser( modifUser );
+
+
+
+
     setPopupOpen(false);
   };
 
@@ -542,7 +544,9 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
 // this is an exacct copy of popupHandleConfirm_TaskForReward
   const popupHandleConfirm_TaskStatus =  async ()  => {
   
-     
+   // console.log (  "popupHandleConfirm_TaskStatus ");
+      
+
   const result = await setWallet(user,address);
 
   //create a new object by shallow copy so react can detect a change 

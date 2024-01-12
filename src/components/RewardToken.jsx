@@ -5,9 +5,7 @@ import { Box, Skeleton, Typography  } from "@mui/material";
 import { BootstrapTooltip, tokens } from "../theme";
 import { useTheme } from "@emotion/react";
 import ErrorOutline from "@mui/icons-material/ErrorOutline";
-import { RowChildrenAlignCenter, RowChildrenAlignLeft } from "./Layout";
-import { useEffect } from "react";
-import { getSDK_fromPrivateKey } from "../data/API";
+ 
 
 export default function StakeToken( {Token_address}) {
     const theme = useTheme();
@@ -21,14 +19,8 @@ export default function StakeToken( {Token_address}) {
      
     const title = Token_address === Discord_invite_stake_token ? "Stake Token":"Reward Token";
 
-
-
-
-
-    //const { contract: dist_tokenLessStatkinng, isLoading: loadingStakingStakeToken } = useContract( Discord_tokenLess_stakinContract );
-    
   
-   
+    /*
     useEffect(()=>{
            
       const fetchData = async ( ) => {
@@ -48,7 +40,7 @@ export default function StakeToken( {Token_address}) {
        fetchData();
      
      }, [ ]);
-
+    */
 
 
     return (

@@ -51,7 +51,7 @@ import   { TaskForReward2, TaskStatus2 } from '../../components/Badges/AppLinkDa
 import   { TaskForReward3, TaskStatus3 } from '../../components/Badges/BadgeJoinServer.jsx';
 import   { TaskForReward4, TaskStatus4 } from '../../components/Badges/BadgeDiscordInvites';
 
-import { DISTStakeInfo, DISTStakeInfoGeneral, useUserContext } from '../../context/UserContext';
+import { useUserContext } from '../../context/UserContext';
 import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
 import { taskBadge } from '../../const/various.js';
 import { CustWeb3Button } from '../../components/Buttons/buttons.jsx';
@@ -64,6 +64,7 @@ import { PopRewardDiscordInviteContent,
   
   } from '../../components/TooltipContent/content.jsx';
 import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
+import { useDISTContext } from '../../context/DISTstakingContext.js';
 
 
 function CustomTabPanel(props) {
@@ -104,8 +105,15 @@ function a11yProps(index) {
 export default function BasicTabs() {
 
 
-  const { notification , setNotification } = useNotificationContext();
-  const {user, addDataToUser  } = useUserContext();
+   
+
+  const {user  } = useUserContext();
+  const {distStakedAmount,   distReward  } = useDISTContext();
+        
+   
+   //const [DISTstakedAmount      , setDISTAmount] = useState( 0 );
+   //const [DISTReward, setDISTReward] = useState( 0 );
+
 
      const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -123,36 +131,28 @@ export default function BasicTabs() {
 
 
  // TO DO: we could use address from useParams().. especially if you want other user to see other people profile
-    const address = useAddress();
+    
 
-  console.log("initialTabIndex  =",initialTabIndex);
-  const [value, setValue] = useState( initialTabIndex );
+   const [value, setValue] = useState( initialTabIndex );
 
-
-  const [DISTstakedAmount      , setDISTAmount] = useState( 0 );
-  const [DISTReward, setDISTReward] = useState( 0 );
-  
  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
  
-
-  useEffect(()=>{
+/*
+    useEffect(()=>{
        
-    if (  loading_dist_tokenLess ) return;
-    const fetchData = async ( ) => {
+      if (  loading_dist_tokenLess ) return;
+      const fetchData = async ( ) => {
 
          // the following data is not related to the staker, they are general info about the contract
          // therefore, they need to be loaded ONLY ONCE  (unlike getStakeInfo for example)
           const ratioInfo = await dist_tokenLessContract.call("getRewardRatio_Over");
           const timeUnit = await dist_tokenLessContract.call("getTimeUnit_Over");
           
-          
-        //  console.log( "PPPPPPP   timeUnit   " , timeUnit );
-
-          // the balance will need to be fetched again, everytime a user claim reward
+         
           // so let us consider this to be the initial balance only  
           const Initialbalance = await dist_tokenLessContract.call("TEST_getBalance");
          // console.log( "PPPPPPP   balance   " , Initialbalance );
@@ -169,74 +169,13 @@ export default function BasicTabs() {
 
 
           addDataToUser(DISTStakeInfoGeneral , generalInfo );
-          /*
-          TEST_getBalance();
-          getTimeUnit_Over();
-          getRewardRatio_Over();
-
-          addDataToUser(DISTStakeInfo , getStakeInfo );
-          console.log(  ">>>> getStakeInfo >>>  = " , getStakeInfo );
-               
-          const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
+          
  
-          const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(4);
-
-          setDIST( tokenStaked );  setDISTReward( _rewards );
-      */
-
-         
-
- 
-     }
-     fetchData();
+       }
+      fetchData();
    
     }, [    loading_dist_tokenLess   ]);
-
-
-//====================================================================================================================
-//====================================================================================================================
-    const fetchDataStakeInfo = async ( ) => {
-
-
-      try {
-        
-        let res;
-      const sdk = getSDK_fromPrivateKey(); 
-      const dist_tokenLessContract = await sdk.getContract(   Discord_tokenLess_stakinContract  );
-      const getStakeInfo = await dist_tokenLessContract.call("getStakeInfo",[ address]);
-    
-  
-        addDataToUser(DISTStakeInfo , getStakeInfo );
-         
-              
-        const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
-      
-        const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(0);
-      
-        setDISTAmount( tokenStaked );  setDISTReward( _rewards );
-
-        console.log(  ">>>> tokenStaked >>>  = " , tokenStaked , "_rewards ", _rewards);
-          res = { tokenStaked :tokenStaked , _rewards:_rewards };
-        return res;
-
-      } catch (error) {
-        console.error('Error  fetchDataStakeInfo   :', error.message);
-        throw error;
-      }
-      
-   }
-
-  useEffect(()=>{
-      
-  if (!address ) return;// || loading_dist_tokenLess
-       fetchDataStakeInfo();
-   
-  }, [  address ]);  // , loading_dist_tokenLess, notification 
-   
-  //====================================================================================================================
-//====================================================================================================================
-
-
+ */
    
    useEffect(()=>{
     if (!user)return;
@@ -323,8 +262,8 @@ export default function BasicTabs() {
          <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForReward4/>}
            
                         taskStatus={<TaskStatus4/>}
-                        rewardInfo={ <RewardInfo stakedAmount={  DISTstakedAmount  } popupContent={ <PopRewardDiscordInviteContent/> }   />}
-                        rewardValue={<RewardValue rewardAmount={DISTReward}/>}  // reward in $WU from Dist staking contract
+                        rewardInfo={ <RewardInfo stakedAmount={  distStakedAmount  } popupContent={ <PopRewardDiscordInviteContent/> }   />}
+                        rewardValue={<RewardValue rewardAmount={ distReward }/>}  // reward in $WU from Dist staking contract
 
                      
 
@@ -367,8 +306,9 @@ export default function BasicTabs() {
 
      </Container>
 
-      <DebugPanel DISTstakedAmount={DISTstakedAmount} 
-       setDISTAmount={setDISTAmount} />
+      <DebugPanel DISTstakedAmount={distStakedAmount} 
+      // setDISTAmount={setDISTAmount}
+        />
     </ >
   );
 }

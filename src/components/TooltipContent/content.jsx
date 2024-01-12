@@ -15,6 +15,7 @@ import { useTheme } from "@emotion/react";
 import { useUserContext } from "../../context/UserContext";
 import ToDoList from "../List/ToDoList";
 import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
+import { useDISTContext } from "../../context/DISTstakingContext.js";
 
 const size1 = "12px";
 const pad ="15px";
@@ -24,16 +25,14 @@ export function PopRewardDiscordInviteContent(){
     
     const {user  } = useUserContext();   //DISTStakeInfo
      
-    
+    const {DISTStakeInfoGeneral } = useDISTContext();
 
  return(
 
     <React.Fragment>
-
-
+ 
        <PopUpTitle title= "$DIST"/>
  
-
        {/* <Typography padding={pad} fontSize={"15px"}>{"Discord invite staking token"}</Typography>  */}
 
         <Box padding ={pad}  >
@@ -44,9 +43,9 @@ export function PopRewardDiscordInviteContent(){
 
 
         <VerticalSpace space={1} />
-          <li> <b>Staking Ratio:</b>{user?.DISTStakeInfoGeneral?._numerator}  / {user?.DISTStakeInfoGeneral?._denominator}   </li>  
-          <li><b>timeUnit:</b> {user?.DISTStakeInfoGeneral?.timeUnit} </li>
-          <li> <b>initial Balance:</b> {user?.DISTStakeInfoGeneral?.initialBalance} </li>
+          <li> <b>Staking Ratio:</b>{ DISTStakeInfoGeneral?._numerator}  / { DISTStakeInfoGeneral?._denominator}   </li>  
+          <li><b>timeUnit:</b> { DISTStakeInfoGeneral?.timeUnit} </li>
+          <li> <b>initial Balance:</b> { DISTStakeInfoGeneral?.initialBalance} </li>
         </Box> 
 
         <Divider orientation="horizontal"  /> 

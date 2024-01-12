@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react';
 import { allCSS, tokens } from "../../theme";
 import {   RowChildrenAlignLeft } from '../../components/Layout';
 import NFTListed from '../../components/FARMER/NFTlisted';
-import { getSDK_fromPrivateKey } from '../../data/API';
+import { getSDK_fromPrivateKey, openPackServer } from '../../data/API';
 import { useDebugModeContext } from '../../context/DebugModeContext';
 
 export default function MyPacks() {
@@ -26,11 +26,12 @@ export default function MyPacks() {
 
     const address = useAddress();
 
-    const { contract } = useContract(PACK_ADDRESS, "pack");
+   // const { contract } = useContract(PACK_ADDRESS, "pack");
+    const { contract } = useContract(PACK_ADDRESS  ); // this is no longer a pack but a regular erc1155
+
     const { data, isLoading } = useOwnedNFTs(contract, address);
 
-    //const [openPackRewards, setOpenPackRewards] = useState(); // <PackRewards>
-     const [rewardNFTs, setRewardNFTs] = useState(); // <PackRewards>
+      const [rewardNFTs, setRewardNFTs] = useState(); // <PackRewards>
      const [spinReady, setSpinReady] = useState([false,false,false,false,false,false]); // <PackRewards>
     
      const {debugMode, set_DebugMode} = useDebugModeContext();
@@ -40,13 +41,12 @@ export default function MyPacks() {
         if (rewardNFTs) {   delayedLoop(true);  }
           
        
-      }, [rewardNFTs]); // Effect depends on rewardNFTs changes
+      }, [rewardNFTs]);  
     async function delayedLoop( state) {
 
          
         for (let i = 0; i < 5; i++) {
           
-         
           console.log(`Iteration ${i + 1}`);
       
 
@@ -70,10 +70,20 @@ export default function MyPacks() {
         let cardRewards;
         const useRealData = false;
         if (useRealData){ 
-            cardRewards = await contract?.open(parseInt(packId), 1);
+            cardRewards = await contract?.open(parseInt(packId), 1); // do not use this 
         }else{
+       const packResult = await openPackServer( address );
+       const erc1155Rewards =[];
 
-             cardRewards ={
+        packResult.forEach(element => {
+             erc1155Rewards.push(
+               {  tokenId: element , contractAddress: TOOLS_ADDRESS, quantityPerReward: 1 } 
+             );
+       });
+       cardRewards = { erc1155Rewards };
+
+            /*
+             cardRewards = {
                 erc1155Rewards:[
                     {  tokenId: 2, contractAddress: TOOLS_ADDRESS, quantityPerReward: 1 },
                     {  tokenId: 4, contractAddress: TOOLS_ADDRESS, quantityPerReward: 1 },
@@ -83,23 +93,24 @@ export default function MyPacks() {
                  ]
  
             }
+            */
+ 
+
         }
  
 
           
         console.log(cardRewards);
-      //  setOpenPackRewards(cardRewards);
-    
-        // load all the nft first, once loaded we do the spin animation
+         // load all the nft first, once loaded we do the spin animation
         
              const sdk = getSDK_fromPrivateKey(); 
              const nftContract = await sdk.getContract(TOOLS_ADDRESS);
              const reward_NFTs = [];
              for ( let i = 0; i <  cardRewards.erc1155Rewards.length; i++ )  { 
-                const card      = cardRewards.erc1155Rewards[i];
-                const he_tokenId = parseInt(  card.tokenId  );  
-                  const nftres  = await nftContract.erc1155.get( he_tokenId );
-                  reward_NFTs.push(nftres);
+                   const card       = cardRewards.erc1155Rewards[i];
+                   const he_tokenId = parseInt(  card.tokenId  );  
+                   const nftres     = await nftContract.erc1155.get( he_tokenId );
+                   reward_NFTs.push(nftres);
              } 
              setRewardNFTs(reward_NFTs);
            
@@ -107,6 +118,18 @@ export default function MyPacks() {
           // it is safer this way so spin animation starts only when NFT reward are loaded
           // delayedLoop( true );
     }; 
+
+
+
+    useEffect(() => {
+         
+      if (!data) return;
+
+       console.log  ("data from pack " , data );
+        
+     
+    }, [data]);  
+
      
 
     
@@ -146,9 +169,7 @@ export default function MyPacks() {
         <Typography sx={ theme.titleDescription }> Open your pack to reveal the NFT layers.</Typography>
           
          <Box sx={{ borderBottom: 1, borderColor:  colors.grey[600] , margin: "40px 0px 20px 0px" }}/>
-
-
-
+ 
 
          {!rewardNFTs  && (
             <div className={styles.grid}>
@@ -174,7 +195,7 @@ export default function MyPacks() {
                   
                      <div  className = {stylesBuy.nftGridContainer} >
  
-                      {/* {openPackRewards.erc1155Rewards.map((card, index) => ( */}
+                      
                        {rewardNFTs.map((card, index) => (  
                          
 

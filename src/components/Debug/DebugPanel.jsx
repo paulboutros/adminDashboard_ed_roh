@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import { HtmlTooltip } from "../../theme.js";
 import { Box, Button, Tooltip, useTheme } from '@mui/material';
@@ -11,53 +11,48 @@ import { ServerButton } from '../Buttons/buttons.jsx';
 import { useDiscordInviteContext } from '../../context/DiscordInviteContext.js';
 import { useNotificationContext } from '../../context/NotificationContext.js';
 import { ethers } from 'ethers';
+import { useDISTContext } from '../../context/DISTstakingContext.js';
 
 export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
 
 
   const address = useAddress();
-  const { notification, setNotification } = useNotificationContext();
+  
   const { discordInvite, setDiscordInvite } = useDiscordInviteContext();
   const { debugMode } = useDebugModeContext();
   const { user, setUser } = useUserContext();
+
+  const { distStakedAmount, distReward,  setReFetch } = useDISTContext(); 
+  const distStakedAmountRef = useRef(distStakedAmount);
+
+  useEffect(() => {
+    distStakedAmountRef.current = distStakedAmount; // Update the ref when distStakedAmount changes
+  }, [distStakedAmount]);
+
+
+
   const theme = useTheme();
  
   async function disconnectWalletDiscord() {
+     const nullAdress = null;
 
-    const nullAdress = null;
-
-    const result = await setWallet(user, nullAdress);
-    /*
-   When working with React state,
-    it's important to note that React relies on
-     shallow comparisons to determine whether the state has changed
-     To properly trigger the useEffect when a property inside the user object changes,
-     you should create a new object with the updated property. Here's how you can do it:
-   */
-    const modifUser = { ...user, wallet: nullAdress };
+   // const result = await setWallet(user, nullAdress);
+     const modifUser = { ...user, wallet: nullAdress };
 
     setUser(modifUser);
 
   }
 
+  // this is called repeatedly from ServerButtom intervalId
   async function checkCondition () {
+     setReFetch(true);
+ 
+    let result = { tokenStaked: distStakedAmountRef.current  , _rewards: distReward };
 
-    const sdk = getSDK_fromPrivateKey();
-    const dist_tokenLessContract = await sdk.getContract(Discord_tokenLess_stakinContract);
+    console.log("distStakedAmountRef.current = ", distStakedAmountRef.current,  "tokenStakedBeforeClicking    ", DISTstakedAmount);
 
-    const getStakeInfo = await dist_tokenLessContract.call("getStakeInfo", [address]);
-
-    const _rewards = parseInt(getStakeInfo._rewards._hex, 16);
-    let tokenStaked = parseInt(getStakeInfo._tokensStaked._hex, 16);
-    tokenStaked = (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(0);
-
-    let result = { tokenStaked: tokenStaked, _rewards: _rewards };
-
-    console.log("tokenStaked = ", tokenStaked, "tokenStakedBeforeClicking    ", DISTstakedAmount);
-
-    // be extremely careful that "tokenStaked" and "tokenStakedBeforeClicking"
-    // are formatted teh same way so comparason is accurate
-    if (tokenStaked !== DISTstakedAmount) {
+    
+    if (distStakedAmountRef.current !== DISTstakedAmount) {
       // onConditionMet( result );
       return result; // true;
     } else {
@@ -65,10 +60,7 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
     }
 
   }
-    
-  
-
-
+     
   return (
     <>
       {debugMode && (
@@ -115,7 +107,8 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
                 onConditionMet={async (result) => {
                   console.log("onConditionMetXXXXXXXXXX  result", result);
 
-                  setDISTAmount(result.tokenStaked);
+                  console.log("setDISTAmount removed because context provider shoud lhave done it already" );
+                 // setDISTAmount(result.tokenStaked);
 
                   let discordInvite_response = await myDiscordInvite(user.ID);
                   setDiscordInvite(discordInvite_response);
@@ -144,12 +137,14 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
                 onConditionMet={async (result) => {
                  console.log("onConditionMet={async (result) =>", result);
 
-                  setDISTAmount(result.tokenStaked);
+                  
+                 console.log("setDISTAmount removed because context provider shoud lhave done it already" );
+                //  setDISTAmount(result.tokenStaked);
 
                   let discordInvite_response = await myDiscordInvite(user.ID);
                   setDiscordInvite(discordInvite_response);
 
-                  console.log("let discordInvite_response = await myDiscordInvite(user.ID", discordInvite_response);
+                  console.log("let disco rdInvite_response = await myDiscordInvite(user.ID", discordInvite_response);
 
                 }}
 

@@ -66,10 +66,7 @@ export const PackNFTCard = ({ contractAddress, tokenId }: Props) => {
                         />  
                          <Box height="150px" width="150px" >
                                 
-                                <VerticalStackAlignCenter>
                                 
-                                    
-                                </VerticalStackAlignCenter>
                         </Box>
                        
 

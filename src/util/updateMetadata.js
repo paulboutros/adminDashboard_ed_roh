@@ -1,7 +1,7 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { NFT } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS,  REWARDS_ADDRESS, PACK_ADDRESS, MARKETPLACE_ADDRESS  } from "../const/addresses";
-import {getSDK_fromPrivateKey} from "../data/API";  
+import {CreateBundlePackWEB2, getSDK_fromPrivateKey} from "../data/API";  
 
 const urlBase = "https://wulibuild.s3.eu-west-3.amazonaws.com/WulirocksLayerNFTimages/"
 const imageToUpload = // "../../public/be/1.png"
@@ -141,7 +141,7 @@ export async function CreateListingPack(){
    
   const txResult = await marketContract.directListings.createListing({
       assetContractAddress: PACK_ADDRESS, // Required - smart contract address of NFT to sell
-      tokenId: 5 , // Required - token ID of the NFT to sell
+      tokenId:0,// 5 , // Required - token ID of the NFT to sell
       pricePerToken: "0.076", // Required - price of each token in the listing
       currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
       isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
@@ -241,9 +241,7 @@ export async function UpdatePackMetaData(){
  
   const packContract = await sdk.getContract(packAddress, "pack");
 
-  //const card = await sdk.getContract(cardAddress, "edition");
-        //await card.setApprovalForAll(packAddress, true);
-  //console.log("Approved card contract to transfer cards to pack contract");
+   
 
   const packImage = urlBase + "he/" + ( 1 ).toString() + ".png" ;
 
@@ -275,13 +273,44 @@ export async function UpdatePackMetaData(){
 
 }
 
+// this is for our web2 pack ceration
+ function createPacksWEB2(cardList, packSize) {
+  const numberOfPacks = Math.floor(cardList.length / packSize);
+  const packs = [];
+
+  for (let i = 0; i < numberOfPacks; i++) {
+    const pack = [];
+    
+    // Randomly pick cards for the pack
+    for (let j = 0; j < packSize; j++) {
+      const randomIndex = Math.floor(Math.random() * cardList.length);
+      const selectedCard = cardList.splice(randomIndex, 1)[0];
+      pack.push(selectedCard);
+    }
+
+    packs.push(pack);
+  }
+
+  return packs;
+}
+
 export async function createBundle(  ){
-           
+           /*
   const generatedData = generateData();
 
-  console.log( "generatedData" , generatedData );
-  // return ;
+// for WEB2 pack geenration
+const cardList = generatedData.flatMap((card) =>
+  Array.from({ length: card.totalRewards }, () => card.tokenId)
+);
+const packSize = 5;
+const packs = createPacksWEB2(cardList, packSize );
 
+console.log( "packs" , packs );
+*/
+     CreateBundlePackWEB2();
+  
+   return ;  // web 3 version
+   const generatedData = generateData();
   const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
 
   const packAddress = PACK_ADDRESS;
@@ -311,6 +340,7 @@ export async function createBundle(  ){
  
 
 }
+ 
 
  export async function createBundle_smallTest(  ){
            

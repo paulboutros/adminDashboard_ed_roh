@@ -67,6 +67,7 @@ import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
+import { DISTProvider } from "./context/DISTstakingContext.js";
 
 
  
@@ -140,12 +141,13 @@ const testThirdWeb = false;
 
 
     <ThirdwebProvider activeChain={Sepolia}>
- <ChakraProvider>
+ <ChakraProvider>  
        <UserProvider>
          <DiscordProvider>
+            <DISTProvider>
            <DebugModeProvider>
 
-     <DiscordInviteProvider> 
+        <DiscordInviteProvider> 
         <AppLinkProvider>
    
       <DropTimeProvider>
@@ -234,6 +236,8 @@ const testThirdWeb = false;
         </DiscordInviteProvider>
      
          </DebugModeProvider>
+
+         </DISTProvider>
     </DiscordProvider>
        </UserProvider>
     </ChakraProvider>

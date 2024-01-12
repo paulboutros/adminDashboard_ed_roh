@@ -26,7 +26,7 @@ export function AllLayersProvider({ children }) {
     const [allLayers, setAllLayers] = useState(null);
  
 
-
+     
      const { data: NFTdata } = useNFTs(contract); // get all neft
    // const [NFTdata, setAllNFTs] = useState(null);
 
@@ -39,9 +39,9 @@ export function AllLayersProvider({ children }) {
       }
       get();
 */
- 
+    console.log( "allNFTs" , NFTdata);
 
-    }, []);
+    }, [  NFTdata  ]);
 
  
     const address = useAddress(); 
@@ -122,6 +122,11 @@ async function CheckOwnedNft( ownedNftData){
 
 async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
   
+
+  console.log( "  Create_Initial_layerToChooseFrom   >>>>    NFTdata" ,  NFTdata   );
+  
+
+
     const initialLayerToChooseFrom = {};
 
  // this v2 is more adapted to token id structure
@@ -158,9 +163,11 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 
  //console.log(">>. nft: ",    NFTdata  );
 
-NFTdata.forEach((nft) => {
 
-  
+ for ( let i = 0 ; i < NFTdata.length; i++  ){ 
+  // NFTdata.forEach((nft) => {
+
+      const nft  =  NFTdata[i];
   /*
   console.log("Token ID: ",    nft.metadata.id  ,  "name: ",    nft.metadata.name  , 
                "trait_type:   ",  nft.metadata.attributes[0].trait_type ,
@@ -169,6 +176,12 @@ NFTdata.forEach((nft) => {
              
              );
      */
+    if  (    !nft.metadata.attributes  ){
+
+        console.log(  "  attribute of  :" ,  i , " is  undefined  ");
+        continue;
+    }
+
 
              const category     = nft.metadata.attributes[0].trait_type ;
             const layerNumber  = nft.metadata.attributes[0].value ;   
@@ -209,17 +222,25 @@ NFTdata.forEach((nft) => {
            // console.log(">>>>   initialLayerToChooseFrom[category][layerNumber].supply" , 
          //     initialLayerToChooseFrom[category][layerNumber].supply);
          
-  });
+  };
+   //);
    
 
 
 
 
-
-  ownedNftData.forEach((ownedNFT) => {
+   for ( let i = 0 ; i < ownedNftData.length; i++  ){ 
+    // NFTdata.forEach((nft) => {
+  
+        const ownedNFT  =  ownedNftData[i];
+  //ownedNftData.forEach((ownedNFT) => {
  
      // console.log( "ownedNFT.metadata.id  ", ownedNFT.metadata.id  );
-    
+     if  (    !ownedNFT.metadata.attributes  ){
+
+      console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  ");
+      continue;
+  }
      // console.log( " ownedNFT.attributes[0]  ",  ownedNFT.attributes[0]  );
      const meta = ownedNFT.metadata.attributes[0];
      initialLayerToChooseFrom[ meta.trait_type][meta.value].owning = ownedNFT.quantityOwned;
@@ -228,7 +249,8 @@ NFTdata.forEach((nft) => {
       ownerLayerFound++;
     
      
-  });
+  };
+ // );
 
 
   /*

@@ -45,8 +45,7 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import LayerBaseInfo from  "./LayerBaseInfo";
     
  import { useAllLayersContext } from '../context/AllLayerAvailableContext';
-import { addressShortened } from "../utils.js";
-import { VerticalSpace } from "./Layout.jsx";
+ import { VerticalSpace } from "./Layout.jsx";
 import { ServerButton } from "./Buttons/buttons.jsx";
 
 
