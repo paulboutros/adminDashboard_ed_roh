@@ -16,7 +16,8 @@ import { BasicScrollable } from '../../components/Layout';
 import Container from '../../components/Container/Container';
 import { useAllListingsContext } from '../../context/AllListingContext';
 import { AllNFTWrapper } from '../shop';
-import { GetCookieRedirectURL, getCookie, removeCookie } from '../../data/API';
+import {   getCookie, removeCookie } from '../../data/API';
+import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
  
   
  //const API_URL = process.env.API_URL;
@@ -31,7 +32,8 @@ import { GetCookieRedirectURL, getCookie, removeCookie } from '../../data/API';
 
     const { contract } = useContract(TOOLS_ADDRESS);
     const { data, isLoading } = useNFTs(contract);
-    const { data: allNFTs } = useNFTs(contract); // get all neft
+    //const { data: allNFTs } = useNFTs(contract); // get all neft
+    const { NFTdata } = useAllLayersContext();
     const { allNFTsWithListing  } = useAllListingsContext();
     
       
@@ -60,8 +62,8 @@ import { GetCookieRedirectURL, getCookie, removeCookie } from '../../data/API';
 
 
   return (
-    !allNFTs ? (
-      <div>alllayerimage.js allNFTs not loaded</div>
+    !NFTdata ? (
+      <div>alllayerimage.js NFTdata not loaded</div>
     ) : (
       //  <Container maxWidth="lg">
       //<Box margin="0px 20px 20px 20px"  maxHeight="calc(85vh)"  overflow="auto"  >  
@@ -69,15 +71,12 @@ import { GetCookieRedirectURL, getCookie, removeCookie } from '../../data/API';
         <Container  maxWidth="lg">
            <Box>
      
-      {/* {user ? ( <ImageComposer  queryId= {`&userId=${user.ID}&limit=1`}/>  ) : ( <div>User is not defined.</div> )} */}
+    
  
          <ReferredUserComponent/>
           <ImageComposer/>  
        
-          {/* <Shop display_mode='grid'/>  */}
-          {/* <NFTGrid  isLoading={isLoading}   NFTdata={allNFTs}  emptyText={"No NFTs found"} />   */}
-
-          {/* <Container maxWidth="lg">     */}
+      
           <div className={ stylesBuy.nftGridContainer } > 
           
                 
@@ -86,10 +85,11 @@ import { GetCookieRedirectURL, getCookie, removeCookie } from '../../data/API';
             ) : (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
               <p></p>
             ) : (
-               
-                 <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={TOOLS_ADDRESS} />
+                //  <p>  allNFTsWithListing.length  = {allNFTsWithListing?.length} </p>
+                  <AllNFTWrapper allNFTsWithListing={allNFTsWithListing} NFT_CONTRACT={TOOLS_ADDRESS} />
+                
             )}
-      
+         
             </div>
 
 

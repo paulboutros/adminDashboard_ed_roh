@@ -1,6 +1,8 @@
 import {createContext, useContext,  useState, useEffect, useRef } from "react";
 import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS  } from "../const/addresses.ts";
-import { useContract, useNFTs,    useValidDirectListings, useValidEnglishAuctions  } from "@thirdweb-dev/react";
+import { useContract,     useValidDirectListings, useValidEnglishAuctions  } from "@thirdweb-dev/react";
+import { getSDK_fromPrivateKey } from "../data/API.js";
+import { useAllLayersContext } from "./AllLayerAvailableContext.js";
   
 const AllListingsContext = createContext();
 
@@ -17,7 +19,32 @@ export function AllListingsProvider({ children , NFT_CONTRACT }) {
 const { contract } = useContract( NFT_CONTRACT );
       
  //================================================================================================================================================
- const { data: allNFTs, isLoading } = useNFTs(contract); // get all neft
+
+  //useNFTs runs periodically... we must use sdk so it loads ONCE
+// const { data: NFTdata, isLoading } = useNFTs(contract); // get all neft
+
+
+  const {NFTdata} = useAllLayersContext();  // useAllLayersContext  
+/*
+ const [NFTdata, setNFTdata] = useState(null);  // NFTdata can be layer NFT or PACK contract
+ async function getAllNFTs(){
+  const sdk = getSDK_fromPrivateKey(); 
+  const contract = await sdk.getContract( NFT_CONTRACT );  // , "edition"
+  const nfts = await contract.erc1155.getAll();
+  setNFTdata(nfts);
+}
+useEffect(() => {
+ 
+   getAllNFTs();
+
+}, [] );
+*/
+
+
+//================================================================================================================
+ 
+
+
  const [allNFTsWithListing, setAllNFTsWithListing] = useState(null);
  // it can be the basci layers, but it can be the pak as well (both are ERC1155)
   
@@ -37,25 +64,28 @@ useValidEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT  });   //,tok
 
 useEffect(() => {
 
-      if ( allNFTs && auctionListing  && directListings ){
-     // if ( allNFTsWithListing ) return;
-       
-      allNFTs.forEach((nft) => {
+  if ( loadingAuction || loadingDirectListings ) return;
+
+      if ( NFTdata && auctionListing  && directListings ){
+     
+       // I think we are adding ot appending some new properties here...
+      NFTdata.forEach((nft) => {
         nft.listing    = [] ;
         nft.auction    = [] ;
+
         nft.allListing = [] ; // auction and direct listing in one array
        
       });
     
 
          auctionListing.forEach( auction => {
-          const selectedNFTIndex =  allNFTs.findIndex((nft) => nft.metadata.id === auction.tokenId);
-          if (selectedNFTIndex !== -1) { allNFTs[selectedNFTIndex].allListing.push(auction); }
+          const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === auction.tokenId);
+          if (selectedNFTIndex !== -1) { NFTdata[selectedNFTIndex].allListing.push(auction); }
 
          });
          directListings.forEach( listing => {
-           const selectedNFTIndex =  allNFTs.findIndex((nft) => nft.metadata.id === listing.tokenId);
-           if (selectedNFTIndex !== -1) {allNFTs[selectedNFTIndex].allListing.push(listing); }
+           const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === listing.tokenId);
+           if (selectedNFTIndex !== -1) {NFTdata[selectedNFTIndex].allListing.push(listing); }
  
           });
          
@@ -74,11 +104,11 @@ useEffect(() => {
           // Update previous values after the effect runs
           prevDirectListings.current = directListings;
           prevAuctionListing.current = auctionListing;
-          // console.log(  ">>>>>  added   >>>>    "  ,  allNFTs  );
-          setAllNFTsWithListing(allNFTs);
+         
+          setAllNFTsWithListing(NFTdata);
      }
    
-}, [ directListings , auctionListing , allNFTs, NFT_CONTRACT ]);
+}, [ directListings , auctionListing , NFTdata, NFT_CONTRACT ]);
     
 
     return (

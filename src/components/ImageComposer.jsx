@@ -31,29 +31,7 @@ import { useDebugModeContext } from '../context/DebugModeContext';
 
     const {debugMode, set_DebugMode} = useDebugModeContext();
 
-    /*
-    const fetchCategoryData = async (category  ) => {
      
-        try {
-          // Fetch data for the category
-          const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?layerPart=${category}${queryId}`;
-          const result = await fetch(endpoint);
-          const resultsJson = await result.json();
-      
-        //  setData(ownedLayers);
-
-        } catch (error) {
-          console.error(`Error fetching data for ${category}: ${error}`);
-        }
-    
-     };
-
-    useEffect(() => {
-        
-        fetchCategoryData("he");  fetchCategoryData("we"); fetchCategoryData("sh"); 
-    }, [ ]);
-     */
-  
 
       
   const debugModeLayout = false;
@@ -169,9 +147,9 @@ import { useDebugModeContext } from '../context/DebugModeContext';
         
             <Box gridColumn="span 8" gridRow="span 1"   >
 
-               <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
+               {/* <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
                  <Typography variant="h5"fontWeight="600" color={colors.grey[100]}>  NFT Composer </Typography>
-               </Box>
+               </Box> */}
              </Box>
              <Box gridColumn="span 4" gridRow="span 1"    >
             <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >

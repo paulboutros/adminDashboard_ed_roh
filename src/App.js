@@ -8,8 +8,7 @@ import Sidebar from "./scenes/global/Sidebar.jsx";
 import Dashboard from "./scenes/dashboard/index.jsx";
 import DiscordBoard from "./scenes/discordBoard/index.jsx";
 
-import Profile from "./scenes/profile/index.jsx";
-import TwitterBoard from "./scenes/twitterBoard/index.jsx";
+ import TwitterBoard from "./scenes/twitterBoard/index.jsx";
 //import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import AllLayerImage from "./scenes/allLayerImage/index.jsx";
  
@@ -60,8 +59,7 @@ import FarmerPage from "./scenes/farmerPage/index.jsx";
 import Sell from "./scenes/sell/index.jsx";
 
 import Shop from"./scenes/shop/index.jsx";
-//import ShopPack from    "./scenes/shopPack/index.jsx";  
-   
+    
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
@@ -174,7 +172,9 @@ const testThirdWeb = false;
             
           
               <Route path="/"                       element={
-                <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS}  > <AllLayerImage /> </AllListingsProvider>
+                <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
+                   <AllLayerImage />
+               </AllListingsProvider>
                  
               }/>
               <Route path="/shop/:NFT_CONTRACT"      element={ 
@@ -196,11 +196,13 @@ const testThirdWeb = false;
               <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={<TokenPageByID/>} />
               
 
+              {/* this is more like a personal profil tab .. */}
+              <Route path="/profileWallet/:initialTabIndex" element={<ProfileWallet/>} />
               <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
               <Route path="/profileWallet/:address/:initialTabIndex" element={<ProfileWallet/>} />
               
             
-              <Route path="/profile" element={<Profile/>} />
+               
               <Route path="/discordBoard" element={<DiscordBoard/>} />
              {/* <Route path="/allLayerGrid" element={<AllLayerGrid />} /> */}
               <Route path="/allLayerImage" element={<AllLayerImage />} />

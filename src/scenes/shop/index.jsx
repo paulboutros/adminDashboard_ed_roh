@@ -21,10 +21,12 @@ import randomColor from "../../util/randomColor";
 
 
 import {useEffect, useState} from "react";
-import { useContract, useValidEnglishAuctions, useValidDirectListings,
-    ConnectWallet,  useAddress ,   useNFTs   } from "@thirdweb-dev/react";
+import { useContract, 
+    ConnectWallet,  useAddress    } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDRESS  } from "../../const/addresses";
  
+
+import ConnectWalletPage from "../../components/ConnectWalletPage.jsx";
 import Container from "../../components/Container/Container";
 import NFTListed from "../../components/FARMER/NFTlisted.jsx"; 
  
@@ -38,7 +40,7 @@ import { useNavigate } from "react-router";
 //the provider is usually called for wrapping around compoenent
 // from App.js, but here we need to specify some prop defined in this component (tokenId)
 
-
+ import {useAllLayersContext }from '../../context/AllLayerAvailableContext.js';  
  import { useAllListingsContext } from '../../context/AllListingContext.js';  
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
@@ -124,8 +126,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
 
   useEffect(()=>{
-
-    
+     
     console.log( ">> SHOP => itemType",itemType  , "allNFTsWithListing  " , allNFTsWithListing );
     
  }, [ itemType , allNFTsWithListing ]);
@@ -139,7 +140,11 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
  
   
- const { data: allNFTs, isLoading } = useNFTs(contract); // get all neft
+ //const { data: allNFTs, isLoading } = useNFTs(contract); // get all neft
+
+ const { NFTdata } = useAllLayersContext();
+
+
  const theme = useTheme();
  const colors = tokens(theme.palette.mode);
  const navigate = useNavigate();
@@ -167,12 +172,11 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
       if (!address){
         return (
             <div> 
-                 <p> To get NFT Layer, you first need to be connected </p>
-                <ConnectWallet/>
+                 <ConnectWalletPage/> 
             </div> 
             )
        }
-       if (!allNFTs){
+       if (!NFTdata){
         return (
             <div> 
                  <p> Loading NFTs metadata </p>
@@ -203,43 +207,25 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
                   <Tab key={index} label= {tabName}   {...a11yProps(index)}  disableRipple  sx={theme.tabStyle}   />
                 ))
               }
-            
-          
-
-           
-            {/* <Tab label= {tabsName[1]}   {...a11yProps(1)}  disableRipple  sx={  theme.tabStyle }   />
-            <Tab label= {tabsName[2]}   {...a11yProps(2)}  disableRipple  sx={ theme.tabStyle }   /> */}
-             
+   
             
            </Tabs>
 
          </Box>
- 
-    
   
-           {/* <div  className={`${  tab === "My Packs" ? stylesBuy.nftGridContainer : "" }`} > 
-          
-                
-            {loadingDirectListings || loadingAuction ? (  // || isLoading 
-              <p>Loading direct and auction...</p>
-            ) : tab !== "nfts" || (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
-              <p></p>
-            ) : (
-                 <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
-            
-            )}
-          
-           </div>   */}
 
           <div  className={`${  tab === "nfts" ? stylesBuy.nftGridContainer : "" }`} > 
-          
-                
+                 
             {loadingDirectListings || loadingAuction ? (  // || isLoading 
               <p>Loading direct and auction...</p>
             ) : tab !== "nfts" || (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
               <p></p>
             ) : (
-                 <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
+
+               
+              // we shoudl pass the NFTdata context here
+                  <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
+                 
             
             )}
           
@@ -261,7 +247,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
                     key={listing.id} // key is mendatory and should be added somewhere in a map loop
                     onClick={() => {
-                       const selectedNFT = allNFTs.find((nft) => nft.metadata.id === listing.tokenId);
+                       const selectedNFT = NFTdata.find((nft) => nft.metadata.id === listing.tokenId);
                        navigate( linkPath( NFT_CONTRACT, selectedNFT, listing  )  )
                     }
                    }
@@ -296,7 +282,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
                 key={listing.id}  
                 onClick={() => {
-                   const selectedNFT = allNFTs.find((nft) => nft.metadata.id === listing.tokenId);
+                   const selectedNFT = NFTdata.find((nft) => nft.metadata.id === listing.tokenId);
                    navigate( linkPath( NFT_CONTRACT, selectedNFT, listing   )  )
                     }
                 }
@@ -382,12 +368,13 @@ export function AllNFTWrapper( {  allNFTsWithListing, NFT_CONTRACT  } ){
                             }
                           }
                      >
-                           
-                            <NFTListed
+                       {/* // this is most likely loaded from the main page..since it does not show listing, just all nft */}
+                           {/* <p> {nft.metadata.id} </p> */}
+                             <NFTListed
                                 propContractAddress = { NFT_CONTRACT }
                                 propTokenId = {nft.metadata.id } // 
-                              //  NFT ={nft}
-                            />   
+                                NFT ={ nft}   /* << warning here, see */ 
+                            />    
   
                             
                        </Box>

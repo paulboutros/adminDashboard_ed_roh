@@ -1,12 +1,12 @@
 import {createContext, useContext,  useState, useEffect } from "react";
 
-import { getAllLayersAvailable , GetAllNFTfromSDK   } from "../data/API.js";
+import { getAllLayersAvailable , GetAllNFTfromSDK, getSDK_fromPrivateKey   } from "../data/API.js";
 //import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
 import { GetLayerSupply } from "../data/API.js";
 import { useUserContext } from './UserContext.js'; // to get user data from context provider
 
 import { TOOLS_ADDRESS } from "../const/addresses.ts";
-import { useContract, useNFTs,  useOwnedNFTs, useAddress  } from "@thirdweb-dev/react";
+import { useContract,  useOwnedNFTs, useAddress  } from "@thirdweb-dev/react";
 
 const maxLayers = 11;
 const AllLayersContext = createContext();
@@ -23,58 +23,65 @@ export function AllLayersProvider({ children }) {
      
      
      
-    const [allLayers, setAllLayers] = useState(null);
+    
  
+ 
+    const address = useAddress(); 
+    const { data, isLoading } = useOwnedNFTs(contract, address);
 
+    
+    // we are replacing, because it seems (useNFTs) loads every 1 minute... which trigger many other useEffect
+    const [NFTdata, setNFTdata] = useState(null); // what is the difference betwwen NFTdata & allLayers (this is unclear)
+    const [allLayers, setAllLayers] = useState(null);
+    //const { data: NFTdata }   = useNFTs(contract);    // get all neft
+   
+
+// get all Layer once, makre SURE it load ONCE 
+//================================================================================================================
+    async function getAllNFTs(){
+      const sdk = getSDK_fromPrivateKey(); 
+      const contract = await sdk.getContract(TOOLS_ADDRESS);  // , "edition"
+      const nfts = await contract.erc1155.getAll();
+      setNFTdata(nfts);
+    }
+  useEffect(() => {
      
-     const { data: NFTdata } = useNFTs(contract); // get all neft
-   // const [NFTdata, setAllNFTs] = useState(null);
-
+    getAllNFTs();
   
+  }, []);
+//================================================================================================================
+
+
+
+
     useEffect(()=>{
-        /*
-      async function get(){
-          const result =  await  GetAllNFTfromSDK();
-          setAllNFTs(result);
-      }
-      get();
-*/
+       
     console.log( "allNFTs" , NFTdata);
 
     }, [  NFTdata  ]);
 
  
-    const address = useAddress(); 
-
+   
     const [ownedNftData, setOwnedNfts] = useState(null);
 
 
     //===============================================================================================================
      
-   const { data, isLoading } = useOwnedNFTs(contract, address);
+   
    useEffect(()=>{
     if (!data)return;
-  //console.log( "context data", data);
-   /* //if  you want to override with locally stored metadata
-      async function get(){
-          const result =  await  GetAllNFTfromSDK(data);
-          setOwnedNfts(result);
-     }
-   
-    get();
-      */
+ 
+     setOwnedNfts (data);
 
-    setOwnedNfts (data);
-
-  }, [data ]);
+   }, [data ]);
 
 
 //==============================================================================================================
  
-
     useEffect( ()=>{
   
-       if (!ownedNftData){return;}
+       // nothing is going to load if wallet is not connected
+       if (address && !ownedNftData){return;}
        if (!NFTdata){ return;} 
  
         // cretae basic layers available to choos efrom in the app
@@ -88,15 +95,7 @@ export function AllLayersProvider({ children }) {
          NFTdata, ownedNftData  // we get the supply from contract now, no more from Mongo
     ]); 
 
-    useEffect( ()=>{
-
-     
-      if (!ownedNftData)return;
-
-      CheckOwnedNft(ownedNftData);
-
-    }, [ ownedNftData ]);
- 
+      
 
     return (
       <AllLayersContext.Provider value={{ allLayers, NFTdata, ownedNftData,  setAllLayers }}>
@@ -115,11 +114,8 @@ NO API call for this
  calling API Add_owning_and_otherLayerInfo()
 
 */
-async function CheckOwnedNft( ownedNftData){
-
- // console.log( "  >>>>  >>>>    ownedNftData" ,  ownedNftData   );
-}
-
+ 
+//if address is not connected, ownedNftData will be NULL, so "we" or the "user" owns nothing
 async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
   
 
@@ -129,15 +125,7 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 
     const initialLayerToChooseFrom = {};
 
- // this v2 is more adapted to token id structure
-    const initialLayerToChooseFromV2 = {};
-   
-     // we do not need to be registered to see supply
-  //  const allSupply = await GetLayerSupply();
-
-     //console.log( "  >>>>    GetLayerSupply  GetLayerSupply" , allSupply   );
-   
-    
+     
 
     const categories = ['he', 'sh', 'we', 'be', 'kn'];
     const layerCount = maxLayers;
@@ -151,136 +139,47 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
     }));
 
     for (const category of categories) {
-      // initialLayerToChooseFrom[category] = [...baseObject];
-      // use  the follow to create a DEEp copy of base object so they are independant copies
+       // use  the follow to create a DEEp copy of base object so they are independant copies
        initialLayerToChooseFrom[category] = JSON.parse(JSON.stringify(baseObject));
     }
 
 //================================================================================
 
-//console.log( "  >>>>    Create_Initial_layerToChooseFrom " , NFTdata   );
+  
  let ownerLayerFound = 0;
 
- //console.log(">>. nft: ",    NFTdata  );
-
-
+  
  for ( let i = 0 ; i < NFTdata.length; i++  ){ 
-  // NFTdata.forEach((nft) => {
-
+ 
       const nft  =  NFTdata[i];
-  /*
-  console.log("Token ID: ",    nft.metadata.id  ,  "name: ",    nft.metadata.name  , 
-               "trait_type:   ",  nft.metadata.attributes[0].trait_type ,
-              "value:   ",  nft.metadata.attributes[0].value,   
-               "supply:   " ,  nft.supply  
-             
-             );
-     */
-    if  (    !nft.metadata.attributes  ){
-
-        console.log(  "  attribute of  :" ,  i , " is  undefined  ");
-        continue;
-    }
-
-
+   
+        if  ( !nft.metadata.attributes  ){console.log(  "  attribute of  :" ,  i , " is  undefined  "); continue; }
+ 
+ 
              const category     = nft.metadata.attributes[0].trait_type ;
             const layerNumber  = nft.metadata.attributes[0].value ;   
             const supply       = nft.supply;
-
-
+ 
             initialLayerToChooseFrom[category][layerNumber].supply = supply;
             initialLayerToChooseFrom[category][layerNumber].tokenID = nft.metadata.id ;
-            
-
-
-           // initialLayerToChooseFromV2.push()
-
-
-
-            ownedNftData.forEach((ownedNFT) => {
-
-             
-              /*
-               if (ownedNFT.metadata.id === nft.metadata.id ){
-                console.log( "ownedNFT.metadata.id  ", ownedNFT.metadata.id  );
-              //  initialLayerToChooseFrom[category][layerNumber].owning =
-              initialLayerToChooseFrom[
-                nft.metadata.attributes[0].trait_type // category
-                ][
-                  nft.metadata.attributes[0].value// layerNumber
-                ].owning =
-
-                ownedNFT.quantityOwned;
-                
-                ownerLayerFound++;
-               }*/
-
-            });
-
-            
-      
-           // console.log(">>>>   initialLayerToChooseFrom[category][layerNumber].supply" , 
-         //     initialLayerToChooseFrom[category][layerNumber].supply);
-         
+          
   };
-   //);
-   
-
-
-
-
-   for ( let i = 0 ; i < ownedNftData.length; i++  ){ 
-    // NFTdata.forEach((nft) => {
-  
-        const ownedNFT  =  ownedNftData[i];
-  //ownedNftData.forEach((ownedNFT) => {
- 
-     // console.log( "ownedNFT.metadata.id  ", ownedNFT.metadata.id  );
-     if  (    !ownedNFT.metadata.attributes  ){
-
-      console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  ");
-      continue;
-  }
-     // console.log( " ownedNFT.attributes[0]  ",  ownedNFT.attributes[0]  );
-     const meta = ownedNFT.metadata.attributes[0];
-     initialLayerToChooseFrom[ meta.trait_type][meta.value].owning = ownedNFT.quantityOwned;
-      
-       
-      ownerLayerFound++;
     
+  //ownedNftData will be NULL is address is not conencted, so [meta.value].owning will keep initial value of 0
+  if (ownedNftData ){
+    for ( let i = 0 ; i < ownedNftData.length; i++  ){ 
+
+     const ownedNFT =ownedNftData[i];
+      if  ( !ownedNFT.metadata.attributes ){  console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  "); continue;  }
      
-  };
- // );
-
-
-  /*
-   console.log("DDDDDD  >>>> NFT   >>>>>   initialLayerToChooseFrom" ,  initialLayerToChooseFrom);
-   console.log( "DDDDDD   >>>>    ownedNftData" ,
-     ownedNftData , "ownerLayerFound   = " + ownerLayerFound  );
- */
-
-
+      const meta = ownedNFT.metadata.attributes[0];
+      initialLayerToChooseFrom[ meta.trait_type][meta.value].owning = ownedNFT.quantityOwned;
+       
+      };
+  } 
+  
 //=====================================================================================
-    
-/*
-    for (const category of categories) {
-     // initialLayerToChooseFrom[category] = [...baseObject];
-     // use  the follow to create a DEEp copy of base object so they are independant copies
-      initialLayerToChooseFrom[category] = JSON.parse(JSON.stringify(baseObject));
-
-      let layerIndex=0; // create a zero useless layer.. so layer 1 is index 1 
-      for (const layer of initialLayerToChooseFrom[category] ) {
-
-             
-          //   layer.supply =  allSupply[0].layers[category][layerIndex] ; 
-                
-                layerIndex++;
-      }
-    }
-    */
-  //console.log(">>>>>>>>>   initialLayerToChooseFrom" ,  initialLayerToChooseFrom);
-
-
+ 
     return initialLayerToChooseFrom;
 
 }

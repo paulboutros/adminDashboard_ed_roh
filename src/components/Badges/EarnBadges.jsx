@@ -6,15 +6,13 @@ import { useTheme } from "@emotion/react";
 import { useAddress } from "@thirdweb-dev/react";
 import { useUserContext } from "../../context/UserContext.js";
 import { useDebugModeContext } from "../../context/DebugModeContext.js";
-import {  getAvatar, openOAuth2Url_whenUserNotConnected, setWallet ,
-  setRewardStatusAndaddDist  } from "../../data/API.js";
-import { Divider,  Avatar, Box, Button, Tooltip, Typography } from "@mui/material";
-import AccountMenu from "../AccountMenuCustom.jsx";
-import SpeedDialTooltipOpen from "../SpeedDialTooltipOpen.jsx";
+import {  getAvatar, openOAuth2Url_whenUserNotConnected, setWallet    } from "../../data/API.js";
+  
+import {   Avatar, Box, Button,  Typography } from "@mui/material";
+ import SpeedDialTooltipOpen from "../SpeedDialTooltipOpen.jsx";
 import { HorizontalSpace, VerticalSpace } from "../Layout.jsx";
 import { addressShortened } from "../../utils.js";
-import ToDoList from "../List/ToDoList.jsx";
-import FaceIcon from '@mui/icons-material/Face';
+ import FaceIcon from '@mui/icons-material/Face';
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { PopupLinkWalletDiscord } from "../popup.jsx";
@@ -23,17 +21,13 @@ import { PopupLinkWalletDiscord } from "../popup.jsx";
 import CancelIcon from '@mui/icons-material/Cancel';
   
 
-import { BiCoin } from "react-icons/bi";
-import { BiCoinStack } from "react-icons/bi";
-
-import { BiLogoDiscordAlt } from "react-icons/bi";
-import { FaDiscord } from "react-icons/fa";
+ 
 import { TbExternalLink } from "react-icons/tb";
 import { PopRewardDiscordInviteContent, PopTaskStatusLoginContent, PopWuRewardFomInviteStakingContent } from "../TooltipContent/content.jsx";
 import { useDISTContext } from "../../context/DISTstakingContext.js";
 
 
-const first_space =1;
+const first_space =5;
 const space_after_avatar =7;  //10
 const space_after_task  = 7;
 const space_after_taskStatus =7;
@@ -71,6 +65,9 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
       <>   
       {/* display blue dashed line, empty badge to make reward badge unavalable due to user being identified */}
        { ( (!user || !address) && rewardIndex > 0) ? (
+
+ 
+
          <Box  sx={{ 
            borderRadius: 4,
         //  backgroundColor: colors.primary[400]
@@ -88,7 +85,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
          }}>
             
 
-            <HorizontalSpace space={first_space}/>
+            <HorizontalSpace space={5}/>
 
             <BootstrapTooltip  title="Connection to Discord is required">
              
@@ -114,15 +111,12 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
          
         }}>
          
-   
-          <AccountMenu/>
+         <HorizontalSpace space={first_space}/>
+        {/* <AccountMenu/> */}
             <Box sx={{ position: 'relative',  width: infoHeight, height: infoHeight, }} >
-        
-         
-       
-       <Box width={"200px"} >
+           <Box width={"200px"} >
 
-        { useAvatar &&(
+          { useAvatar &&(
           <>
            <Avatar 
   
@@ -141,7 +135,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
        <SpeedDialTooltipOpen  textToCopy={  user?.ID  } />
  
        </>
-         )
+          )
       }
 
       </Box>    

@@ -5,13 +5,11 @@ import {useEffect, useState} from "react";
 import { Box , Typography, useTheme } from "@mui/material";
 import { DataGrid  } from "@mui/x-data-grid";
 import { text1, tokens, DataGridStyle } from "../../theme";
-import  { addressShortened } from "../../utils.js"
-import DataGridHeader from "../DataGridHeader.jsx"
+ import DataGridHeader from "../DataGridHeader.jsx"
 
-import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
-    useMinimumNextBid, useValidDirectListings,
-     useValidEnglishAuctions , useMakeBid,
-     useContractEvents, useNFTs, useNFT
+import {   useContract,
+    
+     useContractEvents 
     
    } from "@thirdweb-dev/react";    
 import { 

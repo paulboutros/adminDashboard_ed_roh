@@ -3,7 +3,7 @@
   //web3
 import {   ethers } from "ethers";
 import {darkTheme, lightTheme, ConnectWallet } from "@thirdweb-dev/react";
-import { useContract, useNFTs, useContractRead, useAddress } from "@thirdweb-dev/react";
+import { useContract, useContractRead, useAddress } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS , REWARDS_ADDRESS, PACK_ADDRESS } from "../../const/addresses";
 import { Link } from "react-router-dom";
 

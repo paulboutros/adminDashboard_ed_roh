@@ -3,14 +3,14 @@ import Container from "../../components/Container/Container";
  
  
 import RewardToken from '../../components/RewardToken';
-import { Grid, Paper, Box, Typography } from '@mui/material';
+import { Grid, Box,  } from '@mui/material';
 import  Stake from '../../components/StakeInterface/Stake';
 import { tokens ,basicRoundedBox1 } from '../../theme';
 import { useTheme } from '@emotion/react';
 
- import { Discord_invite_stake_token,REWARDS_ADDRESS , Discord_tokenLess_stakinContract } from "../../const/addresses";
+ import { Discord_invite_stake_token,REWARDS_ADDRESS   } from "../../const/addresses";
 import { useAddress } from "@thirdweb-dev/react";
-import { VerticalSpace, VerticalStackAlignCenter , VerticalStackAlignCenterTest} from "../../components/Layout";
+import { VerticalSpace, } from "../../components/Layout";
 
 export default function RewardTokenTab() {
   const theme = useTheme();
@@ -23,8 +23,7 @@ export default function RewardTokenTab() {
  
 
          <Container maxWidth="lg">   
-                       
-           <Grid container spacing={4}>
+            <Grid container spacing={4}>
               <Grid item xs={12} sm={6}>
                  <Box sx={   basicRoundedBox1(address ,theme ) } >
                  <RewardToken Token_address={Discord_invite_stake_token} />
@@ -46,7 +45,7 @@ export default function RewardTokenTab() {
          
 
          </Container>
-      </>    //BasicScrollable
+      </>    
     )
 }
 

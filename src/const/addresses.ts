@@ -27,8 +27,8 @@ export const Discord_invite_stake_token = "0x87b875631cA5f598A7e2a7a90bebA2e5B69
 
   export const CUSTOM_PACK_ADDRESS = "0xd7c375463B1dE832fd8ff0Beffb9226a1fA189A3";//"0x4ef994c848c0075301fF010413Ee9AEb0328F2A2";
    
-  export const PACK_ADDRESS=// "0xd7c375463B1dE832fd8ff0Beffb9226a1fA189A3";
-    "0xf1A1ad04f82C97243DfC98104649fA70449f85F9";// this address was the Thirdweb pack
+  export const PACK_ADDRESS=  "0xd7c375463B1dE832fd8ff0Beffb9226a1fA189A3";
+   // "0xf1A1ad04f82C97243DfC98104649fA70449f85F9";// this address was the Thirdweb pack
 
  export const DROP_ADDRESS = "0x4cD80F954357613E8cd0063410d60083CF3DCdfD"; 
 

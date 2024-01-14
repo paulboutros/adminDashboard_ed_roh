@@ -16,6 +16,7 @@ import {
 import { BasicScrollable } from "../../components/Layout";
 import { Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
+import ConnectWalletPage from "../../components/ConnectWalletPage";
 
    
   export default function Sell() {
@@ -39,12 +40,19 @@ import { tokens } from "../../theme";
   
   
     return (
-    <BasicScrollable>
-      <Container maxWidth="lg">
-         <Typography sx={ theme.title }  > Sell NFTs </Typography>
+      <React.Fragment>
+         {!address ? (
+              
+                
+               <ConnectWalletPage/>
+              
+        ):(
+           <BasicScrollable>
+                  <Container maxWidth="lg">
+              <Typography sx={ theme.title }  > Sell NFTs </Typography>
         { !selectedNft ? (
           <>
-            {/* sx={{ margin:"16px 0 16px 0" }}   */}
+            
             <Typography sx={ theme.titleDescription }  >Select which NFT you&rsquo;d like to sell below.</Typography>
              <NFTGrid
  
@@ -93,8 +101,11 @@ import { tokens } from "../../theme";
             </div>
           </div>
         )}
-      </Container>
-      </BasicScrollable>
+                  </Container>
+           </BasicScrollable>
+      )}
+     </React.Fragment>
+
     );
   }
   

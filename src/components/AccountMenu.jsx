@@ -72,7 +72,22 @@ const theme = useTheme();
 };
 
 
- const openProfilePage =() =>{   handleClose(); navigate( `/profileWallet/${address}` )  };
+ const openProfilePage =() =>{ 
+  
+  handleClose(); 
+  //navigate( `/profileWallet/${address}` )  
+
+  if ( address ){ 
+
+    navigate( `/profileWallet/${address}` )
+  }else{
+   navigate( `/profileWallet/1` )
+
+  }
+
+
+
+};
    
  
  const DiscordLogin =() =>{
@@ -154,13 +169,13 @@ const theme = useTheme();
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
 
-        {address && (   
+         {/* {address && (    */}
            <MenuItem onClick={openProfilePage}>
            <Avatar/>  Profile 
                
           
          </MenuItem>
-         )}
+         {/* )} */}
 
 
       {/*Owner 1 0x75 is also signed of transaction, which is a problem when testing transaction
@@ -179,9 +194,14 @@ const theme = useTheme();
           {!user ? (  "Discord Login"):(  "Discord Logout" )}
            
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
+
+
+        {/* 
+        <MenuItem onClick={handleClose}>   <Avatar /> My account
+         
         </MenuItem>
+
+
         <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
@@ -200,7 +220,10 @@ const theme = useTheme();
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
-        </MenuItem>
+        </MenuItem> 
+        */}
+
+
       </Menu>
     </React.Fragment>
   );

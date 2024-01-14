@@ -285,14 +285,22 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
       
      [`& .${tooltipClasses.arrow}`]: {
       color:  tokens(theme.palette.mode).primary[600],
+      // border: '1px solid  rgba(150, 150, 150, 0.2)',
+      "&:before": {
+        border: '1px solid  rgba(150, 150, 150, 0.2)',
+      },
      },
     [`& .${tooltipClasses.tooltip}`]: {
+
+      
       backgroundColor: tokens(theme.palette.mode).primary[600],
   
        color:   tokens(theme.palette.mode).grey[300],  
       fontSize: 14,
       fontWeight: 400,
       padding: theme.spacing(1.3), // Adjust the padding as needed
+
+      border: '1px solid  rgba(150, 150, 150, 0.2)',
     },
   }));
 

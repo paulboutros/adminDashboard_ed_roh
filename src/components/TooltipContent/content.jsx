@@ -8,8 +8,7 @@ import  React,{ useEffect, useState } from "react";
 import { BiCoin } from "react-icons/bi";
 import { BiCoinStack } from "react-icons/bi";
 
-import { BiLogoDiscordAlt } from "react-icons/bi";
-import { FaDiscord } from "react-icons/fa";
+ import { FaDiscord } from "react-icons/fa";
 import { TbExternalLink } from "react-icons/tb";
 import { useTheme } from "@emotion/react";
 import { useUserContext } from "../../context/UserContext";

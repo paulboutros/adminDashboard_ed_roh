@@ -41,11 +41,14 @@ const NFTListed =  ({ propContractAddress, propTokenId,
 
         let nftResult;
 
-        // BE very careful, when using NFT (predifined) as it will not ne up to date data.
-        /* for example, make sure you reload NFT if you switch contract layer to Pack for example
+        // BE very careful, when using NFT (predifined) as it will not be up to date data.
+        /* for example, make sure you reload NFT if you switch contract LAYER nft > to > Pack nft  for example
         
+        for example when we had 5 packs, then switching contract to layer NFT, it  would only show 5 layers
+         so if a confusion happens again, watch around here...
         */
          if (!NFT){
+           console.log( " this should not  be loading  tokenId = " ,  tokenId);
             const sdk = getSDK_fromPrivateKey(); 
             const contract = await sdk.getContract(NFT_CONTRACT);
             nftResult = await contract.erc1155.get(tokenId);

@@ -14,29 +14,26 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-import { allCSS, infoHeight, tokens, BootstrapTooltip } from "../../theme";
-import {Box, Chip, useTheme} from '@mui/material';
+import {  tokens  } from "../../theme";
+import {Box, useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
-import {  HorizontalSpace, VerticalSpace } from '../../components/Layout';
+import {  VerticalSpace } from '../../components/Layout';
 
- 
+
 
 
 //==============================================================
- 
-//=============================================================
-
+  
 import {
-   
+  
+ 
   useAddress,
-  useConnectionStatus,
-   metamaskWallet,
    useContract
 } from "@thirdweb-dev/react";
 import MyPacks from '../myPacks/index';
  
 
- import { getSDK_fromPrivateKey, setUserTask   } from '../../data/API';
+ import {  setUserTask   } from '../../data/API';
  import { useParams } from 'react-router';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
 
@@ -44,7 +41,7 @@ import RewardTokenTab from '../RewardTokenTab/index.jsx';
 import { EarnBadges,
    TaskForReward,TaskForRewardLabel,
      TaskStatus,TaskStatusLabel,
-     RewardInfo,RewardInfoLabel, RewardValue, WURewardInfoLabel, ClaimButton
+     RewardInfo,RewardInfoLabel, RewardValue, WURewardInfoLabel 
     } from '../../components/Badges/EarnBadges';
 
 import   { TaskForReward2, TaskStatus2 } from '../../components/Badges/AppLinkDataBox.jsx';
@@ -55,16 +52,15 @@ import { useUserContext } from '../../context/UserContext';
 import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
 import { taskBadge } from '../../const/various.js';
 import { CustWeb3Button } from '../../components/Buttons/buttons.jsx';
-import { useNotificationContext } from '../../context/NotificationContext.js';
-import { ethers } from 'ethers';
-import { PopRewardDiscordInviteContent,
-   PopRewardServerMemberContent,
-   PopRewardInfoLoginContent
+ import { PopRewardDiscordInviteContent,
+   PopRewardServerMemberContent 
+   
   
   
   } from '../../components/TooltipContent/content.jsx';
 import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
 import { useDISTContext } from '../../context/DISTstakingContext.js';
+ 
 
 
 function CustomTabPanel(props) {
@@ -102,18 +98,24 @@ function a11yProps(index) {
 
 // horizontal space between  elements of the badges
   const sp = [20];
+
+  export const myPacksIdx = 0;
+  export const referralRewardTabIndex =1;
+
 export default function BasicTabs() {
+ 
+ 
+  const tabInfo = [
+     {name: "My Packs",        index:0},
+     {name: "Referal Reward",  index:1},
+     {name: "Token",           index:2}
+     
+  ]
 
-
-   
-
+  const address = useAddress();
   const {user  } = useUserContext();
   const {distStakedAmount,   distReward  } = useDISTContext();
-        
-   
-   //const [DISTstakedAmount      , setDISTAmount] = useState( 0 );
-   //const [DISTReward, setDISTReward] = useState( 0 );
-
+     
 
      const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -140,43 +142,7 @@ export default function BasicTabs() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
- 
-/*
-    useEffect(()=>{
-       
-      if (  loading_dist_tokenLess ) return;
-      const fetchData = async ( ) => {
-
-         // the following data is not related to the staker, they are general info about the contract
-         // therefore, they need to be loaded ONLY ONCE  (unlike getStakeInfo for example)
-          const ratioInfo = await dist_tokenLessContract.call("getRewardRatio_Over");
-          const timeUnit = await dist_tokenLessContract.call("getTimeUnit_Over");
-          
-         
-          // so let us consider this to be the initial balance only  
-          const Initialbalance = await dist_tokenLessContract.call("TEST_getBalance");
-         // console.log( "PPPPPPP   balance   " , Initialbalance );
-
-         const  InitialbalanceRes  = (+ethers.utils.formatEther(  Initialbalance._hex     )).toFixed(1);
-          const generalInfo ={
-            _denominator: parseInt(  ratioInfo._denominator._hex , 16),
-            _numerator: parseInt(  ratioInfo._numerator._hex , 16),
-             timeUnit: parseInt(  timeUnit._hex , 16),
-             initialBalance:  InitialbalanceRes
-
-          }
-          console.log( ">>>      generalInfo   " , generalInfo );
-
-
-          addDataToUser(DISTStakeInfoGeneral , generalInfo );
-          
- 
-       }
-      fetchData();
-   
-    }, [    loading_dist_tokenLess   ]);
- */
-   
+  
    useEffect(()=>{
     if (!user)return;
     const fetchData = async ( ) => {
@@ -192,29 +158,34 @@ export default function BasicTabs() {
     //<Box sx={{ width: '100%' }}>
     < >
      <Container maxWidth="lg">   
+
+                      
         <Box >
              {/*sx={{ borderBottom: 1, borderColor: 'divider' }} */}
 
          <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example" sx={theme.tabsStyle}>
                        
-           <Tab label="My NFTs"   {...a11yProps(0)}  disableRipple  sx={  theme.tabStyle }   />
-           <Tab label="My Packs"  {...a11yProps(1)}  disableRipple  sx={  theme.tabStyle }   />
-
-           <Tab label="Referal Reward"   {...a11yProps(2)}  disableRipple  sx={ theme.tabStyle }   />
-           <Tab label="Token"     {...a11yProps(3)}  disableRipple  sx={ theme.tabStyle }   />  
-
+            {/* <Tab label="My NFTs"   {...a11yProps(0)}  disableRipple  sx={  theme.tabStyle }   /> */}
+           <Tab label= { tabInfo[0].name }     {...a11yProps(   tabInfo[0].index   )}  disableRipple  sx={  theme.tabStyle }   />  
+           <Tab label= { tabInfo[1].name }     {...a11yProps(   tabInfo[1].index   )}  disableRipple  sx={ theme.tabStyle }    />
+           {/* <Tab label= { tabInfo[2].name }     {...a11yProps(   tabInfo[2].index   )}  disableRipple  sx={ theme.tabStyle }    />   */}
+ 
         </Tabs>
          
       </Box>
-      <CustomTabPanel value={value} index={0}> 
-         Item One
-      </CustomTabPanel>
-       
-      <CustomTabPanel value={value} index={1}>
+      {/* <CustomTabPanel value={value} index={0}>  Item One  </CustomTabPanel> */}
+      
+     
+       <CustomTabPanel value={value} index={tabInfo[0].index}>
+        {
+         
           <MyPacks/>  
+           
+        }
       </CustomTabPanel>
-
-      <CustomTabPanel value={value} index={2}>
+      
+    
+      <CustomTabPanel value={value} index={tabInfo[1].index}>
        
 
        {/*   TO DO, add a server join reward status (show if user is a member of not)
@@ -286,16 +257,14 @@ export default function BasicTabs() {
                           >
                             Claim
                         </CustWeb3Button>
-                         
-                        
-                        
+                      
                         }
                         
                         />
  
 
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
+      <CustomTabPanel value={value} index={ tabInfo[2].index }>
        
        
        <RewardTokenTab/>
@@ -313,4 +282,4 @@ export default function BasicTabs() {
   );
 }
 
- 
+

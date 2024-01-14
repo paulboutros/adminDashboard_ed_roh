@@ -188,21 +188,7 @@ const address = useAddress();
                Burn to claim
               </Web3Button>   
            
-          
-{/*             
-             <Button variant="contained"
-              onClick={() => ERC20claim( filteredImages ,  address  )}  
-              
-             >
-               CLAIM Your Reward !
-             </Button>   */}
-
-
-
-
-
-
-
+           
 
                         
               </Box>
