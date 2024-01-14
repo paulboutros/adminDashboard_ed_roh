@@ -180,6 +180,7 @@ const theme = useTheme();
 
       {/*Owner 1 0x75 is also signed of transaction, which is a problem when testing transaction
       as it send the funds to it self . OWNER2 is never use as signer so this is a more realistic test   */}
+      
          {(address && address === OWNER2) && (   
 
          <MenuItem onClick={ switchDebugMode }>
