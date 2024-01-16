@@ -23,9 +23,13 @@ export function DebugModeProvider({ children }) {
 
       const fetch_debugMode = async () => {
           try {
-            const response = await globalData();
+ 
+              
+             
+
+           // const response = await globalData();
             
-            setDebugMode(response[0].debugMode);
+            setDebugMode( user.debugMode );
           } catch (error) {
            
             console.error('Error fetching appLink data:', error);

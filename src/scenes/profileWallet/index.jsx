@@ -10,7 +10,7 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 
 //import * as React from 'react';
-import PropTypes from 'prop-types';
+
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
@@ -60,8 +60,9 @@ import { CustWeb3Button } from '../../components/Buttons/buttons.jsx';
   } from '../../components/TooltipContent/content.jsx';
 import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
 import { useDISTContext } from '../../context/DISTstakingContext.js';
+import { CustomTabPanel, a11yProps } from '../../components/TabSubcomponent.jsx';
  
-
+/*
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -75,9 +76,9 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        // <Box sx={{ p: 3 }}>
+        
           <>{children}</>
-        // </Box>
+        
       )}
     </div>
   );
@@ -95,6 +96,8 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
+
+*/
 
 // horizontal space between  elements of the badges
   const sp = [20];

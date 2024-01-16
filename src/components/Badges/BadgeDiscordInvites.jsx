@@ -279,27 +279,15 @@ const mockreferred=
      });
       
      setTasks(referredUsers);
-    
-   //  console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
-
+   
   };
 
     const { discordInvite ,  setdiscordInviteLoaded } =  useDiscordInviteContext();
    const { user, setUser } = useUserContext();
    
-const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-//const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-
-
-const GetReferralCodeData = async () => {
   
- // if (!user){return;}
-   
-    //setReferralCode(discordInvite);
 
-
-};  
-
+ 
 
 useEffect(  ()=> {
  
@@ -309,14 +297,7 @@ useEffect(  ()=> {
  
 }  , [ discordInvite  ]);
 
-useEffect( ()=>{
-   
-  
-       GetReferralCodeData();
  
-
-}, [ discordInvite  ]);
-
  
  
   const theme = useTheme();
@@ -435,17 +416,9 @@ return  (`To DO ${task} / 2`)   ;
    const { user, setUser } = useUserContext();
    
 const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-//const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
+ 
 
-
-const GetReferralCodeData = async () => {
-  
- // if (!user){return;}
-   
-    //setReferralCode(discordInvite);
-
-
-};  
+ 
 
 
 useEffect(  ()=> {
@@ -459,7 +432,7 @@ useEffect(  ()=> {
 useEffect( ()=>{
    
   
-       GetReferralCodeData();
+     
  
 
 }, [ discordInvite  ]);

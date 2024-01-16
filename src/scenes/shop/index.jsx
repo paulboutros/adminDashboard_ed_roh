@@ -8,7 +8,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
- 
+ import {a11yProps} from   '../../components/TabSubcomponent.jsx';
 
 
 import Skeleton from "../../components/Skeleton/Skeleton";
@@ -51,6 +51,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   ];
 
 
+  /*
   function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
   
@@ -76,23 +77,19 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
   };
+  */
+
   
-  function a11yProps(index) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
  
 // display mode, list for shop page, grid for composePage (more simple display)
  export default function Shop( {itemType} ) {
    
   
-  // itemType == "nfts" ot "packs"
+  
   let displayData={
       title: "Buy NFTs",
       description:"Browse which NFTs are available from the collection.",
-     // initialActiveTab:"listings",
+      
       initialState:0,
       tabsNames : ["nfts", "listings","auctions"],
    }
@@ -100,14 +97,14 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
     displayData={
       title: "Buy Packs",
       description:"Each packs contains 5 randomly picked Nfts.",
-     // initialActiveTab:"listings",
+      
       initialState:0,
       tabsNames : [ "listings","auctions"],
      }
 
   }
 
-   
+  const [tab, setTab] = useState(   displayData.tabsNames[  displayData.initialState ] );   
   const [value, setValue] = React.useState(displayData.initialState);
 
   const handleChange = (event, newValue) => {
@@ -116,14 +113,12 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
        
       setTab( displayData.tabsNames[newValue]    )
   };
-
-
+ 
 
   let { directListings, auctionListing, allNFTsWithListing, 
     loadingDirectListings, loadingAuction, NFT_CONTRACT  } = useAllListingsContext();
   const { contract } = useContract(NFT_CONTRACT);
-
-
+ 
 
   useEffect(()=>{
      
@@ -136,7 +131,6 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
 
  const address = useAddress();  
- const [tab, setTab] = useState(   displayData.tabsNames[  displayData.initialState ] ); //<"nfts" | "listings" | "auctions"> (type script)
 
  
   
@@ -198,18 +192,14 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
           
           
           <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: "20px" }}>
-
-          <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example" sx={theme.tabsStyle}>
-            
-          
-              {
+             <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example" sx={theme.tabsStyle}>
+               {
                 displayData.tabsNames.map((tabName, index ) => (
                   <Tab key={index} label= {tabName}   {...a11yProps(index)}  disableRipple  sx={theme.tabStyle}   />
                 ))
               }
-   
-            
            </Tabs>
+
 
          </Box>
   
@@ -221,10 +211,8 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
             ) : tab !== "nfts" || (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
               <p></p>
             ) : (
-
-               
-              // we shoudl pass the NFTdata context here
-                  <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
+ 
+                   <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
                  
             
             )}

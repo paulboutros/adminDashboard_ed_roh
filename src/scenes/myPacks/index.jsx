@@ -11,16 +11,19 @@ import Container from "../../components/Container/Container";
 import { OWNER, PACK_ADDRESS, TOOLS_ADDRESS } from '../../const/addresses';
 import React, { useState, useEffect } from 'react';
 //import { PackRewards } from '@thirdweb-dev/sdk/dist/declarations/src/evm/schema';
- import { useTheme, Box, Typography, Button } from "@mui/material";
-import { allCSS, tokens } from "../../theme";
-
+ import { useTheme, Box, Typography, Button, Tabs,Tab } from "@mui/material";
+import { BootstrapTooltip, allCSS, tokens } from "../../theme";
+ 
 
 import {   ConnectWalletPage  } from '../../components/ConnectWalletPage.jsx';
  
-import {   RowChildrenAlignLeft } from '../../components/Layout';
+import {   BasicScrollable, RowChildrenAlignLeft } from '../../components/Layout';
 import NFTListed from '../../components/FARMER/NFTlisted';
-import { getSDK_fromPrivateKey, openPackServer } from '../../data/API';
+import { getOpenedPack, getSDK_fromPrivateKey, openPackServer } from '../../data/API';
 import { useDebugModeContext } from '../../context/DebugModeContext';
+import { CustomTabPanel, a11yProps } from '../../components/TabSubcomponent.jsx';
+import { useUserContext } from '../../context/UserContext.js';
+ 
  
 export default function MyPacks() {
 
@@ -28,22 +31,54 @@ export default function MyPacks() {
     return (
          
        <> 
+
+   <BasicScrollable>
        {!address ? (
-          // <ComponentB />
-          // <FadeTransition/>
-            // <MyPackPageSimulation/>
+         
              <ConnectWalletPage/>
             
        ):(
           <MyPackPage/>
           
        )}
+
+    </BasicScrollable>
        </>     
     )
 }
 
 function MyPackPage(){
  
+
+
+  const {user } = useUserContext();
+  
+  const tabInfo = [
+    {name: "unopened",        index:0},
+    {name: "opened",  index:1},
+     
+    
+ ]
+  let displayData={
+    title: "Buy NFTs",
+    description:"Browse which NFTs are available from the collection.",
+    
+    initialState:0,
+    tabsNames : ["unopened", "opened"],
+ }
+
+ const [tab, setTab] = useState(   displayData.tabsNames[  displayData.initialState ] );   
+ const [value, setValue] = React.useState(displayData.initialState);
+
+ const handleChange = (event, newValue) => {
+  setValue(newValue);
+
+  
+ setTab( displayData.tabsNames[newValue]    )
+};
+
+
+   
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -100,7 +135,7 @@ function MyPackPage(){
       if (useRealData){ 
           cardRewards = await contract?.open(parseInt(packId), 1); // do not use this 
       }else{
-     const packResult = await openPackServer( address );
+     const packResult = await openPackServer( address, user.ID);
      const erc1155Rewards =[];
 
       packResult.forEach(element => {
@@ -149,14 +184,9 @@ function MyPackPage(){
     <> 
     <Container maxWidth="lg">    
     <RowChildrenAlignLeft>
-  <Typography sx={ theme.title }> My Packs </Typography>
-  <div style={ {
-                                  margin: 0,
-                                  position: 'relative',
-                                  // top: '50%',
-                                  transform: 'translateY(95%)',
-                              }} >  
-   
+   <Typography sx={ theme.title }> My Packs </Typography>
+                   <div style={ {  margin: 0, position: 'relative', transform: 'translateY(95%)'  }} >
+             
               
                { debugMode  && (
                   <>
@@ -175,41 +205,60 @@ function MyPackPage(){
        </div>
  </RowChildrenAlignLeft>
 
-  <Typography sx={ theme.titleDescription }> Open your pack to reveal the NFT layers.</Typography>
+  {/* <Typography sx={ theme.titleDescription }> Open your pack to reveal the NFT layers.</Typography> */}
     
-   <Box sx={{ borderBottom: 1, borderColor:  colors.grey[600] , margin: "40px 0px 20px 0px" }}/>
-
-   {/* pack is not open here, or reward is not defined */}
-     {!rewardNFTs  && (
-           <div className={styles.grid}>
-
-            <DisplayPack isLoading={isLoading}  packData={packData}   theme={theme}   openPack ={openPack} /> 
-        
-
-      </div>
-       )}
-
-
-      <div  >
-        { rewardNFTs && rewardNFTs?.length > 0 && (    
-         
-           
-          <>
-             <>  <h3>Pack Rewards:</h3>  </>
+   <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: "20px" }}>
+      <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example" sx={theme.tabsStyle}>
                
-             
-           <div>
-                {/* <div  className = {stylesBuy.nftGridContainer} > */}
-                  <SpinCardAnimation rewardNFTs={rewardNFTs} spinReady={spinReady} />
-                {/* </div> */}
+      {/* <BootstrapTooltip   title="Open your pack to reveal the NFT layers."  placement="top">   */}
+            
+                <Tab label= { tabInfo[0].name }     {...a11yProps(   tabInfo[0].index   )}  disableRipple  sx={  theme.tabStyle }   />  
+      {/* </BootstrapTooltip> */}
+                <Tab label= { tabInfo[1].name }     {...a11yProps(   tabInfo[1].index   )}  disableRipple  sx={  theme.tabStyle }   />  
+               
+              
+       </Tabs>
+  </Box>
+
+    <CustomTabPanel value={value} index={tabInfo[0].index}>
+       
+   
+      {!rewardNFTs  && (
+           <div className={styles.grid}>
+           <DisplayPack isLoading={isLoading}  packData={packData}   theme={theme}   openPack ={openPack} /> 
+        </div>
+      )}
+ 
+   <div  >
+       { rewardNFTs && rewardNFTs?.length > 0 && (    
+        
+          
+         <>
+            <>  <h3>Pack Rewards:</h3>  </>
+              
+            
+          <div>
+               {/* <div  className = {stylesBuy.nftGridContainer} > */}
+                 <SpinCardAnimation rewardNFTs={rewardNFTs} spinReady={spinReady} />
+               {/* </div> */}
 
 
 
-          </div>
+         </div>
 
-          </>
-        )}
-     </div>
+         </>
+       )}
+   </div>
+   
+
+
+    </CustomTabPanel>
+      
+    <CustomTabPanel value={value} index={tabInfo[1].index}>
+       <MyPackPageSimulation/> 
+    
+
+    </CustomTabPanel>
 
    </Container>
 
@@ -271,12 +320,12 @@ function SpinCardAnimation(  {rewardNFTs , spinReady  }){
   return(
         <React.Fragment>
 
-      <div className = {stylesBuy.nftGridContainer} >
+      <div className = {stylesBuy.nftGridContainer}   >
            {rewardNFTs.map((card, index) => (  
                    
 
-                   //  sx={{  height : "800px"}} 
-                   <Box key={index} > 
+                     
+                   <Box key={index}   sx={{  height : "400px"}} > 
                     
                     <div className= {`${stylesFlip.card}  ${ spinReady[index] ? stylesFlip.spin : ""}`} > 
                  
@@ -340,13 +389,32 @@ function MyPackPageSimulation(){
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+ const{user} = useUserContext();
 
 
-  //const address = useAddress();
+  
 
-  // const { contract } = useContract(PACK_ADDRESS  ); // this is no longer a pack but a regular erc1155
+  useEffect(() => {
+    
+    
+    const fetchData = async () => {
+      try {
+        // Async operations here
+        const openedPackresult = await getOpenedPack( user.ID);
 
-  //const { data, isLoading } = useOwnedNFTs(contract, address);
+        console.log( "openedPack"  ,  openedPackresult.openedPack[0]  ); 
+        openPackSimulation( 0 , openedPackresult.openedPack[0] );
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); // Call the asynchronous function
+   
+         
+        
+  }, [ ]); 
 
   const [rewardNFTs, setRewardNFTs] = useState(); // <PackRewards>
    const [spinReady, setSpinReady] = useState([false,false,false,false,false,false]); // <PackRewards>
@@ -385,27 +453,22 @@ function MyPackPageSimulation(){
      
     
 
-  async function openPackSimulation(packId) { // : string
-      let cardRewards;
-       
-      
-        const packResult = [2,10,35,43,27];
-     const erc1155Rewards =[];
+    async function openPackSimulation(packId ,  packResult ) {  
+       let cardRewards;
+      // const packResult = [2,10,35,43,27];
+       const erc1155Rewards =[];
 
       packResult.forEach(element => {
            erc1155Rewards.push(
              {  tokenId: element , contractAddress: TOOLS_ADDRESS, quantityPerReward: 1 } 
            );
-     });
+       });
      cardRewards = { erc1155Rewards };
-  
-
-
-        
+   
      //  console.log(cardRewards);
        // load all the nft first, once loaded we do the spin animation
       
-           const sdk = getSDK_fromPrivateKey(); 
+     const sdk = getSDK_fromPrivateKey(); 
            const nftContract = await sdk.getContract(TOOLS_ADDRESS);
            const reward_NFTs = [];
            for ( let i = 0; i <  cardRewards.erc1155Rewards.length; i++ )  { 
@@ -425,78 +488,28 @@ function MyPackPageSimulation(){
         // it is safer this way so spin animation starts only when NFT reward are loaded, then trigger
         // delayedLoop( true );
   }; 
-
-
-   
-
-
-   return(
-
-    <> 
-    <Container maxWidth="lg">    
-    <RowChildrenAlignLeft>
-  <Typography sx={ theme.title }> My Packs Simulation </Typography>
-  <div style={ {
-                                  margin: 0,
-                                  position: 'relative',
-                                  
-                                  transform: 'translateY(95%)',
-                              }} >  
-   
-              
-               { debugMode  && (
-                  <>
-                  <Button variant="contained" 
-                    sx={{backgroundColor: colors.redAccent[500]  }}
  
-                     onClick={() => delayedLoop( true) }  
-                  > show cards </Button>
-                  <Button variant="contained" 
-                    sx={{backgroundColor: colors.redAccent[500]  }}
- 
-                     onClick={() => delayedLoop( false) }  
-                  > hide cards </Button>
-                   </>
-               )}
-       </div>
- </RowChildrenAlignLeft>
 
-  <Typography sx={ theme.titleDescription }> Open your pack to reveal the NFT layers.</Typography>
-    
-   <Box sx={{ borderBottom: 1, borderColor:  colors.grey[600] , margin: "40px 0px 20px 0px" }}/>
-
-    
-     {!rewardNFTs  && (
+   return(  <>  
+   
+   {!rewardNFTs  && (
            <div className={styles.grid}>
-
-         <Button variant="contained"
-           onClick= {openPackSimulation} > 
-            Simulate Open Pack
-             </Button>
-           
-         
-
-         
-
-        
-            {/* <DisplayPack isLoading={isLoading}  packData={packData}   theme={theme}   openPack = {openPackSimulation} />  */}
-        
-
+ 
       </div>
        )}
-
-
+ 
       <div  >
         { rewardNFTs && rewardNFTs?.length > 0 && (    
          
            
           <>
-             <>  <h3>Pack Rewards Simulation:</h3>  </>
+             
                
              
            <div>
                 {/* <div  className = {stylesBuy.nftGridContainer} > */}
-                  <SpinCardAnimation rewardNFTs={rewardNFTs} spinReady={spinReady} />
+                  <SpinCardAnimation rewardNFTs={rewardNFTs} spinReady={spinReady} />  
+                  <p>ooooooooooooooooooooooo </p>
                 {/* </div> */}
 
 
@@ -506,35 +519,12 @@ function MyPackPageSimulation(){
           </>
         )}
      </div>
+    
+   
+   
+   </>);
 
-   </Container>
-
-    </> 
-
-
-   )
+  
 }
 
-
-const FadeTransition = () => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsVisible(false);
-    }, 4000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  return (
-
-    <div className={`fade-container ${isVisible ? 'visible' : 'hidden'}`}>
-     <Box   
-        width= "100px"   height= "100px" 
-        sx={{background: "red"}}
-       ></Box>
-  </div>
-  );
-};
  

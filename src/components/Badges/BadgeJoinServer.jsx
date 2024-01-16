@@ -121,8 +121,7 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
 
      const { user } = useUserContext();
      
-   //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-  
+   
   const [joinedServerData, setJoinedServer] = useState(); // gieaway recived but not revealed yet, and not added to layers count
 
   const getUserGuild = async ( user ) => {

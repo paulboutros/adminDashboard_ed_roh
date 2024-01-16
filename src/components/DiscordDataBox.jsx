@@ -18,13 +18,6 @@ import  CountdownTimer from "./CountdownTimer";
     const { notification , setNotification } = useNotificationContext();
     const { user }    = useUserContext();
     const { discord } = useDiscordContext();
-     
-
-  const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-  //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-  
-  const [TempGiveAway, setTempGiveAway] = useState(); // gieaway recived but not revealed yet, and not added to layers count
-
    
 
   useEffect( ()=>{

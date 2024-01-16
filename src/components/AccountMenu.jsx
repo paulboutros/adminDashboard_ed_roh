@@ -9,13 +9,9 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from      '@mui/material/MenuItem';
-import ListItemIcon from  '@mui/material/ListItemIcon';
-import Divider from       '@mui/material/Divider';
+ 
 import IconButton from    '@mui/material/IconButton';
-
-import PersonAdd  from    '@mui/icons-material/PersonAdd';
-import Settings from      '@mui/icons-material/Settings';
-import Logout from        '@mui/icons-material/Logout';
+ 
 import {   useNavigate } from 'react-router-dom';
 import { useAddress } from '@thirdweb-dev/react';
  
@@ -25,9 +21,9 @@ import { useUserContext } from '../context/UserContext';
 import { useDebugModeContext } from '../context/DebugModeContext';
 
 import { getAvatar, globalData_setDebugMode, openOAuth2Url } from '../data/API';
-import { OWNER, OWNER2 } from '../const/addresses';
+ 
 import { useTheme } from '@emotion/react';
-import { allCSS, tokens , BootstrapTooltip  } from '../theme';
+import {   tokens , BootstrapTooltip  } from '../theme';
  
 
  
@@ -64,9 +60,9 @@ const theme = useTheme();
     setAnchorEl(null);
   };
 
-  const switchDebugMode =() =>{
+  const switchDebugMode = () =>{
       
-    globalData_setDebugMode(   !debugMode, setDebugMode   );
+    globalData_setDebugMode(   !debugMode,  setDebugMode ,  user.ID   );
       //set_DebugMode(!debugMode);
      
 };
@@ -180,8 +176,8 @@ const theme = useTheme();
 
       {/*Owner 1 0x75 is also signed of transaction, which is a problem when testing transaction
       as it send the funds to it self . OWNER2 is never use as signer so this is a more realistic test   */}
-      
-         {(address && address === OWNER2) && (   
+
+         {(address && user ) && (    // && address === OWNER2 
 
          <MenuItem onClick={ switchDebugMode }>
              {debugMode ? ("Debug is:ON"):("Debug is:OFF")}    

@@ -30,8 +30,7 @@ import  CountdownTimer from "./CountdownTimer";
 
 
   const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-  //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-  
+   
   const [TempGiveAway, setTempGiveAway] = useState(); // gieaway recived but not revealed yet, and not added to layers count
 
   const GetReferralCodeData = async () => {
@@ -93,7 +92,7 @@ import  CountdownTimer from "./CountdownTimer";
         
           <>
    
-   { referralData /*&& giveAwayTiming */? (
+   { referralData  ? (
 
             <div> 
                   
@@ -228,7 +227,7 @@ import  CountdownTimer from "./CountdownTimer";
                                  CompPrevDrop ={
 
                                     <Typography variant="body2" align="center">
-                                    {/* {giveAwayTiming.lastGiveAway} */}
+                                   
                                    </Typography>
                                  }
 

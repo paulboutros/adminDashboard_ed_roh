@@ -289,11 +289,27 @@ return resultsPostJson.data;
 }
 */
 
-export async function openPackServer(  openerAddress){
+export async function getOpenedPack (   userID){
+  const dataToSend={ 
+    
+    userID: userID
+  }
+  
+ // const endpoint = `${process.env.REACT_APP_API_URL}guildMemberAdd?ID=969712435869122560`; 
+ // const endpoint = `${process.env.REACT_APP_API_URL}/emit/guildMemberAdd?modifiedInviteCode=4ymvf9xGY`; 
+const endpoint = `${process.env.REACT_APP_API_URL}getOpenedPack`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+//console.log("data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+
+}
+export async function openPackServer(  openerAddress , userID){
  
   const dataToSend={ 
-    openerAddress : openerAddress
-     
+    openerAddress : openerAddress,
+    userID: userID
   }
   
  // const endpoint = `${process.env.REACT_APP_API_URL}guildMemberAdd?ID=969712435869122560`; 
@@ -668,10 +684,13 @@ export async function  myDiscordInfo   (user_ID) {
    return resultsJson;
 } 
 
-export async function  globalData_setDebugMode   ( value , setDebugMode ) {
+export async function  globalData_setDebugMode   ( value , setDebugMode, ID ) {
   
  
- const dataToSend= { value:value };
+ const dataToSend= { 
+  value:value,
+  ID: ID
+ };
    
 
  console.log("dataToSend:" ,  dataToSend);
@@ -755,7 +774,7 @@ export async function  getData   () {
     let userType;
 
     if ( user ){
-        userID = user.ID ;
+        userID = user.ID;
         userType = "authenticated";
     }else{
       userID = "";

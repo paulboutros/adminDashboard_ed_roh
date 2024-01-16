@@ -65,13 +65,15 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
     !NFTdata ? (
       <div>alllayerimage.js NFTdata not loaded</div>
     ) : (
+
+      
+
       //  <Container maxWidth="lg">
       //<Box margin="0px 20px 20px 20px"  maxHeight="calc(85vh)"  overflow="auto"  >  
       <BasicScrollable>
         <Container  maxWidth="lg">
            <Box>
-     
-    
+           
  
          <ReferredUserComponent/>
           <ImageComposer/>  

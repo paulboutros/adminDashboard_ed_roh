@@ -46,8 +46,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
      const { user } = useUserContext();
      
   const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-  //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-  
+   
  
   const GetReferralCodeData = async () => {
     
@@ -211,8 +210,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
      const { user } = useUserContext();
      
   const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-  //const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-  
+   
  
   const GetReferralCodeData = async () => {
     
@@ -327,8 +325,7 @@ export function TaskStatus2(){
    const { user } = useUserContext();
    
 const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-//const [giveAwayTiming, setTimingInfo] = useState(); // Set rowData to Array of Objects, one Object per Row
-
+ 
 
 const GetReferralCodeData = async () => {
   
