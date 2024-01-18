@@ -210,10 +210,9 @@ import { CustWeb3Button } from "../Buttons/buttons";
                  flexDirection: 'column',
                  display: 'flex',  
                  justifyContent : "space-between",
-  
-
+ 
                  padding: "20px", margin: "10px",
-                //  height :"100%"
+                
                  height:  _boxHeight ,
                 }}  
               >

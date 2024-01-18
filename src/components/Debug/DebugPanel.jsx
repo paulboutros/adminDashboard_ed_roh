@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Typography from '@mui/material/Typography';
-import { HtmlTooltip } from "../../theme.js";
-import { Box, Button, Tooltip, useTheme } from '@mui/material';
+import { HtmlTooltip, tokens } from "../../theme.js";
+import { Box, Button, Divider, Tooltip, useTheme } from '@mui/material';
 import { useAddress } from "@thirdweb-dev/react";
 import { emit_guildMemberAdd, emit_guildMemberRemove, getSDK_fromPrivateKey, myDiscordInvite, setWallet } from '../../data/API.js';
 import { useUserContext } from '../../context/UserContext.js';
@@ -12,8 +12,11 @@ import { useDiscordInviteContext } from '../../context/DiscordInviteContext.js';
 import { useNotificationContext } from '../../context/NotificationContext.js';
 import { ethers } from 'ethers';
 import { useDISTContext } from '../../context/DISTstakingContext.js';
+import { HorizontalSpace, RowChildrenAlignLeft, VerticalSpace } from '../Layout.jsx';
+import { CgDebug } from "react-icons/cg";
 
-export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
+const _padding ="10px 0 10px 10px"
+export function DebugPanel(  { DISTstakedAmount, setDISTAmount }      ) {
 
 
   const address = useAddress();
@@ -32,7 +35,8 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
 
 
   const theme = useTheme();
- 
+  const colors = tokens(theme.palette.mode);
+
   async function disconnectWalletDiscord() {
      const nullAdress = null;
 
@@ -63,6 +67,106 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
      
   return (
     <>
+    <VerticalSpace space ={5}/> 
+     <Box  sx={{ 
+       
+                 outline:   colors.grey[400]  , 
+                 borderRadius: 2 ,
+                 backgroundColor: colors.primary[600],
+                 flexDirection: 'column',
+                 display: 'flex',  
+                 justifyContent : "space-between",
+                //  padding: "20px", margin: "10px",
+                 
+              
+              
+      }}
+     
+      > 
+         <HorizontalSpace space ={10}/> 
+        < Box  
+          sx={{ display: 'flex',  flexDirection: "column" ,
+            justifyContent :"flex-start",    color: colors.grey[400],
+           
+         }} 
+        >
+          <Box  sx={{   fontWeight:"500px" ,   padding:  _padding  ,  display: 'flex',  flexDirection: "row" ,  justifyContent :"flex-start",   }}   > 
+            {/* <CgDebug/> */}
+            <Typography > Debug Mode Buttons</Typography>
+          </Box>
+    
+         <Divider  orientation="horizontal"/> 
+          {/* <VerticalSpace space ={2}/> */}
+
+          <Box  sx={{ display: 'flex', 
+           flexDirection: "row", 
+            alignItems:"center",  
+             color: colors.grey[100] ,
+             padding:   _padding
+             
+             }}   >
+ 
+              <ButtonRow   DISTstakedAmount={DISTstakedAmount}  />
+           </Box>
+        </Box>
+  </Box>
+</>
+  );
+
+
+}
+
+function ButtonRow(  { DISTstakedAmount, setDISTAmount }   ){
+
+  const address = useAddress();
+  
+  const { discordInvite, setDiscordInvite } = useDiscordInviteContext();
+  const { debugMode } = useDebugModeContext();
+  const { user, setUser } = useUserContext();
+
+  const { distStakedAmount, distReward,  setReFetch } = useDISTContext(); 
+  const distStakedAmountRef = useRef(distStakedAmount);
+
+  useEffect(() => {
+    distStakedAmountRef.current = distStakedAmount; // Update the ref when distStakedAmount changes
+  }, [distStakedAmount]);
+
+
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  async function disconnectWalletDiscord() {
+     const nullAdress = null;
+
+   // const result = await setWallet(user, nullAdress);
+     const modifUser = { ...user, wallet: nullAdress };
+
+    setUser(modifUser);
+
+  }
+
+  // this is called repeatedly from ServerButtom intervalId
+  async function checkCondition () {
+     setReFetch(true);
+ 
+    let result = { tokenStaked: distStakedAmountRef.current  , _rewards: distReward };
+
+    console.log("distStakedAmountRef.current = ", distStakedAmountRef.current,  "tokenStakedBeforeClicking    ", DISTstakedAmount);
+
+    
+    if (distStakedAmountRef.current !== DISTstakedAmount) {
+      
+      return result; // true;
+    } else {
+      return null; //false;
+    }
+
+  }
+    
+
+     return( 
+     <React.Fragment>
       {debugMode && (
         <>
 
@@ -73,8 +177,7 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
               {"[X]"}
             </Button>
           </Tooltip>
-
-
+ 
           {/* ====================================================================================== */}
           <HtmlTooltip //open={true} 
 
@@ -100,6 +203,7 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
 
           {user?.wallet === address ? (
             <>
+              <HorizontalSpace space={2}/>
               <ServerButton
                
                 action={() => emit_guildMemberAdd(user, discordInvite?.invite)}
@@ -121,13 +225,12 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
                 
                 width="200px"
               >
-                Add Invitee
+                Add 1 Invite
               </ServerButton>
 
+              <HorizontalSpace space={2}/>
               <ServerButton
-               // user={user}
-             //   discordInvite={discordInvite}
-               
+                
                 action={() => {
                   // pick whoever is the first member pretends that is the one who leave the server
                   const mock_leavingrMember_ID = discordInvite?.acceptedUsers[0];
@@ -151,7 +254,7 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
                 checkCondition =  { checkCondition } 
                 width="200px"
               >
-                remove Invitee
+                remove 1 Invite
               </ServerButton>
             </>
           ) : (
@@ -164,14 +267,8 @@ export function DebugPanel({ DISTstakedAmount, setDISTAmount }) {
 
         </>
       )}
+   
+      </React.Fragment>
 
-
-
-    </>
-
-
-
-  );
-
-
+     )
 }

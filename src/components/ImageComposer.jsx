@@ -124,7 +124,7 @@ import { useDebugModeContext } from '../context/DebugModeContext';
     <Box margin="0 8px 20px 8px" >
    
     <div>
-       { debugMode && ( // address && address === OWNER?
+       { (debugMode && address && address === OWNER ) && ( // address && address === OWNER?
         <div><EditorButton/></div>)  }
          
  

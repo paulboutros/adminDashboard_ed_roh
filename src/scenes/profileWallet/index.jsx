@@ -265,22 +265,23 @@ export default function BasicTabs() {
                         
                         />
  
-
+          <VerticalSpace space={1}/>
+          <DebugPanel DISTstakedAmount={distStakedAmount} />
+      
       </CustomTabPanel>
       <CustomTabPanel value={value} index={ tabInfo[2].index }>
        
        
        <RewardTokenTab/>
 
-      </CustomTabPanel>
+       </CustomTabPanel>
 
 
 
      </Container>
 
-      <DebugPanel DISTstakedAmount={distStakedAmount} 
-      // setDISTAmount={setDISTAmount}
-        />
+     
+         
     </ >
   );
 }
