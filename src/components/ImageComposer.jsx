@@ -22,9 +22,10 @@ import LayerBaseInfo from "./LayerBaseInfo";
   
  import PopupButton  from "./popup"
  import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata';
-import { OWNER } from '../const/addresses';
+import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses';
 import { RoundedBox } from './Layout';
 import { useDebugModeContext } from '../context/DebugModeContext';
+import { AddressBlock } from './Badges/AddressBlock.jsx';
  
  
   const LayerSelector = (  {queryId="" }  ) => {
@@ -124,7 +125,12 @@ import { useDebugModeContext } from '../context/DebugModeContext';
     <Box margin="0 8px 20px 8px" >
    
     <div>
-       { (debugMode && address && address === OWNER ) && ( // address && address === OWNER?
+       { (debugMode && 
+         address &&
+         ( address === OWNER || address === OWNER2) 
+          
+          
+          ) && ( // address && address === OWNER?
         <div><EditorButton/></div>)  }
          
  
@@ -140,18 +146,27 @@ import { useDebugModeContext } from '../context/DebugModeContext';
           <Box margin = {"8px"} 
           
           backgroundColor = {colors.primary[400]}   
-          
-          borderRadius = {"10px"}  > 
+           borderRadius = {"10px"}  > 
     
           <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
         
-            <Box gridColumn="span 8" gridRow="span 1"   >
+            <Box gridColumn="span 8" gridRow="span 1" 
+                 style={{  display: "flex", 
+                   marginLeft :"30px",
+                  alignItems: "center",
+                  justifyContent: "flex-start" //  "center"
 
-               {/* <Box  sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%" >
-                 <Typography variant="h5"fontWeight="600" color={colors.grey[100]}>  NFT Composer </Typography>
-               </Box> */}
+                  } } 
+               
+              >
+            
+                      <AddressBlock address={ BURN_TO_CLAIM} /> 
+ 
              </Box>
+ 
+
              <Box gridColumn="span 4" gridRow="span 1"    >
+
             <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >
           
 

@@ -54,16 +54,16 @@ const Topbar = () => {
     
    const address = useAddress();
 
-  const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
-  const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
+   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
+   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
    
   
-  const OpenPage = ( route, setTab, tabName ) => {
+   const OpenPage = ( route, setTab, tabName ) => {
 
    
   
-     setTab(tabName);
-     navigate(`/${route}`); 
+   setTab(tabName);
+   navigate(`/${route}`); 
  
       
   };

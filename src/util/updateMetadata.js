@@ -3,10 +3,20 @@ import { NFT } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS,  REWARDS_ADDRESS, PACK_ADDRESS, MARKETPLACE_ADDRESS  } from "../const/addresses";
 import {CreateBundlePackWEB2, getSDK_fromPrivateKey} from "../data/API";  
 
+
+
+
+
+
+
+
+
+
+
+
 const urlBase = "https://wulibuild.s3.eu-west-3.amazonaws.com/WulirocksLayerNFTimages/"
-const imageToUpload = // "../../public/be/1.png"
- "https://coffee-doubtful-unicorn-619.mypinata.cloud/ipfs/QmVB8b68bXt5p7Jvup5qiYzrYt8JGF1XWDE9u2iV8qbrbD/4.png";
   
+
 export async function gainExp(
     nft,//: NFT,
     level,//: string,
@@ -403,31 +413,65 @@ console.log( "packs" , packs );
         const nfts = await contract.erc1155.getAll();
 
         
-        const categories =["he","sh","we","be","kn"]; 
-         
-        
-          // console.log( " >>>>>    resultNumber" + resultNumber);
-       for (let c = 0; c < 1 ; c++ ){
+       
+       // must be in same order as the NFT list
+        const categories =["sh","be","he","kn","we"];  
+        let currentDate = new Date();
+        //we just want to see the time it take upload all metadata
+        const satrtTime = currentDate.toLocaleString();
+        console.log(  ">>>>  satrtTime    =  "  , satrtTime);
+
+
+       let tokenID = 0;
+       for (let c = 0; c < categories.length ; c++ ){  // should be: categories.length
          const category = categories[c];
-         for (let i = 0; i < 4 ; i++ ){
+
+         //if you need to test or filter to certain categoties;
+        //  if ( category !== "sh"  ||  category !== "be"   ) {  continue;  } 
+       
+         for (let design = 0; design < 10 ; design++ ){ // should be:10  (layer by category) )
+
+          const nameBase =  (category + ( design + 1 ).toString().padStart(2, '0')   ) ;
+
             const metadata = {
-                  ...nfts[i].metadata,
-                  name: (category + ( i + 1 ).toString() ),
-                  image:(urlBase + category + "/" + ( i + 1 ).toString() + ".png"  ) ,
-                  description: (category + ( i + 1).toString() )  ,
+                  ...nfts[ tokenID ].metadata,
+                  name: nameBase ,
+                  image:(urlBase + category + "/" + ( design + 1 ).toString() + ".png"  ) ,
+                  description: nameBase,// (category + ( i + 1).toString() )  ,
                   attributes: [
                   {
                     trait_type:category,
-                    value: i.toString(),  
+                    value:  ( design + 1 ).toString() ,  
                   }
                  ],
              };
-             const newUri = await sdk.storage.upload(metadata);  
-             const updateNFT = await contract.call(  "setTokenURI", [ i, newUri ] );  
+
+              
+             
+
+             
+               // filters here, we avoid continue so they do not affect   of tokenID++ and design++ incrementation count
+            if ( category === "he"  ||  category === "kn"   ||  category === "we" ) {  
+
+               console.log(`category = ${category}token ID= ${ tokenID } name =${  metadata.name } description =  ${  metadata.description }`);
+               const newUri = await sdk.storage.upload(metadata);  
+              const updateNFT = await contract.call(  "setTokenURI", [ tokenID , newUri ] );  
+              console.log( `token${ tokenID } metadata =${ metadata.image }  ` );
+            }
+
+
+             tokenID++;
+            
+            
          }
         }
           
 
+
+        currentDate = new Date();
+        //we just want to see the time it take upload all metadata
+        const endTime = currentDate.toLocaleString();
+        console.log(  ">>>>  endTime    =  "  , endTime);
 
           //  const data = await sdk.storage.downloadJSON(nft.metadata.uri);
 

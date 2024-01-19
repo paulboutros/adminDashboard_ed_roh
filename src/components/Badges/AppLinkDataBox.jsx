@@ -13,7 +13,7 @@ import { copyTextToClipboard } from '../../utils';
 import { getAvatar, getManyUserData } from '../../data/API';
 import { useAppLinkContext } from '../../context/AppLinkContext';
 import { PopAppReferralContent } from '../TooltipContent/content.jsx';
-  
+
    const ReferralLinkGrid = ( {sp}  ) => {
  
     const { appLink } = useAppLinkContext();
@@ -81,15 +81,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
   
-    function linkAdressToDiscord(){
    
-   }
-   function getCompletion(){
-
-     if ( !referralData ){ return   (`ACCEPTED : ${"0"}`); }
-     
-     return  (`ACCEPTED : ${referralData.referredUser.length}`)   ;
-   }
 
 
     return (
@@ -125,17 +117,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
                    }} 
                     /> 
              </BootstrapTooltip> 
-             {/* <Chip variant="outlined" color="default" label= {"Discord connection required"}
-          
-             icon={<ErrorOutlineIcon />} sx={ {height :"30px" , borderRadius:"10px" }}/> 
-            */}
-
-    {/* <Chip
-        avatar={<Avatar alt="Natacha" src="/icon/discord-round-color-icon.jpg" />}
-        label="Avatar"
-        variant="outlined"
-      /> */}
-
+           
               
           </Box>
            
@@ -248,52 +230,24 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
     function linkAdressToDiscord(){
    
    }
-   function getCompletion(){
-
-     if ( !referralData ){ return   (`ACCEPTED : ${"0"}`); }
-     
-     return  (`ACCEPTED : ${referralData.referredUser.length}`)   ;
-   }
-
-
-
-
-
+    
 
        return(
         <>
           <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
 
-<Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
-  
-
-<Box onClick={ () => copyTextToClipboard ( referralData?.shareableLink )} > 
-
-       
-     
-       <p> <>Share link with friends 
-       <span style={{
-          marginRight: '10px',
-        fontWeight:"700px",  borderRadius:"3px", padding:"3px",
-      //  outline: `1px solid ${ colors.primary[300] }`,   
-        }}
-         >
-        { referralData?.code}</span></></p>  
-  {/* <Chip variant="outlined" color="info" size="small"  label=  { referralData?.code} icon={<FaceIcon />} /> */}
-   
- 
-
-</Box>
-
-</Box>
-</BootstrapTooltip>
-         
-        
-        </>
-
-
-
-       )
+             <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
+               <Box onClick={ () => copyTextToClipboard ( referralData?.shareableLink )} > 
+                    <p> <>Share link with friends 
+                    <span style={{ marginRight: '10px',fontWeight:"700px",  borderRadius:"3px", padding:"3px" }} >
+                    
+                     { referralData?.code}</span></></p>  
+            
+                 </Box>
+               </Box>
+          </BootstrapTooltip>
+         </>
+        )
   }
 
 export function TaskStatus2(){

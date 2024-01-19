@@ -87,6 +87,10 @@ export function AllLayersProvider({ children }) {
         // cretae basic layers available to choos efrom in the app
         const initialize = async ()=>{
              const layers  = await Create_Initial_layerToChooseFrom( NFTdata, ownedNftData );
+
+
+       
+
              setAllLayers(layers); 
         }
         initialize();
@@ -119,20 +123,14 @@ NO API call for this
 async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
   
 
-  console.log( "  Create_Initial_layerToChooseFrom   >>>>    NFTdata" ,  NFTdata   );
-  
-
-
     const initialLayerToChooseFrom = {};
-
-     
-
+ 
     const categories = ['he', 'sh', 'we', 'be', 'kn'];
     const layerCount = maxLayers;
     const baseObject = Array.from({ length: layerCount }, (_, index) => ({
       layerName: index , 
-      tokenID:0  , 
-      // fake data to make sure all layer are not sharring refference copy data
+       tokenID:0  , 
+      
       // will be overriden
       owning:0,// Math.floor(Math.random() * 11), 
       supply:0,// Math.floor(Math.random() * 11),   
@@ -140,30 +138,51 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 
     for (const category of categories) {
        // use  the follow to create a DEEp copy of base object so they are independant copies
+
+
+       
        initialLayerToChooseFrom[category] = JSON.parse(JSON.stringify(baseObject));
     }
 
 //================================================================================
+//console.log("XXX   snapshotBeforeModification: ",  initialLayerToChooseFrom );
+ const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
+  console.log("Snapshot before modification: ", snapshotBeforeModification);
+//console.log("Current state after modification: ", initialLayerToChooseFrom);
 
-  
- let ownerLayerFound = 0;
+for ( let i = 0 ; i < NFTdata.length; i++  ){ 
+ 
+  const nft  =  NFTdata[i];
+ // initialLayerToChooseFrom["sh"]["4"].supply = 150;
+     
+};
+/*
+const initialLayerToChooseFromXXX = _.cloneDeep(resultPreviousloop);
+*/
 
-  
+ 
  for ( let i = 0 ; i < NFTdata.length; i++  ){ 
  
       const nft  =  NFTdata[i];
    
-        if  ( !nft.metadata.attributes  ){console.log(  "  attribute of  :" ,  i , " is  undefined  "); continue; }
- 
- 
-             const category     = nft.metadata.attributes[0].trait_type ;
+      //  if  ( !nft.metadata.attributes  ){ console.log(  "  attribute of  :" ,  i , " is  undefined  "); continue; }
+  
             const layerNumber  = nft.metadata.attributes[0].value ;   
+            const category     = nft.metadata.attributes[0].trait_type ;
             const supply       = nft.supply;
- 
-            initialLayerToChooseFrom[category][layerNumber].supply = supply;
-            initialLayerToChooseFrom[category][layerNumber].tokenID = nft.metadata.id ;
+  
+       console.log(  "  category   :" ,   category , "  nft.metadata.attributes[0].value =     = " , layerNumber );  
+            let numberValue = parseInt(layerNumber);
+             initialLayerToChooseFrom[category][  numberValue ].supply = supply;
+             initialLayerToChooseFrom[category][  numberValue ].tokenID = nft.metadata.id ;
           
+          
+
+           
   };
+
+  const sssss = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
+  
     
   //ownedNftData will be NULL is address is not conencted, so [meta.value].owning will keep initial value of 0
   if (ownedNftData ){
@@ -177,9 +196,10 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
        
       };
   } 
-  
+   
 //=====================================================================================
- 
+console.log("AFTER  initialLayerToChooseFrom: ", 
+initialLayerToChooseFrom);
     return initialLayerToChooseFrom;
 
 }

@@ -29,7 +29,7 @@ export function DiscordInviteProvider({ children }) {
            //   setdiscordInviteLoaded(true);
           let discordInvite_response ;
            
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  context:  discordInvite:',  discordInvite);
+             
             discordInvite_response = await myDiscordInvite(user.ID);
             callInProgress = true;
          //  }

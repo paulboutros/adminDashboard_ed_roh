@@ -580,8 +580,6 @@ export const allCSS = (mode , _width, _margin,  _colors ) => {
       },
       '&:hover': {
         cursor: "pointer",
-    
-       // outline: `1px solid ${ _blueSelectedTab }`, 
         outline:  _colors ?  `1px solid ${  _colors  }`  :  `1px solid ${ _blueSelectedTab }`, 
 
 
@@ -589,19 +587,79 @@ export const allCSS = (mode , _width, _margin,  _colors ) => {
         WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
         transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
       //  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
-       filter: "brightness(1.55)", // "brightness(1.85)",
+         filter: "brightness(1.55)", // "brightness(1.85)",
       } ,
-     
- 
-
-
+      
 
 
 
      
         borderRadius: "3px",
         outline: `1px solid ${  colors.primary[400] }`  
-    },
+     },
+ 
+ 
+     
+     addressBox: { 
+      borderRadius:"4px",
+       backgroundColor :   alpha(  
+        
+        _colors ? _colors :  colors.primary[100]
+        , 0.05), //  colors.primary[500], 
+
+
+
+       width : `${_width}`,
+      // height : "30px",
+       filter: "brightness(1.15)", // "brightness(1.85)",
+         
+       display: "flex",
+       justifyContent: "center",
+       alignItems: "center",
+   
+       fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+       color:  _colors ? _colors :  colors.grey[400] ,
+      
+       '& span': {
+         color:  _colors ? _colors :colors.grey[400] ,// _blueSelectedTab,     
+         } ,
+
+       '& .MuiButtonBase-root': {
+          textTransform: 'none',
+          fontSize: "5px", // "10px",  infoBox
+          fontWeight: "400px",
+       },
+
+
+       '&:not(.hover)': { 
+           outline: `1px solid ${mode === "dark" ?
+
+            _colors ? _colors :  outline.dark : outline.light     
+           
+          
+          }`, 
+        
+         WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+         transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms" 
+         
+      },
+      '&:hover': {
+        cursor: "pointer",
+        outline:  _colors ?  `1px solid ${  _colors  }`  :  `1px solid ${ _blueSelectedTab }`, 
+
+
+      //  backgroundColor :  colors.primary[400], 
+        WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms", 
+        transition:       "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+      //  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)" 
+         filter: "brightness(1.55)", // "brightness(1.85)",
+      } ,
+        
+          outline: `1px solid ${  colors.primary[400] }`  
+     },
+
+
+
 
     nftContainer:{
      

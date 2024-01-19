@@ -344,15 +344,13 @@ const handleImageSelect = (category, obj   ) => {
 
   function CheckComBoValidity(filteredImages, user, address){
    
-    // testSDK( address );
-    console.log("popup  user " , address  );
-    console.log("CheckComBoValidity  address " , address  );
+  
     // if(!user) return;
       const missingCategories = [];
 
 for (const category in filteredImages) {
   if (filteredImages[category][0].owning === 0) {
-    console.log("Missing ", category , " info");
+    
     missingCategories.push(category);
   }
 }
