@@ -1,7 +1,11 @@
 
 
 
+import { useTheme } from "@emotion/react";
 import { Box, Typography } from "@mui/material";
+import { tokens } from "../theme";
+import {  GetfilteredImages } from "./popup";
+import { useEffect, useState } from "react";
 
  // data Model for Legenda s example
  /*
@@ -81,3 +85,80 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
 
 
   export default CustomLegend;
+
+
+
+  export function CustomLegend2 ( { legendItems, selectedImages,  orientation = 'vertical'  } ){ 
+     
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+
+
+     
+    const [ filteredImages, setFilteredImages] = useState();
+    
+    useEffect(() => {
+      if (!selectedImages )return;
+
+
+      let temp = GetfilteredImages(selectedImages);
+
+      setFilteredImages(temp);
+      
+    }, [ selectedImages ]);
+
+     return  (
+    <Box  sx={     {marginRight:"10px"} } > 
+
+
+
+      {
+      
+      filteredImages && (
+
+      Object.keys(filteredImages).map((key, index) => (
+      // {selectedImages .map((item, index) => (
+        <Box
+           key={index}
+          sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%"
+         >
+          {/* <Box sx={{ width: 15, height: 10, backgroundColor: item.color }}></Box> */}
+            
+                <Box
+                    // variant="h6"
+                    sx={{
+                      width :"150px",
+                      display: 'flex',justifyContent: 'space-between',  color: colors.grey[500]
+                     }}
+                  >
+                    <span>  {filteredImages[key][0].name}</span>
+                    <span>  [{filteredImages[key][0].tokenID}] : {filteredImages[key][0].owning}   </span>
+                     
+                  </Box>
+ 
+
+
+
+        </Box>
+      ))
+
+      )
+      
+      
+      }
+
+
+
+    </Box>
+  );
+}
+/*
+
+        const knData = selectedImages["kn"][0];
+        const heData = selectedImages["he"][0];
+        const shData = selectedImages["sh"][0];
+        const weData = selectedImages["we"][0];
+        const beData = selectedImages["be"][0];
+ */
+ 
+  

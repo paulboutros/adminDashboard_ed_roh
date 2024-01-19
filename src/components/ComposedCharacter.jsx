@@ -5,26 +5,27 @@ import {  useAddress } from '@thirdweb-dev/react'
 
 import {  Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
 
-import CustomLegend from "./Legend"
+import CustomLegend from "./Legend.jsx"
+import { CustomLegend2 } from './Legend.jsx';
  
-import {sendTracking, GetRewardPrice } from "../data/API"
+import {sendTracking, GetRewardPrice } from "../data/API.js"
 
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
  
 
-import { tokens  } from "../theme";
+import { tokens  } from "../theme.js";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
-import { useAllLayersContext } from '../context/AllLayerAvailableContext'; 
+import { useAllLayersContext } from '../context/AllLayerAvailableContext.js'; 
 
    
-import LayerBaseInfo from "./LayerBaseInfo";
+import LayerBaseInfo from "./LayerBaseInfo.jsx";
   
- import PopupButton  from "./popup"
- import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata';
-import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses';
-import { RoundedBox } from './Layout';
-import { useDebugModeContext } from '../context/DebugModeContext';
+ import PopupButton  from "./popup.jsx"
+ import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata.js';
+import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses.ts';
+import { RoundedBox } from './Layout.jsx';
+import { useDebugModeContext } from '../context/DebugModeContext.js';
 import { AddressBlock } from './Badges/AddressBlock.jsx';
  
  
@@ -54,11 +55,7 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
      
 
     const address = useAddress();
-    
-
-
-
-
+     
 
      const GetRewardPriceApp = async ( ) => {
 
@@ -113,11 +110,13 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
        if (!selectedImages) return;
        
          GetRewardPriceApp( );
-
         
-       
       }, [ selectedImages ]);
  
+
+   
+
+
 
   
     return (
@@ -160,7 +159,7 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
                
               >
             
-                      <AddressBlock address={ BURN_TO_CLAIM} /> 
+                      <AddressBlock addressArg={ BURN_TO_CLAIM} /> 
  
              </Box>
  
@@ -212,7 +211,7 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
             <Box gridColumn="span 8" gridRow="span 8" >
 
             <Box  >
-                <ImageComposer images={   selectedImages  } />  
+                <ComposedCharacter images={   selectedImages  } />  
                   
                  </Box>  
              </Box>
@@ -221,7 +220,9 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
             <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: colors.primary[200] } : {}} > </Box>
             <Box gridColumn="span 2" gridRow="span 2" style={debugModeLayout ? { backgroundColor: colors.primary[300] } : {}} > </Box>
             <Box gridColumn="span 2" gridRow="span 2"  >
-                <CustomLegend legendItems={legendItems} />
+                {/* <CustomLegend legendItems={legendItems} /> */}
+                <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
+                 
             </Box>
 
             </Box>
@@ -250,7 +251,7 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
           
 <div> 
      Click the following the layers to test combination and see prize reward associated.
-     <ImageSelector onSelectImage={setSelectedImages}  selectedImages={selectedImages}  />
+     <ImageSelector setSelectedImages={setSelectedImages}  selectedImages={selectedImages}  />
 
 </div>
     
@@ -271,7 +272,7 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
 
 
 // warning (check element on chrome to make sure it does not overlap the top-right button)
-  const ImageComposer = ({ images }) => {
+  const ComposedCharacter = ({ images }) => {
 
 
       if (!images)return null;
@@ -306,7 +307,7 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
  
 // get all layers from user, and update to add owning, and supply info for
 // also update selected image so they match the default character combination
-const ImageSelector = ({   onSelectImage, selectedImages  }) => {
+const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
  
 
      const { user } = useUserContext();
@@ -325,7 +326,7 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
       if ( allLayers.kn === null ) return;
       const indexTotal = allLayers.he.length + allLayers.sh.length + allLayers.we.length + allLayers.be.length + allLayers.kn.length;
       if (indexTotal !== 55)return; // to make sure they are all length of 11
-      onSelectImage(null);
+      setSelectedImages(null);
 
        
          // from 1 to 11
@@ -342,16 +343,17 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
       let kn_rand = Math.floor(Math.random() * 10)+1;    const kn = allLayers.kn[kn_rand];
       
       
-      onSelectImage( {
-        forearn: [{ imagePath:`layersForCharacterCompo/fa/1.png`,  layerName: 1, owning:0 }]  ,  // Example image paths
-        bo:      [{ imagePath:`layersForCharacterCompo/bo/1.png`,  layerName: 1, owning:0 }] , // Example image paths
-        kn:      [{ imagePath:`layersForCharacterCompo/kn/${kn_rand }.png`,  layerName: kn_rand, owning:kn.owning, tokenID:kn.tokenID  }] , // Example image paths
-        be:      [{ imagePath:`layersForCharacterCompo/be/${be_rand }.png`,  layerName: be_rand, owning:be.owning, tokenID:be.tokenID  }]  ,  // Example image paths
-        we:      [{ imagePath:`layersForCharacterCompo/we/${we_rand }.png`,  layerName: we_rand, owning:we.owning, tokenID:we.tokenID  }] , // Example image paths
+      setSelectedImages( {
+        forearn: [{ imagePath:`layersForCharacterCompo/fa/1.png`,  layerName: 1, owning:0 ,name:"Forearm"}]  ,  // Example image paths
+        bo:      [{ imagePath:`layersForCharacterCompo/bo/1.png`,  layerName: 1, owning:0 ,name:"Body"}] , // Example image paths
+
+        kn:      [{ imagePath:`layersForCharacterCompo/kn/${kn_rand }.png`,  layerName: kn_rand, owning:kn.owning, tokenID:kn.tokenID ,name:"knee" }] , // Example image paths
+        be:      [{ imagePath:`layersForCharacterCompo/be/${be_rand }.png`,  layerName: be_rand, owning:be.owning, tokenID:be.tokenID ,name:"Belt" }]  ,  // Example image paths
+        we:      [{ imagePath:`layersForCharacterCompo/we/${we_rand }.png`,  layerName: we_rand, owning:we.owning, tokenID:we.tokenID ,name:"Weapon" }] , // Example image paths
         
-        collar:  [{ imagePath:`layersForCharacterCompo/co/1.png`,  layerName: 1, owning:0 }] , // Example image paths
-        he:      [{ imagePath:`layersForCharacterCompo/he/${he_rand }.png`,  layerName: he_rand, owning:he.owning, tokenID:he.tokenID  }] , // Example image paths
-        sh:      [{ imagePath:`layersForCharacterCompo/sh/${sh_rand }.png`,  layerName: sh_rand, owning:sh.owning, tokenID:sh.tokenID }]   // Example image paths
+        collar:  [{ imagePath:`layersForCharacterCompo/co/1.png`,  layerName: 1, owning:0 ,name:"knee"}] , // Example image paths
+        he:      [{ imagePath:`layersForCharacterCompo/he/${he_rand }.png`,  layerName: he_rand, owning:he.owning, tokenID:he.tokenID ,name:"Head" }] , // Example image paths
+        sh:      [{ imagePath:`layersForCharacterCompo/sh/${sh_rand }.png`,  layerName: sh_rand, owning:sh.owning, tokenID:sh.tokenID ,name:"Shield"}]   // Example image paths
         
         
       }
@@ -362,7 +364,7 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
     }, [ allLayers ]);
  
 
-//onSelectImage which is SetSelected image passed by parent component
+//setSelectedImages which is SetSelected image passed by parent component
 // will update images once we click on one image fromlayer selection bowar
   const handleImageSelect = (category, obj   ) => {
 
@@ -371,7 +373,7 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
  
           
          
-         sendTracking(user , category, image, "setSelectedImages" ,  "ImageComposer " );
+         sendTracking(user , category, image, "setSelectedImages" ,  "ComposedCharacter " );
  
  
        const updatedSelectedImages = { ...selectedImages };
@@ -379,22 +381,30 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
        if (!updatedSelectedImages.hasOwnProperty(category)) {
          throw new Error(`Category '${category}' does not exist in selectedImages.`);
        }
-        // Update the value associated with the 'category' key
-       //updatedSelectedImages[category] = "layersForCharacterCompo/" + image ;//.src;
-     
-       updatedSelectedImages[category] =
-        [{ imagePath:"layersForCharacterCompo/" + image, 
-         layerName: obj.layerName,
-         tokenID: obj.tokenID,
-          owning: obj.owning 
         
-        }]
+     /*
+       updatedSelectedImages[category] =
+        [
+          { imagePath:"layersForCharacterCompo/" + image, 
+            layerName: obj.layerName,
+            tokenID: obj.tokenID,
+            owning: obj.owning, 
+            name: obj.name
+        }
+      ]
+*/
+
+        updatedSelectedImages[category] = [
+          {
+            ...updatedSelectedImages[category][0], // Shallow copy of the existing object
+            imagePath: "layersForCharacterCompo/" + image // Update the imagePath property
+          }
+        ];
+
  
-          console.log( "category" , category,    "OBJ  = ",  obj );
- 
-       console.log("onSelectImage  CATEGO  = ",  updatedSelectedImages );
-       // Set the updated state using onSelectImage
-       onSelectImage(updatedSelectedImages);
+         
+       
+         setSelectedImages(updatedSelectedImages);
    
  
      };
@@ -424,9 +434,7 @@ const ImageSelector = ({   onSelectImage, selectedImages  }) => {
  
 
         
-        {/* <Button variant="contained" color="primary" onClick={() => onSelectImage(selectedImages)}>
-          Compose
-        </Button> */}
+        
       </Box>
 
 

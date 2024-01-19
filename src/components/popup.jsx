@@ -65,7 +65,7 @@ const address = useAddress();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    sendTracking(user , "category", "image" , "Claim" ,  "imageComposer jsx")   ;
+    sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
   const [open, setOpen] = useState(false);
  
   
@@ -225,14 +225,8 @@ const address = useAddress();
 };
 
 
-function GetfilteredImages( selectedImages ){
-
-
-  //  console.log ( "POPUP: selectedImages",  selectedImages );
-
-
-
-
+export function GetfilteredImages( selectedImages ){
+ 
   const excludedKeys = ["forearn", "bo", "collar"];
   const filteredImages = Object.keys(selectedImages).reduce((result, key) => {
     if (!excludedKeys.includes(key)) {
@@ -241,9 +235,15 @@ function GetfilteredImages( selectedImages ){
     return result;
   }, {});
 
-  return filteredImages;
 
+
+  console.log( "real name filteredImages  = " , filteredImages);
+  return filteredImages;
+ 
 }
+
+ 
+
 
 
 function ButtonCTALoginFor2FreeLayers(){

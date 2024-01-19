@@ -6,7 +6,7 @@
  //import dotenv from "dotenv";
  
   import NFTGrid from "../../components/NFTGrid";
-  import ImageComposer from "../../components/ImageComposer";
+  import ComposedCharacter from "../../components/ComposedCharacter";
  
  
   import stylesBuy from "../../styles/Buy.module.css";
@@ -76,7 +76,7 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
            
  
          <ReferredUserComponent/>
-          <ImageComposer/>  
+          <ComposedCharacter/>  
        
       
           <div className={ stylesBuy.nftGridContainer } > 

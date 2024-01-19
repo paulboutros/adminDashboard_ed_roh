@@ -171,7 +171,7 @@ const Topbar = () => {
           <Typography  fontSize={"small"} fontWeight={"150px"}>$WU</Typography>
             {rewardBalance && (
               <Typography  fontSize={"small"} fontWeight={"150"}> 
-                  {Number(ethers.utils.formatUnits(rewardBalance, 18)).toFixed(2)}
+                  {Number( ethers.utils.formatUnits(rewardBalance, 18)).toFixed(2)}
                </Typography>
               )}
         </VerticalStackAlignLeft> 
