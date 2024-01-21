@@ -9,13 +9,14 @@ import {
   import NFTGrid from "../../components/NFTGrid";
   import { TOOLS_ADDRESS } from "../../const/addresses";
   import tokenPageStyles from "../../styles/Token.module.css";
-   
+  import stylesNFT from "../../styles/NFT.module.css";
+
 
   //import { NFT as NFTType } from "@thirdweb-dev/sdk";
   import SaleInfo from "../../components/SaleInfo/SaleInfo";
-import { BasicScrollable } from "../../components/Layout";
+import { BasicScrollable, RoundedBox } from "../../components/Layout";
 import { Typography, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
+import { tokens, mainContainerPagePad } from "../../theme";
 import ConnectWalletPage from "../../components/ConnectWalletPage";
 
    
@@ -47,9 +48,13 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
                <ConnectWalletPage/>
               
         ):(
+
+
            <BasicScrollable>
                   <Container maxWidth="lg">
-              <Typography sx={ theme.title }  > Sell NFTs </Typography>
+
+
+              {/* <Typography sx={ theme.title }  > Sell NFTs </Typography> */}
         { !selectedNft ? (
           <>
             
@@ -68,13 +73,38 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
             />
           </>
         ) : (
-          <div className={tokenPageStyles.container} style={{ marginTop: 0 }}>
-            <div className={tokenPageStyles.metadataContainer}>
+          
+          <div className={tokenPageStyles.container} style={{
+             marginTop: 0,
+             
+             padding: mainContainerPagePad,
+
+             maxWidth:"1128px"
+             }}>
+
+
+             <div className={tokenPageStyles.metadataContainer}>
               <div className={tokenPageStyles.imageContainer}>
-                <ThirdwebNftMedia
+                {/* <ThirdwebNftMedia
                   metadata={selectedNft.metadata}
+                  
+                
                   className={tokenPageStyles.image}
+                  
+                /> */}
+         <RoundedBox>   
+          <RoundedBox padding = "8px">
+                <ThirdwebNftMedia metadata={selectedNft.metadata} 
+                
+                className={stylesNFT.largeImage} 
+              
                 />
+            </RoundedBox> 
+      </RoundedBox>     
+
+
+
+
                 <button
                   onClick={() => {
                     setSelectedNft(undefined);
@@ -84,8 +114,14 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
                   X
                 </button>
               </div>
-            </div>
-  
+            </div>  
+     
+
+    
+        
+ 
+          
+          
             <div className={tokenPageStyles.listingContainer}>
               <p>You&rsquo;re about to list the following item for sale.</p>
               <h1 className={tokenPageStyles.title}>

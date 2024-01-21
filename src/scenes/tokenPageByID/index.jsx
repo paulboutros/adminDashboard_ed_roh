@@ -7,7 +7,8 @@ import  { convertSecondsToDateString,   addressShortened ,handleCopyClick} from 
 import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
     useMinimumNextBid, useValidDirectListings,
      useValidEnglishAuctions , useMakeBid,
-     useContractEvents
+     useContractEvents,
+     useEnglishAuctions
     
    } from "@thirdweb-dev/react";
 
@@ -28,7 +29,8 @@ import {
     VerticalSpace,
      RoundedBox,
      
-     HorizontalSpace 
+     HorizontalSpace, 
+     BasicScrollable
       
    } from "../../components/Layout.jsx"  
 
@@ -36,24 +38,24 @@ import {
    MARKETPLACE_ADDRESS,
    
 } from "../../const/addresses.ts";
- import {text2, text1, tokens } from "../../theme.js";
- import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
- import { getSDK_fromPrivateKey, convertEthToUsd } from "../../data/API.js";
+ import {text2, text1, tokens, buttonStyle, mainContainerPagePad } from "../../theme.js";
+  import { getSDK_fromPrivateKey, convertEthToUsd } from "../../data/API.js";
  import ShowAuction from "../../components/TokenPageBoards/ShowAuction.jsx";
  import Activity from "../../components/TokenPageBoards/Activity.jsx"
   
-import {useEffect, useState} from "react";
-import {useParams } from 'react-router-dom';
-import toast, { Toaster } from "react-hot-toast";
- 
+import React, {useEffect, useState} from "react";
+import {useNavigate, useParams } from 'react-router-dom';
+  
 import styles from "../../styles/NFT.module.css";
+import { useAllListingsContext } from "../../context/AllListingContext.js";
+import Container from "../../components/Container/Container.jsx";
 
 
- const _buttonHeight ="50px";
+
  const _mainBoxPadding = 3;
  const TokenDetailsByID =  ({  propContractAddress,  propTokenId,  displayMode  } ) => {
 
-  
+  const navigate = useNavigate ();
   // we may need to change contractAddress param name as it could be confused with web3 button parameter
     let {  contractAddress, tokenId,  listingId, auctionId } = useParams();
    
@@ -62,14 +64,16 @@ import styles from "../../styles/NFT.module.css";
     // case we click an NFT that is not for sale
     if ( listingId === "NAN" &&  auctionId === "NAN" ){ listingType = "not_for_sale"; }
       
- const { user } = useUserContext();
- const theme = useTheme();
+  const theme = useTheme();
  const colors = tokens(theme.palette.mode);
   
  const [nft, setNFT] = useState();
  const [ auctionData, setAuctionData ] = useState(null); 
  const [ listingData, setListingData ] = useState(null); 
  
+
+ const { directListings, auctionListing } = useAllListingsContext(); 
+   
 
   
  const [ ethToUsdRate, setEthToUsdRate ] = useState(0); 
@@ -81,7 +85,7 @@ useEffect(() => {
     
         const result = await convertEthToUsd();
         setEthToUsdRate(result);  
-    //  }
+    
 
     } catch (error) {
       console.error('Error fetching NFT:', error);
@@ -107,9 +111,7 @@ useEffect(() => {
        
       //let contractMetadataResult;
      try {
-    
-    
-
+     
        setNFT(nftResult);
 
      } catch (error) {
@@ -122,31 +124,27 @@ useEffect(() => {
    fetchNFT();
     
  }, [contractAddress, tokenId]);
-
-
  
-
           const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
  
-        
+           /*
            const { data: directListing, isLoading: loadingDirectListing } = 
            useValidDirectListings(marketplace, {
                tokenContract: contractAddress, 
                tokenId: tokenId,// nft?.metadata.id,
            });
-
-           //Add these for auction section
-           const [bidValue, setBidValue] = useState();
-
+          */
+           /*
            const { data: auctionListing, isLoading: loadingAuction } =
-           useValidEnglishAuctions(marketplace, {
+           // useValidEnglishAuctions(marketplace, {
+            useEnglishAuctions(marketplace, {
                tokenContract: contractAddress,
                tokenId: tokenId,// nft?.metadata.id,
            });
+          */
 
+          const [bidValue, setBidValue] = useState();
  
-
-
            useEffect(() => {
 
             console.log(' USEEFTTECT   auctionListing', auctionListing ,  " for tokenId" , tokenId );
@@ -178,13 +176,13 @@ useEffect(() => {
 //=======================================================================
           useEffect(() => {
 
-            console.log(' USEEFTTECT   listingData', directListing ,  " for tokenId" , tokenId );
-            if (!directListing)return;
+            console.log(' USEEFTTECT   listingData', directListings ,  " for tokenId" , tokenId );
+            if (!directListings)return;
            const fetchNFT = async () => {
            
              try {
               
-              directListing.forEach(element => {
+              directListings.forEach(element => {
                 console.log(' element.id  ', element.id ,  "listingId", listingId);      
                    if (element.id === listingId ){
                     
@@ -205,7 +203,7 @@ useEffect(() => {
            // Call the fetch functions when component mounts
            fetchNFT();
             
-         }, [directListing]);
+         }, [directListings]);
 
 
          //=======================================================================
@@ -315,18 +313,21 @@ useEffect(() => {
     
        return (
 
-         
-          // !loadingDirectListing && !loadingAuction ? (
-        auctionData || listingData || listingType === "not_for_sale" ? ( 
+        <React.Fragment>
+            <BasicScrollable>
+               <Container maxWidth="lg">
+          {
+        // !loadingDirectListing && !loadingAuction ? (
+         auctionData || listingData || listingType === "not_for_sale" ? ( 
 
           <div>
-             <Box display="flex" flexDirection="column" gap="20px" padding="20px">
+             <Box display="flex" flexDirection="column" gap={  mainContainerPagePad }  padding={ mainContainerPagePad }>
        {/* Nested Flex Container for First Two Blocks */}
-       <Box display="flex" flexDirection="row" gap="20px">
+       <Box display="flex" flexDirection="row" gap={  mainContainerPagePad }>
           {/* First Block (40%) */}
 
          <Box flex="1" flexDirection="column"  >
-           <Box flex="1"    >
+           <Box flex="1">
          
         
           <DisplayNFTimage nft={nft} />
@@ -350,7 +351,7 @@ useEffect(() => {
         </Box>
 
  {/* Nested Flex Container for Second and Third Blocks */}
-     <Box flex="1" flexDirection="column" gap="20px">
+     <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
 
 
         {/* right title block 1 title */}
@@ -416,7 +417,7 @@ useEffect(() => {
             { auctionData ? (
                 <RowChildrenAlignLeft expand={true}>
                   <TextField onChange={(e) => setBidValue(e.target.value)}
-                  style={{ minWidth: '50px',  height: _buttonHeight }} 
+                  style={{ minWidth: '50px',  height: buttonStyle._buttonHeight }} 
                       variant="outlined"  label="Minimum Bid" type="number" value={bidValue}  
                     /> 
                       <HorizontalSpace space={1}/>
@@ -427,7 +428,8 @@ useEffect(() => {
                         action={async () => await createBidOffer()}  isDisabled={!auctionData}
 
                         className="tw-web3button--connect-wallet" 
-                        style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                        style={{ backgroundColor:colors.blueAccent[buttonStyle.colorBlue], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
+ 
                         
                     >
                         Place Bid
@@ -435,7 +437,7 @@ useEffect(() => {
                     <HorizontalSpace space={1}/>
                     <Web3Button 
                     className="tw-web3button--connect-wallet"
-                    style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                    style={{ backgroundColor:colors.blueAccent[buttonStyle.colorBlue], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
                     contractAddress={MARKETPLACE_ADDRESS}
                     action={async () => buyListing()}
                     isDisabled={( !auctionData) }
@@ -447,22 +449,41 @@ useEffect(() => {
                 </RowChildrenAlignLeft>
             ):(
                 
-                <RowChildrenAlignTop>        
+                <RowChildrenAlignTop>  
+
                     <Web3Button 
                     className="tw-web3button--connect-wallet"
-                    style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
+                    style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
                     contractAddress={MARKETPLACE_ADDRESS}
                     action={async () => buyListing()}
+
+                    onSuccess={async (txResult) => {
+                      // should to "NFT OWNED " page  
+                      navigate(`/sell`);
+                       
+                    }}
+
+
                     isDisabled={( !listingData) }
                     >
-                Buy at asking price
+                         Buy at asking price
                     </Web3Button>
+
+
+
                      <HorizontalSpace space={1}/>    
                     <Web3Button
                     contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!listingData}
                     className="tw-web3button--connect-wallet" 
-                    style={{ backgroundColor:colors.blueAccent[700], flex: 1,  width: '100%', height: _buttonHeight }}
-                >
+                    style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
+              
+                      onSuccess={async (txResult) => {
+                        // should to "NFT OWNED " page  
+                        navigate(`/sell`);
+                         
+                      }}
+              
+                   >
                     Make Offer
                     </Web3Button>  
                 </RowChildrenAlignTop>     
@@ -487,17 +508,23 @@ useEffect(() => {
           </Box>
          </Box>
  
-       <Box>
-      <Activity nft={ nft } listingID={listingId}  /> 
-     </Box>
-    </Box>
+          <Box>
+           <Activity nft={ nft } listingID={listingId}  /> 
+          </Box>
+          </Box>
  
           </div>
-        ):(
+          ):(
+            <p> Token listing loading </p>
+         )
+           }
+                </Container>
+            </BasicScrollable>
+         </React.Fragment>
+         ) 
+ 
 
-          <p> still load listing </p>
-        )
-       ) 
+
      }
   };
 
@@ -570,25 +597,7 @@ function NftPriceBlock (   {
 
    )
  }
- 
   
-
- function   GetListingStatus(listingData){
-  
-   if (!listingData){return ""; }
-
-    // CREATED, COMPLETED, or CANCELLED
-   switch (listingData.status ){
-     case 2: return "COMPLETED";  
-     case 3: return "CANCELLED";  
-     case 4: return "ACTIVE"; // or created  
-     case 5: return "EXPIRED"; 
-    default: return "ERROR";  
-   }
-  
- }
-
- 
   
  function DisplayNFTimage( {nft}){
 

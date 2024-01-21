@@ -87,6 +87,21 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
   export default CustomLegend;
 
 
+   function GetLayerReadableName( category ){
+
+    const readableName = {
+      "kn": "Knee",
+      "he": "Head",
+      "sh": "Shield",
+      "we": "Weapon",
+      "be": "Belt",
+        
+    };
+    
+    return readableName[category];
+
+
+   }
 
   export function CustomLegend2 ( { legendItems, selectedImages,  orientation = 'vertical'  } ){ 
      
@@ -108,7 +123,7 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
     }, [ selectedImages ]);
 
      return  (
-    <Box  sx={     {marginRight:"10px"} } > 
+    <Box    > 
 
 
 
@@ -120,20 +135,20 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
       // {selectedImages .map((item, index) => (
         <Box
            key={index}
-          sx={{ marginLeft: '20px' }} display="flex" justifyContent="flex-start" alignItems="center" height="100%"
+            display="flex" justifyContent="flex-start" alignItems="center" height="100%"
          >
           {/* <Box sx={{ width: 15, height: 10, backgroundColor: item.color }}></Box> */}
             
                 <Box
                     // variant="h6"
                     sx={{
-                      width :"150px",
-                      display: 'flex',justifyContent: 'space-between',  color: colors.grey[500]
+                      width :"100px", display: 'flex',justifyContent: 'space-between',  color: colors.grey[500]
+                     
                      }}
                   >
-                    <span>  {filteredImages[key][0].name}</span>
-                    <span>  [{filteredImages[key][0].tokenID}] : {filteredImages[key][0].owning}   </span>
-                     
+                    <span>  { GetLayerReadableName(key) }</span>  {/* if you hine the name, the space between will have interesting effect */}   
+                    [<span style={{ color: '#b4a770' }}>{filteredImages[key][0].tokenID}</span>] : {filteredImages[key][0].owning}
+                    {/* [<span style={{ color: '#b4a770' }}>{filteredImages[key][0].tokenID}</span>] : {filteredImages[key][0].owning} */}
                   </Box>
  
 

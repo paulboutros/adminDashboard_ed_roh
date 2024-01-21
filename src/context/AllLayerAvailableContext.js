@@ -128,19 +128,18 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
     const categories = ['he', 'sh', 'we', 'be', 'kn'];
     const layerCount = maxLayers;
     const baseObject = Array.from({ length: layerCount }, (_, index) => ({
-      layerName: index , 
+       layerName: index , 
        tokenID:0  , 
       
       // will be overriden
       owning:0,// Math.floor(Math.random() * 11), 
-      supply:0,// Math.floor(Math.random() * 11),   
+      supply:0,// Math.floor(Math.random() * 11),
+         
     }));
 
     for (const category of categories) {
        // use  the follow to create a DEEp copy of base object so they are independant copies
-
-
-       
+        
        initialLayerToChooseFrom[category] = JSON.parse(JSON.stringify(baseObject));
     }
 
@@ -149,17 +148,7 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
  const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
   console.log("Snapshot before modification: ", snapshotBeforeModification);
 //console.log("Current state after modification: ", initialLayerToChooseFrom);
-
-for ( let i = 0 ; i < NFTdata.length; i++  ){ 
  
-  const nft  =  NFTdata[i];
- // initialLayerToChooseFrom["sh"]["4"].supply = 150;
-     
-};
-/*
-const initialLayerToChooseFromXXX = _.cloneDeep(resultPreviousloop);
-*/
-
  
  for ( let i = 0 ; i < NFTdata.length; i++  ){ 
  
@@ -171,8 +160,8 @@ const initialLayerToChooseFromXXX = _.cloneDeep(resultPreviousloop);
             const category     = nft.metadata.attributes[0].trait_type ;
             const supply       = nft.supply;
   
-       console.log(  "  category   :" ,   category , "  nft.metadata.attributes[0].value =     = " , layerNumber );  
-            let numberValue = parseInt(layerNumber);
+          
+             let numberValue = parseInt(layerNumber);
              initialLayerToChooseFrom[category][  numberValue ].supply = supply;
              initialLayerToChooseFrom[category][  numberValue ].tokenID = nft.metadata.id ;
           

@@ -189,11 +189,14 @@ const testThirdWeb = false;
               }/> 
 
                
-
-              <Route path="/sell" element={<Sell/>} />
-               
-              <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
-              <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={<TokenPageByID/>} />
+           
+                <Route path="/sell" element={<Sell/>} />
+                 <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
+                 <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={
+                   <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
+                    <TokenPageByID/>
+                  </AllListingsProvider>
+                 } />
               
 
               {/* this is more like a personal profil tab .. */}

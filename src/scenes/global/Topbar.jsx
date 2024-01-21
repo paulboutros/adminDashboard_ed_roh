@@ -227,22 +227,7 @@ theme={theme.palette.mode}  modalSize={"wide"}
 
          <HorizontalSpace space={2}/> 
 
-          {/*
-             <div className={styles.navRight}>
-             {address && (
-              <Link className={styles.link}  to={`/profileWallet/${address}`}>
-              
-              <img
-              //  className={styles.profileImage}
-                src="/user-icon.png"
-                width={42} // 42*42
-                height={42}
-                alt="Profile"
-              />
-            </Link>
-          )}
-         </div> 
-         */}
+          
 
             <AccountMenu/> 
 

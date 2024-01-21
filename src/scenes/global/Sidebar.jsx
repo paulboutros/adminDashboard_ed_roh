@@ -156,7 +156,7 @@ import { FaDiscord } from "react-icons/fa"; */}
 
             <Item
               title="Profile"
-              // to={`/profileWallet/${address}`}
+               
                 to={`/profileWallet/${referralRewardTabIndex}`}
               icon={<CgProfile />}
               selected={selected}
@@ -164,7 +164,7 @@ import { FaDiscord } from "react-icons/fa"; */}
             />   
             <Item  
               title="Free Token and staking"
-              // to={`/profileWallet/${address}`}
+               
                 to={`/profileWallet/${referralRewardTabIndex}`}  //referralRewardTabIndex
               // icon={<BiCoinStack />} 
               icon={<LiaCoinsSolid />} 

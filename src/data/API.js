@@ -1,11 +1,11 @@
 
 import axios from "axios";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import {  useAddress } from "@thirdweb-dev/react";
-
+ 
  
 import metadataList from "../metadata/nftmetadata.json"
  
+import { referralRewardTabIndex } from "../scenes/profileWallet/index.jsx";
 import { TOOLS_ADDRESS } from "../const/addresses.ts"
  
 export function getSDK_fromPrivateKey() {
@@ -234,18 +234,33 @@ export function GetCookieRedirectURL(   address ){
 
 
  
+ // this function is actually the React SetState function 
 export const setDebugMode = async (  setDebugModeContext ) => {
   try {
     const response = await globalData();
     
     console.log(" globalData >>   response[0]     " , response[0] );
-      // setDebugModeContext(response[0].debugMode);
-       setDebugModeContext( response[0].debugMode );   // setDebugMode
+        setDebugModeContext( response[0].debugMode );   // setDebugMode
   } catch (error) {
    
     console.error('Error fetching appLink data:', error);
   }
 };
+
+ // this function is actually the React SetState function 
+ export const setSimulatedWuPrice = async (  setDebugModeContext ) => {
+  try {
+    const response = await globalData();
+    
+    console.log(" globalData >>   response[0]     " , response[0] );
+        setDebugModeContext( response[0].debugMode );   // setDebugMode
+  } catch (error) {
+   
+    console.error('Error fetching appLink data:', error);
+  }
+};
+
+
 
 
 // web2 custom bundle pack
@@ -686,23 +701,32 @@ export async function  myDiscordInfo   (user_ID) {
 
 export async function  globalData_setDebugMode   ( value , setDebugMode, ID ) {
   
- 
- const dataToSend= { 
-  value:value,
-  ID: ID
- };
-   
+ const dataToSend= {  value:value, ID: ID};
+  
 
- console.log("dataToSend:" ,  dataToSend);
-const endpoint = `${process.env.REACT_APP_API_URL}globalData_setDebugMode`; // make it specific (filter to twitter fields)
-const resultsPostJson = await axios.post(endpoint, dataToSend);
-    
- 
-
-setDebugMode(  value  );
-
-   return resultsPostJson;
+      console.log("dataToSend:" ,  dataToSend);
+      const endpoint = `${process.env.REACT_APP_API_URL}globalData_setDebugMode`; // make it specific (filter to twitter fields)
+      const resultsPostJson = await axios.post(endpoint, dataToSend);
+       setDebugMode(  value  );
+      return resultsPostJson;
 } 
+
+export async function  SetSimulatedWuUSDTpriceAPI   ( value , setSimulatedWuPrice, ID ) {
+  
+  const dataToSend= {  value:value, ID: ID};
+   
+ /*
+      console.log("dataToSend:" ,  dataToSend);
+     const endpoint = `${process.env.REACT_APP_API_URL}SetSimulatedWuUSDTpriceAPI`; // make it specific (filter to twitter fields)
+     const resultsPostJson = await axios.post(endpoint, dataToSend);
+  */
+     setSimulatedWuPrice(  value  );
+ 
+  //  return resultsPostJson;
+ }
+
+
+
 export async function  globalData   () {
  
     //const getData_enpPoint = API_URL + "getData";
@@ -734,6 +758,7 @@ export async function  getData   () {
       throw error;
     }
   }
+  
  export async function convertEthToUsd( ) {
     const ethToUsdRate = await getEthToUsdRate();
    
@@ -851,9 +876,9 @@ export async function openOAuth2Url_whenUserNotConnected( address ){
 
   // after discord athentication we need to come back to the same exact page,
    // so we save the  route path in a cookie , th redirect will happen of the root route.    
-   createRedirectookie( `profileWallet/${address}/2` ); // is refferal tab
+   createRedirectookie( `profileWallet/${address}/${referralRewardTabIndex}` ); // is refferal tab
    openOAuth2Url(null);
-}
+}  
 
 export function getAvatar(  discordUserData ){
 

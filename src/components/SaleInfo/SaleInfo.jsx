@@ -19,7 +19,7 @@ import {  useNavigate  } from 'react-router-dom';
  
 import toast, { Toaster } from "react-hot-toast";
 import toastStyle from "../../util/toastConfig";
-import { tokens, themeSettings } from "../../theme";
+import { tokens, themeSettings, buttonStyle } from "../../theme";
 import { useTheme } from "@mui/material";
 
 
@@ -237,8 +237,14 @@ export default function SaleInfo({ nft }) { // : Props
 
           <Web3Button
             contractAddress={MARKETPLACE_ADDRESS}
-            action={async () => {
-              await handleSubmitDirect(handleSubmissionDirect)();
+
+            className="tw-web3button--connect-wallet" 
+            style={{ backgroundColor: colors.blueAccent[  buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
+
+
+
+            action={async () => { await handleSubmitDirect(handleSubmissionDirect)();
+              
             }}
             onError={(error) => {
               toast(`Listed Failed! Reason: ${error.cause}`, {
@@ -344,6 +350,11 @@ export default function SaleInfo({ nft }) { // : Props
                if ( allAuctions ) {lastAuction =  allAuctions[  (allAuctions.length-1 ) ];}
                console.log(" sucess here is last listing: " , lastAuction );
               navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/NAN/${lastAuction?.id}`);
+
+              /*
+              http://localhost:3000/tokenByListingID/0x06a33CD093aDD0C6A8F685888f1B3E0C119b2461/2/NAN/5
+              */
+
 
               // router.push(
               //   `/token/${TOOLS_ADDRESS}/${nft.metadata.id}`

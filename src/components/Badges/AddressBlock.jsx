@@ -59,7 +59,7 @@ import { AlignHorizontalLeft, AlignVerticalCenter, Height } from '@mui/icons-mat
             
             }}>
 
-  <BootstrapTooltip  title="Reward contract Balance"  placement="left-start" >
+         <BootstrapTooltip  title="Reward contract Balance"  placement="left-start" >
          { !isLoading ? (
 
                <React.Fragment>
@@ -76,9 +76,9 @@ import { AlignHorizontalLeft, AlignVerticalCenter, Height } from '@mui/icons-mat
               <Skeleton variant="rounded" width={50} height={"26px"}  />
            )}  
 
-     </BootstrapTooltip>
-  </div> 
-  <HorizontalSpace space={1}/> 
+        </BootstrapTooltip>
+       </div> 
+         <HorizontalSpace space={1}/> 
      
          <div  style={{
              display: "flex",
@@ -154,15 +154,7 @@ import { AlignHorizontalLeft, AlignVerticalCenter, Height } from '@mui/icons-mat
            </div>
 
 
-  
-{/* 
-     
-
-        
-           
-
-   */}
-     
+   
 
          </>
         )

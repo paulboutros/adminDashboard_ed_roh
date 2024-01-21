@@ -71,8 +71,7 @@ const theme = useTheme();
  const openProfilePage =() =>{ 
   
   handleClose(); 
-  //navigate( `/profileWallet/${address}` )  
-
+ 
   if ( address ){ 
 
     navigate( `/profileWallet/${address}` )

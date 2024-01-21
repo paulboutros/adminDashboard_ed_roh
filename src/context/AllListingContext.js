@@ -1,8 +1,9 @@
 import {createContext, useContext,  useState, useEffect, useRef } from "react";
 import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS  } from "../const/addresses.ts";
-import { useContract,     useValidDirectListings, useValidEnglishAuctions  } from "@thirdweb-dev/react";
+import { useContract,     useEnglishAuctions,     useValidDirectListings, useValidEnglishAuctions  } from "@thirdweb-dev/react";
 import { getSDK_fromPrivateKey } from "../data/API.js";
 import { useAllLayersContext } from "./AllLayerAvailableContext.js";
+import { listingStatus } from "../const/various.js";
   
 const AllListingsContext = createContext();
 
@@ -53,8 +54,17 @@ const { contract: marketplace, isLoading: loadingMarketplace, } = useContract(MA
 const { data: directListings,isLoading: loadingDirectListings,} = 
 useValidDirectListings(marketplace,{tokenContract: NFT_CONTRACT }); //,tokenId: filterTokenId
 
-const { data: auctionListing, isLoading: loadingAuction } = 
-useValidEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT  });   //,tokenId: filterTokenId
+/*
+let { data: auctionListing, isLoading: loadingAuction } = 
+//useValidEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT  });   // BUG, not show my valid auction with status 1
+useEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT  });   //,tokenId: filterTokenId
+*/
+
+
+const [loadingAuction, setloadingAuction] = useState(true);
+const [auctionListing, setEnglishAuctions] = useState(null);
+ 
+//getAllAuctions
  //================================================================================================================================================
   
  // to compare which dependency has changed
@@ -62,7 +72,34 @@ useValidEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT  });   //,tok
  const prevAuctionListing = useRef(auctionListing); 
 
 
+ async function englishAuctions(){
+   const sdk = getSDK_fromPrivateKey(); 
+   const contract = await sdk.getContract( MARKETPLACE_ADDRESS );  // , "edition"
+  
+  let auctions = await contract.englishAuctions.getAll();
+
+  console.log( "auctions "  ,auctions );
+  const filteredAuctions = auctions
+  .filter(auction => 
+    auction.status === listingStatus.CREATED ||
+    auction.status === listingStatus.ACTIVE
+    );
+
+  setEnglishAuctions(filteredAuctions);
+  setloadingAuction(false);
+}
+
+
+ useEffect(() => {
+  englishAuctions();
+  
+}, []);
+
 useEffect(() => {
+
+
+
+
 
   if ( loadingAuction || loadingDirectListings ) return;
 
@@ -70,18 +107,26 @@ useEffect(() => {
      
        // I think we are adding ot appending some new properties here...
       NFTdata.forEach((nft) => {
-        nft.listing    = [] ;
-        nft.auction    = [] ;
+     //    nft.listing   = [] ;
+     //   nft.auction    = [] ;
 
         nft.allListing = [] ; // auction and direct listing in one array
        
       });
     
 
-         auctionListing.forEach( auction => {
-          const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === auction.tokenId);
-          if (selectedNFTIndex !== -1) { NFTdata[selectedNFTIndex].allListing.push(auction); }
+      
+        
 
+        
+         
+         auctionListing.forEach( auction => {
+ 
+            // is auction is active 
+            
+                  const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === auction.tokenId);
+                 if (selectedNFTIndex !== -1) { NFTdata[selectedNFTIndex].allListing.push(auction); }
+              
          });
          directListings.forEach( listing => {
            const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === listing.tokenId);

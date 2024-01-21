@@ -91,7 +91,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
       description:"Browse which NFTs are available from the collection.",
       
       initialState:0,
-      tabsNames : ["nfts", "listings","auctions"],
+      tabsNames : [ "listings","auctions"],
    }
   if( itemType === "packs"){
     displayData={
@@ -203,10 +203,10 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
          </Box>
   
-
+{/* 
           <div  className={`${  tab === "nfts" ? stylesBuy.nftGridContainer : "" }`} > 
                  
-            {loadingDirectListings || loadingAuction ? (  // || isLoading 
+            {loadingDirectListings || loadingAuction ? (  
               <p>Loading direct and auction...</p>
             ) : tab !== "nfts" || (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
               <p></p>
@@ -218,7 +218,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
             )}
           
            </div>
- 
+  */}
         
     
           <div className={`${ tab === "listings" ? stylesProfile.activeTabContent : stylesProfile.tabContent }`}>

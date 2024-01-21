@@ -1,7 +1,7 @@
 
  
 import Tooltip from '@mui/material/Tooltip';
-import {Grid, Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
+import {Grid, Box, Button, IconButton, Typography, useTheme, colors, Avatar } from "@mui/material";
  
  
 import CardMedia from '@mui/material/CardMedia';
@@ -28,8 +28,17 @@ it  takes a list of layer object and display image, how many are owned  etc..
   const colors = tokens(theme.palette.mode);
  const element = themeSettings(theme.palette.mode);
 
-     // console.log(   " LayerBaseInfo >  layerToChooseFrom"  ,  layerToChooseFrom  );
+ const NumberCircle = (  number  ) => {
+  let circleColor ;//= blue[500]; // Default color
 
+  if ( Number(number) > 0) {
+    circleColor = colors.greenAccent[500]; // Set color to green if number is positive
+  } else  {
+    circleColor =colors.grey[500]; // Set color to red if number is negative
+  }
+
+  return circleColor;
+}
 
 
     return( 
@@ -149,25 +158,30 @@ it  takes a list of layer object and display image, how many are owned  etc..
                    >
 
                 
-                    {obj.owning > 0 ? (
-                    <CheckCircleRoundedIcon sx={{ color: colors.greenAccent[500] }} />
+                    {/* {obj.owning > 0 ? (
+                         <CheckCircleRoundedIcon sx={{ color: colors.greenAccent[500] }} />
                     ) : (
-                        <CancelRoundedIcon sx={{
-                            
-                            //color:  colors.primary[500]  
-                            //color:  colors.grey[300]  
-                            //color:  colors.redAccent[200]  
-                            color:   element.palette.cancelIconColor   //colors.redAccent[500]
-                        
-                        
-                        }} />
+                        <CancelRoundedIcon sx={{ color:   element.palette.cancelIconColor   //colors.redAccent[500]
+                         }} />
                     )}
-                
-                  
-                   <Typography>
+                   
+                   <Typography>  {  obj.owning }   </Typography> */}
    
-                   {  obj.owning }  
-                   </Typography>
+   
+                        {/* <Box sx={{ 
+                             display: "flex",
+                             width: "16px",
+                             height: "16px", backgroundColor: NumberCircle(  obj.owning ),   borderRadius: "50%",  
+                            }}>
+                            {  obj.owning}
+                          </Box> */}
+                  {/* bgcolor: NumberCircle(  obj.owning )   basic gray looks nice */}   
+                        <Avatar sx={{   width: 16, height: 16 }}>
+                            {  obj.owning}
+                          </Avatar>  
+
+
+                        
                      
                    </Box>  
 

@@ -37,7 +37,7 @@ import { useUserContext } from '../context/UserContext.js'; // to get user data 
 import { useAppLinkContext } from '../context/AppLinkContext.js';
 import {sendTracking, openOAuth2Url, ERC20claim, getAvatar  } from "../data/API";
 
-import {  Box ,Button,   Divider,   LinearProgress,   Typography, useTheme  } from "@mui/material";
+import {  Box ,Button,   Divider,    Typography, useTheme  } from "@mui/material";
 
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
@@ -60,15 +60,17 @@ const address = useAddress();
     
 
 
-  const { appLink } = useAppLinkContext();
+  
     const { user } = useUserContext();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    const [missingCategories, setMissingCategories] = useState([]);
+    
+
     sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
-  const [open, setOpen] = useState(false);
- 
-  
+    const [open, setOpen] = useState(false);
+   
   let filteredImages; 
 
    filteredImages = GetfilteredImages(selectedImages);
@@ -76,22 +78,13 @@ const address = useAddress();
    useEffect(()=>{
     if (!address) return;
     
-   // filteredImages = GetfilteredImages(selectedImages);
-    CheckComBoValidity(filteredImages ,user , address);
-
+     CheckComBoValidity(filteredImages ,user , address, setMissingCategories );
      
-    
    }, [ selectedImages ]);
-
-
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+ 
+  const handleOpen = () => { setOpen(true); };
+ 
+  const handleClose = () => {setOpen(false);};
     
 
   //=====================================================================================
@@ -129,8 +122,7 @@ const address = useAddress();
 
   return (
     <div>
- 
-          
+  
 
       <Button variant="outlined" style={style} onClick={handleOpen}   >
          {text}
@@ -140,69 +132,44 @@ const address = useAddress();
         
       
       
-       <div  sx={{  margin: "0px 0px 90px 0px"  }} >
+       <div  sx={{  margin: "0px 0px 90px 0px"  }} ></div>
         
 
-      </div>
+      
 
         <DialogContent     
-        sx={{
-          backgroundColor: colors.primary[400],
-       
-         
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        
-          
-        }} 
+            sx={{ backgroundColor: colors.primary[400], display: 'flex',  flexDirection: 'column', alignItems: 'center' }}
          
          >
-
-
-            {/* use that login to get reward somewher else */}
-           {/* <ButtonCTALoginFor2FreeLayers/> */}
-        
+         
           <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}} >  
           
            
-            <NotEnoughtLayerMessage status={2} filteredImages={filteredImages}  user={user} address={address}  />
-                  
-               
-                <Box sx={{  display: 'flex',  justifyContent: 'space-between',  alignItems: 'center',  marginTop: '20px',  marginBottom:"20px"
-                 }} >
-               {/* <AppLinkDataBox/> */}
-
-
-
-
-  
+            <NotEnoughtLayerMessage
+             status={2} 
+             filteredImages={filteredImages} 
+              user={user} address={address} 
+              setMissingCategories={setMissingCategories}
+              />
                 
+            <Box sx={{  display: 'flex',  justifyContent: 'space-between',  alignItems: 'center',  marginTop: '20px',  marginBottom:"20px" }} >
+
+
                <Web3Button
-              contractAddress={BURN_TO_CLAIM}  // contract to interract with
-               action={async ( contract ) => await mintMutantNft( contract )} 
+                  contractAddress={BURN_TO_CLAIM}  
+                  isDisabled ={ missingCategories.length > 0 }
+                  action={async ( contract ) => await mintMutantNft( contract )} 
               
-                 className="tw-web3button--connect-wallet"
-               style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
+                  className="tw-web3button--connect-wallet"
+                  style={{ backgroundColor:colors.blueAccent[700], width: '100%' }}
               >
                Burn to claim
-              </Web3Button>   
-           
-           
-
-                        
+               </Web3Button>   
+                         
               </Box>
  
             </div>
- 
-    
-        
-   
-
- 
-
-             
-
+  
                    <Box > 
 
                   <LayerBaseInfo   
@@ -275,7 +242,7 @@ function ButtonCTALoginFor2FreeLayers(){
  
 }
 
-function NotEnoughtLayerMessage( {status ,filteredImages, user , address}){
+function NotEnoughtLayerMessage( {status ,filteredImages, user , address, setMissingCategories }){
   //const { user } = useUserContext();
   const {allLayers} = useAllLayersContext();
   const theme = useTheme();
@@ -285,16 +252,18 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address}){
     switch (status) {
       case 1:
         return (
-          <Typography
-          fontWeight="100" 
-          sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} >
+          <></>
+        //   <Typography
+        //   fontWeight="100" 
+        //   sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} >
           
-           { CheckComBoValidity(filteredImages ,user , address ) }
-           <CancelRoundedIcon sx={{ 
-         color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />
+        //    { CheckComBoValidity(filteredImages ,user , address ) }
+        //    <CancelRoundedIcon sx={{ 
+        //  color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />
         
-         If any layers are missing, you can quickly earn them by joining with Discord
-        </Typography>)
+        //  If any layers are missing, you can quickly earn them by joining with Discord
+        // </Typography>
+        )
       case 2:
         return (
         
@@ -302,10 +271,10 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address}){
         fontWeight="100" 
         sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} > 
 
-        { CheckComBoValidity(filteredImages ,user , address) } 
-        <CancelRoundedIcon sx={{ 
-         color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />  
-         If any layers are missing, you can quickly earn them by sharing the link below:
+        { CheckComBoValidity(filteredImages ,user , address, setMissingCategories ) } 
+        {/* <CancelRoundedIcon sx={{  color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> */}
+         <br />  
+         {/* If any layers are missing, you can quickly earn them by sharing the link below: */}
             {/* Now, you can share or post the link. Every think someone open your link,  Discord will
              initiate the login process. If they decide to join, you will instantly recieve a new layer.
 
@@ -342,37 +311,31 @@ const handleImageSelect = (category, obj   ) => {
 
    
 
-  function CheckComBoValidity(filteredImages, user, address){
+  function CheckComBoValidity(filteredImages, user, address, setMissingCategories ){
    
   
     // if(!user) return;
-      const missingCategories = [];
+      const missingCategories =[];
+// find is user has missing tokenID
+   for (const category in filteredImages) {
 
-for (const category in filteredImages) {
-  if (filteredImages[category][0].owning === 0) {
-    
-    missingCategories.push(category);
-  }
-}
+        if (filteredImages[category][0].owning === 0) {
+        missingCategories.push(category);
+       }
+   }
 
-
- if (missingCategories.length > 0 ){
-
-  //console.log("Missing Categories:", missingCategories);
- }else{ 
-
+   // the button needs to access, so it is disable if we miss some token ID
+   setMissingCategories(missingCategories);
  
-
-  if(!user) return;
-     // ERC20claim(user.ID, filteredImages ,  address  );
- //  console.log("  you won !:" , address );
- }
+    if (missingCategories.length > 0 ){
 
 
-   // add option, 
-   // I am low in $Wu and I need more $wu
-   // how ca I get free $Wu
-   // how can I buy $Wu
+      //console.log("Missing Categories:", missingCategories);
+    }else{ 
+    
+            if(!user) return;
+      }
+  
 
     const missingCount =  missingCategories.length;
         switch (missingCount) {

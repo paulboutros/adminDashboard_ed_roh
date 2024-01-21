@@ -1,20 +1,22 @@
-import   { useEffect , useState } from 'react';
+import   React, { useEffect , useState } from 'react';
 
 import {  useAddress } from '@thirdweb-dev/react'
+import { FiExternalLink } from "react-icons/fi";
+import { LuCopy } from "react-icons/lu";  
 
-
-import {  Box, Button, IconButton, Typography, useTheme, colors } from "@mui/material";
+import {  Box, Button, IconButton, Typography, useTheme, colors, Stack, Skeleton } from "@mui/material";
+import { BiCoinStack } from "react-icons/bi";
 
 import CustomLegend from "./Legend.jsx"
 import { CustomLegend2 } from './Legend.jsx';
  
-import {sendTracking, GetRewardPrice } from "../data/API.js"
+import {sendTracking, GetRewardPrice, convertEthToUsd , GetsimulatedWuUSDTprice } from "../data/API.js"
 
  
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
  
 
-import { tokens  } from "../theme.js";
+import { BootstrapTooltip, allCSS, text1, text2, tokens  } from "../theme.js";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAllLayersContext } from '../context/AllLayerAvailableContext.js'; 
 
@@ -24,19 +26,45 @@ import LayerBaseInfo from "./LayerBaseInfo.jsx";
  import PopupButton  from "./popup.jsx"
  import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata.js';
 import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses.ts';
-import { RoundedBox } from './Layout.jsx';
+import { HorizontalSpace, RoundedBox, RowChildrenAlignLeftBottom, VerticalSpace } from './Layout.jsx';
 import { useDebugModeContext } from '../context/DebugModeContext.js';
 import { AddressBlock } from './Badges/AddressBlock.jsx';
+import { PaddingOutlined } from '@mui/icons-material';
  
  
-  const LayerSelector = (  {queryId="" }  ) => {
 
-    const {debugMode, set_DebugMode} = useDebugModeContext();
 
-     
+
+
+
+const LayerSelector = (  {queryId="" }  ) => {
+
+  const {debugMode, set_DebugMode} = useDebugModeContext();
+
+  const [ ethToUsdRate, setEthToUsdRate ] = useState(0); 
+useEffect(() => {
+  // Function to fetch NFT data
+  const fetchUSDrate = async () => {
+ 
+    try {
+    
+        const result = await convertEthToUsd();
+        setEthToUsdRate(result);  
+    //  }
+
+    } catch (error) {
+      console.error('Error fetching NFT:', error);
+    }
+  };
+
+  
+  // Call the fetch functions when component mounts
+  fetchUSDrate();
+   
+}, []); 
 
       
-  const debugModeLayout = false;
+  const debugModeLayout = true;
 
     
     const theme = useTheme();
@@ -113,8 +141,8 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
         
       }, [ selectedImages ]);
  
-
-   
+      //$1000 in pool for WU 10 000 000 supply
+      const WuUSDTprice = 1000/10000000 ;// 0.00001;
 
 
 
@@ -166,11 +194,15 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
 
              <Box gridColumn="span 4" gridRow="span 1"    >
 
-            <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%" >
+            <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%"
+                
+            >
           
 
                
                {/*if you lock a combinasion, you still need to own the layer to claim, but only you can claim */}
+
+                
                <Button variant="outlined" 
                     style={{
                         color:  "#b4a770",
@@ -181,21 +213,35 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
                      
                     >LOCK
             
-               </Button >
+               </Button > 
+                
 
-
+               <HorizontalSpace space={2}/>
               { selectedImages ? (
                <PopupButton
-                        text=   {`Claim $WU${RewardPrice}`}  
+                      text=    {`CLAIM $WU`}    // {`Claim $WU${RewardPrice}`}  
+                        // style={{
+                        //     color: '#b4a770',
+                        //     borderColor: '#f0c435',
+                        //     height: '25px',
+                        //     width: '150px',
+                        //     borderWidth: '2px',
+                        //     textTransform: 'none',
+                        //     marginRight: "10px"
+                        //     // Add any other custom styles here
+                        //  }}
+
+
                         style={{
-                            color: '#b4a770',
-                            borderColor: '#f0c435',
-                            height: '25px',
-                            width: '150px',
-                            borderWidth: '2px',
-                            textTransform: 'none',
-                            // Add any other custom styles here
-                    }}
+                          color: '#b4a770',
+                          borderColor: '#f0c435',
+                          height: '25px',// '50px',
+                          width: '100px',
+                          borderWidth: '2px',
+                          textTransform: 'none',
+                          marginRight: "50px"
+                          // Add any other custom styles here
+                       }}
                     selectedImages ={ selectedImages}
                />
                ):(
@@ -203,26 +249,196 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
                )}
  
 
-             <IconButton> <DownloadOutlinedIcon sx={{ fontSize: "26px", color: colors.greenAccent[500] }}/></IconButton>
+             {/* <IconButton> <DownloadOutlinedIcon sx={{ fontSize: "26px", color: colors.greenAccent[500] }}/></IconButton> */}
             
-            </Box>
+             </Box>
             </Box>
 
             <Box gridColumn="span 8" gridRow="span 8" >
-
-            <Box  >
-                <ComposedCharacter images={   selectedImages  } />  
-                  
-                 </Box>  
+                 <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
              </Box>
+{/* 
+       <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: "rgb(201, 74, 0, 0.05)" } : {}} >  <Box>
+         
+         <Typography color={colors.grey[ text2.color ]} >Reward price: </Typography>
+           <Stack padding={"10px"}>
+             <Typography color={colors.grey[ text1.color ]}  variant="h1" fontWeight="50">
 
-            <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: colors.primary[100] } : {}} > </Box>
-            <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: colors.primary[200] } : {}} > </Box>
-            <Box gridColumn="span 2" gridRow="span 2" style={debugModeLayout ? { backgroundColor: colors.primary[300] } : {}} > </Box>
-            <Box gridColumn="span 2" gridRow="span 2"  >
-                {/* <CustomLegend legendItems={legendItems} /> */}
+               {` $${(  Number(RewardPrice) *WuUSDTprice ).toFixed(2) }`}  
+                
+             </Typography>
+              
+                
+            </Stack>
+            </Box>
+               
+        </Box>
+        <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: "rgb(0, 74, 0, 0.1)" } : {}} > 
+          <Stack>
+            <Typography color={colors.grey[ text2.color ]} >Simulated rate: </Typography>
+
+            <Typography    color= {colors.grey[ text2.color]}  
+                     style={{ fontSize:"8px",   position: 'relative', bottom:"5px" }}  >
+                   {` 1 WU = ${WuUSDTprice} USDT`}  
+            </Typography>
+   
+            <Typography color={colors.grey[ text2.color ]} >reward in $WU: </Typography>
+             <Typography variant="h4"  color= {colors.grey[ text2.color]}  
+                     style={{  position: 'relative', bottom:"5px" }}  >
+                   {` ${(  Number(RewardPrice) ).toFixed(2) } `}  
+            </Typography>
+            <Typography color={colors.grey[ text2.color ]} >reward in $ETH: </Typography>
+             <Typography variant="h4"  color= {colors.grey[ text2.color]}  
+                     style={{  position: 'relative', bottom:"5px" }}  >
+                  {`${ (    (Number(RewardPrice) *WuUSDTprice )  / ethToUsdRate).toFixed(4) } `}
+                  
+            </Typography>
+           </Stack>
+        </Box>   */}
+    
+       
+<Box gridColumn="span 4" gridRow="span 6"
+   
+   sx={ {
+    //color:  colors.grey[ 400 ],
+    paddingLeft :"90px" } }
+     
+
+  >  <Box>
+         
+
+         <div style={{ 
+            color: colors.grey[400], fontWeight:"450",
+            display: 'flex', alignItems: 'center'
+            
+            }}>
+
+         <BootstrapTooltip  title="Reward contract Balance"  placement="left-start" >
+         
+
+               <React.Fragment>
+
+                 <BiCoinStack  size={"15px"} />  
+
+                 <Typography color={colors.grey[  300 ]} >reward in $WU: </Typography>
+
+ 
+                <Typography variant="h4"  color= {colors.grey[ 300]}  
+                        style={{  position: 'relative', bottom:"5px" }}  >
+                      {` ${(  Number(RewardPrice) ).toFixed(2) } `}  
+                </Typography>
+
+                {/* <Typography  fontSize={"small"} fontWeight={"150"}> Balance: </Typography> */}
+              
+
+                 <Typography  fontSize={"small"} fontWeight={"150"}> 
+                {/* { Number( ethers.utils.formatUnits(contractBalance._hex, 18)).toFixed(2) } */}
+             </Typography>  
+             </React.Fragment>
+           
+         <VerticalSpace space={"10px"}/>
+
+
+
+        </BootstrapTooltip>
+       </div> 
+         <HorizontalSpace space={1}/> 
+     
+         <div  style={{
+             display: "flex",
+             flexDirection: "row",
+             justifyContent: "space-between",
+              alignItems: "center" 
+ 
+         }}> 
+    
+                    <HorizontalSpace space={1}/> 
+               
+           </div>
+
+ 
+
+
+
+
+           
+           <Stack   >
+
+{/*      
+             <Box sx={
+                 { 
+                  borderRadius: 4,
+                  backgroundColor: colors.primary[400],
+                      border: `2px ${ colors.grey[ text1.color ]}`  
+
+                 }
+             } >
+            <p  >Reward price: </p>
+
+               <Box sx={  allCSS( theme.palette.mode, "140px","0px" ).addressBox  } >
+                   <p color={colors.grey[ 800 ]}    fontWeight="500">
+
+                    {` $${(  Number(RewardPrice) *WuUSDTprice ).toFixed(2) }`}  
+               
+                </p> 
+
+                </Box>
+
+             </Box> */}
+
+
+              
+            
+                    <p  >Simulated rate: </p>
+
+                  <Typography    color= {colors.grey[ 300  ]}  
+                          style={{ fontSize:"8px",   position: 'relative', bottom:"5px" }}  >
+                        {` 1 WU = ${WuUSDTprice} USDT`}  
+                  </Typography>
+ 
+                  <Box  sx={     {
+                      width :"100px",
+                      borderRadius:"5px",
+                      // marginLeft:"80px",
+                      // backgroundColor: "rgb(201, 74, 0, 0.05)"
+                      
+                      } } > 
+                        <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
+                  </Box>
+
+
+                  
+                  {/* <Typography color={colors.grey[ text2.color ]} >reward in $ETH: </Typography>
+                  <Typography variant="h4"  color= {colors.grey[ text2.color]}  
+                          style={{  position: 'relative', bottom:"5px" }}  >
+                        {`${ (    (Number(RewardPrice) *WuUSDTprice )  / ethToUsdRate).toFixed(4) } `}
+                       
+                  </Typography>         */}
+            
+              
+
+
+            </Stack>
+            </Box>
+               
+        </Box>
+          
+
+
+            {/* <Box gridColumn="span 2" gridRow="span 2" style={debugModeLayout ? { backgroundColor: colors.primary[300] } : {}} > </Box> */}
+            <Box gridColumn="span 4" gridRow="span 2"   >
+           
+            {/* <Box  sx={     {
+              width :"100px",
+              borderRadius:"5px",
+              marginLeft:"80px",
+              backgroundColor: "rgb(201, 74, 0, 0.05)"
+              
+              } } > 
                 <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
-                 
+           </Box> */}
+
+
             </Box>
 
             </Box>
@@ -309,7 +525,7 @@ import { AddressBlock } from './Badges/AddressBlock.jsx';
 // also update selected image so they match the default character combination
 const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
  
-
+ 
      const { user } = useUserContext();
     const { allLayers} = useAllLayersContext(); 
  
@@ -344,16 +560,16 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
       
       
       setSelectedImages( {
-        forearn: [{ imagePath:`layersForCharacterCompo/fa/1.png`,  layerName: 1, owning:0 ,name:"Forearm"}]  ,  // Example image paths
-        bo:      [{ imagePath:`layersForCharacterCompo/bo/1.png`,  layerName: 1, owning:0 ,name:"Body"}] , // Example image paths
+         forearn: [{ imagePath:GetCharacterBodyPartImage("fa",1),  layerName: 1, owning:0 }],  // Example image paths
+        bo:      [{ imagePath:GetCharacterBodyPartImage("bo",1),  layerName: 1, owning:0 }], // Example image paths
 
-        kn:      [{ imagePath:`layersForCharacterCompo/kn/${kn_rand }.png`,  layerName: kn_rand, owning:kn.owning, tokenID:kn.tokenID ,name:"knee" }] , // Example image paths
-        be:      [{ imagePath:`layersForCharacterCompo/be/${be_rand }.png`,  layerName: be_rand, owning:be.owning, tokenID:be.tokenID ,name:"Belt" }]  ,  // Example image paths
-        we:      [{ imagePath:`layersForCharacterCompo/we/${we_rand }.png`,  layerName: we_rand, owning:we.owning, tokenID:we.tokenID ,name:"Weapon" }] , // Example image paths
+        kn:      [{ imagePath: GetCharacterBodyPartImage("kn", kn_rand),  layerName: kn_rand, owning:kn.owning, tokenID:kn.tokenID  }], // Example image paths
+        be:      [{ imagePath: GetCharacterBodyPartImage("be", be_rand),  layerName: be_rand, owning:be.owning, tokenID:be.tokenID  }],  // Example image paths
+        we:      [{ imagePath: GetCharacterBodyPartImage("we", we_rand),  layerName: we_rand, owning:we.owning, tokenID:we.tokenID  }], // Example image paths
         
-        collar:  [{ imagePath:`layersForCharacterCompo/co/1.png`,  layerName: 1, owning:0 ,name:"knee"}] , // Example image paths
-        he:      [{ imagePath:`layersForCharacterCompo/he/${he_rand }.png`,  layerName: he_rand, owning:he.owning, tokenID:he.tokenID ,name:"Head" }] , // Example image paths
-        sh:      [{ imagePath:`layersForCharacterCompo/sh/${sh_rand }.png`,  layerName: sh_rand, owning:sh.owning, tokenID:sh.tokenID ,name:"Shield"}]   // Example image paths
+        collar:  [{ imagePath: GetCharacterBodyPartImage("co",1),  layerName: 1, owning:0 }], // Example image paths
+        he:      [{ imagePath: GetCharacterBodyPartImage("he", he_rand),  layerName: he_rand, owning:he.owning, tokenID:he.tokenID  }], // Example image paths
+        sh:      [{ imagePath: GetCharacterBodyPartImage("sh", sh_rand),  layerName: sh_rand, owning:sh.owning, tokenID:sh.tokenID  }]   // Example image paths
         
         
       }
@@ -363,26 +579,28 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
     
     }, [ allLayers ]);
  
+  function GetCharacterBodyPartImage( category, designNumber ){
 
+   return `layersForCharacterCompo/${category}/${designNumber }.png`;
+}
 //setSelectedImages which is SetSelected image passed by parent component
 // will update images once we click on one image fromlayer selection bowar
   const handleImageSelect = (category, obj   ) => {
 
-    const image = `${category}/${obj.layerName }.png`
-    //`${category}/${obj.layerName }.png`
- 
+    const image = GetCharacterBodyPartImage( category, obj.layerName );// `${category}/${obj.layerName }.png`
+  
+     console.log(  " handle image select : " , obj  );
           
          
-         sendTracking(user , category, image, "setSelectedImages" ,  "ComposedCharacter " );
- 
- 
+       sendTracking(user , category, image, "setSelectedImages" ,  "ComposedCharacter " );
+  
        const updatedSelectedImages = { ...selectedImages };
  
        if (!updatedSelectedImages.hasOwnProperty(category)) {
          throw new Error(`Category '${category}' does not exist in selectedImages.`);
        }
         
-     /*
+    /*
        updatedSelectedImages[category] =
         [
           { imagePath:"layersForCharacterCompo/" + image, 
@@ -392,15 +610,15 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
             name: obj.name
         }
       ]
-*/
-
+ */
+ 
         updatedSelectedImages[category] = [
           {
-            ...updatedSelectedImages[category][0], // Shallow copy of the existing object
-            imagePath: "layersForCharacterCompo/" + image // Update the imagePath property
+            ...obj,//updatedSelectedImages[category][0], // Shallow copy of the existing object
+            imagePath:   image // Update the imagePath property
           }
         ];
-
+ 
  
          
        
