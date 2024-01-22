@@ -149,12 +149,12 @@ export async function  getUserMe   () {
 
 } 
 
+ 
+
 export async function  getUser   () {
  
   const endpoint = `${process.env.REACT_APP_API_URL}user/me`; // make it specific (filter to twitter fields)
-
  
-
   try {
     const response = await fetch(endpoint, {
       method: 'GET',
@@ -261,7 +261,32 @@ export const setDebugMode = async (  setDebugModeContext ) => {
 };
 
 
+// later this should be only using credetial for ID (we still use ID parameter for debugging)
+export async function DeleteAccountAPI( ID ){
+ 
+   
+ 
+  const endpoint = `${process.env.REACT_APP_API_URL}deleteAccount?ID=${ID}`; 
+     
 
+  try {
+    const response = await fetch(endpoint );
+  
+    if (!response.ok) {
+      console.log("!response.ok: User is not connected to discord.")
+     }
+   
+
+  } catch (error) {
+    
+  
+    console.log('user/me Error:  data: return null', error);
+    return null;
+   }
+ 
+
+
+}
 
 // web2 custom bundle pack
 export async function CreateBundlePackWEB2(  ){
@@ -422,76 +447,8 @@ export async function addorupdate( user , address ){
   
   return resultsPostJson.data;
 }
-
-export async function GetLayerSupply(){
-  const endpoint = `${process.env.REACT_APP_API_URL}GetLayerSupply`;
-  const result = await fetch(endpoint);
-  let allSupply = await result.json();
  
-  return allSupply;
-}
 
-
-/*
-export async function  Add_owning_and_otherLayerInfo( user , layerToChooseFrom ){
-
-
-
-  const allSupply = await GetLayerSupply();
-
-  
-
-  const updatedLayerToChooseFrom = { ...layerToChooseFrom };
-  const endpoint = `${process.env.REACT_APP_API_URL}findUsersWithNonZeroProperties?ID=${user.ID}`;
-   const result = await fetch(endpoint);
-   let userOwnedLayers = await result.json();
-
-     // const copy_updatedLayerToChooseFrom = { ...updatedLayerToChooseFrom };
-       for (const category in updatedLayerToChooseFrom) {
-         const userOwnedLayersInCategory = userOwnedLayers[0].layers[category] ;//userOwnedLayers[category]; //<<< null
-
-         const layersToChooseFromInCategory =  updatedLayerToChooseFrom[category]  ;
-         
-         let layerIndex=0; //from 0 to 11 ( we added a (useless) layer 0, to avoid compensation +1 or -1)
-         for (const layer of layersToChooseFromInCategory) {
-
-             
-               layer.supply =  allSupply[0].layers[category][layerIndex] ; 
-                
-                layerIndex++;
-
-             if (userOwnedLayersInCategory){
-       
-                 let ownedCount = 0;
-                 for (const userLayer of userOwnedLayersInCategory) {
-                   if (userLayer   === layer.layerName) {
-                     ownedCount++;
-                    }
-                 }  
-                 layer.owning = ownedCount; 
-            
-                    const targetLayer = updatedLayerToChooseFrom[category].find((item) => item.layerName === layer.layerName);
-
-                         if (targetLayer) {
-                           targetLayer.owning = ownedCount; // Assign the value 5 to the owning property
-                         }
-
-             }
-
-
-         }
-        
-        //  console.log( "FINAL  category  =" , category,  "   layer=" ,  allSupply[0].layers[category] );
-         // console.log( "FINAL >>>>>> ",category," updatedLayerToChooseFrom", updatedLayerToChooseFrom[category]);
-        
-       }
-       
-
-       console.log( "FINAL      updatedLayerToChooseFrom", updatedLayerToChooseFrom);
-    return updatedLayerToChooseFrom;
-
-}
-*/
  
  
 // this mostly for testing purposes

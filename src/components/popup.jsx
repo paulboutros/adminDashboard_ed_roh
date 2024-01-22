@@ -65,24 +65,53 @@ const address = useAddress();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+
     const [missingCategories, setMissingCategories] = useState([]);
-    
+    const [filteredImages, setFilteredImages] = useState([]);
 
     sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
     const [open, setOpen] = useState(false);
    
-  let filteredImages; 
 
-   filteredImages = GetfilteredImages(selectedImages);
-      
-   useEffect(()=>{
-    if (!address) return;
-    
-     CheckComBoValidity(filteredImages ,user , address, setMissingCategories );
-     
-   }, [ selectedImages ]);
  
-  const handleOpen = () => { setOpen(true); };
+   
+      
+
+
+
+
+
+    
+   useEffect(()=>{
+     
+        if (!address) return;
+      //  if( !open ){ return; }
+        
+        let filteredIm = GetfilteredImages(selectedImages);
+        setFilteredImages(filteredIm);
+
+        console.log( ">>>>    t filteredIm = GetfilteredImages(selectedImages);")
+      //====
+        const missingCateg =[];
+        for (const category in filteredImages) {
+            if (filteredImages[category][0].owning === 0) { missingCateg.push(category);}
+       }
+      setMissingCategories(missingCateg);
+
+       //====
+        console.log( ">>>>      missingCateg =", missingCateg)
+  
+     
+   }, [ open , selectedImages ]); // selectedImages  // selectedImages // selectedImages
+ 
+  const handleOpen = () => {
+     setOpen(true); 
+    
+ 
+
+        console.log( ">>>>  OPEN      missingCateg =" )
+    
+    };
  
   const handleClose = () => {setOpen(false);};
     
@@ -149,15 +178,18 @@ const address = useAddress();
              status={2} 
              filteredImages={filteredImages} 
               user={user} address={address} 
-              setMissingCategories={setMissingCategories}
+              missingCateg ={ missingCategories }
               />
                 
+     
+    
+
             <Box sx={{  display: 'flex',  justifyContent: 'space-between',  alignItems: 'center',  marginTop: '20px',  marginBottom:"20px" }} >
 
 
                <Web3Button
                   contractAddress={BURN_TO_CLAIM}  
-                  isDisabled ={ missingCategories.length > 0 }
+                  isDisabled ={!user || !address || missingCategories?.length > 0   }
                   action={async ( contract ) => await mintMutantNft( contract )} 
               
                   className="tw-web3button--connect-wallet"
@@ -242,27 +274,29 @@ function ButtonCTALoginFor2FreeLayers(){
  
 }
 
-function NotEnoughtLayerMessage( {status ,filteredImages, user , address, setMissingCategories }){
+function NotEnoughtLayerMessage( {status ,filteredImages, user , address, missingCateg }){
   //const { user } = useUserContext();
-  const {allLayers} = useAllLayersContext();
+  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  if(!missingCateg) {
+    return("missingCateg");
   
+  }
+  
+  if(!user) {
+    return("To go further, Login with Discord");
+  
+  }
+
+
+
  
     switch (status) {
       case 1:
         return (
           <></>
-        //   <Typography
-        //   fontWeight="100" 
-        //   sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} >
-          
-        //    { CheckComBoValidity(filteredImages ,user , address ) }
-        //    <CancelRoundedIcon sx={{ 
-        //  color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> <br />
         
-        //  If any layers are missing, you can quickly earn them by joining with Discord
-        // </Typography>
         )
       case 2:
         return (
@@ -271,15 +305,10 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address, setMis
         fontWeight="100" 
         sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} > 
 
-        { CheckComBoValidity(filteredImages ,user , address, setMissingCategories ) } 
-        {/* <CancelRoundedIcon sx={{  color: colors.redAccent[500],position: 'relative',   top: '1px', left: '1px',  height :"15px" }} /> */}
+        { CheckComBoValidity(filteredImages ,user , address, missingCateg ) } 
+        
          <br />  
-         {/* If any layers are missing, you can quickly earn them by sharing the link below: */}
-            {/* Now, you can share or post the link. Every think someone open your link,  Discord will
-             initiate the login process. If they decide to join, you will instantly recieve a new layer.
-
-             On your profile page you can check, your new layers as well as the status of your invite link.
-             Good luck! */}
+         
         </Typography>
         
         
@@ -311,33 +340,17 @@ const handleImageSelect = (category, obj   ) => {
 
    
 
-  function CheckComBoValidity(filteredImages, user, address, setMissingCategories ){
-   
-  
-    // if(!user) return;
-      const missingCategories =[];
-// find is user has missing tokenID
-   for (const category in filteredImages) {
-
-        if (filteredImages[category][0].owning === 0) {
-        missingCategories.push(category);
-       }
-   }
-
-   // the button needs to access, so it is disable if we miss some token ID
-   setMissingCategories(missingCategories);
- 
-    if (missingCategories.length > 0 ){
-
-
-      //console.log("Missing Categories:", missingCategories);
-    }else{ 
+  function CheckComBoValidity(filteredImages, user, address, missingCateg ){
     
-            if(!user) return;
-      }
+    
+            if(!user) {
+                 return("To go further, Login with Discord");
+               
+            }
+     
   
 
-    const missingCount =  missingCategories.length;
+    const missingCount =  missingCateg.length;
         switch (missingCount) {
           case 5:
             return ("Welcome to the claiming section. In order To claim the reward,"+ 

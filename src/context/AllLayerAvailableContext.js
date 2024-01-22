@@ -2,8 +2,7 @@ import {createContext, useContext,  useState, useEffect } from "react";
 
 import { getAllLayersAvailable , GetAllNFTfromSDK, getSDK_fromPrivateKey   } from "../data/API.js";
 //import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
-import { GetLayerSupply } from "../data/API.js";
-import { useUserContext } from './UserContext.js'; // to get user data from context provider
+ import { useUserContext } from './UserContext.js'; // to get user data from context provider
 
 import { TOOLS_ADDRESS } from "../const/addresses.ts";
 import { useContract,  useOwnedNFTs, useAddress  } from "@thirdweb-dev/react";

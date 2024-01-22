@@ -85,22 +85,7 @@ import { PopTaskStatusDiscordInviteContent } from '../TooltipContent/content.jsx
     console.log( "MongoDeleteResult    = " , MongoDeleteResult);
  }
 
-
- function onClickInvite(){ 
-    // to do:
-    /*
-    add toast, copied to clip board
-    */
- 
-
-     copyTextToClipboard ( discordInvite?.shareableLink )
-
-
- 
- }
-
-    
-
+  
     return (
       <>
 
@@ -314,15 +299,7 @@ useEffect(  ()=> {
  in such scenario, the discord invite is null (not created yet), and it will trigger the code that automatically
  create an invite and assign it to this user
 */
-async function  deleteInvite(){
-  const MongoDeleteResult = await deleteDiscordInvite(user.ID);
-
-   // so it can reload after we changed it on the server
-  // setdiscordInviteLoaded(false);
-  //setUser(user);
-  console.log( "MongoDeleteResult    = " , MongoDeleteResult);
-}
-
+ 
 
 function onClickInvite(){ 
   // to do:
@@ -337,20 +314,7 @@ function onClickInvite(){
 
 }
 
- function getCompletion(){
-
-    if ( !discordInvite ){
-
-      return  (`ACCEPTED: ${"0"}`)   ;
-    }
-
-
-let task = 0;
- 
-return  (`ACCEPTED:${discordInvite?.acceptedUsers.length}`);  
-//   return  (`ACCEPTED: ${referralData.referredUser.length}`)   ;
-return  (`To DO ${task} / 2`)   ;
- }
+  
 
 
    return(
@@ -453,14 +417,7 @@ useEffect( ()=>{
  in such scenario, the discord invite is null (not created yet), and it will trigger the code that automatically
  create an invite and assign it to this user
 */
-async function  deleteInvite(){
-  const MongoDeleteResult = await deleteDiscordInvite(user.ID);
-
-   // so it can reload after we changed it on the server
-  // setdiscordInviteLoaded(false);
-  //setUser(user);
-  console.log( "MongoDeleteResult    = " , MongoDeleteResult);
-}
+ 
 
 
 function onClickInvite(){ 

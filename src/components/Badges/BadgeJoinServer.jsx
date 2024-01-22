@@ -22,6 +22,9 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
 
   const getUserGuild = async ( user ) => {
     
+    if ( !user ){
+      setJoinedServer(   response_t   )
+    }
     
 
     const userID =  user.ID;
@@ -86,37 +89,7 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
   }
 
   export function TaskStatus3(){
-  
- 
-    const [tasks, setTasks] = useState([
-      
-      {global_name:"", src:""}, 
-      {global_name:"", src:""}, 
-      {global_name:"", src:""}  
-    ]);
-
-    const updateTask = async ( ) => {
-     
-     let referredUserListDetails  = await getManyUserData(  joinedServerData.referredUser   );
-     
-      //mockreferred isc opied from  postman /getManyUserData response
-        //referredUserListDetails =mockreferred;
-
-
-        const referredUsers =[];
-        referredUserListDetails.forEach(data => {
-          console.log ( " >>>>>>>  data  : "  , data  );
-          const src = getAvatar(data.discordUserData );
-         const elData = { global_name : data.discordUserData.global_name,  src:src };
-         referredUsers.push(elData) 
- 
-       });
-        
-       setTasks(referredUsers);
-      
-       console.log ( " referredUsers  : "  ,  referredUsers  );
-
-    };
+   
  
 
      const { user } = useUserContext();
@@ -126,6 +99,12 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
 
   const getUserGuild = async ( user ) => {
     
+
+    if (  !user ) { 
+       
+
+      setJoinedServer(null);
+    }
     
 
     const userID =  user.ID;

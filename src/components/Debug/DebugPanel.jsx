@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import { HtmlTooltip, tokens } from "../../theme.js";
 import { Box, Button, Divider, Tooltip, useTheme } from '@mui/material';
 import { useAddress } from "@thirdweb-dev/react";
-import { emit_guildMemberAdd, emit_guildMemberRemove, getSDK_fromPrivateKey, myDiscordInvite, setWallet } from '../../data/API.js';
+import { DeleteAccountAPI, emit_guildMemberAdd, emit_guildMemberRemove, getSDK_fromPrivateKey, myDiscordInvite, openOAuth2Url, setWallet } from '../../data/API.js';
 import { useUserContext } from '../../context/UserContext.js';
 import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
 import { useDebugModeContext } from '../../context/DebugModeContext.js';
@@ -136,15 +136,7 @@ function ButtonRow(  { DISTstakedAmount, setDISTAmount }   ){
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  async function disconnectWalletDiscord() {
-     const nullAdress = null;
-
-   // const result = await setWallet(user, nullAdress);
-     const modifUser = { ...user, wallet: nullAdress };
-
-    setUser(modifUser);
-
-  }
+   
 
   // this is called repeatedly from ServerButtom intervalId
   async function checkCondition () {
@@ -170,20 +162,30 @@ function ButtonRow(  { DISTstakedAmount, setDISTAmount }   ){
       {debugMode && (
         <>
 
-          <Tooltip title={"disconnect, as if user did not completed this task"}>
+          <Tooltip title={"delete account and to restart over"}>
+
             <Button variant="contained"
               sx={{ backgroundColor: theme.debugModeColor }}
-              onClick={() => disconnectWalletDiscord()}>
-              {"[X]"}
+              onClick={() => { 
+                
+                const ID =  user?.ID; 
+                openOAuth2Url(user,setUser); // log out 
+                DeleteAccountAPI(ID);
+                
+                
+                }}>
+                Delete account 
             </Button>
+
+
           </Tooltip>
  
           {/* ====================================================================================== */}
-          <HtmlTooltip //open={true} 
-
-            title={<React.Fragment>
-
-              <Typography fontSize={"15px"}>{"Simulate a join Server using your invite code"}</Typography>
+          <HtmlTooltip   title={ 
+          
+          <React.Fragment>    
+ 
+           <Typography fontSize={"15px"}>{"Simulate a join Server using your invite code"}</Typography>
 
               <Box>
                 <p> - In real, this event is called by Discord server when someone join using your invite code </p>
