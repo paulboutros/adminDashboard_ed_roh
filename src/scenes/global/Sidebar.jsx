@@ -36,18 +36,13 @@ import { CiTrophy } from "react-icons/ci";
 import { GiBoxUnpacking } from "react-icons/gi"
 import { TbPackages } from "react-icons/tb";
 import "react-pro-sidebar/dist/css/styles.css";
-import { BootstrapTooltip, text1,  tokens } from "../../theme";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
- import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import {   text1,  tokens } from "../../theme";
+ 
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+ 
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
  
-import {sendTracking} from "../../data/API"
+ 
 import Item from "../../components/Item";
  import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
 import { referralRewardTabIndex } from "../profileWallet/index.jsx";

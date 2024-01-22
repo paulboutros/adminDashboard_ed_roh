@@ -68,20 +68,14 @@ const address = useAddress();
 
     const [missingCategories, setMissingCategories] = useState([]);
     const [filteredImages, setFilteredImages] = useState([]);
-
-    sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
+     
     const [open, setOpen] = useState(false);
    
-
  
-   
-      
 
 
 
 
-
-    
    useEffect(()=>{
      
         if (!address) return;
@@ -108,8 +102,8 @@ const address = useAddress();
      setOpen(true); 
     
  
-
-        console.log( ">>>>  OPEN      missingCateg =" )
+     sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
+     
     
     };
  

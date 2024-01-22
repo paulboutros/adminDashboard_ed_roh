@@ -501,12 +501,14 @@ export async function myAppLink (user_ID){
     const resultG = await fetch(endpointG);
     let resultsJson = await resultG.json();
      
+
+     console.log(" referral result  : resultsJson  = ", resultsJson);
     // if no referral link has been created we generate one
-      if (resultsJson.referralCode.length === 0){
+  if (!resultsJson.referralCode || resultsJson.referralCode.length === 0){
 
         const dataToSend= { 
           ID: user_ID ,
-          one_referral_Code: "xxx"
+          one_referral_Code: "xxxTempxx"
         }
 
      const endpoint = `${process.env.REACT_APP_API_URL}generateReferralCode`; // make it specific (filter to twitter fields)
