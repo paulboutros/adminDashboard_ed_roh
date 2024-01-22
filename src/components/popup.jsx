@@ -47,6 +47,7 @@ import LayerBaseInfo from  "./LayerBaseInfo";
  import { useAllLayersContext } from '../context/AllLayerAvailableContext';
  import { VerticalSpace } from "./Layout.jsx";
 import { ServerButton } from "./Buttons/buttons.jsx";
+import { isWalletSaved_OnServer } from "./Badges/EarnBadges";
 
 
 
@@ -410,41 +411,36 @@ const handleImageSelect = (category, obj   ) => {
                 
                 </p>
         
-            { user?.wallet !== connectedWalletAddress && (
-                 <>
+                    { ( isWalletSaved_OnServer(user) && user?.wallet !== connectedWalletAddress )  ? (
+                        <>
+      
+                          <p style={
+                            { padding:"5px 5px 5px 5px", width:"400px", fontSize:"12px",fontWeight:"700px", color: colors.grey[400]}
+                           }> 
+                                If you press confirm, your connected wallet will be saved as primary for this app. <br />
+                               <li>All staking will be transfered to the new address</li> 
+                           </p>
+                          
+                        
+                          </>
 
-        
-        
-                   <p style={
-                    {
-                      padding:"5px 5px 5px 5px",
-                       width:"400px", 
-                      fontSize:"12px",
-                      fontWeight:"700px",
-                       color: colors.grey[400]
-                    }
-                  }  > 
-                  
-                  
-                 {/* The wallet you are <b>connected</b> to is not the one  
-                  associated with Discord on this DAPP <br /> 
+                    ):(
+                            <>
+            
+                            <p style={
+                              { padding:"5px 5px 5px 5px", width:"400px", fontSize:"12px",fontWeight:"700px", color: colors.grey[400]}
+                            }> 
+                                  If you press confirm, your connected wallet will be saved as primary for this app. <br />
+                                <li>You can change it later on if need</li> 
+                            </p>
+                            
+                          
+                            </>
+                       
+
+                    )
                     
-                  To use  {addressShortened(connectedWalletAddress)} instead, 
-                   simply press confirm.
-                  
-                   
-
-                  You agree that your $DIST staking and unclaimed $WU reward, will be transfered
-                  to the newly register address. */}
-                   If you press confirm, your connected wallet will be used as primary for this app. <br />
-                    <li>All staking will be transfered to the new address</li> 
-                  
-                  </p>
-                   
-                
-                  </>
-
-            )}
+                    }
        
 
              
@@ -459,8 +455,9 @@ const handleImageSelect = (category, obj   ) => {
            backgroundColor: popUpColor 
           }}>
  
-        
-            { user?.wallet !== connectedWalletAddress ? (
+          {/* if user did not even save a wallet, UI looks stupid when asking to replace with new, there is nothing
+          to replace yet */}
+            { (  isWalletSaved_OnServer(user) &&  user?.wallet !== connectedWalletAddress) ? (
                  <>
                     <p style={
                     {

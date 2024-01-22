@@ -505,8 +505,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
      return;
    }
  
-   console.log(" user.wallet  =  " , user.wallet   , "clientL  address    ="  ,address     );
-  
+   
   const loggedInWithDiscord = user ? true:false; 
   updateTask(0,loggedInWithDiscord )
  
@@ -784,9 +783,9 @@ function connectedWallet_match_savedWallet ( user , address ){
   return   address === user.wallet? true:false
 }
 
-function isWalletSaved_OnServer( user ){
+export function isWalletSaved_OnServer( user ){
      if (!user)return false;
- return (  !user.wallet ||  user.wallet.includes("0000000")  )? false:true
+ return (  !user.wallet    )? false:true
 }
 
  

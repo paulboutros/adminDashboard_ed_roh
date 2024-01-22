@@ -17,15 +17,8 @@ import { CgDebug } from "react-icons/cg";
 
 const _padding ="10px 0 10px 10px"
 export function DebugPanel(  { DISTstakedAmount, setDISTAmount }      ) {
-
-
-  const address = useAddress();
-  
-  const { discordInvite, setDiscordInvite } = useDiscordInviteContext();
-  const { debugMode } = useDebugModeContext();
-  const { user, setUser } = useUserContext();
-
-  const { distStakedAmount, distReward,  setReFetch } = useDISTContext(); 
+ 
+  const { distStakedAmount  } = useDISTContext(); 
   const distStakedAmountRef = useRef(distStakedAmount);
 
   useEffect(() => {
@@ -36,34 +29,7 @@ export function DebugPanel(  { DISTstakedAmount, setDISTAmount }      ) {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
-  async function disconnectWalletDiscord() {
-     const nullAdress = null;
-
-   // const result = await setWallet(user, nullAdress);
-     const modifUser = { ...user, wallet: nullAdress };
-
-    setUser(modifUser);
-
-  }
-
-  // this is called repeatedly from ServerButtom intervalId
-  async function checkCondition () {
-     setReFetch(true);
  
-    let result = { tokenStaked: distStakedAmountRef.current  , _rewards: distReward };
-
-    console.log("distStakedAmountRef.current = ", distStakedAmountRef.current,  "tokenStakedBeforeClicking    ", DISTstakedAmount);
-
-    
-    if (distStakedAmountRef.current !== DISTstakedAmount) {
-      // onConditionMet( result );
-      return result; // true;
-    } else {
-      return null; //false;
-    }
-
-  }
      
   return (
     <>
@@ -195,6 +161,10 @@ function ButtonRow(  { DISTstakedAmount, setDISTAmount }   ){
               </Box>
             </React.Fragment>}
           >
+
+              <> 
+                 child
+              </>
 
 
 

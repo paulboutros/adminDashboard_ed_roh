@@ -130,7 +130,7 @@ export async function  getUserMe   () {
     const data = await response.json();
 
 
-    console.error('const response = await fetch(endpoint,  :', response);
+      //console.error('const response = await fetch(endpoint,  :', response);
     
 
   if ( data) 
@@ -297,16 +297,15 @@ export async function CreateBundlePackWEB2(  ){
    const resultsPostJson = await axios.post(endpoint, dataToSend);
 
    console.log("data response :" ,   resultsPostJson.data );
-   return resultsPostJson.data;
+     return resultsPostJson.data;
 }
 
  
+/*
 export async function setUserTask( user , address ){
  
-  const dataToSend={ 
-    ID : user.ID 
-     
-  }
+  const dataToSend={  ID : user.ID  }
+  
   
 const endpoint = `${process.env.REACT_APP_API_URL}setUserTask`; 
 const resultsPostJson = await axios.post(endpoint, dataToSend);
@@ -315,19 +314,8 @@ console.log("setUserTask  >>> response :" ,   resultsPostJson.data );
 
 return resultsPostJson.data;
 }
+ */
 
- /*
- export async function openPackServer( packID){
-
-   
-  const endpoint = `${process.env.REACT_APP_API_URL}openPack`; // make it specific (filter to twitter fields)
-  const resultsPostJson = await fetch(endpoint);
-  const resultsJson = await resultsPostJson.json();
-  
-  
-  return resultsJson ;
-}
-*/
 
 export async function getOpenedPack (   userID){
   const dataToSend={ 
@@ -614,7 +602,11 @@ export async function ERC20claim_discord_login_required(ID, filteredImages_arg ,
 
 
 export async function getManyUserData( IDlist  ){
- 
+  // if we did not invite anyone yet, the list provided as argument can be null
+   if (!IDlist || IDlist.length === 0){ 
+      return [];
+   }
+
    const dataToSend={ IDlist : IDlist }
     
    

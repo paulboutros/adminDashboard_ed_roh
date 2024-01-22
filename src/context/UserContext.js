@@ -36,7 +36,7 @@ export function UserProvider({ children }) {
         try {
           const response = await getUserMe();
  
-          console.log('  User context : response.data is null  >>>   setUser(null); ', response );
+         // console.log('  User context : response.data is null  >>>   setUser(null); ', response );
           setUser(response);
         } catch (error) {
 

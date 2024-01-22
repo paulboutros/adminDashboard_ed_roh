@@ -21,9 +21,7 @@ import { PopTaskStatusDiscordInviteContent } from '../TooltipContent/content.jsx
 
     const {debugMode }     = useDebugModeContext();
     const [tasks, setTasks] = useState([
-      // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
-      // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
-      // { description: 'validate', completed: false },
+      
       {global_name:"", src:"", verified:null, email:null }, 
        
     ]);
@@ -243,9 +241,7 @@ const mockreferred=
   
   const {debugMode }     = useDebugModeContext();
   const [tasks, setTasks] = useState([
-    // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
-    // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
-    // { description: 'validate', completed: false },
+     
     {global_name:"", src:"", verified:null, email:null }, 
      
   ]);
@@ -339,16 +335,14 @@ function onClickInvite(){
     
   const {debugMode }     = useDebugModeContext();
   const [tasks, setTasks] = useState([
-    // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
-    // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
-    // { description: 'validate', completed: false },
+    
     {global_name:"", src:"", verified:null, email:null }, 
      
   ]);
 
   const updateTask = async ( ) => {
    
-
+     
        //discordInvite?.acceptedUsers contains list of ID (discord ID) who accepted the invite
        // getManyUserData > to get avatar and other info to display
       let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
@@ -387,7 +381,7 @@ const [referralData, setReferralCode] = useState(); // Set rowData to Array of O
 
 useEffect(  ()=> {
  
- //  if (!referralData)return;
+   if (!discordInvite)return;
     updateTask();
 
  

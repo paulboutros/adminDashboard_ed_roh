@@ -50,7 +50,7 @@ export function DISTProvider({ children }) {
       setDISTStakedAmount( tokenStaked );
       setDISTReward( _rewards );
 
-      console.log(  "context fetchDataStakeInfo   >>>> tokenStaked >>>  = " , tokenStaked , "_rewards ", _rewards  , "address", address);
+     // console.log(  "context fetchDataStakeInfo   >>>> tokenStaked >>>  = " , tokenStaked , "_rewards ", _rewards  , "address", address);
       res = { tokenStaked :tokenStaked , _rewards:_rewards };
       return res;
 
@@ -63,9 +63,12 @@ export function DISTProvider({ children }) {
  
 
     useEffect(() => {
-        let isMounted = true;
 
-        console.log(" 111 DIST context    address=: "  ,   address   ,  " 111 reFetch   = "  , reFetch    );
+      if (!address)return;
+
+        let isMounted = true;
+       
+       // console.log(" 111 DIST context    address=: "  ,   address   ,  " 111 reFetch   = "  , reFetch    );
 
 
         const fetchData = async () => {

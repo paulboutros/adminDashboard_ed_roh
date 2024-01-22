@@ -33,7 +33,7 @@ import {
 import MyPacks from '../myPacks/index';
  
 
- import {  setUserTask   } from '../../data/API';
+  
  import { useParams } from 'react-router';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
 
@@ -146,17 +146,9 @@ export default function BasicTabs() {
     setValue(newValue);
   };
   
-   useEffect(()=>{
-    if (!user)return;
-    const fetchData = async ( ) => {
-          
-        await setUserTask(user);
  
-    }
-    fetchData();
-   
-   }, [ user ]);
- 
+
+
   return (
     //<Box sx={{ width: '100%' }}>
     < >

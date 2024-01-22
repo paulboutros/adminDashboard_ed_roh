@@ -52,13 +52,13 @@ export function AllLayersProvider({ children }) {
 
 
 
-
+/*
     useEffect(()=>{
        
     console.log( "allNFTs" , NFTdata);
 
     }, [  NFTdata  ]);
-
+*/
  
    
     const [ownedNftData, setOwnedNfts] = useState(null);
@@ -144,9 +144,8 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 
 //================================================================================
 //console.log("XXX   snapshotBeforeModification: ",  initialLayerToChooseFrom );
- const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
-  console.log("Snapshot before modification: ", snapshotBeforeModification);
-//console.log("Current state after modification: ", initialLayerToChooseFrom);
+ //const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
+  
  
  
  for ( let i = 0 ; i < NFTdata.length; i++  ){ 
@@ -186,8 +185,8 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
   } 
    
 //=====================================================================================
-console.log("AFTER  initialLayerToChooseFrom: ", 
-initialLayerToChooseFrom);
+ 
+
     return initialLayerToChooseFrom;
 
 }

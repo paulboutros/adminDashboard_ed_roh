@@ -18,9 +18,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
  
     const { appLink } = useAppLinkContext();
     const [tasks, setTasks] = useState([
-      // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
-      // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
-      // { description: 'validate', completed: false },
+      
       {global_name:"", src:""}, 
       {global_name:"", src:""}, 
       {global_name:"", src:""}  
@@ -164,9 +162,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
 
     const { appLink } = useAppLinkContext();
     const [tasks, setTasks] = useState([
-      // { description: 'login with Discord',     completed: false, callBack:  linkAdressToDiscord },
-      // { description: 'link wallet to Discord', completed: false, callBack:  linkAdressToDiscord   },
-      // { description: 'validate', completed: false },
+       
       {global_name:"", src:""}, 
       {global_name:"", src:""}, 
       {global_name:"", src:""}  

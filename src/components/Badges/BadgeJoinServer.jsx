@@ -10,6 +10,7 @@ import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../..
 import { copyTextToClipboard, timeAgo } from '../../utils';
 import { getAvatar, getManyUserData } from '../../data/API';
 import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
+import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
     
 
   export function TaskForReward3(){
@@ -17,22 +18,26 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
 
      const { user } = useUserContext();
      
-   
-  const [joinedServerData, setJoinedServer] = useState(); // gieaway recived but not revealed yet, and not added to layers count
+     const { joinedServerData ,  setJoinedServer } =  useDiscordInviteContext();
+ // const [joinedServerData, setJoinedServer] = useState(); // gieaway recived but not revealed yet, and not added to layers count
 
+
+ /*
   const getUserGuild = async ( user ) => {
     
-    if ( !user ){
-      setJoinedServer(   response_t   )
-    }
+      if ( !user ){ setJoinedServer(   null   )
+        
+      }
     
-
+      console.log( ">> Badge Join Server  fetch:getUserGuild  >>>>   "  );
     const userID =  user.ID;
  
       const endpoint_t = `${process.env.REACT_APP_API_URL}getUserGuild?ID=${userID}`; // make it specific (filter to twitter fields)
       const result_t = await fetch(endpoint_t);
       let response_t = await result_t.json();
       
+     console.log( ">> Badge Join Server  response ="  ,    response_t   );
+
       if ( response_t.status ){
       
        // response_t.text = "Guild Member since :" +   timeAgo(response_t.joinedAt) 
@@ -46,12 +51,12 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
                
 
   };  
-   
+   */
 
   useEffect( ()=>{
      
     if (!user)return;
-         getUserGuild(user);
+     //    getUserGuild(user);
    
 
   }, [ user  ]);
@@ -73,7 +78,8 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
         {joinedServerData?.status ?(  //   joinedServerData?.date
            <p>  You are a <span style={{fontWeight:"700px"}} >{ "Guild Member"}</span> since  <span style={{fontWeight:"700px"}} >{   joinedServerData?.date }</span>    </p>
         ):(
-          <p> <>Share link <span style={{fontWeight:"700px"}} >{   joinedServerData?.text}</span> with friends</></p>
+          // <p> <>Share link <span style={{fontWeight:"700px"}} >{   joinedServerData?.text}</span> with friends</></p>
+             <p>Join The Server Here</p>
         )}
        
            {/* <p> <>Share link <span style={{fontWeight:"700px"}} >{ joinedServerData?.status}</span> with friends</></p> */}
@@ -95,7 +101,8 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
      const { user } = useUserContext();
      
    
-  const [joinedServerData, setJoinedServer] = useState(); // gieaway recived but not revealed yet, and not added to layers count
+     const { joinedServerData ,  setJoinedServer } =  useDiscordInviteContext();
+ /*
 
   const getUserGuild = async ( user ) => {
     
@@ -103,7 +110,7 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
     if (  !user ) { 
        
 
-      setJoinedServer(null);
+     // setJoinedServer(null);
     }
     
 
@@ -122,19 +129,20 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
         response_t.text = "Join the Wulirocks server";
       }
       
-      setJoinedServer(   response_t   );
+     // setJoinedServer(   response_t   );
 
               
 
   };  
-  
+
+  */
 
   
 
   useEffect( ()=>{
      
     if (!user)return;
-         getUserGuild(user);
+       //  getUserGuild(user);
    
 
   }, [ user  ]);
@@ -144,9 +152,7 @@ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
   
-    function linkAdressToDiscord(){
-   
-   }
+    
    function getCompletion(){
 
       if (!joinedServerData ){return  (`JOINED: ${"0"}`);}
