@@ -44,7 +44,7 @@ import { EarnBadges,
      RewardInfo,RewardInfoLabel, RewardValue, WURewardInfoLabel 
     } from '../../components/Badges/EarnBadges';
 
-import   { TaskForReward2, TaskStatus2 } from '../../components/Badges/AppLinkDataBox.jsx';
+import   { TaskForRewardAppLink, TaskStatus2 } from '../../components/Badges/AppLinkDataBox.jsx';
 import   { TaskForReward3, TaskStatus3 } from '../../components/Badges/BadgeJoinServer.jsx';
 import   { TaskForReward4, TaskStatus4 } from '../../components/Badges/BadgeDiscordInvites';
 
@@ -208,7 +208,7 @@ export default function BasicTabs() {
         
           <VerticalSpace space={1}/>
 
-          <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForReward2/>} 
+          <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForRewardAppLink/>} 
                       taskStatus={<TaskStatus2/>}   
                        rewardInfo={<RewardInfo stakedAmount={0}/>}
                        rewardValue={<RewardValue rewardAmount={0}/>} 

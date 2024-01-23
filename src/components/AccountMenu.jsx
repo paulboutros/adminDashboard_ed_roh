@@ -164,13 +164,13 @@ const theme = useTheme();
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
 
-         {/* {address && (    */}
+        {/*   we currently turn off this       
            <MenuItem onClick={openProfilePage}>
            <Avatar/>  Profile 
                
           
          </MenuItem>
-         {/* )} */}
+          */}
 
 
       {/*Owner 1 0x75 is also signed of transaction, which is a problem when testing transaction

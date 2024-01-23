@@ -119,20 +119,25 @@ useEffect(()=>{
 useEffect(()=>{
   (async ()=> {
     
-    const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScoreMOCK`;  //getDiscordScore
+    const endpoint = `${process.env.REACT_APP_API_URL}getDiscordScore`;  //getDiscordScore MOCK
      const result  = await fetch(endpoint);
-    //========
+   
     let resultsJson = await result.json();
  
-    //console.log(  "resultsJson"  ,resultsJson);
+     
+
+   console.log(  " resultsJson   = "   ,resultsJson );
+
+
  
      const listOfID = resultsJson.map(item => item.id);
      let referredUserListDetails  = await getManyUserData(  listOfID   );
- 
+
     let temp = resultsJson.map((item, index ) =>  {
       return {
-        ...item, // Copy existing properties from resultsJson
-        discordUserData: referredUserListDetails[index].discordUserData,
+        ...item, //  this part is more related to invites numbers and score
+
+        discordUserData: referredUserListDetails[index].discordUserData, // this is use to access avatar and maybe more later about discord user
       } 
      });
   
@@ -150,31 +155,26 @@ useEffect(()=>{
 
 
 
- 
-  
 const columns = [
  
   {
     field: "discordUserData", //(params.value)
     headerName: "Discord",
     flex: 2,
-   // cellClassName: "name-column--cell",
+   
     width: 200,
     renderCell: (params) => { // (params.value   = field )
        
       return (
         <>
-      {/* src= {!user ? ( null ):(  getAvatar( user.discordUserData )  )}  */}
+      
           <Avatar  src= { getAvatar( params.value ) } />  
           <p> {params.value.username}  </p>
-          {/* getAvatar( user.discordUserData ) <Avatar src={params.value.avatar} /> */}
          
-        
         </>
       );
     }
-
-    
+     
   } ,
     
   {
@@ -191,22 +191,62 @@ const columns = [
     renderCell: (params) => {
       return (
         <Box>
-         
-        {/* <Typography >  {params.value.id} </Typography>    */}
-
-          {/* <ProgressBarB totalInvite={totalInvite}
-           invite_use={params.value.invite_use} invite_share={params.value.invite_share} 
-           barWidth={ 50 } /> */}
-          
-          
-            <p> { params.value.invite_use}  /   {  params.value.nextInviteMaxThreshhold }  </p>    
-             {/* <p> { params.value.invite_use}  /   { totalInvite }  </p>     */}
-           {/* <p> { params.value.invite_share}   </p>   */}
-
-           <HorizontalBars  invite_use={ params.value.invite_use } />
-          {/* <RenderCellA debugMode ={true}   colors={colors}  data={params.value}  />   */}
+             <p> { params.value.invite_use}  </p>    
+   
+        </Box>
+      );
+    },
+  } 
   
-        
+  ];
+
+
+
+
+
+
+ 
+  /*  //  use this for mock data ...
+   const columns = [
+ 
+  {
+    field: "discordUserData", //(params.value)
+    headerName: "Discord",
+    flex: 2,
+   
+    width: 200,
+    renderCell: (params) => { // (params.value   = field )
+       
+      return (
+        <>
+           <Avatar  src= { getAvatar( params.value ) } />  
+          <p> {params.value.username}  </p>
+         
+        </>
+      );
+    }
+     
+  } ,
+    
+  {
+    field: "invite_code",
+    headerName: "Invite Code",
+    flex: 2,
+    cellClassName: "name-column--cell",
+    
+  } ,
+  {
+    field: "data", // stores from items (params.value)
+    headerName: "Invites",
+    flex: 2,
+    renderCell: (params) => {
+      return (
+        <Box>
+           
+            <p> { params.value.invite_use}  /   {  params.value.nextInviteMaxThreshhold }  </p>    
+ 
+           <HorizontalBars  invite_use={ params.value.invite_use } />
+         
         </Box>
       );
     },
@@ -219,18 +259,15 @@ const columns = [
       return (
         <Box>
          
-        {/* <Typography >  {params.value.id} </Typography>    */}
         <p> { params.value }   </p> 
-         {/* <RenderCellA debugMode ={true}   colors={colors}  data={params.value}  />  */}
-  
-        
+         
         </Box>
       );
     },
   } 
   
   ];
-
+*/
 
 
  

@@ -16,7 +16,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
 
    const ReferralLinkGrid = ( {sp}  ) => {
  
-    const { appLink } = useAppLinkContext();
+   // const { referralData } = useAppLinkContext();
     const [tasks, setTasks] = useState([
       
       {global_name:"", src:""}, 
@@ -45,18 +45,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
      
   const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
    
- 
-  const GetReferralCodeData = async () => {
-    
-    if (!user){return;}
-    if (!appLink){return;}
- 
-        setReferralCode(appLink.referralCode);
-      
- 
-  };  
-  
-
+   
   useEffect(  ()=> {
  
      if (!referralData)return;
@@ -65,14 +54,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
      
   }  , [ referralData  ]);
 
-  useEffect( ()=>{
-     
-    if (!user)return;
-    if (!appLink)return;
-         GetReferralCodeData();
    
-
-  }, [ user  , appLink  ]);
 
    
    
@@ -133,7 +115,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
 
          
            
-            <TaskForReward2/>  
+            <TaskForRewardAppLink/>  
             
        
         <HorizontalSpace space={30}/> 
@@ -158,9 +140,9 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
    
 
 
-  export function TaskForReward2(){
+  export function TaskForRewardAppLink(){
 
-    const { appLink } = useAppLinkContext();
+    const { referralData } = useAppLinkContext();
     const [tasks, setTasks] = useState([
        
       {global_name:"", src:""}, 
@@ -186,19 +168,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
     };
  
      const { user } = useUserContext();
-     
-  const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
-   
- 
-  const GetReferralCodeData = async () => {
     
-    if (!user){return;}
-    if (!appLink){return;}
- 
-        setReferralCode(appLink.referralCode);
-      
- 
-  };  
   
 
   useEffect(  ()=> {
@@ -208,17 +178,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
 
      
   }  , [ referralData  ]);
-
-  useEffect( ()=>{
-     
-    if (!user)return;
-    if (!appLink)return;
-         GetReferralCodeData();
-   
-
-  }, [ user  , appLink  ]);
-
-   
+ 
    
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -247,7 +207,7 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
   }
 
 export function TaskStatus2(){
-  const { appLink } = useAppLinkContext();
+  const { referralData } = useAppLinkContext();
   const [tasks, setTasks] = useState([
      
     {global_name:"", src:""}, 
@@ -273,20 +233,7 @@ export function TaskStatus2(){
   };
 
    const { user } = useUserContext();
-   
-const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
- 
-
-const GetReferralCodeData = async () => {
   
-  if (!user){return;}
-  if (!appLink){return;}
-
-      setReferralCode(appLink.referralCode);
-    
-
-};  
-
 
 useEffect(  ()=> {
 
@@ -296,36 +243,20 @@ useEffect(  ()=> {
    
 }  , [ referralData  ]);
 
-useEffect( ()=>{
-   
-  if (!user)return;
-  if (!appLink)return;
-       GetReferralCodeData();
- 
-
-}, [ user  , appLink  ]);
-
  
  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  function linkAdressToDiscord(){
- 
- }
+  
  function getCompletion(){
 
    if ( !referralData ){ return   (`ACCEPTED : ${"0"}`); }
-   
+ 
    return  (`ACCEPTED : ${referralData.referredUser.length}`)   ;
  }
 
-
  
-
- 
-
-
       return(
      <>  
          <HtmlTooltip

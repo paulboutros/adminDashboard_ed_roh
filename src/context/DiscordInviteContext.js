@@ -61,14 +61,14 @@ export function DiscordInviteProvider({ children }) {
       const fetchDiscordInviteData = async () => {
         try {
          
-         console.log('>>>>>>> Discord context:  start fetching' );
+       //  console.log('>>>>>>> Discord context:  start fetching' );
           let discordInvite_response ;
            
              
             discordInvite_response = await myDiscordInvite(user.ID);
             callInProgress = true;
          
-          console.log('>>>>>>>  context:  discordInvite_response     :',  discordInvite_response);
+         // console.log('>>>>>>>  context:  discordInvite_response     :',  discordInvite_response);
 
           setDiscordInvite(discordInvite_response);
         } catch (error) {

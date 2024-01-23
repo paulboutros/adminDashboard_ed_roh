@@ -542,11 +542,7 @@ const handleImageSelect = (category, obj   ) => {
           </Button>
 
 
-
-             {/* 
-           <Button variant="contained" onClick={onConfirm} color="primary">
-            Confirm
-          </Button>   */}
+ 
         
 
           <ServerButton

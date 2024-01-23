@@ -39,6 +39,7 @@ import { PaddingOutlined } from '@mui/icons-material';
 
 const LayerSelector = (  {queryId="" }  ) => {
 
+  const { user } = useUserContext();
   const {debugMode, set_DebugMode} = useDebugModeContext();
 
   const [ ethToUsdRate, setEthToUsdRate ] = useState(0); 
@@ -152,8 +153,8 @@ useEffect(() => {
     <Box margin="0 8px 20px 8px" >
    
     <div>
-       { (debugMode && 
-         address &&
+       { (user && debugMode && 
+           address &&
          ( address === OWNER || address === OWNER2) 
           
           
@@ -466,7 +467,7 @@ useEffect(() => {
           
           
 <div> 
-     Click the following the layers to test combination and see prize reward associated.
+     Click the following layers to test combination and see prize reward associated.
      <ImageSelector setSelectedImages={setSelectedImages}  selectedImages={selectedImages}  />
 
 </div>
@@ -526,7 +527,7 @@ useEffect(() => {
 const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
  
  
-     const { user } = useUserContext();
+    const { user } = useUserContext();
     const { allLayers} = useAllLayersContext(); 
  
 
@@ -560,7 +561,7 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
       
       
       setSelectedImages( {
-         forearn: [{ imagePath:GetCharacterBodyPartImage("fa",1),  layerName: 1, owning:0 }],  // Example image paths
+        forearn: [{ imagePath:GetCharacterBodyPartImage("fa",1),  layerName: 1, owning:0 }],  // Example image paths
         bo:      [{ imagePath:GetCharacterBodyPartImage("bo",1),  layerName: 1, owning:0 }], // Example image paths
 
         kn:      [{ imagePath: GetCharacterBodyPartImage("kn", kn_rand),  layerName: kn_rand, owning:kn.owning, tokenID:kn.tokenID  }], // Example image paths

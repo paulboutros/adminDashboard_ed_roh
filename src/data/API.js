@@ -488,26 +488,9 @@ export async function myAppLink (user_ID){
    const endpointG = `${process.env.REACT_APP_API_URL}GetReferralCode?ID=${user_ID}`; // make it specific (filter to twitter fields)
     const resultG = await fetch(endpointG);
     let resultsJson = await resultG.json();
-     
+      
 
-     console.log(" referral result  : resultsJson  = ", resultsJson);
-    // if no referral link has been created we generate one
-  if (!resultsJson.referralCode || resultsJson.referralCode.length === 0){
 
-        const dataToSend= { 
-          ID: user_ID ,
-          one_referral_Code: "xxxTempxx"
-        }
-
-     const endpoint = `${process.env.REACT_APP_API_URL}generateReferralCode`; // make it specific (filter to twitter fields)
-     const resultsPostJson = await axios.post(endpoint, dataToSend);
-
-      console.log("referal :" ,   resultsPostJson.data.shareableLink);
-     
-        // set the refferal code to the one we jsut generate
-       resultsJson = resultsPostJson;
-     }
- 
    // will be the one that exist or the one geenrate by the postrequest it it initially does not exist
      return resultsJson;
 } 
@@ -836,9 +819,13 @@ export function getAvatar(  discordUserData ){
   // discordata is custom and store discord user data after sucesfully auth
  const discordData =  discordUserData;
 
+   
+ //if (discordData.displayAvatarURL && !discordData.displayAvatarURL ){
 
-  
- 
+ // return discordData.displayAvatarURL;  
+ //}
+
+
  if (!discordData ||discordData.avatar === null) {
    // User has a default Discord avatar
    return `https://cdn.discordapp.com/embed/avatars/0.png`;
