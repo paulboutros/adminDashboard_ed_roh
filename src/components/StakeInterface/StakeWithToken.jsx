@@ -373,12 +373,7 @@ import { CustWeb3Button } from "./Buttons/buttons";
   
     const { data: rewardTokenBalance, isLoading: loadingRewardTokenBalance } =
       useTokenBalance(rewardTokenContract, address);
-  
-    useEffect(() => {
-      setInterval(() => {
-   //     refetchStakeInfo();
-      }, 10000);
-    }, []);
+   
 
     const [timeRemaining, setTimeRemaining] = useState(1000);
       
@@ -406,32 +401,36 @@ import { CustWeb3Button } from "./Buttons/buttons";
 
 
 
-         
-         if (myInterval) {return; }
+   console.log(" if (myInterval) {return; }   myInterval =" , stakersVar.timeOfLastUpdate._hex );
+         if (myInterval) {
+          clearInterval(myInterval);
+      //    return;
+        
+        }
    
          myInterval =  setInterval(() => {
 
            
             
-            console.log(" stakersVar  ================= " , stakersVar.timeOfLastUpdate._hex );
+           // console.log(" stakersVar  ================= " , stakersVar.timeOfLastUpdate._hex );
            
           // timestamp time IN SECOND = time of update - time in second since //January 1, 1970, 00:00:00 UTC
              const  timeOfLastUpdate =   parseInt(   stakersVar.timeOfLastUpdate._hex );
                 // Assuming startTime is the timestamp of the past start time in seconds
                      startTime = timeOfLastUpdate;// 2000;// in second
    
-                 console.log(  ">>> Hard coded startTime   =  "  , startTime);
+               //  console.log(  ">>> Hard coded startTime   =  "  , startTime);
 
 
                    const timeOfLastUpdate_date = new Date( (timeOfLastUpdate *1000));
 
                    
-                 console.log(  ">>> real   startTime   =  "  ,  (timeOfLastUpdate  ) , "   "  , timeOfLastUpdate_date.toLocaleString());
+               //  console.log(  ">>> real   startTime   =  "  ,  (timeOfLastUpdate  ) , "   "  , timeOfLastUpdate_date.toLocaleString());
 
                   
                    // Assuming eventInterval is the time interval between events in seconds
                    const eventInterval =  parseInt(  stakeGetTimeUnit._hex , 16);
-                   console.log(  ">>> eventInterval  =  "  , eventInterval);
+                 //  console.log(  ">>> eventInterval  =  "  , eventInterval);
                    // Assuming currentTime is the current timestamp in seconds
                    const currentTime = Date.now() / 1000;
    

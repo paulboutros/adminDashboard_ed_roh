@@ -1,18 +1,16 @@
 import React from 'react';
-import {Box, Divider,Grid, Typography , useTheme, Chip, Button,  } from '@mui/material';
+import {Box, useTheme, Button,  } from '@mui/material';
 import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../../theme";
-  import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+ import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
  import {useEffect, useState} from "react";
- 
- 
- 
+  
 import { HorizontalSpace } from '../Layout';
 import FaceIcon from '@mui/icons-material/Face';
-import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
+ 
  
 import { copyTextToClipboard } from '../../utils';
-import { deleteDiscordInvite, getAvatar, getManyUserData } from '../../data/API';
+import { deleteDiscordInvite, getAvatar, getManyUserData, GetManyUsersFromDiscord } from '../../data/API';
 import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
 import { useDebugModeContext } from '../../context/DebugModeContext';
 import { PopTaskStatusDiscordInviteContent } from '../TooltipContent/content.jsx';
@@ -28,20 +26,24 @@ import { PopTaskStatusDiscordInviteContent } from '../TooltipContent/content.jsx
 
     const updateTask = async ( ) => {
      
-        let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
-      
+       // let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
+      // we need to get data from discord directly, because a new member will not exist yet on the Mongo DB
+        let referredUserListDetails  = await GetManyUsersFromDiscord(  discordInvite?.acceptedUsers   );
+
+         console.log( "referredUserListDetails  "  ,referredUserListDetails );
+
         const referredUsers =[];
         referredUserListDetails.forEach(data => {
          
-          const src = getAvatar(data.discordUserData );
-         const elData = { global_name : data.discordUserData.username,  src:src, verified:data.discordUserData.verified };
+          const src = getAvatar( data   ); // .discordUserData
+         const elData = { global_name : data.username,  src:src, verified:data.verified };
          referredUsers.push(elData) 
  
        });
         
        setTasks(referredUsers);
       
-     //  console.log ( " >>>>>>>>>>>.   referredUserListDetails  : "  ,  referredUserListDetails  );
+       
 
     };
  
@@ -132,7 +134,7 @@ import { PopTaskStatusDiscordInviteContent } from '../TooltipContent/content.jsx
       <HorizontalSpace space={ sp[0] }/>
 
        
-         <TaskForReward4/> 
+         <TaskForRewardDiscordInvites/> 
          
           
        
@@ -237,7 +239,7 @@ const mockreferred=
 
 
  
- export function TaskForReward4(){
+ export function TaskForRewardDiscordInvites(){
   
   const {debugMode }     = useDebugModeContext();
   const [tasks, setTasks] = useState([
@@ -345,25 +347,30 @@ function onClickInvite(){
      
        //discordInvite?.acceptedUsers contains list of ID (discord ID) who accepted the invite
        // getManyUserData > to get avatar and other info to display
-      let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
-    
+   //   let referredUserListDetails  = await getManyUserData(  discordInvite?.acceptedUsers   );
+      let referredUserListDetails  = await GetManyUsersFromDiscord(  discordInvite?.acceptedUsers   );
+
+      console.log( "referredUserListDetails  "  ,referredUserListDetails );
 
 
-     // console.log ( " >>>>>>>>>>>.    discordInvite?.acceptedUsers .length   : "  ,  discordInvite?.acceptedUsers.length  );
-
+   // console.log ( " >>>>>>>>>>>.    discordInvite?.acceptedUsers .length   : "  ,  discordInvite?.acceptedUsers.length  );
+   // console.log ( " >>>>>>>>>>>.    referredUserListDetails    : "  ,  referredUserListDetails   );
       const referredUsers = [];
+      let pp =0;
       referredUserListDetails.forEach(data => {
-       
-        const src = getAvatar(data.discordUserData );
-        const elData = {
-         global_name : data.discordUserData.username, 
-         src:src, verified:data.discordUserData.verified,
+     //   console.log ( " >>>>>>  forEach data   : "  ,   data  , "pp   =" , pp);
+         const src = getAvatar(data ); // .discordUserData
+         const elData = {
+         global_name : data.username,  // .discordUserData.
+         src:src, verified:data.verified, // .discordUserData
          mockMember: (discordInvite.mockMember &&  discordInvite.mockMember.includes(data.ID) ) ? true: false  
-        };
-       referredUsers.push(elData) 
+      };
+      pp++
+      referredUsers.push(elData) 
 
      });
       
+     console.log ( " >>>>>> referredUsers   : "  ,  referredUsers.length  );
      setTasks(referredUsers);
     
     // console.log ( " >>>>>>>>>>>.   referredUsers  : "  ,  referredUsers  );
@@ -371,11 +378,7 @@ function onClickInvite(){
   };
 
     const { discordInvite ,  setdiscordInviteLoaded } =  useDiscordInviteContext();
-   const { user, setUser } = useUserContext();
-   
-const [referralData, setReferralCode] = useState(); // Set rowData to Array of Objects, one Object per Row
- 
-
+    
  
 
 
@@ -387,13 +390,7 @@ useEffect(  ()=> {
  
 }  , [ discordInvite  ]);
 
-useEffect( ()=>{
-   
-  
-     
  
-
-}, [ discordInvite  ]);
 
  
  
@@ -427,6 +424,11 @@ function onClickInvite(){
 
 }
 
+function handleTooltipOpen(){
+
+  console.log("  >>>>>>     tooltipOpen   tooltipOpen");
+}
+
  function getCompletion(){
 
     if ( !discordInvite ){
@@ -449,27 +451,19 @@ return  (`To DO ${task} / 2`)   ;
       return(
         <HtmlTooltip
         // open={true} // for debugging
-      
-
+           // open={tooltipOpen}
+            
             placement="right" 
         title={
 
            <PopTaskStatusDiscordInviteContent tasksArg={tasks}/>
-          //  <React.Fragment>
-
-             
-
-          //    <Typography color="inherit">Referred friends</Typography>
-          //      <Typography fontSize={"15px"}>{ tasks[0].global_name }</Typography> 
- 
-          //      <Box>  <ReferredFriendsList tasks={tasks} /> </Box>    
-          //     </React.Fragment>
+          
             }
            >
 
             
            <Box >
-             <CustomChip theme={theme} label= { getCompletion()}  icon={<FaceIcon />} color=  {theme.palette.chipYellow} />
+             <CustomChip theme={theme} label= { getCompletion()}  icon={<FaceIcon />} color = {theme.palette.chipYellow} />
          </Box >
 
              

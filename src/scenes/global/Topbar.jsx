@@ -2,34 +2,29 @@
 //https://portal.thirdweb.com/connect/connect-wallet/class-name
   //web3
 import {   ethers } from "ethers";
-import {darkTheme, lightTheme, ConnectWallet } from "@thirdweb-dev/react";
+import {darkTheme,   ConnectWallet } from "@thirdweb-dev/react";
 import { useContract, useContractRead, useAddress } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS , REWARDS_ADDRESS, PACK_ADDRESS } from "../../const/addresses";
-import { Link } from "react-router-dom";
-
+ 
 import { Box, IconButton, useTheme ,   Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import {   useContext, useEffect, useState  } from "react";
-import { ColorModeContext, tokens, buttonStyle, StyledConnectWallet  } from "../../theme";
+import {   useContext,  useState  } from "react";
+import { ColorModeContext, tokens,  StyledConnectWallet, allCSS, StyledExternalLink, basicRoundedBox1, cool_orange  } from "../../theme";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchIcon from "@mui/icons-material/Search";
+ import SearchIcon from "@mui/icons-material/Search";
  import { RowChildrenAlignCenter,
     
-   VerticalStackAlignLeft,
+    
    RoundedBox,
-   HorizontalSpace
+   HorizontalSpace,
+    
   } from "../../components/Layout"
 
-  import stylesBuy from "../../styles/Buy.module.css";
-  
-  import styleWalletConnect  from "../../styles/walletConnect.module.css"; 
-
- import styles from        "../../styles/Navbar.module.css"; 
+   
  import stylesProfile from "../../styles/Profile.module.css"; 
 import AccountMenu from "../../components/AccountMenu";
 
@@ -41,7 +36,7 @@ export const StyledDiv = styled('div')({
   backgroundColor: 'red',
 });
 
-
+ 
 
 
 const Topbar = () => {
@@ -67,23 +62,8 @@ const Topbar = () => {
  
       
   };
-  const customDarkTheme = darkTheme({
-    fontFamily: "Inter, sans-serif",
-    colors: {
-      modalBg: "#000000",
-      accentText: "red",
-      // ... etc
-    },
-  });
-
-  const customStyles = {
-   // color: 'green', // Override the color
-    backgroundColor: "green"
-    // Add more style overrides as needed
-  };
-
-
-
+   
+ 
   return (
     <Box display="flex" justifyContent="space-between"
       padding="0px 20px 0px 20px" height={"46px"}
@@ -143,10 +123,7 @@ const Topbar = () => {
 
       {/* ICONS */}
        <Box display="flex">
-      
-      
-
-
+       
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
@@ -154,10 +131,10 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton>
+        <IconButton color={colors.grey[100]}   >
           <NotificationsOutlinedIcon />
         </IconButton>
-        <IconButton>
+        <IconButton  color={colors.grey[100]}  >
           <SettingsOutlinedIcon />
         </IconButton>
  
@@ -166,16 +143,8 @@ const Topbar = () => {
       
        <HorizontalSpace space={2}/>
        
-        <VerticalStackAlignLeft>
-        
-          <Typography  fontSize={"small"} fontWeight={"150px"}>$WU</Typography>
-            {rewardBalance && (
-              <Typography  fontSize={"small"} fontWeight={"150"}> 
-                  {Number( ethers.utils.formatUnits(rewardBalance, 18)).toFixed(2)}
-               </Typography>
-              )}
-        </VerticalStackAlignLeft> 
-
+          <ShowRewardBalance rewardBalance={rewardBalance} />
+ 
         <HorizontalSpace space={2}/>
 
 
@@ -219,11 +188,7 @@ theme={theme.palette.mode}  modalSize={"wide"}
           }}
 
          />  */}
-
  
-        
-
-    
 
          <HorizontalSpace space={2}/> 
 
@@ -231,9 +196,7 @@ theme={theme.palette.mode}  modalSize={"wide"}
 
             <AccountMenu/> 
 
-         {/* <MenuPopupState/> */}
-         {/* <ButtonOAuth/> */}
-
+ 
          </RowChildrenAlignCenter>
 
 
@@ -251,5 +214,60 @@ theme={theme.palette.mode}  modalSize={"wide"}
 export default Topbar;
 
 //https://v5.reactrouter.com/web/api/Hooks/usehistory
+ /*
+ function ShowRewardBalance (  {rewardBalance}  ){
+     return(
+
+      <VerticalStackAlignLeft>
+        
+      <Typography  fontSize={"small"} fontWeight={"150px"}>$WU</Typography>
+          {rewardBalance && (
+                <Typography  fontSize={"small"} fontWeight={"150"}> 
+                         {Number( ethers.utils.formatUnits(rewardBalance, 18)).toFixed(2)}
+                 </Typography>
+          )}
+    </VerticalStackAlignLeft> 
+
+    )
+ }
+*/
+
+function ShowRewardBalance (  {rewardBalance}  ){
+
+  const theme = useTheme();
+
+
+  return(
+
+   <div  style={{ 
+       display: "flex", flexDirection: "row", alignItems: "center", marginLeft: "auto"   }}
+    
+    >
+     
+      
+     {/* sx={ allCSS( theme.palette.mode).unclaimedRewardText }  */}
+     <Box     >
+     
+            {rewardBalance && (
+                <h3  className={`${stylesProfile.toptab}`}    >   
+                      {Number( ethers.utils.formatUnits(rewardBalance, 18)).toFixed(2)}
+                       {/* <span style={{color: "#0294fe"  }}> $ </span>
+                        WU */}
+                         <span style={{color: cool_orange }}> $ </span>
+                        WU
+                </h3>
  
+        )}
+       </Box>
+
+         
+
+
+        
+ </div> 
+
+ )
+}
+
+
 

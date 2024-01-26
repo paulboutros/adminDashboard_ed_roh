@@ -19,8 +19,7 @@ export function AppLinkProvider({ children }) {
 
     useEffect(() => {
 
-    //  console.log('>>>>>> useEffect:  fetching appLink ' );
-       if (!user)return;
+        if (!user)return;
         
       // Fetch appLink data from the API
       const fetchAppLinkData = async () => {
@@ -29,7 +28,7 @@ export function AppLinkProvider({ children }) {
          
           const response = await myAppLink(user.ID);
 
-          console.log('>>>>>>  referralData = ', response);
+          //console.log('>>>>>>  referralData = ', response);
           setReferralCode(response);
          // setAppLink(response);
         } catch (error) {

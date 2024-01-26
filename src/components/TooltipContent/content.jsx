@@ -2,29 +2,32 @@
 
 import  React,{ useEffect, useState } from "react";
  import { Divider,  Avatar, Box, Button, Tooltip, Typography } from "@mui/material";
- import { HorizontalSpace, VerticalSpace } from "../Layout";
+ import {   VerticalSpace } from "../Layout";
   
 
 import { BiCoin } from "react-icons/bi";
 import { BiCoinStack } from "react-icons/bi";
 
- import { FaDiscord } from "react-icons/fa";
+ 
 import { TbExternalLink } from "react-icons/tb";
 import { useTheme } from "@emotion/react";
-import { useUserContext } from "../../context/UserContext";
+ 
 import ToDoList from "../List/ToDoList";
 import ReferredFriendsList from '../List/ReferredFriendsList.jsx';
 import { useDISTContext } from "../../context/DISTstakingContext.js";
+ 
+import { EtherScanLinkBlock } from "../BlockLink/BlockLinks";
+import { Discord_tokenLess_stakinContract } from "../../const/addresses";
+import { tokens } from "../../theme";
 
 const size1 = "12px";
 const pad ="15px";
 export function PopRewardDiscordInviteContent(){
-
  
-    
-    const {user  } = useUserContext();   //DISTStakeInfo
-     
-    const {DISTStakeInfoGeneral } = useDISTContext();
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  const {DISTStakeInfoGeneral } = useDISTContext();
 
  return(
 
@@ -52,9 +55,17 @@ export function PopRewardDiscordInviteContent(){
          
           display="flex"   flexDirection="row"   alignItems="center" 
         >
-           <p style={{marginRight: "5px" }}  > <span>See more details</span>  </p> 
+
+           <EtherScanLinkBlock addressArg={ 
+            Discord_tokenLess_stakinContract} 
+                 _colors={ colors.primary[100] } 
+                 _alpha={0.05}
+                 
+                 toolTipMessage={"Discord Staking Contract"}
+                 />  
+            {/* <p style={{marginRight: "5px" }}  > <span>See more details</span>  </p> 
         
-           <TbExternalLink     size={"15px"} />
+           <TbExternalLink     size={"15px"} /> */}
         </Box>
 
       {/* _denominator: parseInt(  ratioInfo._denominator._hex , 16),

@@ -1,13 +1,14 @@
 import {createContext, useContext,    useState, useEffect } from "react";
 import {   getSDK_fromPrivateKey  } from "../data/API.js";
- import { useAddress, useContract } from "@thirdweb-dev/react";
+ import { useAddress, useContract, useContractRead } from "@thirdweb-dev/react";
 import { ethers } from "ethers";
 import { Discord_tokenLess_stakinContract } from "../const/addresses.ts";
 
 export const DISTStakeInfo ="DISTStakeInfo";
 export const DISTStakeInfoGeneral ="DISTStakeInfoGeneral";
 
- 
+let startTime;
+let myInterval;
 
 const DISTContext = createContext();
 
@@ -18,20 +19,28 @@ export function useDISTContext() {
 
 export function DISTProvider({ children }) {
 
-
+  const [timeRemaining, setTimeRemaining] = useState(1000);
+  const address = useAddress();
 
     const { contract: dist_tokenLessContract, isLoading: loading_dist_tokenLess } = useContract( Discord_tokenLess_stakinContract );
     
+
+   //const { contract: stakeContract }                                              = useContract(Discord_tokenLess_stakinContract,"custom");
+   const { data: stakersVar,  isLoading: loadingstakers, } = useContractRead( dist_tokenLessContract , "stakers", [address] );
+
   //contract no staker specific data
-  const [DISTStakeInfoGeneral, setDISTStakeInfoGeneral] = useState(null); 
+    const [DISTStakeInfoGeneral, setDISTStakeInfoGeneral] = useState(null); 
 
     const [distStakedAmount, setDISTStakedAmount] = useState(0);
     const [distReward, setDISTReward] = useState(0);
- 
+     const [ stakeInfo, setStakeInfo] = useState(null);
+
+   const [ stakeGetTimeUnit , setStakeGetTimeUnit ] = useState(null);
+
 
     const [reFetch, setReFetch] = useState( true );
  
-    const address = useAddress();
+    
   
    const fetchDataStakeInfo = async ( ) => {
  
@@ -40,12 +49,12 @@ export function DISTProvider({ children }) {
       let res;
         const sdk = getSDK_fromPrivateKey();  
         const dist_tokenLessContract = await sdk.getContract(   Discord_tokenLess_stakinContract  );
-        const getStakeInfo = await dist_tokenLessContract.call("getStakeInfo",[ address]);
+        const stake_Info = await dist_tokenLessContract.call("getStakeInfo",[ address]);
  
-     // addDataToUser(DISTStakeInfo , getStakeInfo );
-
-       const _rewards    =  (+ethers.utils.formatEther(getStakeInfo[1])).toFixed(4);  //unary to convert in number (+variable)
-       const tokenStaked =  (+ethers.utils.formatEther(getStakeInfo[0])).toFixed(0);
+        setStakeInfo( stake_Info  );
+ 
+       const _rewards    =  (+ethers.utils.formatEther(stake_Info[1])).toFixed(4);  //unary to convert in number (+variable)
+       const tokenStaked =  (+ethers.utils.formatEther(stake_Info[0])).toFixed(0);
     
       setDISTStakedAmount( tokenStaked );
       setDISTReward( _rewards );
@@ -61,6 +70,71 @@ export function DISTProvider({ children }) {
     
    } 
  
+
+  
+   useEffect(() => {
+    if (!stakeGetTimeUnit || !stakersVar)return;
+   
+      if (!stakeInfo) return;
+      if (stakeInfo[0] === 0) return;
+    
+       if (myInterval) {  clearInterval(myInterval);}
+     
+       
+      
+    myInterval = setInterval( ( ) => {
+
+     //  console.log(" stakersVar  ================= " , stakersVar.timeOfLastUpdate._hex );
+      
+     // timestamp time IN SECOND = time of update - time in second since //January 1, 1970, 00:00:00 UTC
+           const  timeOfLastUpdate = parseInt(   stakersVar.timeOfLastUpdate._hex );
+           // Assuming startTime is the timestamp of the past start time in seconds
+
+              startTime = timeOfLastUpdate;// 2000;// in second
+          //    console.log(  ">>> Hard coded startTime   =  "  , startTime);
+
+              const timeOfLastUpdate_date = new Date( (timeOfLastUpdate *1000));
+               
+            //  console.log(  ">>> real startTime  =",(timeOfLastUpdate  ) ,"  ", timeOfLastUpdate_date.toLocaleString());
+
+              // Assuming eventInterval is the time interval between events in seconds
+              const eventInterval = parseInt(  stakeGetTimeUnit._hex , 16);
+              
+              
+
+
+            //  console.log(  ">>> eventInterval  =  "  , eventInterval);
+              // Assuming currentTime is the current timestamp in seconds
+              const currentTime = Date.now() / 1000;
+               // Calculate the elapsed time since the start time
+              const elapsedTime = currentTime - startTime;
+               // Calculate the time remaining for the next event
+                 const timeRemainingTemp = eventInterval - (elapsedTime % eventInterval);
+
+                // this will update the smart cotnract
+
+                
+                 if ( timeRemainingTemp < 1){
+                    // refetchStakeInfo();
+
+                       // set refesh can not be inside use effect or it would only work when component is rendered/visible
+                     setReFetch(true);
+                 }
+                
+                 setTimeRemaining(timeRemainingTemp);
+            //  console.log(`Time remaining for the next event: ${timeRemainingTemp} seconds`);
+
+
+    
+    },  (  1000)     ); // update the counter every seconds
+       
+      
+    }, [  stakeGetTimeUnit, stakersVar ]);
+   
+
+
+
+
 
     useEffect(() => {
 
@@ -80,7 +154,7 @@ export function DISTProvider({ children }) {
               
               if (isMounted) {
                 // Update the state only if the component is still mounted
-                setReFetch(false);
+                 setReFetch(false);
               }
             }
           } catch (error) {
@@ -110,9 +184,9 @@ export function DISTProvider({ children }) {
   
            // the following data is not related to the staker, they are general info about the contract
            // therefore, they need to be loaded ONLY ONCE  (unlike getStakeInfo for example)
-            const ratioInfo = await dist_tokenLessContract.call("getRewardRatio_Over");
-            const timeUnit = await dist_tokenLessContract.call("getTimeUnit_Over");
-            
+            const ratioInfo = await dist_tokenLessContract.call("getRewardRatio_Over"); 
+            const timeUnit = await dist_tokenLessContract.call("getTimeUnit_Over"); 
+            setStakeGetTimeUnit(timeUnit);
            
             // so let us consider this to be the initial balance only  
             const Initialbalance = await dist_tokenLessContract.call("TEST_getBalance");
@@ -128,7 +202,8 @@ export function DISTProvider({ children }) {
             }
             //console.log( ">>>      generalInfo   " , generalInfo );
   
-            setDISTStakeInfoGeneral(DISTStakeInfoGeneral , generalInfo );
+            setDISTStakeInfoGeneral(   generalInfo );
+           // setDISTStakeInfoGeneral(DISTStakeInfoGeneral , generalInfo );
            
             
    
@@ -149,8 +224,13 @@ export function DISTProvider({ children }) {
         distStakedAmount, setDISTStakedAmount, 
         distReward, setDISTReward,
         reFetch, setReFetch,
+        stakeInfo, setStakeInfo,
+        stakersVar,
+          //  general info 
+        DISTStakeInfoGeneral,
+        stakeGetTimeUnit,
 
-        DISTStakeInfoGeneral
+        timeRemaining
          }}>
         {children}
       </DISTContext.Provider>

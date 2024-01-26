@@ -262,9 +262,12 @@ export const setDebugMode = async (  setDebugModeContext ) => {
 
 
 // later this should be only using credetial for ID (we still use ID parameter for debugging)
-export async function DeleteAccountAPI( ID ){
+export async function DeleteAccountAPI( user ){
  
-   
+     const ID = user.ID;
+
+    // console.log( "user" , user  );
+     // return;
  
   const endpoint = `${process.env.REACT_APP_API_URL}deleteAccount?ID=${ID}`; 
      
@@ -496,14 +499,14 @@ export async function myAppLink (user_ID){
 } 
 
 
-export async function  GetRewardPrice(dataToSend   /*he,sh,we,be,kn*/ ){
+export async function GetRewardPrice( dataToSend ){
   
- 
+   console.log( "> GetRewardPrice  ");
    
-  const endpoint = `${process.env.REACT_APP_API_URL}GetReward`;
-  const result = await axios.post(endpoint, dataToSend);
-  //const rewardPrizeObject = await result.json();
-  return result.data;
+   const endpoint = `${process.env.REACT_APP_API_URL}GetRewardPrice`;
+   const result = await axios.post(endpoint, dataToSend);
+   //const rewardPrizeObject = await result.json();
+   return result.data;
   
 
 
@@ -545,6 +548,7 @@ const endpoint = `${process.env.REACT_APP_API_URL}ERC20claim`; // make it specif
 const resultsPostJson = await axios.post(endpoint, dataToSend);
 
  console.log("resultsPostJson" , resultsPostJson);
+
 //  setReferralCode(result.data.shareableLink);
  // setShowCopyButton(true);
 
@@ -583,6 +587,23 @@ export async function ERC20claim_discord_login_required(ID, filteredImages_arg ,
  
 
 
+export async function GetManyUsersFromDiscord ( IDlist  ){
+  // if we did not invite anyone yet, the list provided as argument can be null
+   if (!IDlist || IDlist.length === 0){ 
+      return [];
+   }
+
+   const dataToSend={ IDlist : IDlist }
+    
+   
+
+const endpoint = `${process.env.REACT_APP_API_URL}GetManyUsersFromDiscord`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+ //console.log("data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+}
 
 export async function getManyUserData( IDlist  ){
   // if we did not invite anyone yet, the list provided as argument can be null

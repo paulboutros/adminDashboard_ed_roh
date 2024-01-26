@@ -1,22 +1,17 @@
 import   React, { useEffect , useState } from 'react';
 
 import {  useAddress } from '@thirdweb-dev/react'
-import { FiExternalLink } from "react-icons/fi";
-import { LuCopy } from "react-icons/lu";  
-
+ 
 import {  Box, Button, IconButton, Typography, useTheme, colors, Stack, Skeleton } from "@mui/material";
 import { BiCoinStack } from "react-icons/bi";
 
-import CustomLegend from "./Legend.jsx"
-import { CustomLegend2 } from './Legend.jsx';
+ import { CustomLegend2 } from './Legend.jsx';
  
-import {sendTracking, GetRewardPrice, convertEthToUsd , GetsimulatedWuUSDTprice } from "../data/API.js"
+import {sendTracking, GetRewardPrice, convertEthToUsd   } from "../data/API.js"
 
- 
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
- 
+  
 
-import { BootstrapTooltip, allCSS, text1, text2, tokens  } from "../theme.js";
+import { BootstrapTooltip, allCSS, cool_orange, text1, text2, tokens  } from "../theme.js";
 import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
 import { useAllLayersContext } from '../context/AllLayerAvailableContext.js'; 
 
@@ -29,13 +24,7 @@ import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses.ts';
 import { HorizontalSpace, RoundedBox, RowChildrenAlignLeftBottom, VerticalSpace } from './Layout.jsx';
 import { useDebugModeContext } from '../context/DebugModeContext.js';
 import { AddressBlock } from './Badges/AddressBlock.jsx';
-import { PaddingOutlined } from '@mui/icons-material';
- 
- 
-
-
-
-
+   
 
 const LayerSelector = (  {queryId="" }  ) => {
 
@@ -206,8 +195,8 @@ useEffect(() => {
                 
                <Button variant="outlined" 
                     style={{
-                        color:  "#b4a770",
-                        borderColor:  "#f0c435", // Set border color
+                        color:  cool_orange,// "#b4a770",
+                        borderColor: cool_orange,// "#f0c435", // Set border color
                         height: "25px",borderWidth: '2px',
                         textTransform: 'none', // Prevent text from being transformed to uppercase
                     }} 
@@ -219,32 +208,22 @@ useEffect(() => {
 
                <HorizontalSpace space={2}/>
               { selectedImages ? (
-               <PopupButton
-                      text=    {`CLAIM $WU`}    // {`Claim $WU${RewardPrice}`}  
-                        // style={{
-                        //     color: '#b4a770',
-                        //     borderColor: '#f0c435',
-                        //     height: '25px',
-                        //     width: '150px',
-                        //     borderWidth: '2px',
-                        //     textTransform: 'none',
-                        //     marginRight: "10px"
-                        //     // Add any other custom styles here
-                        //  }}
-
-
+                
+                  <PopupButton
+                      text = {`CLAIM $WU`}     
+ 
                         style={{
-                          color: '#b4a770',
-                          borderColor: '#f0c435',
-                          height: '25px',// '50px',
-                          width: '100px',
-                          borderWidth: '2px',
-                          textTransform: 'none',
-                          marginRight: "50px"
-                          // Add any other custom styles here
-                       }}
+                            color:    '#b4a770', //cool_orange,// '#b4a770',
+                            borderColor:   '#f0c435',
+                            height: '25px',// '50px',
+                            width: '100px',
+                            borderWidth: '2px',
+                            textTransform: 'none',
+                            marginRight: "50px"
+                          
+                        }}
                     selectedImages ={ selectedImages}
-               />
+                 />
                ):(
                 <p></p>
                )}

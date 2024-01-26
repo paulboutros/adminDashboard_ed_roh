@@ -47,7 +47,8 @@ export const text2 ={
 }; 
 
 export const blueButton= "rgba(7,132,195,1)"
-const _blueSelectedTab = "#0294fe";
+export const _blueSelectedTab = "#0294fe";
+export const cool_orange =  "rgb(171,122,42)"
 export const  debugModeColor ="#872b3f";
  
 // type: control + K the control + G to generate the shades
@@ -400,18 +401,67 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
 
 
 
-  export const StyledConnectWallet2 = styled(({ className, ...props }) => (
+  export const StyledConnectWallet2 = styled ( ({ className, ...props }) => (
     <ConnectWallet {...props}
      className={className}
      btnTitle= { <p>  <>Wallet <span  >{"Login"}</span></> </p>}
      modalTitleIconUrl="" modalTitle="Wulirocks"  
      />
-  ))(({ theme }) => (
+  ))   (  ({ theme }) => (
     
      
        allCSS( theme.palette.mode, "400px","0px" ).infoBox 
   
   ));
+
+
+ 
+
+   
+ export const StyledExternalLink = styled(Box)(({ theme, _colors,_alpha, ...props }) => ({
+ 
+          
+    borderRadius: "4px",
+    backgroundColor:  alpha( _colors ? _colors : theme.colors.primary[100],     _alpha      ),
+   
+  
+ 
+           // width: `${_width}`,
+            height: "26px",
+            filter: "brightness(1.15)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontFamily: ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+            color: _colors ? _colors : theme.colors.grey[400],
+            '& span': {
+              color: _colors ? _colors : theme.colors.grey[400],
+            },
+            '& .MuiButtonBase-root': {
+              textTransform: 'none',
+              fontSize: "5px",
+              fontWeight: "400",
+            },
+            '&:not(.hover)': {
+              WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+              transition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+            },
+            '&:hover': {
+              cursor: "pointer",
+              WebkitTransition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+              transition: "all 500ms cubic-bezier(0.05, 0.82, 0.14, 0.95) 0ms",
+              filter: "brightness(1.55)",
+            },
+          
+      
+       
+     
+     
+ 
+  }));
+
+
+
 
 
 
@@ -514,6 +564,27 @@ export const allCSS = (mode , _width, _margin,  _colors ) => {
        borderBottom: `1px solid ${ colors.primary[400]}`
      },
 
+
+     unclaimedRewardText: { 
+    
+      fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
+      color:  colors.grey[ text2.color ]  ,// colors.primary[50],
+    //  color={colors.grey[ text2.color ]}
+      '& span': {
+          fontWeight: "700px",
+           color: "rgba(204,154,6,1)",  // cool_orange  ,  // _blueSelectedTab
+        } ,
+
+      '& .MuiButtonBase-root': {
+         textTransform: 'none',
+         fontSize: "10px",
+         fontWeight: "700px",
+      },
+ 
+       
+   },
+
+
      basicTextWithAddress: { 
     
        fontFamily:  ["Inter", "Helvetica", "Arial", "sans-serif"].join(","),
@@ -534,7 +605,7 @@ export const allCSS = (mode , _width, _margin,  _colors ) => {
 
 
      infoBox: { 
-      borderRadius:"4px",
+       borderRadius:"4px",
        backgroundColor :   alpha(  
         
         _colors ? _colors :  colors.primary[100]
@@ -652,6 +723,9 @@ export const allCSS = (mode , _width, _margin,  _colors ) => {
         
          // outline: `1px solid ${  colors.primary[400] }`  
      },
+
+
+
      addressBox: { 
       borderRadius:"4px",
        backgroundColor :   alpha(  
@@ -853,7 +927,8 @@ export const themeSettings = (mode) => {
             cancelIconColor: colors.grey[600], 
             blueSelectedTab : _blueSelectedTab, //blue from thirdweb marketpalce
             chipYellow :  `rgba(204,154,6)`,//`rgba(255, 193, 7, 1)`, 
-            chipGreen : `rgba(0,161,134,1)`,  
+            chipGreen  : `rgba(0,161,134,1)`,  
+           
             chipRed:colors.redAccent[400],
 
             nftImage:colors.primary[400],

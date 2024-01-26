@@ -106,10 +106,10 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 
 
 
-  export function CountdownEndTime({ startTime, endTime , color ,   endTimeInSecondsX    }) {
+  export function CountdownEndTime({  color ,   endTimeInSecondsX  , showText = true  }) {
  
  
- 
+     const spaceBetwwenNumnberAndText =1;
  
       let dayText;
       const calculateTimeLeft = (endTimeInSec ) => {
@@ -137,29 +137,30 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
  
      useEffect(() => {
        
-      //  const timer = setInterval(() => {
+       
           setTimeLeft(calculateTimeLeft( endTimeInSecondsX  ));
       //  }, 1000);
    
       // return () => clearInterval(timer);
      }, [endTimeInSecondsX]);
    
+    // return (<p>dddddddddddd</p>)
      return (
        <div  >
         
          <div>
           
-          <RowChildrenAlignLeft>
+            <RowChildrenAlignLeft>
            {/* =================================================================================== */}
  
-     {timeLeft.days >0  && (
+        {timeLeft.days >0  && (
         <div>
          <VerticalStackAlignLeft> 
  
             <Typography color={color} variant= {_variant1} >   {timeLeft.days} </Typography>
  
             <VerticalSpace space={2}/>  
-            <Typography color={color} variant= {_variant2}  >   {dayText.toString().padStart(2, '0')}   </Typography>
+            <Typography color={color} variant= {_variant2}  >   {dayText.toString().padStart(2, '0')} :  </Typography>
             
            </VerticalStackAlignLeft>
  
@@ -167,36 +168,36 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
         
          </div>)}
  {/* =================================================================================== */}
-           <HorizontalSpace space={3}/> 
+           
   
  
              <VerticalStackAlignLeft> 
-              <Typography color={color} variant= {_variant1} >   {timeLeft.hours.toString().padStart(2, '0')   }  </Typography>
-             <VerticalSpace space={2}/> 
-             <Typography color={color} variant= {_variant2} >   Hours  </Typography>
+              <Typography color={color} variant= {_variant1} >   {timeLeft.hours.toString().padStart(2, '0')   }: </Typography>
+             <VerticalSpace space={spaceBetwwenNumnberAndText}/> 
+             { showText && (  <Typography color={color} variant= {_variant2} >   Hrs  </Typography> )} 
              
              </VerticalStackAlignLeft>
  
-         <HorizontalSpace space={3}/> 
- 
+         
+                  {/* <HorizontalSpace space={3}/>  */}
  {/* =================================================================================== */}
             <VerticalStackAlignLeft> 
-              <Typography color={color} variant= {_variant1} >   {timeLeft.minutes.toString().padStart(2, '0') } </Typography>
-             <VerticalSpace space={2}/> 
-             <Typography color={color} variant= {_variant2} >   Minutes  </Typography>
+              <Typography color={color} variant = {_variant1} >   {timeLeft.minutes.toString().padStart(2, '0') }: </Typography>
+             <VerticalSpace space={spaceBetwwenNumnberAndText}/> 
+             { showText && (<Typography color={color} variant= {_variant2} >   Min  </Typography> )} 
              
              </VerticalStackAlignLeft>
  
-           <HorizontalSpace space={3}/>         
+             
  {/* =================================================================================== */}
  <VerticalStackAlignLeft> 
               <Typography color={color} variant= {_variant1} >  {timeLeft.seconds.toString().padStart(2, '0') } </Typography>
-             <VerticalSpace space={2}/> 
-             <Typography color={color} variant= {_variant2} >   Secondes  </Typography>
+             <VerticalSpace space={spaceBetwwenNumnberAndText}/> 
+             { showText && (<Typography color={color} variant= {_variant2} >   Sec  </Typography> )} 
              
              </VerticalStackAlignLeft>
  
-           <HorizontalSpace space={3}/>         
+             
  {/* =================================================================================== */}
  
  
@@ -216,7 +217,7 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 
   export function CountdownTimerWithArg({ startTime, endTime , color ,   endTimeInSecondsX    }) {
 
-
+  const spaceBetwwenNumnberAndText =2;
    // let endTimeInSecondsX = endTime - startTime;
    if (!endTimeInSecondsX){
       const currentTimestamp = new Date().getTime() /1000;
@@ -224,10 +225,6 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
     } 
 
      
-
-
-
-
 
      let dayText;
      const calculateTimeLeft = () => {
@@ -278,7 +275,7 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 
            <Typography color={color} variant= {_variant1} >   {timeLeft.days} </Typography>
 
-           <VerticalSpace space={2}/>  
+           <VerticalSpace space={spaceBetwwenNumnberAndText}/>  
            <Typography color={color} variant= {_variant2}  >   {dayText.toString().padStart(2, '0')}   </Typography>
            
           </VerticalStackAlignLeft>
@@ -292,8 +289,8 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 
             <VerticalStackAlignLeft> 
              <Typography color={color} variant= {_variant1} >   {timeLeft.hours.toString().padStart(2, '0')   }  </Typography>
-            <VerticalSpace space={2}/> 
-            <Typography color={color} variant= {_variant2} >   Hours  </Typography>
+            <VerticalSpace space={spaceBetwwenNumnberAndText}/> 
+            <Typography color={color} variant= {_variant2} >   Hrs  </Typography>
             
             </VerticalStackAlignLeft>
 
@@ -302,8 +299,8 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 {/* =================================================================================== */}
            <VerticalStackAlignLeft> 
              <Typography color={color} variant= {_variant1} >   {timeLeft.minutes.toString().padStart(2, '0') } </Typography>
-            <VerticalSpace space={2}/> 
-            <Typography color={color} variant= {_variant2} >   Minutes  </Typography>
+            <VerticalSpace space={spaceBetwwenNumnberAndText}/> 
+            <Typography color={color} variant= {_variant2} >   Min  </Typography>
             
             </VerticalStackAlignLeft>
 
@@ -311,8 +308,8 @@ function CountdownTimer( /*{ futureDate , GetRewardNextTime  , onCountdownFinish
 {/* =================================================================================== */}
 <VerticalStackAlignLeft> 
              <Typography color={color} variant= {_variant1} >  {timeLeft.seconds.toString().padStart(2, '0') } </Typography>
-            <VerticalSpace space={2}/> 
-            <Typography color={color} variant= {_variant2} >   Secondes  </Typography>
+            <VerticalSpace space={spaceBetwwenNumnberAndText}/> 
+            <Typography color={color} variant= {_variant2} >   Sec  </Typography>
             
             </VerticalStackAlignLeft>
 

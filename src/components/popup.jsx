@@ -431,7 +431,7 @@ const handleImageSelect = (category, obj   ) => {
                               { padding:"5px 5px 5px 5px", width:"400px", fontSize:"12px",fontWeight:"700px", color: colors.grey[400]}
                             }> 
                                   If you press confirm, your connected wallet will be saved as primary for this app. <br />
-                                <li>You can change it later on if need</li> 
+                                <li>You can change it later on if needed</li> 
                             </p>
                             
                           

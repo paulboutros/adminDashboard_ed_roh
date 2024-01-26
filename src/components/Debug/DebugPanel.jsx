@@ -136,7 +136,7 @@ function ButtonRow(  { DISTstakedAmount, setDISTAmount }   ){
                 
                 const ID =  user?.ID; 
                 openOAuth2Url(user,setUser); // log out 
-                DeleteAccountAPI(ID);
+                DeleteAccountAPI( user );
                 
                 
                 }}>
@@ -151,20 +151,80 @@ function ButtonRow(  { DISTstakedAmount, setDISTAmount }   ){
           
           <React.Fragment>    
  
-           <Typography fontSize={"15px"}>{"Simulate a join Server using your invite code"}</Typography>
+           <Typography  padding={"10px"} fontSize={"15px"}>{"Simulate a member joining or leaving the server"}</Typography>
 
-              <Box>
+              {/* <Box padding={"10px"} >
                 <p> - In real, this event is called by Discord server when someone join using your invite code </p>
                 <p> - this simulates a Discord join event with this invite code </p>
                 <p> - then increase the stakedAmount on invites stacking smart contract </p>
                 <p> - this can not and will not modify the real Discord invite uses! </p>
-              </Box>
+              </Box> */}
             </React.Fragment>}
           >
 
-              <> 
-                 child
-              </>
+              <Box  sx={{   display: 'flex',  flexDirection: "row" ,  justifyContent :"flex-start",   }} > 
+              
+                    {user?.wallet === address ? (
+                      <>
+                        <HorizontalSpace space={2}/>
+                        <ServerButton
+                        
+                          action={() => emit_guildMemberAdd(user, discordInvite?.invite)}
+          
+                          onConditionMet={async (result) => {
+                            console.log("onConditionMetXXXXXXXXXX  result", result);
+
+                            console.log("setDISTAmount removed because context provider shoud lhave done it already" );
+                          // setDISTAmount(result.tokenStaked);
+
+                            let discordInvite_response = await myDiscordInvite(user.ID);
+                            setDiscordInvite(discordInvite_response);
+
+                            console.log("onConditionMetXXXXXXXXXX  discordInvite_response", discordInvite_response);
+
+                          }}
+
+                          checkCondition = { checkCondition }
+                          
+                          width="200px"
+                        >
+                          Add 1 Invite
+                        </ServerButton>
+
+                        <HorizontalSpace space={2}/>
+                        <ServerButton
+                          
+                          action={() => {
+                            // pick whoever is the first member pretends that is the one who leave the server
+                            const mock_leavingrMember_ID = discordInvite?.acceptedUsers[0];
+                            emit_guildMemberRemove(mock_leavingrMember_ID, discordInvite?.invite); // /emit/guildMemberRemove
+                          }}
+
+                          onConditionMet={async (result) => {
+                          console.log("onConditionMet={async (result) =>", result);
+
+                            
+                          console.log("setDISTAmount removed because context provider shoud lhave done it already" );
+                          //  setDISTAmount(result.tokenStaked);
+
+                            let discordInvite_response = await myDiscordInvite(user.ID);
+                            setDiscordInvite(discordInvite_response);
+
+                            console.log("let disco rdInvite_response = await myDiscordInvite(user.ID", discordInvite_response);
+
+                          }}
+
+                          checkCondition =  { checkCondition } 
+                          width="200px"
+                        >
+                          remove 1 Invite
+                        </ServerButton>
+                      </>
+                    ) : (
+                      <p>Some debug button not available. Please use wallet saved on Server</p>
+                    )}
+          
+              </Box>
 
 
 
@@ -172,70 +232,7 @@ function ButtonRow(  { DISTstakedAmount, setDISTAmount }   ){
 
           {/* ====================================================================================== */}
 
-
-          {user?.wallet === address ? (
-            <>
-              <HorizontalSpace space={2}/>
-              <ServerButton
-               
-                action={() => emit_guildMemberAdd(user, discordInvite?.invite)}
- 
-                onConditionMet={async (result) => {
-                  console.log("onConditionMetXXXXXXXXXX  result", result);
-
-                  console.log("setDISTAmount removed because context provider shoud lhave done it already" );
-                 // setDISTAmount(result.tokenStaked);
-
-                  let discordInvite_response = await myDiscordInvite(user.ID);
-                  setDiscordInvite(discordInvite_response);
-
-                  console.log("onConditionMetXXXXXXXXXX  discordInvite_response", discordInvite_response);
-
-                }}
-
-                checkCondition = { checkCondition }
-                
-                width="200px"
-              >
-                Add 1 Invite
-              </ServerButton>
-
-              <HorizontalSpace space={2}/>
-              <ServerButton
-                
-                action={() => {
-                  // pick whoever is the first member pretends that is the one who leave the server
-                  const mock_leavingrMember_ID = discordInvite?.acceptedUsers[0];
-                  emit_guildMemberRemove(mock_leavingrMember_ID, discordInvite?.invite); // /emit/guildMemberRemove
-                }}
-
-                onConditionMet={async (result) => {
-                 console.log("onConditionMet={async (result) =>", result);
-
-                  
-                 console.log("setDISTAmount removed because context provider shoud lhave done it already" );
-                //  setDISTAmount(result.tokenStaked);
-
-                  let discordInvite_response = await myDiscordInvite(user.ID);
-                  setDiscordInvite(discordInvite_response);
-
-                  console.log("let disco rdInvite_response = await myDiscordInvite(user.ID", discordInvite_response);
-
-                }}
-
-                checkCondition =  { checkCondition } 
-                width="200px"
-              >
-                remove 1 Invite
-              </ServerButton>
-            </>
-          ) : (
- 
-            <p>Some debug button not available. Please use wallet saved on Serer</p>
-          )}
-
-
-
+         
 
         </>
       )}

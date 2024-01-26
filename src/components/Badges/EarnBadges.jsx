@@ -25,6 +25,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { TbExternalLink } from "react-icons/tb";
 import { PopRewardDiscordInviteContent, PopTaskStatusLoginContent, PopWuRewardFomInviteStakingContent } from "../TooltipContent/content.jsx";
 import { useDISTContext } from "../../context/DISTstakingContext.js";
+import StakeRewardToolTip from "../StakeInterface/StakeRewardToolTip.jsx";
 
 
 const first_space =5;
@@ -189,21 +190,20 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
     
    
      return (
-          <>   
-           
+          <React.Fragment>   
+            
             <BootstrapTooltip 
-             title="Your wallet is successfully associated with your Discord profile"  placement="left-start">
-
-   {/* sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  } onClick={() => {}   } */}
-            <Box width={"400px"}  >
-
-                    <p style={{fontWeight:"500px" }}>   Task For Reward  </p>
-            </Box>
+                 title="Basic info of the reward program" 
+                 placement="left-start">
+    
+               <Box width={"400px"}  >
+                     <p style={{fontWeight:"500px" }}>   Task For Reward  </p>
+               </Box>
 
 
             </BootstrapTooltip>
              
-        </>
+        </React.Fragment>
         
 
      )
@@ -292,7 +292,10 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
                  connectedWallet_match_savedWallet(user,address)  ? (
 
                   <BootstrapTooltip 
-                  title="Your wallet is successfully associated with your Discord profile"  placement="left-start">
+                  title="Your wallet is successfully associated with your Discord profile. Click, if you need to change it"
+                  
+                  
+                  placement="left-start">
                       <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }
                        onClick={() => linkAdressToDiscord( user, address   )}  >
                           <p style={{fontWeight:"500px" }}>   {user.wallet}    </p>
@@ -403,29 +406,20 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
 
     return(
          <>  
-             <HtmlTooltip //open={true} 
-              title={
-              <React.Fragment>
-                <Typography color="inherit">Requirement</Typography>
-  
-                <Typography fontSize={"15px"}>{"Link your Wallet to your Discord"}</Typography> 
-              
-  
-                          <Box>
-                             <p> The current status of tasks </p>
-                          </Box>
-  
-  
-              </React.Fragment>
-            }
-          >
-           <Box> 
-            
-              TaskStatus
-            
-          </Box >
-            
-           </HtmlTooltip>    
+             
+         <React.Fragment> 
+             <BootstrapTooltip 
+             
+             title=
+
+                {"Display tasks status or various informations related to the corresponding task showed in Task"}
+
+               placement="top" >  
+
+                <Box> Tasks status </Box>
+
+             </BootstrapTooltip  >  
+          </React.Fragment> 
            
          </>
 
@@ -622,26 +616,11 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
  
    return(
          <>  
-             <HtmlTooltip //open={true} 
-              title={
-              <React.Fragment>
-                <Typography color="inherit">Requirement</Typography>
-  
-                <Typography fontSize={"15px"}>{"Link your Wallet to your Discord"}</Typography> 
-                           <Box>
-                              <p>Amount rewarded in $DIST</p>
-                          </Box>
-   
-              </React.Fragment>
-            }
-          >
-           <Box> 
-           <p> Reward </p>
-             
-          </Box >
-            
-           </HtmlTooltip>    
-           
+         <BootstrapTooltip  title= {"$DIST token staked amount"}  placement="top" >
+             <Box> 
+                <p> Staking </p>
+            </Box >
+           </BootstrapTooltip>
          </>
 
    )
@@ -661,28 +640,13 @@ useEffect(()=>{
 }, [ debugMode   ]);
 
   return(
-        <>  
-            <HtmlTooltip //open={true} 
-             title={
-             <React.Fragment>
-               {/* <Typography color="inherit">Requirement</Typography> */}
- 
-               <Typography fontSize={"15px"}>{"Amount rewarded in $WU"}</Typography> 
-                          {/* <Box>
-                             <p>Amount rewarded in $WU</p>
-                         </Box> */}
-  
-             </React.Fragment>
-           }
-         >
-          <Box> 
-          <p> $WU reward </p>
-            
-         </Box >
-           
-          </HtmlTooltip>    
-          
-        </>
+      <React.Fragment> 
+          <BootstrapTooltip  title= {"Unclaimed Reward in $WU ERC-20"}  placement="top" >  
+             <Box> 
+                <p>Reward</p>
+            </Box >
+         </BootstrapTooltip>
+      </React.Fragment>
 
   )
 
@@ -693,7 +657,7 @@ useEffect(()=>{
 
   const theme = useTheme();
  
-                
+  const {distStakedAmount,   distReward  } = useDISTContext();             
   
  const {debugMode }     = useDebugModeContext();
   
@@ -706,19 +670,20 @@ useEffect(()=>{
 
    return(
          <>  
-             <HtmlTooltip //open={true} 
-              title={
-                 <PopWuRewardFomInviteStakingContent/>
-              
-            }
-          >
+             <HtmlTooltip // open={true} 
+              title={ <StakeRewardToolTip />}
+            >
            <Box> 
             
-          {/* <CustomChip theme={theme} label= { rewardAmount }  icon={<MonetizationOnTwoToneIcon/>} color=  {theme.palette.chipGreen} /> */}
-
-          <Button variant="contained">
+ 
+          {/* <Button variant="contained"> */}
+           <Typography  
+           
+           sx={ allCSS( theme.palette.mode).unclaimedRewardText }  
+           
+           >   
              { rewardAmount } 
-            </Button> 
+            </Typography> 
             
           </Box >
             
@@ -732,21 +697,19 @@ useEffect(()=>{
 
 // this shows the stakes amount for the tokenless
 const pad ="15px";
- export function RewardInfo(  {  stakedAmount , popupContent,   forceOpenForDesigning=false }){
+ export function RewardInfo(  {  stakedAmount , popupContent  }){
   
 
   const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
   const {user, setUser } = useUserContext();   //DISTStakeInfo
-                
-  
- const {debugMode }     = useDebugModeContext();
-  
-   
+     
 
    return(
          <> 
            {  
-            user ?(
+            user &&(
              <HtmlTooltip 
               // open={ forceOpenForDesigning } // force it open when designing 
               placement="right"
@@ -756,17 +719,16 @@ const pad ="15px";
           >
            <Box> 
             
-           <CustomChip theme={theme} label= { stakedAmount }  icon={<MonetizationOnTwoToneIcon/>} color=  {theme.palette.chipGreen} />
-           {/* <CustomChip theme={theme} label= { stakedAmount }  icon={<MonetizationOnTwoToneIcon/>} color=  {theme.palette.chipGreen} /> */}
-
-             {/* {customChip} */}
-            
+           <CustomChip theme={theme} label= { stakedAmount } 
+            icon={<MonetizationOnTwoToneIcon/>}
+             color=  { stakedAmount > 0 ? theme.palette.chipGreen: colors.grey[500]  } />
+             
           </Box >
             
             </HtmlTooltip>    
-            ):(
-               <p>Discord login is not connected</p>
-            )
+            ) //:( <p>Discord login is not connected</p> )
+               
+           
             }
          </>
 

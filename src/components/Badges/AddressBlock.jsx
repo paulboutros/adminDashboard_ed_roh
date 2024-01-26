@@ -1,33 +1,26 @@
 import React, { useEffect } from 'react';
-import {Box,    Skeleton,    Stack,    Typography,    useTheme,  } from '@mui/material';
-import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../../theme";
+import {Box,    Skeleton,       Typography,    useTheme,  } from '@mui/material';
+import { BootstrapTooltip,   allCSS, cool_orange, tokens } from "../../theme";
   
-import { BiCoinStack } from "react-icons/bi";
- 
+  
 
-
-   import { FiExternalLink } from "react-icons/fi";
- import { addressShortened, copyTextToClipboard } from '../../utils';
-  import { LuCopy } from "react-icons/lu";  
  import { useContract, useContractRead } from "@thirdweb-dev/react";
 import { HorizontalSpace } from '../Layout';
 import { ethers } from 'ethers';
-import { AlignHorizontalLeft, AlignVerticalCenter, Height } from '@mui/icons-material';
- 
+import { AddressCopyBlock, EtherScanLinkBlock, ContractBalance  } from '../BlockLink/BlockLinks';
+  
 
   export function AddressBlock( {addressArg}){
 
-
-     const linkToSpeliaScan = () => {
-        
-        window.location.href = `https://sepolia.etherscan.io/address/${addressArg}`;
-    };
+     const theme = useTheme();
+     const colors = tokens(theme.palette.mode);
+     
 
     
         const { contract } = useContract(addressArg);
         const { data: contractBalance, isLoading } = useContractRead(contract, "getBalance" )
       
-        useEffect(() => {
+     useEffect(() => {
            
 
             if (!contractBalance){ return; }
@@ -38,17 +31,7 @@ import { AlignHorizontalLeft, AlignVerticalCenter, Height } from '@mui/icons-mat
            
 
         }, [ contractBalance ]);
-
-
-
  
-  
-      
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-  
-     
-    
 
        return(
         <>
@@ -59,98 +42,28 @@ import { AlignHorizontalLeft, AlignVerticalCenter, Height } from '@mui/icons-mat
             
             }}>
 
-         <BootstrapTooltip  title="Reward contract Balance"  placement="left-start" >
-         { !isLoading ? (
 
-               <React.Fragment>
-
-                 <BiCoinStack  size={"15px"} />  
-                {/* <Typography  fontSize={"small"} fontWeight={"150"}> Balance: </Typography> */}
-              
-
-                 <Typography  fontSize={"small"} fontWeight={"150"}> 
-                {Number( ethers.utils.formatUnits(contractBalance._hex, 18)).toFixed(2)}
-             </Typography>  
-             </React.Fragment>
-           ):(
-              <Skeleton variant="rounded" width={50} height={"26px"}  />
-           )}  
-
-        </BootstrapTooltip>
+          <ContractBalance addressArg={addressArg}   />   
+         
+   
        </div> 
          <HorizontalSpace space={1}/> 
      
          <div  style={{
-             display: "flex",
-             flexDirection: "row",
-             justifyContent: "space-between",
-              alignItems: "center" 
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center" 
  
          }}> 
    
-                <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
-
-                <Box sx={  allCSS( theme.palette.mode, "160px","0px" ).addressBox  } >
-                <Box onClick={ () => copyTextToClipboard ( addressArg  )} > 
-                        {/* <p> Share link with friends  */}
-                        <>
-
-                        <div> 
-                        
-                            <span style={{
-                                fontSize :"12px",
-                                marginRight: '20px',fontWeight:"900px",  borderRadius:"3px", padding:"3px",
-                                
-                                marginTop: "2px",
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent:  "flex-start",// "space-between",
-                                
-                                }} >
-                            <LuCopy  style={{marginRight:"5px", marginTop: "2px",  fontWeight: "900", }}   />
-                            
-                            
-                            {  addressShortened(addressArg)    }
-                            
-                            </span>
-                        
-                            </div>
-                        </>
-                        {/* </p>   */}
-                
-                    </Box>
-                </Box>
-                    </BootstrapTooltip>
-
+  
+                   <AddressCopyBlock addressArg={addressArg}   /> 
+ 
                     <HorizontalSpace space={1}/> 
-                <BootstrapTooltip  title="Go to Sepolia-Scan"  placement="right-start" >
-
-                    <Box sx={  allCSS( theme.palette.mode, "100px","0px" ).externalLink }  >
-                    <Box onClick={ () => linkToSpeliaScan ( addressArg  )} > 
-                            {/* <p> Share link with friends  */}
-                            <>
-
-                            <div> 
-                            
-                                <span style={{ fontSize :"12px",  fontWeight:"900px",  borderRadius:"3px", padding:"3px", marginTop: "2px", display: "flex", flexDirection: "row", justifyContent:  "flex-start", 
-                            
-                                }} >
-
-                                {"etherscan"}   
-                                < FiExternalLink  style={{marginLeft:"5px", marginTop: "2px",  fontWeight: "900", }}   />
-                                
-                                
-                                
-                                
-                                </span>
-                            
-                            </div>
-                            </>
-                            {/* </p>   */}
-
-                        </Box>
-                    </Box>
-                </BootstrapTooltip>
+ 
+                    <EtherScanLinkBlock addressArg={addressArg}    _colors = {cool_orange}    _alpha={0.05} />   
+                
            </div>
 
 
@@ -159,6 +72,8 @@ import { AlignHorizontalLeft, AlignVerticalCenter, Height } from '@mui/icons-mat
          </>
         )
   }
+
+
 
 
   
