@@ -12,7 +12,7 @@ export function useDiscordInviteContext() {
   return useContext(DiscordInviteContext);
 }
 
-let callInProgress = false; // defined outside of reatc component, so value independant from rendering
+ 
 export function DiscordInviteProvider({ children }) {
 
     const { user } = useUserContext();
@@ -66,9 +66,9 @@ export function DiscordInviteProvider({ children }) {
            
              
             discordInvite_response = await myDiscordInvite(user.ID);
-            callInProgress = true;
+            
          
-         // console.log('>>>>>>>  context:  discordInvite_response     :',  discordInvite_response);
+           console.log('>>>>>>>  context:  discordInvite_response     :',  discordInvite_response);
 
           setDiscordInvite(discordInvite_response);
         } catch (error) {

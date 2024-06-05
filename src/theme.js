@@ -364,7 +364,7 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
   export const StyledConnectWallet = styled(({ className, ...props }) => (
     <ConnectWallet {...props}
      className={className}
-     modalTitleIconUrl="" modalTitle="Pixels"  
+     modalTitleIconUrl="" modalTitle="Wulirocks"  
      />
   ))(({ theme }) => ({
  

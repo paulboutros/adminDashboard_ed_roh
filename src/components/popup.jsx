@@ -551,15 +551,7 @@ const handleImageSelect = (category, obj   ) => {
                 action={  onConfirm }
 
                 onConditionMet={async (result) => {
-              //   console.log("onConditionMet={async (result) =>", result);
-
-                 // setDISTAmount(result.tokenStaked);
-
-                //  let discordInvite_response = await myDiscordInvite(user.ID);
-                //  setDiscordInvite(discordInvite_response);
-
-                //  console.log("let discordInvite_response = await myDiscordInvite(user.ID", discordInvite_response);
-
+               
                 }}
 
                  checkCondition =  {   async (result) => { return null } } 

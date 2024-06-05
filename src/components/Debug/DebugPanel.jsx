@@ -3,18 +3,14 @@ import Typography from '@mui/material/Typography';
 import { HtmlTooltip, tokens } from "../../theme.js";
 import { Box, Button, Divider, Tooltip, useTheme } from '@mui/material';
 import { useAddress } from "@thirdweb-dev/react";
-import { DeleteAccountAPI, emit_guildMemberAdd, emit_guildMemberRemove, getSDK_fromPrivateKey, myDiscordInvite, openOAuth2Url, setWallet } from '../../data/API.js';
+import { DeleteAccountAPI, emit_guildMemberAdd, emit_guildMemberRemove,   myDiscordInvite, openOAuth2Url  } from '../../data/API.js';
 import { useUserContext } from '../../context/UserContext.js';
-import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
-import { useDebugModeContext } from '../../context/DebugModeContext.js';
+ import { useDebugModeContext } from '../../context/DebugModeContext.js';
 import { ServerButton } from '../Buttons/buttons.jsx';
 import { useDiscordInviteContext } from '../../context/DiscordInviteContext.js';
-import { useNotificationContext } from '../../context/NotificationContext.js';
-import { ethers } from 'ethers';
-import { useDISTContext } from '../../context/DISTstakingContext.js';
-import { HorizontalSpace, RowChildrenAlignLeft, VerticalSpace } from '../Layout.jsx';
-import { CgDebug } from "react-icons/cg";
-
+ import { useDISTContext } from '../../context/DISTstakingContext.js';
+import { HorizontalSpace,   VerticalSpace } from '../Layout.jsx';
+ 
 const _padding ="10px 0 10px 10px"
 export function DebugPanel(  { DISTstakedAmount, setDISTAmount }      ) {
  
