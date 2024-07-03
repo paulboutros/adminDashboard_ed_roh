@@ -6,34 +6,23 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+ 
 import VerifiedIcon from '@mui/icons-material/Verified';
 
-import React, { useEffect, useState } from 'react';
+ 
  
 
 import { allCSS, tokens  } from "../../theme";
 import { Avatar, useTheme} from '@mui/material';
   
- 
-
-import {
-   
-  useAddress,
-  
-} from "@thirdweb-dev/react";
-import { useUserContext } from '../../context/UserContext';
-import { getAvatar } from '../../data/API';
   
 
 export default function ToDoList ({ tasks    }) {
 
-    const address = useAddress();
+     
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const {user, setUser } = useUserContext();
-   
+     
     
   
      function taskHandleClick( index ){

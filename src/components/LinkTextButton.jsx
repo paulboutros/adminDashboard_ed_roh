@@ -1,12 +1,10 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'; 
-import {Button, Box,  Divider,  Typography, useTheme   } from "@mui/material";
+import {Button, Box,   useTheme   } from "@mui/material";
 import { Link } from 'react-router-dom';
 
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
-import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
- //https://chakra-ui.com/docs/components/button
- import { MediaRenderer  } from "@thirdweb-dev/react";
-import { Avatar, 
+  //https://chakra-ui.com/docs/components/button
+ import { 
   useToast,
    Tooltip
 } from "@chakra-ui/react";
@@ -15,7 +13,7 @@ import { Avatar,
 
  
 import {CopyToClipboard } from "../utils.js";
-import {buttonStyle, text2, text1, tokens } from "../theme.js";
+import {  text2,   tokens } from "../theme.js";
    
  
  

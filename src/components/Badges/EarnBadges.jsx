@@ -8,9 +8,9 @@ import { useUserContext } from "../../context/UserContext.js";
 import { useDebugModeContext } from "../../context/DebugModeContext.js";
 import {  getAvatar, openOAuth2Url_whenUserNotConnected, setWallet    } from "../../data/API.js";
   
-import {   Avatar, Box, Button,  Typography } from "@mui/material";
+import {   Avatar, Box,    Typography } from "@mui/material";
  import SpeedDialTooltipOpen from "../SpeedDialTooltipOpen.jsx";
-import { HorizontalSpace, VerticalSpace } from "../Layout.jsx";
+import { HorizontalSpace  } from "../Layout.jsx";
 import { addressShortened } from "../../utils.js";
  import FaceIcon from '@mui/icons-material/Face';
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
@@ -22,8 +22,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
   
 
  
-import { TbExternalLink } from "react-icons/tb";
-import { PopRewardDiscordInviteContent, PopTaskStatusLoginContent, PopWuRewardFomInviteStakingContent } from "../TooltipContent/content.jsx";
+ import {   PopTaskStatusLoginContent   } from "../TooltipContent/content.jsx";
 import { useDISTContext } from "../../context/DISTstakingContext.js";
 import StakeRewardToolTip from "../StakeInterface/StakeRewardToolTip.jsx";
 
@@ -45,7 +44,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
    const colors = tokens(theme.palette.mode);
    const address = useAddress();
                   
-   const {user, setUser } = useUserContext();
+   const {user } = useUserContext();
    const {debugMode }     = useDebugModeContext();
    
  
@@ -179,12 +178,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
 
    export function TaskForRewardLabel(){
  
-  
-    const theme = useTheme();
-  
-   const colors = tokens(theme.palette.mode);
-   const address = useAddress();
-                  
+   
     
    
     
@@ -218,8 +212,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
    const address = useAddress();
                   
    const {user, setUser } = useUserContext();
-   const {debugMode }     = useDebugModeContext();
-   
+    
      
   
   const {    setReFetch } = useDISTContext(); 
@@ -232,8 +225,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
         console.log (  "started:    popupHandleConfirm_TaskForReward ");
      
      
-    const result = await setWallet(user,address);
-
+ 
     //create a new object by shallow copy so react can detect a change 
     
      console.log( ">>>>>>>>>>>>>>>>>>>>>>>>   setReFetch(true) "   );
@@ -397,11 +389,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
  export function TaskStatusLabel( ){
  
      
-
-  const theme = useTheme();
-
- const colors = tokens(theme.palette.mode);
- const address = useAddress();
+ 
      
 
     return(
@@ -472,8 +460,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
 
   const theme = useTheme();
 
- const colors = tokens(theme.palette.mode);
- const address = useAddress();
+  const address = useAddress();
                 
  const {user, setUser } = useUserContext();
  const {debugMode }     = useDebugModeContext();
@@ -604,8 +591,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
  export function RewardInfoLabel(  ){
   
 
-   const theme = useTheme();
- 
+  
  const {debugMode }     = useDebugModeContext();
  
  
@@ -629,8 +615,7 @@ export function EarnBadges( {sp ,useAvatar, taskForReward , taskStatus, rewardIn
  export function WURewardInfoLabel(  ){
   
 
-  const theme = useTheme();
-
+ 
 const {debugMode }     = useDebugModeContext();
 
 
@@ -657,8 +642,7 @@ useEffect(()=>{
 
   const theme = useTheme();
  
-  const {distStakedAmount,   distReward  } = useDISTContext();             
-  
+   
  const {debugMode }     = useDebugModeContext();
   
  useEffect(()=>{

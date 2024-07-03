@@ -1,5 +1,5 @@
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { NFT } from "@thirdweb-dev/react";
+//import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+//import { NFT } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS,  REWARDS_ADDRESS, PACK_ADDRESS, MARKETPLACE_ADDRESS  } from "../const/addresses";
 import {CreateBundlePackWEB2, getSDK_fromPrivateKey} from "../data/API";  
 
@@ -26,13 +26,13 @@ export async function gainExp(
     try {
         const sdk = getSDK_fromPrivateKey();
 
-        const contract = await sdk.getContract(TOOLS_ADDRESS);
+        //const contract = await sdk.getContract(TOOLS_ADDRESS);
 
         var updatedExp = await parseInt(exp) + 50;
-        var updatedLvl = await parseInt(level);
+     //   var updatedLvl = await parseInt(level);
 
         if (updatedExp >= 100) {
-            updatedLvl += 1;
+           // updatedLvl += 1;
             updatedExp -= 100;
         }
 
@@ -48,15 +48,16 @@ export async function gainExp(
 
      
 
-        const newUri = await sdk.storage.upload(metadata);
+       // const newUri = await sdk.storage.upload(metadata);
 
+        /*
         const updateNFT = await contract.call(
             "setTokenURI",
             [
                 nftTokenId,
                 newUri,
             ]
-        );
+        );*/
 
         return { success: "Pokemon Trained!" };
     } catch (error) {
@@ -71,14 +72,14 @@ export async function evolve(
 ){
     try {
         const category ="kn"; 
-        const catOffSet = 1;
-          const resultNumber = parseInt(nftTokenId) + catOffSet;
+     //   const catOffSet = 1;
+       //  const resultNumber = parseInt(nftTokenId) + catOffSet;
 
 
           // console.log( " >>>>>    resultNumber" + resultNumber);
         const sdk = getSDK_fromPrivateKey();
 
-        const contract = await sdk.getContract(TOOLS_ADDRESS);
+     //   const contract = await sdk.getContract(TOOLS_ADDRESS);
  
        
             const metadata = {
@@ -119,6 +120,7 @@ export async function evolve(
 
          // const txResult = await contract.erc1155.burn(0, 2);
            
+        /*
          const updateNFT = await contract.call(
             "setTokenURI",
             [
@@ -126,6 +128,7 @@ export async function evolve(
                 newUri,
             ]
         );
+              */
  
       //  }
 
@@ -228,7 +231,7 @@ export async function UpdateListing (){
     const marketContract = await sdk.getContract(MARKETPLACE_ADDRESS,"marketplace-v3" );
 
 
-
+/*
     const txResult = await marketContract.directListings.updateListing( 9 , {
         assetContractAddress:  PACK_ADDRESS , // Required - smart contract address of NFT to sell
         tokenId: 0, // Required - token ID of the NFT to sell
@@ -239,7 +242,7 @@ export async function UpdateListing (){
         startTimestamp: new Date(), // Optional - when the listing should start (default is now)
         endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // Optional - when the listing should end (default is 7 days from now)
       });
-
+*/
 }
 
 //https://portal.thirdweb.com/typescript/sdk.contractmetadata
@@ -320,6 +323,8 @@ console.log( "packs" , packs );
      CreateBundlePackWEB2();
   
    return ;  // web 3 version
+/*
+
    const generatedData = generateData();
   const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
 
@@ -348,6 +353,7 @@ console.log( "packs" , packs );
 
   console.log("Packs created");
  
+  */
 
 }
  

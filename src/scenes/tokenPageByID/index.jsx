@@ -1,14 +1,13 @@
 
-import { IconButton ,Paper, Button, TextField ,   Box,   Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
+import {  TextField ,   Box,   Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
 
  import {CountdownTimerWithArg} from "../../components/CountdownTimer.jsx"
-import  { convertSecondsToDateString,   addressShortened ,handleCopyClick} from "../../utils.js"
+import  { convertSecondsToDateString,   addressShortened  } from "../../utils.js"
 //https://chakra-ui.com/docs/components/button
-import { MediaRenderer, ThirdwebNftMedia, Web3Button, useContract,
-    useMinimumNextBid, useValidDirectListings,
-     useValidEnglishAuctions , useMakeBid,
-     useContractEvents,
-     useEnglishAuctions
+import {   ThirdwebNftMedia, Web3Button, useContract,
+    
+     useContractEvents 
+  
     
    } from "@thirdweb-dev/react";
 

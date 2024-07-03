@@ -1,16 +1,15 @@
-import { Divider ,Box, IconButton, useTheme  , Button, Typography } from "@mui/material";
-import {text2, text1, tokens } from "../theme";
+import { Divider ,Box,  useTheme  ,   Typography } from "@mui/material";
+import {  text1, tokens } from "../theme";
 import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-
+ 
 export function TabsLayout( {children , value  } ){
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  
 
 
   const handleChange = (event, newValue) => { 
 
-    console.log( "newValue >>>>>>>>>>>>>>>>>>>>   ");
+     
     
  };
 
@@ -308,7 +307,7 @@ export function RoundedBox(  {children , _height , backgroundColor ,  padding=0 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
   
-    const boxColor = colors.primary[400];
+    
     const  _borderColor = colors.primary[400]
     const _borderRadius= "10px";
 
@@ -333,7 +332,7 @@ export function BoxWithTopBar(  {children  ,timeLeft, topBarHeight = 20  , boxHe
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const boxColor = colors.primary[400];
+  
   const  _borderColor = colors.primary[400]
   const _borderRadius= "10px";
   return(
