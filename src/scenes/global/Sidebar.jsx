@@ -2,8 +2,7 @@ import { useState , useEffect  } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 
-import { BiCoinStack } from "react-icons/bi";
-import { BiLogoDiscordAlt } from "react-icons/bi";
+ import { BiLogoDiscordAlt } from "react-icons/bi";
 
 //https://www.iconpacks.net/free-icon/nft-token-13058.html
 //import { ReactComponent as CustomIcon } from "https://sepolia.etherscan.io/images/main/nft-placeholder.svg"
@@ -13,9 +12,7 @@ import { ReactComponent as Nft2Icon } from "../../svg/nft-hand-13049.svg"
 
 
 import { CgProfile } from "react-icons/cg";
-import { TbCookieMan } from "react-icons/tb";
-import { FaSitemap } from "react-icons/fa6";
-import { CiCoinInsert } from "react-icons/ci";
+  
 
 import { LiaCoinsSolid } from "react-icons/lia";
 
@@ -26,15 +23,7 @@ import { FiPackage } from "react-icons/fi";
 // hand with coin . could be for claim reward
 import { PiHandCoinsLight } from "react-icons/pi";
 
-// send email
-import { MdAlternateEmail } from "react-icons/md";
-// for donation
-import { CiCoffeeCup } from "react-icons/ci";
-// good for unclaimed reward
-import { CiTrophy } from "react-icons/ci";
-
-import { GiBoxUnpacking } from "react-icons/gi"
-import { TbPackages } from "react-icons/tb";
+ 
 import "react-pro-sidebar/dist/css/styles.css";
 import {   text1,  tokens } from "../../theme";
  
@@ -49,8 +38,7 @@ import { referralRewardTabIndex } from "../profileWallet/index.jsx";
 import { useAddress } from "@thirdweb-dev/react";
 
 // that path will assign the src property of an <im element, therefore it is assume that path starts from public directory
-let avatarURL="/he/1.png"; // add default avatar here
- 
+  
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -60,8 +48,7 @@ const Sidebar = () => {
 
   const { user } = useUserContext();
 
-    const address = useAddress();
- 
+  
 
   useEffect(() => {
     // This effect will run when the user object changes

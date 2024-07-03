@@ -5,16 +5,16 @@ starts at 27:00min
 */
 
 import * as React from 'react';
-import PropTypes from 'prop-types';
+ 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
  import {a11yProps} from   '../../components/TabSubcomponent.jsx';
 
 
-import Skeleton from "../../components/Skeleton/Skeleton";
+ 
 
 import stylesProfile from "../../styles/Profile.module.css";
-import stylesBuy from "../../styles/Buy.module.css";
+ 
 
 
 import randomColor from "../../util/randomColor";
@@ -42,44 +42,8 @@ import { useNavigate } from "react-router";
 
  import {useAllLayersContext }from '../../context/AllLayerAvailableContext.js';  
  import { useAllListingsContext } from '../../context/AllListingContext.js';  
-
-const [randomColor1, randomColor2, randomColor3, randomColor4] = [
-    randomColor(),
-    randomColor(),
-    randomColor(),
-    randomColor(),
-  ];
-
-
-  /*
-  function CustomTabPanel(props) {
-    const { children, value, index, ...other } = props;
-  
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{ p: 3 }}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    );
-  }
-  
-  CustomTabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-  };
-  */
-
-  
+ 
+ 
  
 // display mode, list for shop page, grid for composePage (more simple display)
  export default function Shop( {itemType} ) {
@@ -117,7 +81,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
   let { directListings, auctionListing, allNFTsWithListing, 
     loadingDirectListings, loadingAuction, NFT_CONTRACT  } = useAllListingsContext();
-  const { contract } = useContract(NFT_CONTRACT);
+  //const { contract } = useContract(NFT_CONTRACT);
  
 
   useEffect(()=>{
@@ -140,7 +104,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
 
  const theme = useTheme();
- const colors = tokens(theme.palette.mode);
+ //const colors = tokens(theme.palette.mode);
  const navigate = useNavigate();
 
  const { contract: marketplace, isLoading: loadingMarketplace, } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
@@ -299,7 +263,7 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 export function AllNFTWrapper( {  allNFTsWithListing, NFT_CONTRACT  } ){
 
    const theme = useTheme();
-   const colors = tokens(theme.palette.mode);
+  // const colors = tokens(theme.palette.mode);
    const navigate = useNavigate();
 
 

@@ -10,8 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 //import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart"; 
-//import GridAllLayer from "../../components/GridAllLayer";  
+ 
  
 import GridDiscord from "../../components/GridDiscord";  
 import GridTwitter from "../../components/GridTwitter";  

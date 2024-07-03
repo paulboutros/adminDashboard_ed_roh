@@ -19,7 +19,7 @@ import {
    
 } from "@chakra-ui/react";
 
-import {CopyText, CustomLinkWithLocalIcon  } from "../../components/LinkTextButton.jsx"
+import {  CustomLinkWithLocalIcon  } from "../../components/LinkTextButton.jsx"
 import {  
     
     VerticalStackAlignLeft,  RowChildrenAlignTop,VerticalStackAlign,

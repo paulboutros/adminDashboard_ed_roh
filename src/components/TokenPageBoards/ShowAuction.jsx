@@ -2,7 +2,7 @@
 import {useEffect, useState} from "react";
 import { Box , Typography, useTheme } from "@mui/material";
 import { DataGrid  } from "@mui/x-data-grid";
-import { text1,text2, tokens, DataGridStyle } from "../../theme";
+import {  text2, tokens, DataGridStyle } from "../../theme";
  
 import {GetContractName} from "../../util/GetMarketContractEventData.js"   
 
@@ -19,13 +19,13 @@ import {
    
  
   
-const grid_gap ="20px";
+ ;
   
 
 const ShowAuction = ( { nft , auctionId, listingId, title, isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [filterModel, setFilterModel] = useState([]);
+  
 
   const gridtext  = text2.color;
   const gridFont  = text2.fontSize;
@@ -33,7 +33,7 @@ const ShowAuction = ( { nft , auctionId, listingId, title, isDashboard = false }
  const _rowHeight = isDashboard ?  20: 40 ;
  const _headerHeight = isDashboard ?  20: 40 ;
  const _footerHeight = isDashboard ?  20: 40 ;
-const maxRowsPerPage = 5;          
+//const maxRowsPerPage = 5;          
   
   const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
         
@@ -52,7 +52,7 @@ const maxRowsPerPage = 5;
   
 //==========================================================================
 // pb added to fetch data
- const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+// const [data, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
 const [newDataList, setNewDataList] = useState(); // Set rowData to Array of Objects, one Object per Row
 const [_height, setHeight] = useState(300);
 

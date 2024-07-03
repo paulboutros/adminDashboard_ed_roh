@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import Topbar from "./scenes/global/Topbar.jsx";
 import Sidebar from "./scenes/global/Sidebar.jsx";
-import Dashboard from "./scenes/dashboard/index.jsx";
+ 
 import DiscordBoard from "./scenes/discordBoard/index.jsx";
 
  import TwitterBoard from "./scenes/twitterBoard/index.jsx";
@@ -17,7 +17,7 @@ import Form from "./scenes/form/index.jsx";
 import Line from "./scenes/line/index.jsx";
 import Pie from "./scenes/pie/index.jsx";
 import FAQ from "./scenes/faq/index.jsx";
-import Geography from "./scenes/geography/index.jsx";
+ 
 import MyPacks from "./scenes/myPacks/index.jsx";
 import Maintenance  from "./scenes/maintenance/index.jsx";
  
@@ -48,9 +48,7 @@ import { DiscordInviteProvider } from "./context/DiscordInviteContext.js";
 import { DebugModeProvider } from "./context/DebugModeContext.js";
 
 
-
-
-import Calendar from "./scenes/calendar/calendar.jsx";
+ 
   
 //web 3 market plce component:
 //import './App.css';
@@ -216,8 +214,8 @@ const testThirdWeb = true;
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />
               <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} />
+              
+              
               <Route path="/myPacks" element={<MyPacks/>} />
                 
               

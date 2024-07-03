@@ -649,7 +649,7 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
             <Button variant="contained" 
               sx={{backgroundColor: theme.debugModeColor }}
                 onClick={() => createBundle() } >   
-                 createBundle
+                 create Bundle web 2
             </Button> 
  
             <Button variant="contained" 
