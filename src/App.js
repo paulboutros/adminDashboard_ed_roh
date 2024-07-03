@@ -73,7 +73,7 @@ function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
 
-const testThirdWeb = false;
+const testThirdWeb = true;
   if ( testThirdWeb === true  ){
 
     return (  
