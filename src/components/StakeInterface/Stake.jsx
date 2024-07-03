@@ -30,25 +30,21 @@ import {
   import React, { useEffect, useState } from "react";
   import { ethers } from "ethers";
 import { useTheme } from "@emotion/react";
-import {  text2, tokens } from "../../theme";
- import { CountdownEndTime  } from "../CountdownTimer";
-import { CustWeb3Button } from "../Buttons/buttons";
+import {    tokens } from "../../theme";
+ import { CustWeb3Button } from "../Buttons/buttons";
  
 import RewardToken from "./RewardToken";
 
  //let timeRemaining;
- let startTime;
- let myInterval;
- const _boxHeight ="270px";
+  const _boxHeight ="270px";
 
 
 
  
   export default function Stake() {
     const address = useAddress();
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-
+    
+ 
      
 
     const { contract: stakeTokenContract } = useContract(
@@ -76,7 +72,7 @@ import RewardToken from "./RewardToken";
     const { data: rewardTokenBalance, isLoading: loadingRewardTokenBalance } =
       useTokenBalance(rewardTokenContract, address);
    
-     const toast = useToast();
+      
   
     return (  
        

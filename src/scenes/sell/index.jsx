@@ -85,13 +85,7 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
 
              <div className={tokenPageStyles.metadataContainer}>
               <div className={tokenPageStyles.imageContainer}>
-                {/* <ThirdwebNftMedia
-                  metadata={selectedNft.metadata}
-                  
                 
-                  className={tokenPageStyles.image}
-                  
-                /> */}
          <RoundedBox>   
           <RoundedBox padding = "8px">
                 <ThirdwebNftMedia metadata={selectedNft.metadata} 
