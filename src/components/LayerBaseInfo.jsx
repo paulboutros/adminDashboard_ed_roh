@@ -203,7 +203,7 @@ it  takes a list of layer object and display image, how many are owned  etc..
                             
                            // obj.owning
                             
-                           infoMap[ obj.tokenID] ? (
+                           infoMap?.[ obj.tokenID] ? (
                             <span>{infoMap[ obj.tokenID ].quantityOwned}</span>
                           ) : (
                             <span>0</span>
