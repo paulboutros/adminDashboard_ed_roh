@@ -31,7 +31,7 @@ import { ColorModeContext, useMode } from "./theme.js";
 
 // Context
 import { AllListingsProvider } from "./context/AllListingContext.js";
-import { UserProvider } from './context/UserContext.js';
+// import { UserProvider } from './context/UserContext.js';    user_disabled
 import { AllLayersProvider }  from './context/AllLayerAvailableContext.js';
 import { NotificationProvider }  from './context/NotificationContext.js'; 
 import { DropTimeProvider }  from './context/DropTimeContext.js'; 
@@ -133,7 +133,7 @@ const testThirdWeb = false;
 
     <ThirdwebProvider activeChain={Sepolia}>
  <ChakraProvider>  
-       <UserProvider>
+       {/* <UserProvider> */}
          <DiscordProvider>
             <DISTProvider>
            <DebugModeProvider>
@@ -234,7 +234,7 @@ const testThirdWeb = false;
 
          </DISTProvider>
     </DiscordProvider>
-       </UserProvider>
+       {/* </UserProvider> */}
     </ChakraProvider>
     </ThirdwebProvider>
   
@@ -247,13 +247,13 @@ const testThirdWeb = false;
     return (
     <ThirdwebProvider activeChain={Sepolia}>
     <ChakraProvider>  
-          <UserProvider>
-            <DiscordProvider>
-               <DISTProvider>
-              <DebugModeProvider>
+          {/* <UserProvider> */}
+            {/* <DiscordProvider> */}
+               {/* <DISTProvider> */}
+              {/* <DebugModeProvider> */}
    
-           <DiscordInviteProvider> 
-           <AppLinkProvider>
+           {/* <DiscordInviteProvider>  */}
+           {/* <AppLinkProvider> */}
       
          <DropTimeProvider>
          <NotificationProvider>
@@ -341,14 +341,14 @@ const testThirdWeb = false;
         </NotificationProvider>
         </DropTimeProvider>
         
-        </AppLinkProvider> 
-           </DiscordInviteProvider>
+        {/* </AppLinkProvider>  */}
+           {/* </DiscordInviteProvider> */}
         
-            </DebugModeProvider>
+            {/* </DebugModeProvider> */}
    
-            </DISTProvider>
-       </DiscordProvider>
-          </UserProvider>
+            {/* </DISTProvider> */}
+       {/* </DiscordProvider> */}
+          {/* </UserProvider> */}
        </ChakraProvider>
        </ThirdwebProvider>
      

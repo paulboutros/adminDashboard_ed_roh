@@ -1,6 +1,5 @@
-import {createContext, useContext,    useState, useEffect } from "react";
-import { globalData, globalData_setDebugMode } from "../data/API";
-import { useUserContext } from "./UserContext";
+import {createContext, useContext } from "react";
+ 
  
 const DebugModeContext = createContext();
 
@@ -12,36 +11,6 @@ export function useDebugModeContext() {
  
 // Remember to add this as a wrapper to the App.js
 export function DebugModeProvider({ children }) {
-
-    
-  const {user} = useUserContext();
-
-    const [debugMode, setDebugMode] = useState(false);
  
-    useEffect(() => {
-      if (!user)return;
-
-      const fetch_debugMode = async () => {
-          try {
- 
-              
-             
-
-           // const response = await globalData();
-            
-            setDebugMode( user.debugMode );
-          } catch (error) {
-           
-            console.error('Error fetching appLink data:', error);
-          }
-      };
-      fetch_debugMode();
-     }, [ user ]); // Empty dependency array runs the effect once
-
-    return (
-      <DebugModeContext.Provider value={{ debugMode,   setDebugMode   }}>
-        {children}
-      </DebugModeContext.Provider>
-    );
   }
   

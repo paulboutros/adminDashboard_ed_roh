@@ -2,7 +2,7 @@ import {createContext, useContext,  useState, useEffect } from "react";
 
 import { getAllLayersAvailable , GetAllNFTfromSDK, getSDK_fromPrivateKey   } from "../data/API.js";
 //import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
- import { useUserContext } from './UserContext.js'; // to get user data from context provider
+// import { useUserContext } from './UserContext.js'; // to get user data from context provider
 
 import { TOOLS_ADDRESS } from "../const/addresses.ts";
 import { useContract,  useOwnedNFTs, useAddress  } from "@thirdweb-dev/react";
@@ -15,7 +15,7 @@ export function useAllLayersContext() { return useContext(AllLayersContext);}
  
 export function AllLayersProvider({ children }) {
   
-    const { user } = useUserContext();
+   // const { user } = useUserContext();
 
     const { contract } = useContract(TOOLS_ADDRESS);
    
@@ -34,7 +34,8 @@ export function AllLayersProvider({ children }) {
     const [allLayers, setAllLayers] = useState(null);
     //const { data: NFTdata }   = useNFTs(contract);    // get all neft
    
-
+    const [infoMap, setInfoMap] = useState(null);
+     
 // get all Layer once, makre SURE it load ONCE 
 //================================================================================================================
     async function getAllNFTs(){
@@ -70,6 +71,27 @@ export function AllLayersProvider({ children }) {
    useEffect(()=>{
     if (!data)return;
  
+
+      console.log(  " owned nft   =  "  , data);
+      const infoMapTemp = data.reduce((acc, current) => {
+        acc[current.metadata.id] = {
+          owner: current.owner,
+          metadata: current.metadata,
+          type: current.type,
+          supply: current.supply,
+          quantityOwned: current.quantityOwned
+        };
+        return acc;
+      }, {});
+      
+      console.log( "infoMap  >>>>>>>>>>>>>>>>>>>>>>>>>>    "    , infoMap);
+     
+ 
+      setInfoMap(infoMapTemp);
+
+
+
+
      setOwnedNfts (data);
 
    }, [data ]);
@@ -94,14 +116,14 @@ export function AllLayersProvider({ children }) {
         }
         initialize();
 
-    }, [  user,// this will need to re-run when the user logout for example 
+    }, [  // user,// this will need to re-run when the user logout for example 
          NFTdata, ownedNftData  // we get the supply from contract now, no more from Mongo
     ]); 
 
       
 
     return (
-      <AllLayersContext.Provider value={{ allLayers, NFTdata, ownedNftData,  setAllLayers }}>
+      <AllLayersContext.Provider value={{infoMap, allLayers, NFTdata, ownedNftData,  setAllLayers }}>
         {children}
       </AllLayersContext.Provider>
     );

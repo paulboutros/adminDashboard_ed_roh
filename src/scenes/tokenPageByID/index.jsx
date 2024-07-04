@@ -113,6 +113,8 @@ useEffect(() => {
      
        setNFT(nftResult);
 
+       console.error(' setNFT  ;nftResult:',   nftResult);
+
      } catch (error) {
        console.error('Error fetching NFT:', error);
      }
@@ -329,7 +331,7 @@ useEffect(() => {
            <Box flex="1">
          
         
-          <DisplayNFTimage nft={nft} />
+           <DisplayNFTimage nft={nft} />
         </Box>
         <VerticalSpace space={2}/>
         <Box flex="1"   >
@@ -598,7 +600,7 @@ function NftPriceBlock (   {
  }
   
   
- function DisplayNFTimage( {nft}){
+ export function DisplayNFTimage( {nft}){
 
   return(
     <div > 

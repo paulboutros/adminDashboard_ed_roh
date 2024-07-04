@@ -1,5 +1,5 @@
 import {createContext, useContext,    useState, useEffect } from "react";
-import { useUserContext } from './UserContext.js'; // to get user data from context provider
+//import { useUserContext } from './UserContext.js'; // to get user data from context provider
 import { formatTimestampToCustomFormat ,  formatMilliseconds} from  "../utils.js"
 
 
@@ -18,15 +18,10 @@ export function useDropTimeContext() {
 export function DropTimeProvider({ children }) {
     const [dropTime, setDropTime] = useState(null);
     
-    const { user } = useUserContext();
+    //const { user } = useUserContext();
 
      
-  
-    useEffect(() => {
- 
-
-    }, [ user ]); // Empty dependency array runs the effect once
- 
+   
 
    
     return (

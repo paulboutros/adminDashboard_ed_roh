@@ -2,17 +2,17 @@ import   React, { useEffect , useState } from 'react';
 
 import {  useAddress } from '@thirdweb-dev/react'
  
-import {  Box, Button, IconButton, Typography, useTheme, colors, Stack, Skeleton } from "@mui/material";
+import {  Box, Button,   Typography, useTheme, colors, Stack   } from "@mui/material";
 import { BiCoinStack } from "react-icons/bi";
 
  import { CustomLegend2 } from './Legend.jsx';
  
-import {sendTracking, GetRewardPrice, convertEthToUsd   } from "../data/API.js"
+import {  GetRewardPrice, convertEthToUsd   } from "../data/API.js"
 
   
 
-import { BootstrapTooltip, allCSS, cool_orange, text1, text2, tokens  } from "../theme.js";
-import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
+import { BootstrapTooltip,   cool_orange,   tokens  } from "../theme.js";
+ 
 import { useAllLayersContext } from '../context/AllLayerAvailableContext.js'; 
 
    
@@ -21,17 +21,17 @@ import LayerBaseInfo from "./LayerBaseInfo.jsx";
  import PopupButton  from "./popup.jsx"
  import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata.js';
 import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses.ts';
-import { HorizontalSpace, RoundedBox, RowChildrenAlignLeftBottom, VerticalSpace } from './Layout.jsx';
-import { useDebugModeContext } from '../context/DebugModeContext.js';
+import { HorizontalSpace, RoundedBox,   VerticalSpace } from './Layout.jsx';
+//import { useDebugModeContext } from '../context/DebugModeContext.js';
 import { AddressBlock } from './Badges/AddressBlock.jsx';
    
-
+const debugMode = false;
 const LayerSelector = (  {queryId="" }  ) => {
 
-  const { user } = useUserContext();
-  const {debugMode, set_DebugMode} = useDebugModeContext();
+ // const { user } = useUserContext();
+  //const {debugMode,  } = useDebugModeContext();
 
-  const [ ethToUsdRate, setEthToUsdRate ] = useState(0); 
+  const [  setEthToUsdRate ] = useState(0); 
 useEffect(() => {
   // Function to fetch NFT data
   const fetchUSDrate = async () => {
@@ -52,10 +52,7 @@ useEffect(() => {
   fetchUSDrate();
    
 }, []); 
-
-      
-  const debugModeLayout = true;
-
+ 
     
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -142,7 +139,8 @@ useEffect(() => {
     <Box margin="0 8px 20px 8px" >
    
     <div>
-       { (user && debugMode && 
+       { (  /*user &&*/
+           debugMode && 
            address &&
          ( address === OWNER || address === OWNER2) 
           
@@ -506,7 +504,7 @@ useEffect(() => {
 const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
  
  
-    const { user } = useUserContext();
+   // const { user } = useUserContext();
     const { allLayers} = useAllLayersContext(); 
  
 
@@ -572,7 +570,7 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
      console.log(  " handle image select : " , obj  );
           
          
-       sendTracking(user , category, image, "setSelectedImages" ,  "ComposedCharacter " );
+   //    sendTracking(user , category, image, "setSelectedImages" ,  "ComposedCharacter " );
   
        const updatedSelectedImages = { ...selectedImages };
  
@@ -580,17 +578,7 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
          throw new Error(`Category '${category}' does not exist in selectedImages.`);
        }
         
-    /*
-       updatedSelectedImages[category] =
-        [
-          { imagePath:"layersForCharacterCompo/" + image, 
-            layerName: obj.layerName,
-            tokenID: obj.tokenID,
-            owning: obj.owning, 
-            name: obj.name
-        }
-      ]
- */
+     
  
         updatedSelectedImages[category] = [
           {

@@ -1,4 +1,4 @@
-import { useState , useEffect  } from "react";
+import { useState    } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 
@@ -33,9 +33,9 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
  
  
 import Item from "../../components/Item";
- import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+// import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
 import { referralRewardTabIndex } from "../profileWallet/index.jsx";
-import { useAddress } from "@thirdweb-dev/react";
+ 
 
 // that path will assign the src property of an <im element, therefore it is assume that path starts from public directory
   
@@ -46,22 +46,8 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [selected, setSelected] = useState("Dashboard");
 
-  const { user } = useUserContext();
-
-  
-
-  useEffect(() => {
-    // This effect will run when the user object changes
-    // You can check if the user object is not null and perform actions accordingly
-     
-     
-     
    
-
-  }, [user]); // This effect will re-run when the 'user' value changes
-
-
-
+    
 
 
   return (
@@ -136,6 +122,8 @@ const Sidebar = () => {
 import { BiLogoDiscordAlt } from "react-icons/bi";
 import { FaDiscord } from "react-icons/fa"; */}
 
+
+        {/*
             <Item
               title="Profile"
                
@@ -144,6 +132,8 @@ import { FaDiscord } from "react-icons/fa"; */}
               selected={selected}
               setSelected={setSelected}
             />   
+          
+
             <Item  
               title="Free Token and staking"
                
@@ -154,7 +144,10 @@ import { FaDiscord } from "react-icons/fa"; */}
               selected={selected}
               setSelected={setSelected}
             />    
- 
+        
+
+
+
             <Item
               title="My Packs"
               to="myPacks"//  "/userProfile"
@@ -165,6 +158,8 @@ import { FaDiscord } from "react-icons/fa"; */}
               setSelected={setSelected}
               addressRequired={true}
             />  
+
+              
            <Item
               title="Layer Packs for sale"
               to= {"/shopPack/:NFT_CONTRACT"} 
@@ -173,7 +168,9 @@ import { FaDiscord } from "react-icons/fa"; */}
               selected={selected}
               setSelected={setSelected}
               addressRequired={true}
-            />  
+            /> 
+            */}
+            
             <Item
               title="Debug mode"
               to= {"/shopPack/:NFT_CONTRACT"} 
@@ -257,7 +254,7 @@ import { FaDiscord } from "react-icons/fa"; */}
               sx={{ m: "15px 0 5px 20px" }}
             >
               Social Contest
-            </Typography> */}
+            </Typography> 
             <Item
               title="Discord Invite Board"
               to="/discordBoard"
@@ -265,7 +262,7 @@ import { FaDiscord } from "react-icons/fa"; */}
               selected={selected}
               setSelected={setSelected}
             />
-
+               */}
           
             {/*  
             <Item

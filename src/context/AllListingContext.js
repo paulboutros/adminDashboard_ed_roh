@@ -91,6 +91,10 @@ const [auctionListing, setEnglishAuctions] = useState(null);
 
 
  useEffect(() => {
+
+  console.log( "Hello WORLD!!! "    );
+
+
   englishAuctions();
   
 }, []);

@@ -23,7 +23,7 @@ import {
   useAddress,
   
 } from "@thirdweb-dev/react";
-import { useUserContext } from '../../context/UserContext';
+//import { useUserContext } from '../../context/UserContext';
   
 
 export default function ToDoList ({ tasks    }) {
@@ -31,7 +31,7 @@ export default function ToDoList ({ tasks    }) {
     const address = useAddress();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const {user, setUser } = useUserContext();
+    //const {user, setUser } = useUserContext();
    
     
   
@@ -42,7 +42,7 @@ export default function ToDoList ({ tasks    }) {
         tasks[index].callBack ( address ); 
         ;break;
         case 1: 
-             tasks[index].callBack ( user, address  );
+            // tasks[index].callBack ( user, address  );
        //  handleConnect(); 
         
         ;break; 

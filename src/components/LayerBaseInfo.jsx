@@ -12,6 +12,8 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 
 
  import {tokens, themeSettings, cancelIconColor } from "../theme";
+import { useAllLayersContext } from '../context/AllLayerAvailableContext';
+import { useEffect } from 'react';
  
 
 /*
@@ -27,6 +29,25 @@ it  takes a list of layer object and display image, how many are owned  etc..
     const theme = useTheme();
   const colors = tokens(theme.palette.mode);
  const element = themeSettings(theme.palette.mode);
+
+
+  
+
+ 
+ const { infoMap} = useAllLayersContext(); 
+
+ useEffect(() => {
+     
+   if (!infoMap)return;
+    console.log  (    " infoMap   in layer basde info   >>  ownedNftData     ===============    "   ,  infoMap);
+
+}, [ infoMap ]);
+       
+  
+
+
+
+
 
  const NumberCircle = (  number  ) => {
   let circleColor ;//= blue[500]; // Default color
@@ -177,7 +198,23 @@ it  takes a list of layer object and display image, how many are owned  etc..
                           </Box> */}
                   {/* bgcolor: NumberCircle(  obj.owning )   basic gray looks nice */}   
                         <Avatar sx={{   width: 16, height: 16 }}>
-                            {  obj.owning}
+                            { 
+                            
+                            
+                           // obj.owning
+                            
+                           infoMap[ obj.tokenID] ? (
+                            <span>{infoMap[ obj.tokenID ].quantityOwned}</span>
+                          ) : (
+                            <span>0</span>
+                          ) 
+
+
+
+                            
+                            
+                            
+                            }
                           </Avatar>  
 
 

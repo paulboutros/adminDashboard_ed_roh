@@ -1,57 +1,31 @@
 
 import {
- // MARKETPLACE_ADDRESS,
- // LAYER_EDITION_ADDRESS,
+  
    TOOLS_ADDRESS ,
    BURN_TO_CLAIM,
-  REWARDS_ADDRESS
-
+ 
 } 
 
 from "../const/addresses";
-
-
-import { IoArrowDown } from "react-icons/io5";
-import { IoWarningOutline } from "react-icons/io5";
-import { HiOutlineChevronRight } from "react-icons/hi";
-import { FaLink } from "react-icons/fa";
-import { FaEthereum } from "react-icons/fa";
-
-
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import Avatar from '@mui/material/Avatar';
-
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { useContract, useAddress, Web3Button } from "@thirdweb-dev/react";
-import styles    from "../styles/NFT.module.css";
-
+ 
+  
+ import { useContract, useAddress, Web3Button } from "@thirdweb-dev/react";
+ 
 import React, { useState , useEffect } from 'react';
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-
+ 
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
   
-import { allCSS, tokens } from "../theme";
-import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
-import { useAppLinkContext } from '../context/AppLinkContext.js';
-import {sendTracking, openOAuth2Url, ERC20claim, getAvatar  } from "../data/API";
+import {  tokens } from "../theme";
+  import {     ERC20claim   } from "../data/API";
 
-import {  Box ,Button,   Divider,    Typography, useTheme  } from "@mui/material";
-
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-
+import {  Box ,Button,      Typography, useTheme  } from "@mui/material";
+ 
  
 import LayerBaseInfo from  "./LayerBaseInfo";
     
- import { useAllLayersContext } from '../context/AllLayerAvailableContext';
- import { VerticalSpace } from "./Layout.jsx";
-import { ServerButton } from "./Buttons/buttons.jsx";
-import { isWalletSaved_OnServer } from "./Badges/EarnBadges";
-
-
-
-
+    
+ 
 const PopupButton =  ({ text, style , selectedImages   }) => {
  
   
@@ -62,7 +36,7 @@ const address = useAddress();
 
 
   
-    const { user } = useUserContext();
+    // const { user } = useUserContext();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -72,21 +46,16 @@ const address = useAddress();
      
     const [open, setOpen] = useState(false);
    
- 
-
-
-
-
    useEffect(()=>{
      
         if (!address) return;
-      //  if( !open ){ return; }
+      
         
         let filteredIm = GetfilteredImages(selectedImages);
         setFilteredImages(filteredIm);
 
         console.log( ">>>>    t filteredIm = GetfilteredImages(selectedImages);")
-      //====
+       
         const missingCateg =[];
         for (const category in filteredImages) {
             if (filteredImages[category][0].owning === 0) { missingCateg.push(category);}
@@ -103,7 +72,7 @@ const address = useAddress();
      setOpen(true); 
     
  
-     sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
+    // sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
      
     
     };
@@ -131,10 +100,7 @@ const address = useAddress();
    
     }
 
-         // if (balance < 1) {  return alert("Not enough serum tokens");  } 
-     
-       //    const tokenIdsToBurn = [0, 12, 21, 34, 40];
-       //   const amounts = [1, 1, 1, 1, 1];
+        
            
             await  ERC20claim( filteredImages ,  address  ) 
           //  await maycContract?.call("burnAndClaim", [address, tokenIdsToBurn ]);
@@ -172,7 +138,8 @@ const address = useAddress();
             <NotEnoughtLayerMessage
              status={2} 
              filteredImages={filteredImages} 
-              user={user} address={address} 
+         //     user={user}
+               address={address} 
               missingCateg ={ missingCategories }
               />
                 
@@ -184,7 +151,11 @@ const address = useAddress();
 
                <Web3Button
                   contractAddress={BURN_TO_CLAIM}  
-                  isDisabled ={!user || !address || missingCategories?.length > 0   }
+                  isDisabled ={
+                     // !user ||  
+                      !address ||
+                      missingCategories?.length > 0 
+                      }
                   action={async ( contract ) => await mintMutantNft( contract )} 
               
                   className="tw-web3button--connect-wallet"
@@ -238,37 +209,7 @@ export function GetfilteredImages( selectedImages ){
 
  
 
-
-
-function ButtonCTALoginFor2FreeLayers(){
-  const { user } = useUserContext();
-  const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-  
-     return(
-
-
-      <div>
-      <Button
-      sx={{
-        backgroundColor: colors.blueAccent[700],
-        color: colors.grey[100],
-        fontSize: "14px",
-        fontWeight: "bold",
-        padding: "10px 20px",
-      }}
-      onClick={() => openOAuth2Url(user)}
-    >
-      <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-      Login Now And Recieve 2 free Layers
-    </Button>
-
-
-    </div>
-     )
  
-}
-
 function NotEnoughtLayerMessage( {status ,filteredImages, user , address, missingCateg }){
   //const { user } = useUserContext();
   
@@ -300,7 +241,7 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address, missin
         fontWeight="100" 
         sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} > 
 
-        { CheckComBoValidity(filteredImages ,user , address, missingCateg ) } 
+        { CheckComBoValidity(filteredImages /* ,user ,*/, address, missingCateg ) } 
         
          <br />  
          
@@ -335,14 +276,16 @@ const handleImageSelect = (category, obj   ) => {
 
    
 
-  function CheckComBoValidity(filteredImages, user, address, missingCateg ){
+  function CheckComBoValidity(filteredImages,  /*user,*/ address, missingCateg ){
     
     
+
+        /*  user_requirement_removed 
             if(!user) {
                  return("To go further, Login with Discord");
                
             }
-     
+         */
   
 
     const missingCount =  missingCateg.length;
@@ -372,209 +315,8 @@ const handleImageSelect = (category, obj   ) => {
  
 
   export const PopupLinkWalletDiscord = ({  connectedWalletAddress, user, open, onClose, onConfirm }) => {
-
-  
-    
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-   const popUpColor = colors.primary[700]  ;
-   const popUpColor2 = colors.primary[600]  ;
-
-    return (
-      <Dialog open={open} onClose={onClose} PaperProps={{ 
-        
-        style: {  
-          borderRadius: 8,
-          border: `${colors.primary[400] } solid 2px`, 
-
-        } 
-      
-        }}>
-
-
-        <Box sx={{ 
-          padding:"20px",
-          // textAlign: 'center' ,
-           backgroundColor: popUpColor 
-          }}>
-
-            <p style={{ ...theme.titleDescription, 
-              display: 'flex', alignItems: 'center',
-              
-              margin: "0 0 10px 5px",
-              color: colors.grey[1000],
-              fontWeight:"50px"
-              }}>
-                
-               {/* <FaLink  style={{  color: colors.grey[400], }} /> */}
-                Link wallet to discord
-                
-                </p>
-        
-                    { ( isWalletSaved_OnServer(user) && user?.wallet !== connectedWalletAddress )  ? (
-                        <>
-      
-                          <p style={
-                            { padding:"5px 5px 5px 5px", width:"400px", fontSize:"12px",fontWeight:"700px", color: colors.grey[400]}
-                           }> 
-                                If you press confirm, your connected wallet will be saved as primary for this app. <br />
-                               <li>All staking will be transfered to the new address</li> 
-                           </p>
-                          
-                        
-                          </>
-
-                    ):(
-                            <>
-            
-                            <p style={
-                              { padding:"5px 5px 5px 5px", width:"400px", fontSize:"12px",fontWeight:"700px", color: colors.grey[400]}
-                            }> 
-                                  If you press confirm, your connected wallet will be saved as primary for this app. <br />
-                                <li>You can change it later on if needed</li> 
-                            </p>
-                            
-                          
-                            </>
-                       
-
-                    )
-                    
-                    }
-       
-
-             
-          
-          
-        </Box>
-
-        <Divider orientation="horizontal"  />
-        <Box sx={{ 
-          padding:"20px",
-          // textAlign: 'center' ,
-           backgroundColor: popUpColor 
-          }}>
- 
-          {/* if user did not even save a wallet, UI looks stupid when asking to replace with new, there is nothing
-          to replace yet */}
-            { (  isWalletSaved_OnServer(user) &&  user?.wallet !== connectedWalletAddress) ? (
-                 <>
-                    <p style={
-                    {
-                      padding:"5px 5px 5px 5px",
-                       width:"400px", 
-                      fontSize:"12px",
-                      fontWeight:"700px",
-                       color: colors.grey[400]
-                    }
-                  }  > 
-                     current will replace the red one
-                  
-                  </p>
-
-                  <Box sx={ allCSS( theme.palette.mode).basicTextWithAddress  } >
-              
-                    <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  >
-                    <p style={{fontWeight:"500px" }}>   {connectedWalletAddress}    </p>
-                  </Box>
-                   </Box>
- 
-                        <Box
-                        sx ={{  justifyContent: 'center' , }} >
-                            <Box  sx={{   display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                          <VerticalSpace  space={1}/>
-                          <IoArrowDown/>
-                          <VerticalSpace  space={1}/>
-                          </Box>
-                        </Box>
- 
-                 <Box sx={  allCSS( theme.palette.mode, "400px","0px", colors.redAccent[300]    ).infoBox  }  >
-                    <p style={{fontWeight:"500px" }}>   {user?.wallet}    </p>
-                  </Box>
-                  </>
-
-            ):(
-           <React.Fragment> 
-           
-             <Box sx={ allCSS( theme.palette.mode).basicTextWithAddress  } >
-  
-                  <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }  >
-                  <p style={{fontWeight:"500px" }}>   {connectedWalletAddress}    </p>
-                 </Box>
-             </Box>
-             </React.Fragment>
-          )}
-          
-        </Box>
-
-        
-        <Divider orientation="horizontal"  />
-
-        <DialogContent 
-           sx={{ backgroundColor: popUpColor, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-          
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-
-          <FaEthereum  style={{   height:"25px", color: colors.grey[400],marginRight:"10px" }} />  
-          <HiOutlineChevronRight 
-           style={{ color: colors.grey[400], marginRight:"10px" }} /> 
-            <Avatar src={!user ? null : getAvatar(user.discordUserData)} />
-            <span 
-            style={{
-              ...theme.titleDescription,
-               marginLeft: 15, 
-                }}>  
-                {user?.discordUserData?.global_name}
-                </span>
-          </div>
-        </DialogContent>
-
-        <Divider orientation="horizontal"  />
-
-
-        <DialogActions style={{
-           justifyContent: 'center' ,
-           backgroundColor: popUpColor2  
-           }}>
-          <Button variant="contained" onClick={onClose} color="primary">
-            Cancel
-          </Button>
-
-
- 
-        
-
-          <ServerButton
-                
-
-                action={  onConfirm }
-
-                onConditionMet={async (result) => {
-               
-                }}
-
-                 checkCondition =  {   async (result) => { return null } } 
-
-                 width={"100px"}
-              >
- 
-                
-                Confirm
-               
-
-
-              </ServerButton>
-
-
-
-
-
-
-
-        </DialogActions>
-      </Dialog>
-    );
+     
+        //  code remove because we no longer connect wallet to a discord user
   };
  
 

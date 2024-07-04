@@ -102,12 +102,18 @@ const Topbar = () => {
                 >
                   Sell
                 </h3>
-                <h3
+
+
+                {/*
+                 <h3
                   className={`${stylesProfile.toptab}  ${tab === "Pack" ? stylesProfile.topactiveTab : ""}`}
                   onClick={() => OpenPage(`shopPack/${PACK_ADDRESS}/`, setTab, "Pack"  ) }
                 >    
                    Pack
-                </h3>
+                </h3> 
+                */}
+
+
               </div>
 
 

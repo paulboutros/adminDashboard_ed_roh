@@ -27,26 +27,14 @@ import MyPacks from '../myPacks/index';
  import { useParams } from 'react-router';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
 
-
-import { EarnBadges,
-   TaskForReward,TaskForRewardLabel,
-     TaskStatus,TaskStatusLabel,
-     RewardInfo,RewardInfoLabel, RewardValue, WURewardInfoLabel 
-    } from '../../components/Badges/EarnBadges';
-
- import   { TaskForReward3, TaskStatus3 } from '../../components/Badges/BadgeJoinServer.jsx';
-import   { TaskForRewardDiscordInvites, TaskStatus4 } from '../../components/Badges/BadgeDiscordInvites';
+  
 
  import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
-import { taskBadge } from '../../const/various.js';
-import { CustWeb3Button } from '../../components/Buttons/buttons.jsx';
-import { PopRewardDiscordInviteContent,PopRewardServerMemberContent  } from '../../components/TooltipContent/content.jsx';
-   
-   
+ 
   
   
  
-import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
+//import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
 import { useDISTContext } from '../../context/DISTstakingContext.js';
 import { CustomTabPanel, a11yProps } from '../../components/TabSubcomponent.jsx';
   
@@ -67,7 +55,7 @@ export default function BasicTabs() {
   ]
 
    
-  const {distStakedAmount,   distReward  } = useDISTContext();
+  //const {distStakedAmount,   distReward  } = useDISTContext();
      
 
      const theme = useTheme();
@@ -123,75 +111,14 @@ export default function BasicTabs() {
          since we have direct access to bot. see if we can access message and content in some channel...
         */}
 
-         <EarnBadges  sp={sp}  useAvatar={false}  taskForReward={<TaskForRewardLabel/>}  taskStatus={<TaskStatusLabel/>} 
-
-                      rewardInfo={<RewardInfoLabel/>} 
-                      rewardValue={<WURewardInfoLabel/>} 
-                      rewardIndex={-1}
-
-         />
         
-        <VerticalSpace space={1}/>
 
-          <EarnBadges  sp={sp} useAvatar={true} taskForReward={<TaskForReward/>} 
-                       taskStatus={<TaskStatus/>} // no need for argument each task are different object(very different from each other) 
-                       rewardInfo={<RewardInfo stakedAmount={0}/> } 
-                       rewardValue={  null } //<RewardValue rewardAmount={0}/>} 
-                       rewardIndex={
-                        taskBadge.discordAndWalletRegistration
-                       }
-                    />
-        
-          {/* <VerticalSpace space={1}/>
-
-          <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForRewardAppLink/>} 
-                      taskStatus={<TaskStatus2/>}   
-                       rewardInfo={<RewardInfo stakedAmount={0}/>} rewardValue={<RewardValue rewardAmount={0}/>}  rewardIndex={ taskBadge.appLinkInvite  } 
-                     
-          /> */}
-           
-         <VerticalSpace space={1}/>
-        
-         <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForReward3/>}   taskStatus={<TaskStatus3/>}  
-                          rewardInfo ={   <RewardInfo stakedAmount={0}  popupContent={ null }     />     }  
-                          rewardValue={ null } // <RewardValue rewardAmount={0}/>}       
-                          rewardIndex={ taskBadge.guildMember_index }
-                        />
-       
-         <VerticalSpace space={1}/>
- 
-         <EarnBadges  sp={sp} useAvatar={false} taskForReward={<TaskForRewardDiscordInvites/>}
-           
-                        taskStatus={<TaskStatus4/>}
-                        rewardInfo={ <RewardInfo stakedAmount={  distStakedAmount  } popupContent={ <PopRewardDiscordInviteContent/> }   />}
-                        rewardValue={<RewardValue rewardAmount={ distReward }/>}  // reward in $WU from Dist staking contract
- 
-                        rewardIndex={ taskBadge.invite_index } 
-                        
-                        claimButton={
-                          
-                          <CustWeb3Button
-                          //  contractAddress={Discord_stake_contract}
-                            action={ async () => {
-                              const trx = await dist_tokenLessContract.call("claimRewards");// stakeContract.call("claimRewards");
-                           //   resetValue();
-                              return trx;
-                            }}
-                            onSuccess={() => console.log("sucess") 
-                              
-                            //   toast({title: "Rewards Claimed", status: "success",duration: 5000,isClosable: true,})
-                             }
-                           // isDisabled={( !address) }
-                          >
-                            Claim
-                        </CustWeb3Button>
-                      
-                        }
-                        
-                        />
+          {/* 
+           There was a lot of EarnBadge code here remove because of disabling Discord and User requirement
+           */}
  
           <VerticalSpace space={1}/>
-          <DebugPanel DISTstakedAmount={distStakedAmount} />
+          {/* <DebugPanel DISTstakedAmount={distStakedAmount} /> */}
       
       </CustomTabPanel>
       <CustomTabPanel value={value} index={ tabInfo[2].index }>

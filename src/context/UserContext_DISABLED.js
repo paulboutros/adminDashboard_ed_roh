@@ -16,18 +16,7 @@ export function useUserContext() {
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
   
-
-/*
-    const addDataToUser = (dataSource, data) => {
-      // if user is not loaded (==null) , adding data will make other hook think the "user" is not null
-      // where it is actually null (if logged out or not authenticated)
-      if (!user)return 
-      setUser((prevUser) => ({
-        ...prevUser,
-        [dataSource]: data,
-      }));
-    };
-*/
+  
 
 
     useEffect(() => {

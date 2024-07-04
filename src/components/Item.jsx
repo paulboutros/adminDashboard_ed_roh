@@ -1,22 +1,20 @@
  
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import {  MenuItem } from "react-pro-sidebar";
+import { Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { BootstrapTooltip, tokens } from "../theme";
+  
  
- 
-import {sendTracking} from "../data/API"
-import { useUserContext } from '../context/UserContext.js'; // to get user data from context provider
-import React from "react";
-import { useAddress } from "@thirdweb-dev/react";
+ import React from "react";
+ import { useAddress } from "@thirdweb-dev/react";
 
 
 const Item = ({ title, to, icon, selected, setSelected, addressRequired=false }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
   
-    const { user } = useUserContext();
+    //const { user } = useUserContext();
     const address = useAddress();
     return (
 
@@ -39,7 +37,7 @@ const Item = ({ title, to, icon, selected, setSelected, addressRequired=false })
             }}
             onClick={() =>{
               setSelected(title)
-              sendTracking(user , "N/A", "N/A" , title ,  "Side Bar " ) 
+            //  sendTracking(user , "N/A", "N/A" , title ,  "Side Bar " ) 
               }}
             icon={icon}
           >

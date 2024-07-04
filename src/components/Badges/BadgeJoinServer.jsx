@@ -1,65 +1,32 @@
 import React from 'react';
 import {Box,  useTheme,  } from '@mui/material';
 import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../../theme";
-  import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
-  import {useEffect, useState} from "react";
+  //import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+  import {useEffect } from "react";
   
  
  import FaceIcon from '@mui/icons-material/Face';
   
-import { copyTextToClipboard, timeAgo } from '../../utils';
-import { getAvatar, getManyUserData } from '../../data/API';
-import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
+import { copyTextToClipboard  } from '../../utils';
+ import { PopJoinedServerContent } from '../TooltipContent/content.jsx';
 import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
     
 
   export function TaskForReward3(){
    
 
-     const { user } = useUserContext();
+   //  const { user } = useUserContext();
      
-     const { joinedServerData ,  setJoinedServer } =  useDiscordInviteContext();
- // const [joinedServerData, setJoinedServer] = useState(); // gieaway recived but not revealed yet, and not added to layers count
-
-
- /*
-  const getUserGuild = async ( user ) => {
+     const { joinedServerData   } =  useDiscordInviteContext();
+  
+/*
+  useEffect( ()=>{if (!user)return;   }, [ user  ]);
+     */
     
-      if ( !user ){ setJoinedServer(   null   )
-        
-      }
-    
-      console.log( ">> Badge Join Server  fetch:getUserGuild  >>>>   "  );
-    const userID =  user.ID;
- 
-      const endpoint_t = `${process.env.REACT_APP_API_URL}getUserGuild?ID=${userID}`; // make it specific (filter to twitter fields)
-      const result_t = await fetch(endpoint_t);
-      let response_t = await result_t.json();
-      
-     console.log( ">> Badge Join Server  response ="  ,    response_t   );
-
-      if ( response_t.status ){
-      
-       // response_t.text = "Guild Member since :" +   timeAgo(response_t.joinedAt) 
-         response_t.date = timeAgo(response_t.joinedAt);
-       }else{
-       
-        response_t.text = "Join the Wulirocks server";
-      }
-      
-      setJoinedServer(   response_t   );
-               
-
-  };  
-   */
-
-  useEffect( ()=>{
      
-    if (!user)return;
-     //    getUserGuild(user);
    
 
-  }, [ user  ]);
+   
 
    
    
@@ -97,9 +64,9 @@ import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
   export function TaskStatus3(){
    
  
-
+/*
      const { user } = useUserContext();
-     
+     */
    
      const { joinedServerData ,  setJoinedServer } =  useDiscordInviteContext();
  /*
@@ -138,7 +105,7 @@ import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
   */
 
   
-
+/*
   useEffect( ()=>{
      
     if (!user)return;
@@ -146,7 +113,7 @@ import { useDiscordInviteContext } from '../../context/DiscordInviteContext';
    
 
   }, [ user  ]);
-
+*/
    
    
     const theme = useTheme();

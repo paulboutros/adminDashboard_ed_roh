@@ -3,11 +3,11 @@ import {  useTheme /*, Skeleton */ } from "@mui/material";
 import {  ThirdwebNftMedia,  useContract,useValidDirectListings, useValidEnglishAuctions ,  useContractEvents } from "@thirdweb-dev/react";
  import styles from "../../styles/NFT.module.css";
  import { MARKETPLACE_ADDRESS } from "../../const/addresses.ts";
- import {  tokens } from "../../theme.js";
- import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
+  
+ //import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import { getSDK_fromPrivateKey  } from "../../data/API.js";
  import {useEffect, useState} from "react";
- import { Link, useParams } from 'react-router-dom';
+ import {   useParams } from 'react-router-dom';
 
 
 const NFTListed =  ({ propContractAddress, propTokenId,
@@ -27,10 +27,10 @@ const NFTListed =  ({ propContractAddress, propTokenId,
 
  const NFT_CONTRACT = contractAddress;
 
- const { user } = useUserContext();
+ //const { user } = useUserContext();
 
  const theme = useTheme();
- const colors = tokens(theme.palette.mode);
+ //const colors = tokens(theme.palette.mode);
  
  const [nft, setNFT] = useState();
  //const [contractMetadata, setContractMetadata] = useState(); 
@@ -61,6 +61,15 @@ const NFTListed =  ({ propContractAddress, propTokenId,
        //let contractMetadataResult;
       try {
        
+
+
+        //console.log( "  >>>>>   nftResult" ,     nftResult );
+      
+        
+
+
+
+
 
        setNFT(nftResult);
 
@@ -121,7 +130,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
                           <p className={styles.nftPriceLabel}>Price</p>
                           <p className={styles.nftPriceValue}>
                             {`${AlllistingData?.currencyValuePerToken.displayValue}
-                      ${AlllistingData?.currencyValuePerToken.symbol}`}
+                              ${AlllistingData?.currencyValuePerToken.symbol}`}
                           </p>
                         </div>
                       </div>

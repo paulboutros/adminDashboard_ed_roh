@@ -1,18 +1,17 @@
 import React from 'react';
-import {Box,   Typography , useTheme, Chip, Tooltip,  } from '@mui/material';
-import { BootstrapTooltip, CustomChip, HtmlTooltip, allCSS, tokens } from "../../theme";
+import {Box, useTheme } from '@mui/material';
+import { BootstrapTooltip,  allCSS, tokens } from "../../theme";
   import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
  import {useEffect, useState} from "react";
   
  
 import { HorizontalSpace } from '../Layout';
-import FaceIcon from '@mui/icons-material/Face';
-  
-import { copyTextToClipboard } from '../../utils';
+   
+//import { copyTextToClipboard } from '../../utils';
 import { getAvatar, getManyUserData } from '../../data/API';
-import { useAppLinkContext } from '../../context/AppLinkContext';
-import { PopAppReferralContent } from '../TooltipContent/content.jsx';
+//import { useAppLinkContext } from '../../context/AppLinkContext';
+//import { PopAppReferralContent } from '../TooltipContent/content.jsx';
 
    const ReferralLinkGrid = ( {sp}  ) => {
  
@@ -141,139 +140,11 @@ import { PopAppReferralContent } from '../TooltipContent/content.jsx';
 
 
   export function TaskForRewardAppLink(){
-
-    const { referralData } = useAppLinkContext();
-    const [tasks, setTasks] = useState([
-       
-      {global_name:"", src:""}, 
-      {global_name:"", src:""}, 
-      {global_name:"", src:""}  
-    ]);
-
-    const updateTask = async ( ) => {
-     
-     let referredUserListDetails  = await getManyUserData(  referralData.referredUser   );
-   
-        const referredUsers =[];
-        referredUserListDetails.forEach(data => {
-          
-          const src = getAvatar(data.discordUserData );
-          const elData = { global_name : data.discordUserData.global_name,  src:src };
-          referredUsers.push(elData) 
- 
-       });
-        
-       setTasks(referredUsers);
- 
-    };
- 
-     const { user } = useUserContext();
-    
-  
-
-  useEffect(  ()=> {
- 
-     if (!referralData)return;
-      updateTask();
-
-     
-  }  , [ referralData  ]);
- 
-   
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-  
-    function linkAdressToDiscord(){
-   
-   }
-    
-
-       return(
-        <>
-          <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
-
-             <Box sx={  allCSS( theme.palette.mode, "400px","0px" ).infoBox  }   onClick={() => linkAdressToDiscord()}>
-               <Box onClick={ () => copyTextToClipboard ( referralData?.shareableLink )} > 
-                    <p> <>Share link with friends 
-                    <span style={{ marginRight: '10px',fontWeight:"700px",  borderRadius:"3px", padding:"3px" }} >
-                    
-                     { referralData?.code}</span></></p>  
-            
-                 </Box>
-               </Box>
-          </BootstrapTooltip>
-         </>
-        )
+     // full code removes because #Discord #disabled #disable user referral
   }
 
 export function TaskStatus2(){
-  const { referralData } = useAppLinkContext();
-  const [tasks, setTasks] = useState([
-     
-    {global_name:"", src:""}, 
-    {global_name:"", src:""}, 
-    {global_name:"", src:""}  
-  ]);
-
-  const updateTask = async ( ) => {
-   
-   let referredUserListDetails  = await getManyUserData(  referralData.referredUser   );
- 
-      const referredUsers =[];
-      referredUserListDetails.forEach(data => {
-        
-        const src = getAvatar(data.discordUserData );
-        const elData = { global_name : data.discordUserData.global_name,  src:src };
-        referredUsers.push(elData) 
-
-     });
-      
-     setTasks(referredUsers);
-
-  };
-
-   const { user } = useUserContext();
-  
-
-useEffect(  ()=> {
-
-   if (!referralData)return;
-    updateTask();
-
-   
-}  , [ referralData  ]);
-
- 
- 
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-
-  
- function getCompletion(){
-
-   if ( !referralData ){ return   (`ACCEPTED : ${"0"}`); }
- 
-   return  (`ACCEPTED : ${referralData.referredUser.length}`)   ;
- }
-
- 
-      return(
-     <>  
-         <HtmlTooltip
-          placement="right"
-          title={
-              <PopAppReferralContent tasksArg={tasks} />
-             }>
- 
-          <Box >
-            <CustomChip theme={theme} label= { getCompletion()}  icon={<FaceIcon />} color=  {theme.palette.chipYellow} />
-          </Box >
-   
-            </HtmlTooltip>
-        
-       </>
-
-      )
+    // full code remove because we are #disabling #disable, Discord and user and user referal system
   }
  
 

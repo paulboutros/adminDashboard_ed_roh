@@ -18,12 +18,13 @@ import { BasicScrollable, RoundedBox } from "../../components/Layout";
 import { Typography, useTheme } from "@mui/material";
 import { tokens, mainContainerPagePad } from "../../theme";
 import ConnectWalletPage from "../../components/ConnectWalletPage";
+import { getSDK_fromPrivateKey } from "../../data/API";
 
    
   export default function Sell() {
     // Load all of the NFTs from the NFT Collection
     const { contract } = useContract(TOOLS_ADDRESS);
-    const address = useAddress();
+    const   address = useAddress();
     const { data, isLoading } = useOwnedNFTs(contract, address);
     const [selectedNft, setSelectedNft] = useState();
   
@@ -36,6 +37,15 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
       console.log( ">>  => address = ", address    );
       console.log( ">>  => ownedNfts = ", data    );
    }, [data]);
+
+   useEffect(()=>{
+    console.log( ">>  => selectedNft is now set  = ",  selectedNft      );
+      
+ }, [ selectedNft ]);
+
+
+   
+
   
   
   
@@ -66,8 +76,22 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
                 NFT_contract={TOOLS_ADDRESS}
                 NFTdata={data} 
                 emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
-                overrideOnclickBehavior={(nft) => { setSelectedNft(nft); }}
-               
+                // overrideOnclickBehavior={(nft) => { setSelectedNft(nft); }}
+                 overrideOnclickBehavior={ async (nft) => {
+
+
+                  const sdk = getSDK_fromPrivateKey(); 
+                  const contract = await sdk.getContract(TOOLS_ADDRESS);
+                  //const nftResult = await contract.erc721.get(tokenId);
+                  const nftResult = await contract.erc1155.get( nft.metadata.id );
+
+                 
+
+                     setSelectedNft(nftResult); 
+
+                }
+                
+             }
               
              
             />
@@ -87,7 +111,7 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
               <div className={tokenPageStyles.imageContainer}>
                 
          <RoundedBox>   
-          <RoundedBox padding = "8px">
+          <RoundedBox padding = "8px">   
                 <ThirdwebNftMedia metadata={selectedNft.metadata} 
                 
                 className={stylesNFT.largeImage} 
