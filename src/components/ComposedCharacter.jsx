@@ -342,43 +342,22 @@ useEffect(() => {
            
            <Stack   >
 
-{/*      
-             <Box sx={
-                 { 
-                  borderRadius: 4,
-                  backgroundColor: colors.primary[400],
-                      border: `2px ${ colors.grey[ text1.color ]}`  
-
-                 }
-             } >
-            <p  >Reward price: </p>
-
-               <Box sx={  allCSS( theme.palette.mode, "140px","0px" ).addressBox  } >
-                   <p color={colors.grey[ 800 ]}    fontWeight="500">
-
-                    {` $${(  Number(RewardPrice) *WuUSDTprice ).toFixed(2) }`}  
-               
-                </p> 
-
-                </Box>
-
-             </Box> */}
-
-
+  
               
-            
+                        {/*   
+
                     <p  >Simulated rate: </p>
 
                   <Typography    color= {colors.grey[ 300  ]}  
                           style={{ fontSize:"8px",   position: 'relative', bottom:"5px" }}  >
                         {` 1 WU = ${WuUSDTprice} USDT`}  
                   </Typography>
+                   */}
  
                   <Box  sx={     {
                       width :"100px",
                       borderRadius:"5px",
-                      // marginLeft:"80px",
-                      // backgroundColor: "rgb(201, 74, 0, 0.05)"
+                     
                       
                       } } > 
                         <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
@@ -386,12 +365,7 @@ useEffect(() => {
 
 
                   
-                  {/* <Typography color={colors.grey[ text2.color ]} >reward in $ETH: </Typography>
-                  <Typography variant="h4"  color= {colors.grey[ text2.color]}  
-                          style={{  position: 'relative', bottom:"5px" }}  >
-                        {`${ (    (Number(RewardPrice) *WuUSDTprice )  / ethToUsdRate).toFixed(4) } `}
-                       
-                  </Typography>         */}
+                
             
               
 
@@ -406,15 +380,7 @@ useEffect(() => {
             {/* <Box gridColumn="span 2" gridRow="span 2" style={debugModeLayout ? { backgroundColor: colors.primary[300] } : {}} > </Box> */}
             <Box gridColumn="span 4" gridRow="span 2"   >
            
-            {/* <Box  sx={     {
-              width :"100px",
-              borderRadius:"5px",
-              marginLeft:"80px",
-              backgroundColor: "rgb(201, 74, 0, 0.05)"
-              
-              } } > 
-                <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
-           </Box> */}
+            
 
 
             </Box>
@@ -512,6 +478,8 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
    
   // getlayer supply should only change when a new layer is given away
    useEffect( ()=>{
+
+     
       if (!allLayers || allLayers.lenght === 0)return;
       if ( allLayers.he === null ) return;
       if ( allLayers.sh === null ) return;

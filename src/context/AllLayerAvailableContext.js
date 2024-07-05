@@ -71,30 +71,26 @@ export function AllLayersProvider({ children }) {
    useEffect(()=>{
     if (!data)return;
  
+    // 60: it could be any large number, make sure the number os superior to the total amount of design
+      const infoMapTempX =  Array(60).fill(0).map(() => ({ supply: 0, quantityOwned: 0 }));
+  
 
-      console.log(  " owned nft   =  "  , data);
-      const infoMapTemp = data.reduce((acc, current) => {
-        acc[current.metadata.id] = {
-          owner: current.owner,
-          metadata: current.metadata,
-          type: current.type,
-          supply: current.supply,
-          quantityOwned: current.quantityOwned
-        };
-        return acc;
-      }, {});
-      
-      console.log( "infoMap  >>>>>>>>>>>>>>>>>>>>>>>>>>    "    , infoMap);
+      for (let e = 0; e < data.length; e++ ){
+ 
+        infoMapTempX[ data[e].metadata.id ] = {  supply:  data[e].supply   ,  quantityOwned:   data[e].quantityOwned   }; 
+        console.log( "  e.metadata        "   , data[e].metadata  );
+      }
+     
      
  
-      setInfoMap(infoMapTemp);
+      setInfoMap( infoMapTempX  );
 
 
 
 
      setOwnedNfts (data);
 
-   }, [data ]);
+   }, [data]);
 
 
 //==============================================================================================================

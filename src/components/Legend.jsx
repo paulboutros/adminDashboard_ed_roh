@@ -6,6 +6,7 @@ import { Box, Typography } from "@mui/material";
 import { tokens } from "../theme";
 import {  GetfilteredImages } from "./popup";
 import { useEffect, useState } from "react";
+import { useAllLayersContext } from "../context/AllLayerAvailableContext";
 
  // data Model for Legenda s example
  /*
@@ -109,7 +110,7 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
     const colors = tokens(theme.palette.mode);
 
 
-     
+    const { infoMap} = useAllLayersContext(); 
     const [ filteredImages, setFilteredImages] = useState();
     
     useEffect(() => {
@@ -147,7 +148,7 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
                      }}
                   >
                     <span>  { GetLayerReadableName(key) }</span>  {/* if you hine the name, the space between will have interesting effect */}   
-                    [<span style={{ color: '#b4a770' }}>{filteredImages[key][0].tokenID}</span>] : {filteredImages[key][0].owning}
+                    [<span style={{ color: '#b4a770' }}>{filteredImages[key][0].tokenID}</span>] : {  infoMap?.[ filteredImages[key][0].tokenID  ].quantityOwned       }
                     {/* [<span style={{ color: '#b4a770' }}>{filteredImages[key][0].tokenID}</span>] : {filteredImages[key][0].owning} */}
                   </Box>
  

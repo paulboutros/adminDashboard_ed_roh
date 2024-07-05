@@ -18,29 +18,10 @@ export function AllListingsProvider({ children , NFT_CONTRACT }) {
    // const { data: owned, isLoading: ownedLoadin } = useOwnedNFTs(contract, address);
    
 const { contract } = useContract( NFT_CONTRACT );
-      
- //================================================================================================================================================
-
-  //useNFTs runs periodically... we must use sdk so it loads ONCE
-// const { data: NFTdata, isLoading } = useNFTs(contract); // get all neft
-
+       
 
   const {NFTdata} = useAllLayersContext();  // useAllLayersContext  
-/*
- const [NFTdata, setNFTdata] = useState(null);  // NFTdata can be layer NFT or PACK contract
- async function getAllNFTs(){
-  const sdk = getSDK_fromPrivateKey(); 
-  const contract = await sdk.getContract( NFT_CONTRACT );  // , "edition"
-  const nfts = await contract.erc1155.getAll();
-  setNFTdata(nfts);
-}
-useEffect(() => {
  
-   getAllNFTs();
-
-}, [] );
-*/
-
 
 //================================================================================================================
  
@@ -51,8 +32,12 @@ useEffect(() => {
   
 const { contract: marketplace, isLoading: loadingMarketplace, } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
  
+
+/*
 const { data: directListings,isLoading: loadingDirectListings,} = 
-useValidDirectListings(marketplace,{tokenContract: NFT_CONTRACT }); //,tokenId: filterTokenId
+useValidDirectListings(marketplace,{tokenContract: NFT_CONTRACT }  ); //,tokenId: filterTokenId
+*/
+
 
 /*
 let { data: auctionListing, isLoading: loadingAuction } = 
@@ -63,6 +48,10 @@ useEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT  });   //,tokenId:
 
 const [loadingAuction, setloadingAuction] = useState(true);
 const [auctionListing, setEnglishAuctions] = useState(null);
+
+const [loadingDirectListings,  setLoadingDirectListings] = useState(true);
+const [directListings, setDirectListing] = useState(null);
+
  
 //getAllAuctions
  //================================================================================================================================================
@@ -72,6 +61,7 @@ const [auctionListing, setEnglishAuctions] = useState(null);
  const prevAuctionListing = useRef(auctionListing); 
 
 
+ // English auction   loading  ======================================================
  async function englishAuctions(){
    const sdk = getSDK_fromPrivateKey(); 
    const contract = await sdk.getContract( MARKETPLACE_ADDRESS );  // , "edition"
@@ -90,11 +80,34 @@ const [auctionListing, setEnglishAuctions] = useState(null);
 }
 
 
+
+
+async function directListingCall(){
+  const sdk = getSDK_fromPrivateKey(); 
+  const contract = await sdk.getContract( MARKETPLACE_ADDRESS );  // , "edition"
+ 
+ let directs = await contract.directListings.getAll();
+
+ console.log( ">>>>>                 direct "  ,directs );
+ const filteredDirect = directs
+ .filter(direct => 
+  direct.status === listingStatus.CREATED ||
+  direct.status === listingStatus.ACTIVE
+   );
+
+ setDirectListing(filteredDirect);
+ setLoadingDirectListings(false);
+}
+
+
+
+
+
  useEffect(() => {
 
   console.log( "Hello WORLD!!! "    );
 
-
+  directListingCall();
   englishAuctions();
   
 }, []);
@@ -156,6 +169,12 @@ useEffect(() => {
          
           setAllNFTsWithListing(NFTdata);
      }
+
+
+
+
+    console.log( "directListings     =    "    , directListings);
+
    
 }, [ directListings , auctionListing , NFTdata, NFT_CONTRACT ]);
     

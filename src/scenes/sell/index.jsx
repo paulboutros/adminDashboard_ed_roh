@@ -19,6 +19,7 @@ import { Typography, useTheme } from "@mui/material";
 import { tokens, mainContainerPagePad } from "../../theme";
 import ConnectWalletPage from "../../components/ConnectWalletPage";
 import { getSDK_fromPrivateKey } from "../../data/API";
+import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
 
    
   export default function Sell() {
@@ -27,6 +28,12 @@ import { getSDK_fromPrivateKey } from "../../data/API";
     const   address = useAddress();
     const { data, isLoading } = useOwnedNFTs(contract, address);
     const [selectedNft, setSelectedNft] = useState();
+
+
+
+
+    //const { allLayers} = useAllLayersContext(); 
+
   
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);

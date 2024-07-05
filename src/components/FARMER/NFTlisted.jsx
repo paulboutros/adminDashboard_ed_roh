@@ -8,6 +8,7 @@ import {  ThirdwebNftMedia,  useContract,useValidDirectListings, useValidEnglish
  import { getSDK_fromPrivateKey  } from "../../data/API.js";
  import {useEffect, useState} from "react";
  import {   useParams } from 'react-router-dom';
+import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
 
 
 const NFTListed =  ({ propContractAddress, propTokenId,
@@ -32,6 +33,8 @@ const NFTListed =  ({ propContractAddress, propTokenId,
  const theme = useTheme();
  //const colors = tokens(theme.palette.mode);
  
+
+  const { infoMap} = useAllLayersContext(); 
  const [nft, setNFT] = useState();
  //const [contractMetadata, setContractMetadata] = useState(); 
 
@@ -39,6 +42,9 @@ const NFTListed =  ({ propContractAddress, propTokenId,
    // Function to fetch NFT data
    const fetchNFT = async () => {
 
+    let amountOwned = 0;
+    let supply = 0;
+       let contract;
         let nftResult;
 
         // BE very careful, when using NFT (predifined) as it will not be up to date data.
@@ -48,10 +54,40 @@ const NFTListed =  ({ propContractAddress, propTokenId,
          so if a confusion happens again, watch around here...
         */
          if (!NFT){
-           console.log( " this should not  be loading  tokenId = " ,  tokenId);
-            const sdk = getSDK_fromPrivateKey(); 
-            const contract = await sdk.getContract(NFT_CONTRACT);
-            nftResult = await contract.erc1155.get(tokenId);
+
+
+            console.log( " this should not  be loading  tokenId = " ,  tokenId);
+            const sdk  = getSDK_fromPrivateKey(); 
+            contract   = await sdk.getContract(NFT_CONTRACT);
+            nftResult  = await contract.erc1155.get(tokenId);
+
+
+
+
+            var BalanceToken = await contract.erc1155.balance(  tokenId  );
+            const bigNumber =     BalanceToken._hex ;
+            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   bigNumber" ,     bigNumber  );
+            amountOwned =   parseInt(  bigNumber , 16);
+            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regularNumber" , amountOwned); // Output: 2
+ 
+            nftResult.amountOwned = amountOwned;
+              
+           var totalSupply  = await contract.erc1155.totalSupply(  tokenId  );
+             const supplybigNumber  = totalSupply._hex ;
+ 
+            supply = parseInt(  supplybigNumber , 16);
+            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regular supply " ,     supply  );
+            nftResult.supply = supply;
+
+
+
+
+
+
+
+              
+            
+ 
          }else{
 
           nftResult = NFT;
@@ -60,17 +96,36 @@ const NFTListed =  ({ propContractAddress, propTokenId,
 
        //let contractMetadataResult;
       try {
-       
+ 
 
-
-        //console.log( "  >>>>>   nftResult" ,     nftResult );
       
-        
 
 
 
 
 
+        // one way to do it but it may be resource intensive for each NFT
+              /*
+            var BalanceToken = await contract.erc1155.balance(  tokenId  );
+            const bigNumber =     BalanceToken._hex ;
+            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   bigNumber" ,     bigNumber  );
+            amountOwned =   parseInt(  bigNumber , 16);
+            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regularNumber" , amountOwned); // Output: 2
+            // appening daata
+            nftResult.amountOwned = amountOwned;
+            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   nftResult" , nftResult); // Output: 2
+            */
+
+
+       // appening  quantityOwned  to nftResult
+  // it is dangerous to cache owned NFT, because after i buy or a sell we need to make sure it is updated immidiately
+
+          nftResult.amountOwned =     infoMap[tokenId ].quantityOwned;
+          nftResult.supply      =     infoMap[tokenId ].supply;
+         
+     
+
+         
        setNFT(nftResult);
 
      } catch (error) {
@@ -109,15 +164,51 @@ const NFTListed =  ({ propContractAddress, propTokenId,
    }else{
         // NFTlisted must includes its parent "theme.nftContainer" to function properly 
             return (
-                
-             
+              
       <>
 
                 
                   <ThirdwebNftMedia metadata={nft.metadata} 
                   className={styles.nftImage}  style={{ background : theme.palette.nftImage  }} />
                    
-                   <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
+                   {/* <p className={styles.nftTokenId}> Token ID #{nft.metadata.id}     own {  nft.amountOwned }    </p> */}
+                   {/* <p style={{ flexDirection: 'row', justifyContent: 'flex-end' }}> Token ID #{nft.metadata.id} own {nft.amountOwned} </p> */}
+                 
+
+                      <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto'
+                  }}>
+                    <p>Token ID #{nft.metadata.id}</p>
+                    {/* <p style={{ textAlign: 'right' }}>  you own {nft.amountOwned} / {nft.supply}   </p> */}
+
+       
+
+
+                     <p style={{ textAlign: 'right' }}>
+                      {nft.amountOwned > 0 ? (
+                        <span style={{ color: 'green' }}>
+                          you own {nft.amountOwned} / {nft.supply}
+                        </span>
+                      ) : (
+                        <span style={{ color: 'red' }}>
+                          you own {nft.amountOwned} / {nft.supply}
+                        </span>
+                      )}
+                    </p>
+
+
+
+
+
+   
+
+                  </div>
+
+
+
+
+
                    <p className={styles.nftName}>{nft.metadata.name}</p>
                    
             

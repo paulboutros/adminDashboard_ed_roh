@@ -228,11 +228,24 @@ useEffect(() => {
    async function buyListing() {
        let txResult;
 
+
+         console.log("auctionData      =   "   ,  auctionData);
+         console.log("listingData      =   "   ,  listingData);
+
        //Add for auction section
-       if (auctionData) {
+       if (auctionData !== null ) {
+
+        console.log("     auctionData.id  =   "    ,  auctionData.id   );
+
+
            txResult = await marketplace?.englishAuctions.buyoutAuction(
                auctionData.id
            );
+           
+
+           console.log("   auctionData.id   >>>>>>>  txResult         =   "   ,    txResult );
+
+
        } else if (listingData){
            txResult = await marketplace?.directListings.buyFromListing(
                listingData.id,
@@ -241,6 +254,10 @@ useEffect(() => {
        } else {
            throw new Error("No listing found");
        }
+
+
+       console.log(">>>>>>>   =   "   , txResult);
+
 
        return txResult;
    }
@@ -436,16 +453,50 @@ useEffect(() => {
                         Place Bid
                     </Web3Button>
                     <HorizontalSpace space={1}/>
-                    <Web3Button 
-                    className="tw-web3button--connect-wallet"
-                    style={{ backgroundColor:colors.blueAccent[buttonStyle.colorBlue], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-                    contractAddress={MARKETPLACE_ADDRESS}
-                    action={async () => buyListing()}
-                    isDisabled={( !auctionData) }
-                    >
+                     
 
-                       Buy out
-                    </Web3Button>
+
+
+
+
+                    <Web3Button 
+ 
+
+ className="tw-web3button--connect-wallet"
+ style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
+ contractAddress={MARKETPLACE_ADDRESS}
+ action={async () => buyListing()}
+
+ onSuccess={async (txResult) => {
+   // should to "NFT OWNED " page  
+   navigate(`/sell`);
+    
+ }}
+
+
+
+ isDisabled={( !auctionData) }
+
+ >
+      Buy at asking price
+ </Web3Button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 </RowChildrenAlignLeft>
             ):(
@@ -453,6 +504,8 @@ useEffect(() => {
                 <RowChildrenAlignTop>  
 
                     <Web3Button 
+ 
+
                     className="tw-web3button--connect-wallet"
                     style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
                     contractAddress={MARKETPLACE_ADDRESS}
@@ -463,12 +516,17 @@ useEffect(() => {
                       navigate(`/sell`);
                        
                     }}
+  
 
 
                     isDisabled={( !listingData) }
+ 
                     >
                          Buy at asking price
                     </Web3Button>
+
+
+
 
 
 
