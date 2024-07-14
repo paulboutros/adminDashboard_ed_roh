@@ -62,14 +62,14 @@ export function EtherScanLinkBlock( {addressArg, _colors, _alpha, toolTipMessage
     )
   }
 
-export function AddressCopyBlock  ( {addressArg} ){
+export function AddressCopyBlock  ( {addressArg, _width="160px" } ){
     const theme = useTheme();
     //const colors = tokens(theme.palette.mode);
    
 
   return(
     <BootstrapTooltip  title="Click To Copy"  placement="left-start" >
-    <Box sx={  allCSS( theme.palette.mode, "160px","0px" ).addressBox  } >
+    <Box sx={  allCSS( theme.palette.mode,  _width ,"0px" ).addressBox  } >
       <Box onClick={ () => copyTextToClipboard ( addressArg  )} > 
          {/* <p> Share link with friends  */}
          <>

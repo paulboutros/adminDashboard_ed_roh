@@ -1,17 +1,16 @@
 
  
 import Tooltip from '@mui/material/Tooltip';
-import {Grid, Box, Button, IconButton, Typography, useTheme, colors, Avatar } from "@mui/material";
+import {Grid, Box, Typography, useTheme,  Avatar } from "@mui/material";
  
  
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';  
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+ 
 
 
 
- import {tokens, themeSettings, cancelIconColor } from "../theme";
+ import {tokens   } from "../theme";
 import { useAllLayersContext } from '../context/AllLayerAvailableContext';
 import { useEffect } from 'react';
  
@@ -28,8 +27,7 @@ it  takes a list of layer object and display image, how many are owned  etc..
 
     const theme = useTheme();
   const colors = tokens(theme.palette.mode);
- const element = themeSettings(theme.palette.mode);
-
+  
 
   
 

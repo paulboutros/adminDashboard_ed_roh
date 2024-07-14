@@ -21,6 +21,8 @@ import ConnectWalletPage from "../../components/ConnectWalletPage";
 import { getSDK_fromPrivateKey } from "../../data/API";
 import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
 
+
+
    
   export default function Sell() {
     // Load all of the NFTs from the NFT Collection

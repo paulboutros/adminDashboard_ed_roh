@@ -9,8 +9,7 @@ import {  ThirdwebNftMedia,  useContract,useValidDirectListings, useValidEnglish
  import {useEffect, useState} from "react";
  import {   useParams } from 'react-router-dom';
 import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
-
-
+import { AddressCopyBlock  } from '../BlockLink/BlockLinks';
 const NFTListed =  ({ propContractAddress, propTokenId,
   
   AlllistingData, AuctionListingData , NFT   } ) => {   // ,  NFT_CONTRACT
@@ -53,56 +52,42 @@ const NFTListed =  ({ propContractAddress, propTokenId,
         for example when we had 5 packs, then switching contract to layer NFT, it  would only show 5 layers
          so if a confusion happens again, watch around here...
         */
-         if (!NFT){
+       //  if (!NFT){
 
 
-            console.log( " this should not  be loading  tokenId = " ,  tokenId);
+           
             const sdk  = getSDK_fromPrivateKey(); 
             contract   = await sdk.getContract(NFT_CONTRACT);
             nftResult  = await contract.erc1155.get(tokenId);
 
 
-
+            console.log( " XXXXXXXXXXXXXX   nftResult = " ,    nftResult);
 
             var BalanceToken = await contract.erc1155.balance(  tokenId  );
             const bigNumber =     BalanceToken._hex ;
-            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   bigNumber" ,     bigNumber  );
+           // console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   bigNumber" ,     bigNumber  );
             amountOwned =   parseInt(  bigNumber , 16);
-            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regularNumber" , amountOwned); // Output: 2
+         //  console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regularNumber" , amountOwned); // Output: 2
  
             nftResult.amountOwned = amountOwned;
               
-           var totalSupply  = await contract.erc1155.totalSupply(  tokenId  );
-             const supplybigNumber  = totalSupply._hex ;
+           // var totalSupply  = await contract.erc1155.totalSupply(  tokenId  );
+            // const supplybigNumber  = totalSupply._hex ;
  
-            supply = parseInt(  supplybigNumber , 16);
-            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regular supply " ,     supply  );
-            nftResult.supply = supply;
-
-
-
-
-
-
-
-              
-            
+          //  supply =  nftResult.supply;  //parseInt(  supplybigNumber , 16);
+          //  console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regular supply " ,     supply  );
+          //  nftResult.supply = supply;
  
-         }else{
+ 
+       //  }else{    nftResult = NFT;    }
 
-          nftResult = NFT;
-         }
-
-
+         
+ 
+        
+ 
        //let contractMetadataResult;
       try {
- 
-
-      
-
-
-
-
+  
 
         // one way to do it but it may be resource intensive for each NFT
               /*
@@ -121,10 +106,10 @@ const NFTListed =  ({ propContractAddress, propTokenId,
   // it is dangerous to cache owned NFT, because after i buy or a sell we need to make sure it is updated immidiately
 
           nftResult.amountOwned =     infoMap[tokenId ].quantityOwned;
-          nftResult.supply      =     infoMap[tokenId ].supply;
+        //  nftResult.supply      =     infoMap[tokenId ].supply;
          
-     
-
+          console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>    nftResult  " ,  nftResult ); // Output: 2
+          
          
        setNFT(nftResult);
 
@@ -136,8 +121,13 @@ const NFTListed =  ({ propContractAddress, propTokenId,
    
    
    fetchNFT();
+
+   //AlllistingData ={null}
+   //AuctionListingData = {listing}
+   //console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   AlllistingData   " ,      AlllistingData   );
+   console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   AuctionListingData   " ,      AuctionListingData   );
     
- }, [contractAddress, tokenId]);
+ }, [contractAddress, tokenId ]); // NFT added
 
 
           const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
@@ -175,16 +165,11 @@ const NFTListed =  ({ propContractAddress, propTokenId,
                    {/* <p style={{ flexDirection: 'row', justifyContent: 'flex-end' }}> Token ID #{nft.metadata.id} own {nft.amountOwned} </p> */}
                  
 
-                      <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr auto'
-                  }}>
-                    <p>Token ID #{nft.metadata.id}</p>
-                    {/* <p style={{ textAlign: 'right' }}>  you own {nft.amountOwned} / {nft.supply}   </p> */}
+                    <div style={{ display: 'grid',   gridTemplateColumns: '1fr auto' }}>
+                     
 
-       
-
-
+                     <p>Token ID #{nft.metadata.id}</p>
+  
                      <p style={{ textAlign: 'right' }}>
                       {nft.amountOwned > 0 ? (
                         <span style={{ color: 'green' }}>
@@ -197,19 +182,33 @@ const NFTListed =  ({ propContractAddress, propTokenId,
                       )}
                     </p>
 
-
-
-
-
-   
-
                   </div>
+  
+
+
+                  <div style={{ display: 'grid',   gridTemplateColumns: '1fr auto' }}>
+                  <p className={styles.nftName}>{nft.metadata.name}</p>
+
+                  <p style={{ textAlign: 'right' }}>
+                      {AuctionListingData? (
+                        
+                         
+                          
+                        
+                          <AddressCopyBlock addressArg={ AuctionListingData?.creatorAddress } _width="120px" /> 
+                          
+                       
+                      ) : (
+                        <span style={{ color: 'red' }}>
+                        <AddressCopyBlock addressArg={ AlllistingData?.creatorAddress }  _width="120px" /> 
+                        </span>
+                      )}
+                    </p>
+                    </div>
 
 
 
 
-
-                   <p className={styles.nftName}>{nft.metadata.name}</p>
                    
             
                   <div className={styles.priceContainer}  style={{ background : theme.palette.nftImage  }} >

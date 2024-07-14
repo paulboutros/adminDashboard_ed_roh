@@ -15,18 +15,18 @@ import { BootstrapTooltip,   cool_orange,   tokens  } from "../theme.js";
  
 import { useAllLayersContext } from '../context/AllLayerAvailableContext.js'; 
 
-   
+import styles from "../styles/Buy.module.css";  
 import LayerBaseInfo from "./LayerBaseInfo.jsx";
   
  import PopupButton  from "./popup.jsx"
  import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata.js';
 import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses.ts';
 import { HorizontalSpace, RoundedBox,   VerticalSpace } from './Layout.jsx';
-//import { useDebugModeContext } from '../context/DebugModeContext.js';
+ 
 import { AddressBlock } from './Badges/AddressBlock.jsx';
    
 const debugMode = false;
-const LayerSelector = (  {queryId="" }  ) => {
+ const MainBlock = (  {queryId="" }  ) => {
 
  // const { user } = useUserContext();
   //const {debugMode,  } = useDebugModeContext();
@@ -151,285 +151,185 @@ useEffect(() => {
  
     </div> 
       <Box display="flex" justifyContent="space-between" alignItems="center"> </Box>
- 
-      {/* GRID & CHARTS */}
-      <Box  display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
        
-      {/*The composed character image block*/}
-      <Box gridColumn="span 8" gridRow="span 4" >  
-           <RoundedBox>
-          <Box margin = {"8px"} 
-          
-          backgroundColor = {colors.primary[400]}   
-           borderRadius = {"10px"}  > 
-    
-          <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
-        
-            <Box gridColumn="span 8" gridRow="span 1" 
-                 style={{  display: "flex", 
-                   marginLeft :"30px",
-                  alignItems: "center",
-                  justifyContent: "flex-start" //  "center"
-
-                  } } 
-               
-              >
-            
-                      <AddressBlock addressArg={ BURN_TO_CLAIM} /> 
- 
-             </Box>
- 
-
-             <Box gridColumn="span 4" gridRow="span 1"    >
-
-            <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%"
-                
-            >
-          
-
-               
-               {/*if you lock a combinasion, you still need to own the layer to claim, but only you can claim */}
-
-                
-               <Button variant="outlined" 
-                    style={{
-                        color:  cool_orange,// "#b4a770",
-                        borderColor: cool_orange,// "#f0c435", // Set border color
-                        height: "25px",borderWidth: '2px',
-                        textTransform: 'none', // Prevent text from being transformed to uppercase
-                    }} 
-                     
-                    >LOCK
-            
-               </Button > 
-                
-
-               <HorizontalSpace space={2}/>
-              { selectedImages ? (
-                
-                  <PopupButton
-                      text = {`CLAIM $WU`}     
- 
-                        style={{
-                            color:    '#b4a770', //cool_orange,// '#b4a770',
-                            borderColor:   '#f0c435',
-                            height: '25px',// '50px',
-                            width: '100px',
-                            borderWidth: '2px',
-                            textTransform: 'none',
-                            marginRight: "50px"
-                          
-                        }}
-                    selectedImages ={ selectedImages}
-                 />
-               ):(
-                <p></p>
-               )}
- 
-
-             {/* <IconButton> <DownloadOutlinedIcon sx={{ fontSize: "26px", color: colors.greenAccent[500] }}/></IconButton> */}
-            
-             </Box>
-            </Box>
-
-            <Box gridColumn="span 8" gridRow="span 8" >
-                 <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
-             </Box>
-{/* 
-       <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: "rgb(201, 74, 0, 0.05)" } : {}} >  <Box>
+          <Box  display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
          
-         <Typography color={colors.grey[ text2.color ]} >Reward price: </Typography>
-           <Stack padding={"10px"}>
-             <Typography color={colors.grey[ text1.color ]}  variant="h1" fontWeight="50">
-
-               {` $${(  Number(RewardPrice) *WuUSDTprice ).toFixed(2) }`}  
-                
-             </Typography>
-              
-                
-            </Stack>
-            </Box>
-               
-        </Box>
-        <Box gridColumn="span 2" gridRow="span 6" style={debugModeLayout ? { backgroundColor: "rgb(0, 74, 0, 0.1)" } : {}} > 
-          <Stack>
-            <Typography color={colors.grey[ text2.color ]} >Simulated rate: </Typography>
-
-            <Typography    color= {colors.grey[ text2.color]}  
-                     style={{ fontSize:"8px",   position: 'relative', bottom:"5px" }}  >
-                   {` 1 WU = ${WuUSDTprice} USDT`}  
-            </Typography>
-   
-            <Typography color={colors.grey[ text2.color ]} >reward in $WU: </Typography>
-             <Typography variant="h4"  color= {colors.grey[ text2.color]}  
-                     style={{  position: 'relative', bottom:"5px" }}  >
-                   {` ${(  Number(RewardPrice) ).toFixed(2) } `}  
-            </Typography>
-            <Typography color={colors.grey[ text2.color ]} >reward in $ETH: </Typography>
-             <Typography variant="h4"  color= {colors.grey[ text2.color]}  
-                     style={{  position: 'relative', bottom:"5px" }}  >
-                  {`${ (    (Number(RewardPrice) *WuUSDTprice )  / ethToUsdRate).toFixed(4) } `}
-                  
-            </Typography>
-           </Stack>
-        </Box>   */}
-    
-       
-<Box gridColumn="span 4" gridRow="span 6"
-   
-   sx={ {
-    //color:  colors.grey[ 400 ],
-    paddingLeft :"90px" } }
-     
-
-  >  <Box>
-         
-
-         <div style={{ 
-            color: colors.grey[400], fontWeight:"450",
-            display: 'flex', alignItems: 'center'
-            
-            }}>
-
-         <BootstrapTooltip  title="Reward contract Balance"  placement="left-start" >
-         
-
-               <React.Fragment>
-
-                 <BiCoinStack  size={"15px"} />  
-
-                 <Typography color={colors.grey[  300 ]} >reward in $WU: </Typography>
-
- 
-                <Typography variant="h4"  color= {colors.grey[ 300]}  
-                        style={{  position: 'relative', bottom:"5px" }}  >
-                      {` ${(  Number(RewardPrice) ).toFixed(2) } `}  
-                </Typography>
-
-                {/* <Typography  fontSize={"small"} fontWeight={"150"}> Balance: </Typography> */}
-              
-
-                 <Typography  fontSize={"small"} fontWeight={"150"}> 
-                {/* { Number( ethers.utils.formatUnits(contractBalance._hex, 18)).toFixed(2) } */}
-             </Typography>  
-             </React.Fragment>
-           
-         <VerticalSpace space={"10px"}/>
-
-
-
-        </BootstrapTooltip>
-       </div> 
-         <HorizontalSpace space={1}/> 
-     
-         <div  style={{
-             display: "flex",
-             flexDirection: "row",
-             justifyContent: "space-between",
-              alignItems: "center" 
- 
-         }}> 
-    
-                    <HorizontalSpace space={1}/> 
-               
-           </div>
-
- 
-
-
-
-
-           
-           <Stack   >
-
+                   {/*The composed character image block     <Box   className={styles.mainPageLayout}  >   */}
+                   <Box className= {styles.mainPageLayout} >  
+                    <ComposedCharacterArea selectedImages ={selectedImages} RewardPrice = {RewardPrice} legendItems ={ legendItems } />
+                   </Box>
   
-              
-                        {/*   
-
-                    <p  >Simulated rate: </p>
-
-                  <Typography    color= {colors.grey[ 300  ]}  
-                          style={{ fontSize:"8px",   position: 'relative', bottom:"5px" }}  >
-                        {` 1 WU = ${WuUSDTprice} USDT`}  
-                  </Typography>
-                   */}
- 
-                  <Box  sx={     {
-                      width :"100px",
-                      borderRadius:"5px",
-                     
-                      
-                      } } > 
-                        <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
+                     {/* ROW 3  ImageSelector  */}
+                    <Box gridColumn="span 4" gridRow="span 4" backgroundColor={colors.primary[500]} p="30px">
+                      <Box display="flex"  flexDirection="column"  alignItems="center" mt="25px">
+                      <div> 
+                      {/* Click the following layers to test combination and see prize reward associated. */}
+                      <ImageSelector setSelectedImages={setSelectedImages}  selectedImages={selectedImages}  />
+                      </div>
+                    </Box>
                   </Box>
+          </Box>
 
 
-                  
-                
-            
-              
-
-
-            </Stack>
-            </Box>
-               
-        </Box>
-          
-
-
-            {/* <Box gridColumn="span 2" gridRow="span 2" style={debugModeLayout ? { backgroundColor: colors.primary[300] } : {}} > </Box> */}
-            <Box gridColumn="span 4" gridRow="span 2"   >
-           
-            
-
-
-            </Box>
-
-            </Box>
-            </Box>
-          </RoundedBox>
-        </Box>
- 
-        
-      {/* ROW 3 */}
-      <Box
-        gridColumn="span 4"
-        gridRow="span 4"
-        backgroundColor={colors.primary[500]}
-        p="30px"
-      >
-        <Typography variant="h5" fontWeight="600">
-          Layers Selector
-        </Typography>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            mt="25px"
-          >
-          
-          
-<div> 
-     Click the following layers to test combination and see prize reward associated.
-     <ImageSelector setSelectedImages={setSelectedImages}  selectedImages={selectedImages}  />
-
-</div>
-    
-           
-        </Box>
       </Box>
-      
-     </Box>
-      
-     </Box>
  
-
     );
   };
   
-  export default LayerSelector;
+  export default MainBlock;
+ 
+  
+const ComposedCharacterArea =( {  selectedImages, RewardPrice, legendItems  })=>{  
+
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+ 
+
+
+   return(
+
+
+    <RoundedBox>
+    <Box margin = {"8px"} 
+    
+    backgroundColor = {colors.primary[400]}   
+    borderRadius = {"10px"}  > 
+
+    <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
+  
+      <Box gridColumn="span 8" gridRow="span 1"  style={{  display: "flex",  marginLeft :"30px", alignItems: "center",justifyContent: "flex-start"} }  //  "center"
+      >
+      
+    <AddressBlock addressArg={ BURN_TO_CLAIM} /> 
+
+      </Box>
+
+
+        <Box gridColumn="span 4" gridRow="span 1"    >
+        <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%">
+          
+          
+
+        <HorizontalSpace space={2}/>
+        { selectedImages ? (
+          
+            <PopupButton
+                text = {`CLAIM $WU`}     
+
+                  style={{
+                      color:    '#b4a770', //cool_orange,// '#b4a770',
+                      borderColor:   '#f0c435',
+                      height: '25px',// '50px',
+                      width: '100px',
+                      borderWidth: '2px',
+                      textTransform: 'none',
+                      marginRight: "50px"
+                    
+                  }}
+              selectedImages ={ selectedImages}
+          />
+        ):(
+          <p></p>
+        )}
+
+      
+      </Box>
+      </Box>
+
+      <Box gridColumn="span 8" gridRow="span 8" >
+          <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
+      </Box>
+
+
+
+<Box gridColumn="span 4" gridRow="span 6"
+
+    sx={ { paddingLeft :"90px" } }>  <Box>
+      <div style={{  color: colors.grey[400], fontWeight:"450", display: 'flex', alignItems: 'center' }}>
+      <RewardDisplay RewardPrice={RewardPrice} />
+     
+</div> 
+  <HorizontalSpace space={1}/> 
+
+  <div  style={{ display: "flex",  flexDirection: "row", justifyContent: "space-between", alignItems: "center"
+    
+  }}> 
+
+              <HorizontalSpace space={1}/> 
+        
+    </div>
+
+    
+    <Stack   >
+
+            <Box  sx={ {    width :"100px",borderRadius:"5px",
+              }}> 
+                  <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
+            </Box>
+
+            
+
+      </Stack>
+      </Box>
+        
+  </Box>
+
+      <Box gridColumn="span 4" gridRow="span 2"   >
+    
+      
+
+
+      </Box>
+
+      </Box>
+      </Box>
+    </RoundedBox>
+  
+ 
+ 
+
+   )
+
+}
+
+const RewardDisplay = ( {RewardPrice} )=>{
+
+    
   
 
+   return (
+    <BootstrapTooltip  title="Reward contract Balance"  placement="left-start" >
+         
+
+    <React.Fragment>
+
+      <BiCoinStack  size={"15px"} />  
+
+      <Typography color={colors.grey[  300 ]} >reward in $WU: </Typography>
+
+
+     <Typography variant="h4"  color= {colors.grey[ 300]}  
+             style={{  position: 'relative', bottom:"5px" }}  >
+           {` ${(  Number(RewardPrice) ).toFixed(2) } `}  
+     </Typography>
+
+
+      <Typography  fontSize={"small"} fontWeight={"150"}> 
+    
+  </Typography>  
+  </React.Fragment>
+
+<VerticalSpace space={"10px"}/>
+
+
+
+</BootstrapTooltip>
+
+   )
+
+
+}
 
 // warning (check element on chrome to make sure it does not overlap the top-right button)
   const ComposedCharacter = ({ images }) => {
@@ -467,7 +367,7 @@ useEffect(() => {
  
 // get all layers from user, and update to add owning, and supply info for
 // also update selected image so they match the default character combination
-const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
+  const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
  
  
    // const { user } = useUserContext();
@@ -529,8 +429,8 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
 
    return `layersForCharacterCompo/${category}/${designNumber }.png`;
 }
-//setSelectedImages which is SetSelected image passed by parent component
-// will update images once we click on one image fromlayer selection bowar
+   //setSelectedImages which is SetSelected image passed by parent component
+   // will update images once we click on one image fromlayer selection bowar
   const handleImageSelect = (category, obj   ) => {
 
     const image = GetCharacterBodyPartImage( category, obj.layerName );// `${category}/${obj.layerName }.png`
@@ -573,7 +473,7 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
 
       { allLayers ? ( 
            <LayerBaseInfo   
-          //  layerToChooseFrom={ layerToChooseFrom}   allLayers
+           
              layerToChooseFrom={ allLayers}   
              handleImageSelect ={handleImageSelect} 
             colors ={colors}
@@ -593,7 +493,7 @@ const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
 
 
     );
-  };
+};
 
   function EditorButton(){
     const theme = useTheme();

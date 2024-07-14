@@ -30,8 +30,67 @@
 
 
 
- 
 
+.characterBox {
+  position: relative;
+  top: 0;
+}
+ 
+ 
+/* Mobile */
+@media (max-width: 767px) {
+  .characterBox {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+/* Tablet and smaller laptops */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .characterBox {
+    width: 350px;
+    height:350px;
+  }
+}
+
+/* Desktop monitors and larger laptops */
+@media (min-width: 1025px) {
+  .characterBox {
+    width: 580px;
+    height: 580px;
+  }
+}
+
+
+
+.mainPageLayout {
+   
+}
+ 
+ 
+/* Mobile */
+@media (max-width: 767px) {
+  .mainPageLayout {
+    grid-column: span 12;
+    grid-row: span 4;
+  }
+}
+
+/* Tablet and smaller laptops */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .mainPageLayout {
+    grid-column: span 8;
+    grid-row: span 4;
+  }
+}
+ 
+/* Desktop monitors and larger laptops */
+@media (min-width: 1025px) {
+  .mainPageLayout {
+    grid-column: span 8;
+    grid-row: span 4;
+  }
+}
 
 
 

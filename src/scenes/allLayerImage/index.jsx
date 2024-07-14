@@ -79,6 +79,7 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
           <ComposedCharacter/>  
        
       
+      {/*
           <div className={ stylesBuy.nftGridContainer } > 
           
                 
@@ -93,7 +94,7 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
             )}
          
             </div>
-
+      */}
 
            </Box>
         </Container>

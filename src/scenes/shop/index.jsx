@@ -239,6 +239,8 @@ import { useNavigate } from "react-router";
                     }
                 }
                > 
+
+               
                  <NFTListed
                     key={listing.id}
                     propContractAddress = {listing.assetContractAddress}
@@ -246,7 +248,12 @@ import { useNavigate } from "react-router";
 
                    AlllistingData ={null}
                    AuctionListingData = {listing}
-                    /> 
+                 /> 
+
+
+
+
+
                   </Box> 
 
               ))
