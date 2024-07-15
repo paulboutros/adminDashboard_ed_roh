@@ -27,38 +27,161 @@
   transform: translate3d(0px, -4px, 0px);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
+ 
 
-
-
-
-.characterBox {
+  .characterBox {
   position: relative;
   top: 0;
-}
+
+  width: 512px;
+  height: 512px;
+
+   width: '120%';
+   height: '120%';
+
+}  
+  
  
- 
-/* Mobile */
-@media (max-width: 767px) {
+
+/* Mobile   Less than 600     767px  */
+@media (max-width:600px ) { 
+  
+
+   
+
+
+  .composedLayerPosition {
+    position: absolute;
+       
+      width: '100%';
+      height: '100%';  
+
+    }
+    
+    
+   
+
+    .RewardPrice{
+
+      grid-column : span 4;
+      grid-row : span 6; 
+      padding-left :90px;
+    }  
+
+
   .characterBox {
-    width: 240px;
-    height: 240px;
+    top: -120px;
+    left:-50px;
+      width:  '100%';
+      height: '100%';  
+  }
+  .mainPageLayout {
+    grid-column: span 12;
+    grid-row: span 4;
+  }
+  .ImageSelector {
+
+    grid-column: span 12;
+    grid-row: span 4;
   }
 }
+@media (min-width: 600px) and (max-width:  819px ) {   /*  760px */
+      
+    
+  .Sidebar { display: block;   
+   } 
 
+
+   .RewardPrice{
+
+    grid-column : span 4;
+    grid-row : span 6; 
+    padding-left :90px;
+  }  
+
+
+ 
+  .mainPageLayout {
+    grid-column: span 12;
+    grid-row: span 4;
+  }
+  .ImageSelector {
+
+    grid-column: span 12;
+    grid-row: span 4;
+  }
+
+
+}
+
+
+/* xs: Extra small (up to 599px width)
+sm: Small (600px to 959px width)
+md: Medium (960px to 1279px width)
+lg: Large (1280px and up width) */
 /* Tablet and smaller laptops */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .characterBox {
-    width: 350px;
-    height:350px;
+@media (min-width: 820px) and (max-width: 1024px) {
+
+  .RewardPrice{
+
+    grid-column : span 4;
+    grid-row : span 6; 
+    padding-left :90px;
+  }  
+
+
+
+ 
+  .mainPageLayout {
+    grid-column: span 12;
+    grid-row: span 4;
+  }
+  .ImageSelector {
+
+    grid-column: span 12;
+    grid-row: span 4;
   }
 }
 
 /* Desktop monitors and larger laptops */
 @media (min-width: 1025px) {
+
+   
+
+
+
+
   .characterBox {
-    width: 580px;
-    height: 580px;
+   
+    
+    top: 20px;
+    width: 512px;
+    height: 512px;
   }
+
+
+  .mainPageLayout {
+    grid-column: span 8;
+    grid-row: span 4;
+  }
+  .ImageSelector {
+
+    grid-column: span 4;
+    grid-row: span 4;
+  }
+  .composedLayerPosition {
+     position: absolute;
+     
+      top: -20;
+      left: 0;
+      
+      width:  '100%';
+      height: '100%';  
+
+    }
+  
+
+
 }
 
 
@@ -67,30 +190,7 @@
    
 }
  
- 
-/* Mobile */
-@media (max-width: 767px) {
-  .mainPageLayout {
-    grid-column: span 12;
-    grid-row: span 4;
-  }
-}
-
-/* Tablet and smaller laptops */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .mainPageLayout {
-    grid-column: span 8;
-    grid-row: span 4;
-  }
-}
- 
-/* Desktop monitors and larger laptops */
-@media (min-width: 1025px) {
-  .mainPageLayout {
-    grid-column: span 8;
-    grid-row: span 4;
-  }
-}
+  
 
 
 

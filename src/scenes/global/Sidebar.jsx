@@ -17,9 +17,9 @@ import { CgProfile } from "react-icons/cg";
 import { LiaCoinsSolid } from "react-icons/lia";
 
 import { GoPackageDependencies } from "react-icons/go";
-import { FiPackage } from "react-icons/fi";
+ import { FiPackage } from "react-icons/fi";
 
-
+import styles from "../../styles/Buy.module.css";  
 // hand with coin . could be for claim reward
 import { PiHandCoinsLight } from "react-icons/pi";
 
@@ -52,9 +52,13 @@ const Sidebar = () => {
 
   return (
     <Box
+
+    
+
       sx={{
         "& .pro-sidebar-inner": {
           background: `${colors.primary[600]} !important`,
+         
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -70,7 +74,13 @@ const Sidebar = () => {
         },
       }}
     >
-      <ProSidebar collapsed={isCollapsed}>
+      <ProSidebar 
+      
+       //  style={{ display: 'none' }}   Sidebar
+       className= { styles.Sidebar  } 
+
+        collapsed={isCollapsed}>
+       
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem

@@ -8,6 +8,8 @@ body,
   height: 100%;
   width: 100%;
    font-family: "Source Sans Pro", sans-serif;
+
+   margin-top: 26px; /*  this is suppose to be the height of the top bar , so content is not under the top bar*/
 }
 
 .app {
@@ -35,6 +37,5 @@ body,
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
-
+ 
   

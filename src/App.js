@@ -25,6 +25,7 @@ import ProfileWallet from "./scenes/profileWallet/index.jsx";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
 
+import styles from "./styles/Buy.module.css";  
 
 
 
@@ -130,114 +131,7 @@ const testThirdWeb = false;
      if (  heavyVersion === true ){ 
        return (
 
-
-    <ThirdwebProvider activeChain={Sepolia}>
- <ChakraProvider>  
-       {/* <UserProvider> */}
-         <DiscordProvider>
-            <DISTProvider>
-           <DebugModeProvider>
-
-        <DiscordInviteProvider> 
-        <AppLinkProvider>
-   
-      <DropTimeProvider>
-      <NotificationProvider>
-
-     <AllLayersProvider>
-        {/* <AllListingsProvider>   */}
-
-     <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
-          <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
-
-          {/* <Router> */}
-            <Routes>
-              
-             
-               
-              
-              {/* <Route path="/farmerPage" element={<FarmerPage/>} /> */}
-            
-          
-              <Route path="/"                       element={
-                <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
-                   <AllLayerImage />
-               </AllListingsProvider>
-                 
-              }/>
-              <Route path="/shop/:NFT_CONTRACT"      element={ 
-                 <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
-                     <Shop key="1" itemType={"nfts"} />
-                 </AllListingsProvider>
-               }/>    
-              <Route path="/shopPack/:NFT_CONTRACT"  element={
-                 <AllListingsProvider  NFT_CONTRACT={PACK_ADDRESS} >  
-                    <Shop key="2" itemType={"packs"} />
-                </AllListingsProvider>  
-              }/> 
-
-               
-           
-                <Route path="/sell" element={<Sell/>} />
-                 <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
-                 <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={
-                   <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
-                    <TokenPageByID/>
-                  </AllListingsProvider>
-                 } />
-              
-
-              {/* this is more like a personal profil tab .. 
-              <Route path="/profileWallet/:initialTabIndex" element={<ProfileWallet/>} />
-              <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
-              <Route path="/profileWallet/:address/:initialTabIndex" element={<ProfileWallet/>} />
-              
-            */}
-               
-              
-             
-              <Route path="/allLayerImage" element={<AllLayerImage />} />
-              
-             
-              <Route path="/form" element={<Form />} />
-              
-              
-              
-              <Route path="/myPacks" element={<MyPacks/>} />
-                
-              
-            </Routes>
-         {/* </Router> */}
-
-
-          </main>
-        </div>
-      </ThemeProvider>
-     </ColorModeContext.Provider>
-
-      {/* </AllListingsProvider>   */}
-    </AllLayersProvider>
-
-
-     </NotificationProvider>
-     </DropTimeProvider>
-     
-     </AppLinkProvider> 
-        </DiscordInviteProvider>
-     
-         </DebugModeProvider>
-
-         </DISTProvider>
-    </DiscordProvider>
-       {/* </UserProvider> */}
-    </ChakraProvider>
-    </ThirdwebProvider>
-  
+      <></>
 
     ); 
  
@@ -264,9 +158,12 @@ const testThirdWeb = false;
         <ColorModeContext.Provider value={colorMode}>
          <ThemeProvider theme={theme}>
            <CssBaseline />
-           <div className="app">
-             <Sidebar isSidebar={isSidebar} />
-             <main className="content">
+           <div className="app">  
+           {/* <Sidebar  className= { styles.Sidebar  }    isSidebar={isSidebar} /> */}
+           {/* <Sidebar  isSidebar={isSidebar} /> */}
+             <main 
+               className="content"
+            >
                <Topbar setIsSidebar={setIsSidebar} />
    
              {/* <Router> */}

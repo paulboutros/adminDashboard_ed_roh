@@ -160,7 +160,7 @@ useEffect(() => {
                    </Box>
   
                      {/* ROW 3  ImageSelector  */}
-                    <Box gridColumn="span 4" gridRow="span 4" backgroundColor={colors.primary[500]} p="30px">
+                    < Box className= {styles.ImageSelector}      >
                       <Box display="flex"  flexDirection="column"  alignItems="center" mt="25px">
                       <div> 
                       {/* Click the following layers to test combination and see prize reward associated. */}
@@ -181,13 +181,187 @@ useEffect(() => {
   
 const ComposedCharacterArea =( {  selectedImages, RewardPrice, legendItems  })=>{  
 
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
  
 
+return (
+  <div>
+  {screenWidth > 768 ? (
+    <p> ddddddddddddd </p> 
 
-   return(
+    // <Large    selectedImages = {selectedImages}  RewardPrice = {RewardPrice} legendItems = {legendItems}     /> 
+  ) : (
+     
+      
+      <ExtraSmall    selectedImages = {selectedImages}  RewardPrice = {RewardPrice} legendItems = {legendItems}     /> 
+      
+        
+  )}
+</div>
+  )
+
+ 
+
+}
+
+ 
+const ExtraSmall =( {  selectedImages, RewardPrice, legendItems  })=>{
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  return(
+
+
+    <RoundedBox>
+     
+    
+    <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
+  
+     
+
+            <Box gridColumn="span 12" gridRow="span 2"    >
+                    { selectedImages ? (
+                      
+                      <PopupButton
+                            text = {`CLAIM $WU`}     
+
+                            style={{
+                                color: '#b4a770', //cool_orange,// '#b4a770',
+                                borderColor:   '#f0c435',
+                                height: '50px',// '50px',
+                                width: "100%",//'300px',
+                                borderWidth: '2px',
+                                textTransform: 'none',
+                                marginRight: "50px"
+                              
+                            }}
+                        selectedImages ={ selectedImages}
+                    />
+                  ):(
+                    <p></p>
+                  )}
+            </Box>
+
+
+            <Box gridColumn="span 12" gridRow="span 6" >
+            <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
+           </Box> 
+
+
+       
+
+      </Box>
+ 
+</RoundedBox>
+ 
+
+)
+}
+
+const Large =( {  selectedImages, RewardPrice, legendItems  })=>{
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  return(
+
+
+    <RoundedBox>
+    <Box margin = {"8px"} 
+    
+    backgroundColor = {colors.primary[400]}   
+    borderRadius = {"10px"}  > 
+
+    <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
+  
+       
+
+
+    <Box gridColumn="span 12" gridRow="span 1"    >
+         <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%">
+ 
+              <HorizontalSpace space={2}/>
+              { selectedImages ? (
+                
+                  <PopupButton
+                      text = {`CLAIM  ${RewardPrice} $WU`}     
+
+                        style={{
+                            color: '#b4a770', //cool_orange,// '#b4a770',
+                            borderColor:   '#f0c435',
+                            height: '25px',// '50px',
+                            width: '100px',
+                            borderWidth: '2px',
+                            textTransform: 'none',
+                            marginRight: "50px"
+                          
+                        }}
+                    selectedImages ={ selectedImages}
+                />
+              ):(
+                <p></p>
+              )}
+
+  
+        </Box>
+     </Box>
+
+ 
+  
+   <Box gridColumn="span 12" gridRow="span 8" >
+      <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
+  </Box> 
+   
+ 
+
+  <Box    className= {styles.RewardDisplay  }   >  <Box>
+    
+  
+      <div style={{  color: colors.grey[400], fontWeight:"450", display: 'flex', alignItems: 'center' }}>  
+        <RewardDisplay RewardPrice={RewardPrice} />
+      </div> 
+
+        <HorizontalSpace space={1}/> 
+      <div style={{ display: "flex",  flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <HorizontalSpace space={1}/> 
+      </div>
+  
+      <Stack   >
+            <Box  sx={ {    width :"100px",borderRadius:"5px",}}> 
+                  <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
+            </Box>
+      </Stack>
+ </Box>
+ 
+    
+</Box>
+
+ 
+
+  <Box gridColumn="span 4" gridRow="span 2"   >
+
+  
+
+
+  </Box>
+
+  </Box>
+  </Box>
+</RoundedBox>
+
+
+
+
+)
+}
+
+/*
+  return(
 
 
     <RoundedBox>
@@ -201,98 +375,101 @@ const ComposedCharacterArea =( {  selectedImages, RewardPrice, legendItems  })=>
       <Box gridColumn="span 8" gridRow="span 1"  style={{  display: "flex",  marginLeft :"30px", alignItems: "center",justifyContent: "flex-start"} }  //  "center"
       >
       
-    <AddressBlock addressArg={ BURN_TO_CLAIM} /> 
-
-      </Box>
-
-
-        <Box gridColumn="span 4" gridRow="span 1"    >
-        <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%">
-          
-          
-
-        <HorizontalSpace space={2}/>
-        { selectedImages ? (
-          
-            <PopupButton
-                text = {`CLAIM $WU`}     
-
-                  style={{
-                      color:    '#b4a770', //cool_orange,// '#b4a770',
-                      borderColor:   '#f0c435',
-                      height: '25px',// '50px',
-                      width: '100px',
-                      borderWidth: '2px',
-                      textTransform: 'none',
-                      marginRight: "50px"
-                    
-                  }}
-              selectedImages ={ selectedImages}
-          />
-        ):(
-          <p></p>
-        )}
-
-      
-      </Box>
-      </Box>
-
-      <Box gridColumn="span 8" gridRow="span 8" >
-          <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
-      </Box>
-
-
-
-<Box gridColumn="span 4" gridRow="span 6"
-
-    sx={ { paddingLeft :"90px" } }>  <Box>
-      <div style={{  color: colors.grey[400], fontWeight:"450", display: 'flex', alignItems: 'center' }}>
-      <RewardDisplay RewardPrice={RewardPrice} />
      
-</div> 
-  <HorizontalSpace space={1}/> 
 
-  <div  style={{ display: "flex",  flexDirection: "row", justifyContent: "space-between", alignItems: "center"
-    
-  }}> 
+    </Box>
 
-              <HorizontalSpace space={1}/> 
-        
-    </div>
 
-    
-    <Stack   >
+    <Box gridColumn="span 4" gridRow="span 1"    >
+    <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%">
+      
+      
 
-            <Box  sx={ {    width :"100px",borderRadius:"5px",
-              }}> 
-                  <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
-            </Box>
+    <HorizontalSpace space={2}/>
+    { selectedImages ? (
+      
+        <PopupButton
+            text = {`CLAIM $WU`}     
 
-            
+              style={{
+                  color: '#b4a770', //cool_orange,// '#b4a770',
+                  borderColor:   '#f0c435',
+                  height: '25px',// '50px',
+                  width: '100px',
+                  borderWidth: '2px',
+                  textTransform: 'none',
+                  marginRight: "50px"
+                
+              }}
+          selectedImages ={ selectedImages}
+      />
+    ):(
+      <p></p>
+    )}
 
-      </Stack>
-      </Box>
-        
+  
+  </Box>
   </Box>
 
-      <Box gridColumn="span 4" gridRow="span 2"   >
+  <Box gridColumn="span 8" gridRow="span 8" >
+      <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
+  </Box>
+
+
+  <Box    className= {styles.RewardDisplay  }   >  <Box>
     
-      
-
-
-      </Box>
-
-      </Box>
-      </Box>
-    </RoundedBox>
   
+      <div style={{  color: colors.grey[400], fontWeight:"450", display: 'flex', alignItems: 'center' }}>  
+        <RewardDisplay RewardPrice={RewardPrice} />
+      </div> 
+
+        <HorizontalSpace space={1}/> 
+      <div style={{ display: "flex",  flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <HorizontalSpace space={1}/> 
+      </div>
+  
+      <Stack   >
+            <Box  sx={ {    width :"100px",borderRadius:"5px",}}> 
+                  <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
+            </Box>
+      </Stack>
+ </Box>
  
- 
+    
+</Box>
 
-   )
 
-}
 
+
+
+
+
+
+
+
+
+
+
+
+
+  <Box gridColumn="span 4" gridRow="span 2"   >
+
+  
+
+
+  </Box>
+
+  </Box>
+  </Box>
+</RoundedBox>
+
+
+
+
+)
+
+
+*/
 const RewardDisplay = ( {RewardPrice} )=>{
 
     
@@ -339,7 +516,9 @@ const RewardDisplay = ( {RewardPrice} )=>{
 
 
     return (
-      <Box style={{  position: 'relative', width: '580px', height: '580px', top: 0  }}>
+
+      
+      <Box  className= {styles.characterBox  } >
         { Object.values(images).map((image, index) => (
 
 
@@ -349,13 +528,16 @@ const RewardDisplay = ( {RewardPrice} )=>{
               key={index}
               src= {image[0].imagePath} // {image}
               alt={`Layer ${index + 1}`}
-              style={{
-                position: 'absolute',
-                top: -20,
-                left: 0,
-                width: '100%',
-                height: '100%',
-              }}
+
+
+                className= {styles.composedLayerPosition  }
+              //   style={{
+              //     position: 'absolute',
+              //      top: -20,
+              //      left: 0,
+              //     width: '100%',
+              //     height: '100%',
+              //  }}
             />
           )
         )) 
@@ -466,7 +648,7 @@ const RewardDisplay = ( {RewardPrice} )=>{
   
     return (
        
-        <Box maxHeight="calc(75vh)"  overflow="auto" >
+     <Box maxHeight="calc(75vh)"  overflow="auto" >
         
 
      <Box m="0 0 0 0" height= {_layerSelectorScrollareaHeight} > 

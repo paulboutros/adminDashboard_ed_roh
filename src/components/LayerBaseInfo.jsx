@@ -59,7 +59,10 @@ it  takes a list of layer object and display image, how many are owned  etc..
   return circleColor;
 }
 
-
+//xs: Extra small (up to 599px width)
+//sm: Small (600px to 959px width)
+//md: Medium (960px to 1279px width)
+//lg: Large (1280px and up width)
     return( 
         <div > 
        <Grid container spacing={2}  >

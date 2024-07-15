@@ -68,8 +68,18 @@ const Topbar = () => {
     <Box display="flex" justifyContent="space-between"
       padding="0px 20px 0px 20px" height={"46px"}
 
-      borderBottom={`1px solid ${colors.primary[300]}`}
-     
+      borderBottom={`1px solid ${colors.primary[100]}`}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        zIndex: 1000, // Ensure it's above other content
+        backgroundColor: colors.primary[300]
+
+       
+
+      }}
      >
        { /* SEARCH BAR */ }
        <RowChildrenAlignCenter>
@@ -77,7 +87,7 @@ const Topbar = () => {
          <Box  display="flex" >
     
      <RoundedBox> 
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
+        {/* <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" /> */}
           <IconButton type="button" sx={{ p: 1 }}
           
           >
