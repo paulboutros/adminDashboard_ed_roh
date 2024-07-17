@@ -198,7 +198,7 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
            
   };
 
-  const sssss = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
+   const sssss = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
   
     
   //ownedNftData will be NULL is address is not conencted, so [meta.value].owning will keep initial value of 0
@@ -211,7 +211,7 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
         
         }
      
-      const meta = ownedNFT.metadata.attributes[0];
+       const meta = ownedNFT.metadata.attributes[0];
       initialLayerToChooseFrom[ meta.trait_type][meta.value].owning = ownedNFT.quantityOwned;
        
       };
