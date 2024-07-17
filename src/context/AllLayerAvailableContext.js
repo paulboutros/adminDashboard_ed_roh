@@ -42,6 +42,18 @@ export function AllLayersProvider({ children }) {
       const sdk = getSDK_fromPrivateKey(); 
       const contract = await sdk.getContract(TOOLS_ADDRESS);  // , "edition"
       const nfts = await contract.erc1155.getAll();
+
+
+
+
+       
+       console.log( " ============  >>>>>>>>>>>>>>>>>>>>>>>>>>>>.  ======== nfts       "   ,  nfts  );
+
+
+
+
+
+
       setNFTdata(nfts);
     }
   useEffect(() => {
@@ -78,7 +90,7 @@ export function AllLayersProvider({ children }) {
       for (let e = 0; e < data.length; e++ ){
  
         infoMapTempX[ data[e].metadata.id ] = {  supply:  data[e].supply   ,  quantityOwned:   data[e].quantityOwned   }; 
-        console.log( "  e.metadata        "   , data[e].metadata  );
+        //console.log( "  e.metadata        "   , data[e].metadata  );
       }
      
      
@@ -194,7 +206,10 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
     for ( let i = 0 ; i < ownedNftData.length; i++  ){ 
 
      const ownedNFT =ownedNftData[i];
-      if  ( !ownedNFT.metadata.attributes ){  console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  "); continue;  }
+      if  ( !ownedNFT.metadata.attributes ){  
+        // console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  "); continue; 
+        
+        }
      
       const meta = ownedNFT.metadata.attributes[0];
       initialLayerToChooseFrom[ meta.trait_type][meta.value].owning = ownedNFT.quantityOwned;

@@ -60,32 +60,18 @@ const NFTListed =  ({ propContractAddress, propTokenId,
             contract   = await sdk.getContract(NFT_CONTRACT);
             nftResult  = await contract.erc1155.get(tokenId);
 
-
-            console.log( " XXXXXXXXXXXXXX   nftResult = " ,    nftResult);
+          
+         
 
             var BalanceToken = await contract.erc1155.balance(  tokenId  );
             const bigNumber =     BalanceToken._hex ;
-           // console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   bigNumber" ,     bigNumber  );
+         
             amountOwned =   parseInt(  bigNumber , 16);
-         //  console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regularNumber" , amountOwned); // Output: 2
+          
  
             nftResult.amountOwned = amountOwned;
               
-           // var totalSupply  = await contract.erc1155.totalSupply(  tokenId  );
-            // const supplybigNumber  = totalSupply._hex ;
- 
-          //  supply =  nftResult.supply;  //parseInt(  supplybigNumber , 16);
-          //  console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regular supply " ,     supply  );
-          //  nftResult.supply = supply;
- 
- 
-       //  }else{    nftResult = NFT;    }
-
-         
- 
-        
- 
-       //let contractMetadataResult;
+          
       try {
   
 
@@ -108,8 +94,8 @@ const NFTListed =  ({ propContractAddress, propTokenId,
           nftResult.amountOwned =     infoMap[tokenId ].quantityOwned;
         //  nftResult.supply      =     infoMap[tokenId ].supply;
          
-          console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>    nftResult  " ,  nftResult ); // Output: 2
-          
+       //   console.log(  `  >>>  nftResult token ID [${tokenId}    ` ); // Output: 2
+      //    console.log(  "  >>>  nftResult " ,nftResult  ); // Output: 2
          
        setNFT(nftResult);
 
@@ -125,7 +111,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
    //AlllistingData ={null}
    //AuctionListingData = {listing}
    //console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   AlllistingData   " ,      AlllistingData   );
-   console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   AuctionListingData   " ,      AuctionListingData   );
+   //console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   AuctionListingData   " ,      AuctionListingData   );
     
  }, [contractAddress, tokenId ]); // NFT added
 

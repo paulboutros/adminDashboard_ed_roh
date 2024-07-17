@@ -83,12 +83,17 @@ const [directListings, setDirectListing] = useState(null);
 
 
 async function directListingCall(){
+
+ 
+
+
+
   const sdk = getSDK_fromPrivateKey(); 
   const contract = await sdk.getContract( MARKETPLACE_ADDRESS );  // , "edition"
  
  let directs = await contract.directListings.getAll();
 
- console.log( ">>>>>                 direct "  ,directs );
+ //console.log( ">>>>>                 direct "  ,directs );
  const filteredDirect = directs
  .filter(direct => 
   direct.status === listingStatus.CREATED ||
@@ -97,6 +102,9 @@ async function directListingCall(){
 
  setDirectListing(filteredDirect);
  setLoadingDirectListings(false);
+
+
+ 
 }
 
 

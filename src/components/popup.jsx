@@ -8,7 +8,7 @@ import {
 
 from "../const/addresses";
  
-  
+import styles from "../styles/Buy.module.css";  
  import { useContract, useAddress, Web3Button } from "@thirdweb-dev/react";
  
 import React, { useState , useEffect } from 'react';
@@ -54,7 +54,7 @@ const address = useAddress();
         let filteredIm = GetfilteredImages(selectedImages);
         setFilteredImages(filteredIm);
 
-        console.log( ">>>>    t filteredIm = GetfilteredImages(selectedImages);")
+         
        
         const missingCateg =[];
         for (const category in filteredImages) {
@@ -114,7 +114,14 @@ const address = useAddress();
     <div>
   
 
-      <Button variant="outlined" style={style} onClick={handleOpen}   >
+      <Button variant= "outlined"
+       // className= {styles.claimButton  }
+       style={style} 
+
+    
+        //  className = {styles.claimButton}
+      
+      onClick={handleOpen}   >
          {text}
       </Button>
 

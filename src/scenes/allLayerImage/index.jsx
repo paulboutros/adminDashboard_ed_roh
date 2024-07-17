@@ -79,10 +79,16 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
           <ComposedCharacter/>  
        
       
-      {/*
+       
+
+
+
+
+
+     {/* this shows all listing  START*/}
+
           <div className={ stylesBuy.nftGridContainer } > 
           
-                
             {isLoading ? (
               <p>Loading...</p>
             ) : (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
@@ -94,7 +100,16 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
             )}
          
             </div>
-      */}
+       
+ {/* this shows all listing ENDS HERE */}
+
+
+
+
+
+
+
+
 
            </Box>
         </Container>

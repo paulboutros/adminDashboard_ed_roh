@@ -1,3 +1,16 @@
+
+.claimButton {
+ color: #b4a770;
+  border-color: #f0c435;
+  height: 50px; 
+  width: 100%;
+  border-width: 2px;
+  text-transform: none; 
+  background-color: #f0c435;
+}
+
+
+
 .nftGridContainer {
   display: flex;
   flex-direction: row;
@@ -6,8 +19,10 @@
   width: 100%;
 }
 
+/*
+// this has been moved in theme.js
 .nftContainer {
-  width: 17.8%;
+   width: 17.8%;  
   margin: 8px;
   position: relative;
   overflow: hidden;
@@ -21,6 +36,7 @@
   max-height: 382px;
   transition: all 0.25s ease-in-out;
 }
+*/
 
 .nftContainer:hover {
   cursor: pointer;
@@ -36,30 +52,43 @@
   width: 512px;
   height: 512px;
 
-   width: '120%';
-   height: '120%';
+   width: '100%';
+   height: '100%';
 
 }  
   
  
-
+/* xs: Extra small (up to 599px width)
+sm: Small (600px to 959px width)
+md: Medium (960px to 1279px width)
+lg: Large (1280px and up width) */
+/* Tablet and smaller laptops */
 /* Mobile   Less than 600     767px  */
 @media (max-width:600px ) { 
   
 
-   
+   .composedLayerPosition {
+       position: absolute;       
+       width: '100%';
+       height: '100%';  
 
+      
+       /* background-color : #0000FF; */
 
-  .composedLayerPosition {
-    position: absolute;
+    }
+    .characterBox {
+       top: 0;
+       left:-20px;
+       /* width:  '100%';
+       height: '100%'; */
        
-      width: '100%';
-      height: '100%';  
+       width: 420px;
+       height: 420px;
+      
+
 
     }
     
-    
-   
 
     .RewardPrice{
 
@@ -69,27 +98,37 @@
     }  
 
 
-  .characterBox {
-    top: -120px;
-    left:-50px;
-      width:  '100%';
-      height: '100%';  
-  }
-  .mainPageLayout {
-    grid-column: span 12;
-    grid-row: span 4;
-  }
-  .ImageSelector {
-
-    grid-column: span 12;
-    grid-row: span 4;
-  }
-}
-@media (min-width: 600px) and (max-width:  819px ) {   /*  760px */
-      
     
+      .mainPageLayout {
+        grid-column: span 12;
+        grid-row: span 4;
+      }
+      .ImageSelector {
+
+        grid-column: span 12;
+        grid-row: span 4;
+      }
+}
+
+   @media (min-width: 600px) and (max-width: 959px ) {   /*  760px */
+     
   .Sidebar { display: block;   
    } 
+
+   .composedLayerPosition {
+    position: absolute;       
+    width: '100%';
+    height: '100%';  
+
+    }
+    .characterBox {
+      top: -20px;
+      left:50px;
+        width:  '100%';
+        height: '100%';  
+    }
+
+
 
 
    .RewardPrice{
@@ -112,15 +151,29 @@
   }
 
 
+  
+
+
 }
+ 
+
+@media (min-width: 960px) and (max-width: 1279px) {
+
+  .composedLayerPosition {
+    position: absolute;       
+    width: '100%';
+    height: '100%';  
+
+    }
+    .characterBox {
+      top: 0px;
+      left: 0; /* 50px;  */
+        width:  '100%';
+        height: '100%';  
+    }
 
 
-/* xs: Extra small (up to 599px width)
-sm: Small (600px to 959px width)
-md: Medium (960px to 1279px width)
-lg: Large (1280px and up width) */
-/* Tablet and smaller laptops */
-@media (min-width: 820px) and (max-width: 1024px) {
+
 
   .RewardPrice{
 
@@ -128,10 +181,7 @@ lg: Large (1280px and up width) */
     grid-row : span 6; 
     padding-left :90px;
   }  
-
-
-
- 
+  
   .mainPageLayout {
     grid-column: span 12;
     grid-row: span 4;
@@ -144,58 +194,54 @@ lg: Large (1280px and up width) */
 }
 
 /* Desktop monitors and larger laptops */
-@media (min-width: 1025px) {
+@media (min-width: 1280px) {
 
-   
+  .composedLayerPosition {
+    position: absolute;       
+    width: '100%';
+    height: '100%';  
+
+    }
+    .characterBox {
+      top: 0px;
+      left: 0; /* 50px;  */
+        width:  '100%';
+        height: '100%';  
+    }
 
 
 
 
-  .characterBox {
-   
-    
-    top: 20px;
-    width: 512px;
-    height: 512px;
-  }
+  .RewardPrice{
 
-
+    grid-column : span 4;
+    grid-row : span 6; 
+    padding-left :90px;
+  }  
+  
   .mainPageLayout {
-    grid-column: span 8;
+    grid-column: span 12;
     grid-row: span 4;
   }
   .ImageSelector {
 
-    grid-column: span 4;
+    grid-column: span 12;
     grid-row: span 4;
   }
-  .composedLayerPosition {
-     position: absolute;
-     
-      top: -20;
-      left: 0;
-      
-      width:  '100%';
-      height: '100%';  
-
-    }
-  
-
 
 }
 
 
-
-.mainPageLayout {
-   
-}
- 
   
 
+/*
 
-
-
-
+NFT container
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+===========================================================================================================
+*/
 
 
 
@@ -207,8 +253,7 @@ lg: Large (1280px and up width) */
 
 /* Responsive */
 
-@media (min-width: 1200px) {
-}
+
 
 @media (min-width: 760px) and (max-width: 1200px) {
   .nftContainer {
@@ -227,4 +272,6 @@ lg: Large (1280px and up width) */
   .nftContainer {
     width: 45%;
   }
+}
+@media (min-width: 1200px) {
 }

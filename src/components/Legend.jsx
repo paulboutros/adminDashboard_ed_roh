@@ -8,6 +8,7 @@ import {  GetfilteredImages } from "./popup";
 import { useEffect, useState } from "react";
 import { useAllLayersContext } from "../context/AllLayerAvailableContext";
 
+import styles from "../styles/Profile.module.css"; 
  // data Model for Legenda s example
  /*
      const legendItems = [
@@ -104,6 +105,61 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
 
    }
 
+
+   export function CustomLegend3 ( { legendItems, selectedImages,  orientation = 'vertical'  } ){ 
+     
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+ 
+    const { infoMap} = useAllLayersContext(); 
+    const [ filteredImages, setFilteredImages] = useState();
+    
+    useEffect(() => {
+      if (!selectedImages )return;
+ 
+      let temp = GetfilteredImages(selectedImages);  setFilteredImages(temp);   }, [ selectedImages ]);
+ 
+
+
+
+      return (
+        <Box>
+          {
+            filteredImages && (
+              <Box display="flex" flexDirection="row" justifyContent='space-between' alignItems="center" flexWrap="wrap">
+                {Object.keys(filteredImages).map((key, index) => (
+                  <Box key={index}>
+
+                    {/* <Box sx={{   color: colors.grey[500] }}> */}
+
+                    <Box sx={{   display: 'flex', justifyContent: 'space-between', color: colors.grey[500] }}>
+                      <span>{GetLayerReadableName(key)}</span> {/* if you hide the name, the space between will have an interesting effect */}
+                      [<span 
+                        className= {styles.currentlayerSelection}
+                      // style={{ color: '#b4a770' }}
+                      
+                      >
+                        
+                        {filteredImages[key][0].tokenID}</span>]: {infoMap?.[filteredImages[key][0].tokenID].quantityOwned}
+                    </Box>
+
+                  </Box>
+                ))}
+              </Box>
+            )
+          }
+        </Box>
+      );
+
+
+
+
+
+
+
+
+  }
+
   export function CustomLegend2 ( { legendItems, selectedImages,  orientation = 'vertical'  } ){ 
      
     const theme = useTheme();
@@ -167,14 +223,7 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
 
     </Box>
   );
-}
-/*
-
-        const knData = selectedImages["kn"][0];
-        const heData = selectedImages["he"][0];
-        const shData = selectedImages["sh"][0];
-        const weData = selectedImages["we"][0];
-        const beData = selectedImages["be"][0];
- */
+  }
+ 
  
   

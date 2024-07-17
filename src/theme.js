@@ -46,9 +46,9 @@ export const text2 ={
   fontSize: 50
 }; 
 
-export const blueButton= "rgba(7,132,195,1)"
-export const _blueSelectedTab = "#0294fe";
-export const cool_orange =  "rgb(171,122,42)"
+export const blueButton= "rgba(7,132,195,1)";//
+export const _blueSelectedTab = "rgba(204,154,6)";// "#0294fe";(original blue, but we do not want it anymore)
+export const cool_orange =  "rgb(171,122,42)";//
 export const  debugModeColor ="#872b3f";
  
 // type: control + K the control + G to generate the shades
@@ -967,7 +967,7 @@ export const themeSettings = (mode) => {
     nftContainer:{
      
       
-        width: "17.8%",
+        // width: "17.8%",
         margin: "8px",
         position: "relative",
         overflow: "hidden",
@@ -979,7 +979,9 @@ export const themeSettings = (mode) => {
         display: "flex",
         flexDirection: "column",
         padding: "8px",
-        maxHeight: "382px",
+         /* maxHeight: "382px",
+       height: 0;
+  padding-bottom: 100%; Ensures a square aspect ratio */
   
   
         '&:not(.hover)': { 

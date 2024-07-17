@@ -37,7 +37,7 @@ it  takes a list of layer object and display image, how many are owned  etc..
  useEffect(() => {
      
    if (!infoMap)return;
-    console.log  (    " infoMap   in layer basde info   >>  ownedNftData     ===============    "   ,  infoMap);
+   
 
 }, [ infoMap ]);
        
@@ -65,14 +65,15 @@ it  takes a list of layer object and display image, how many are owned  etc..
 //lg: Large (1280px and up width)
     return( 
         <div > 
-       <Grid container spacing={2}  >
+       <Grid container spacing={1}  >
             {Object.keys(layerToChooseFrom).map((category) => (
    
                  
                  layerToChooseFrom[category].filter(ob=>ob.layerName !== 0).map((obj, index) => (
                   
                  
-                   <Grid item xs={12} sm={6} md={4} key={index} >
+                  
+                   <Grid item xs={3} sm={2} md={3} lg={3} key={index} >
                       <Card
                      sx={{  position: 'relative',   border: colors.grey[500], 
                        backgroundColor:  colors.primary[400], // 'transparent',
