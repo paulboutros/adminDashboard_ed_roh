@@ -62,7 +62,7 @@ useEffect (()=>{
       const gridData= await  GetContractName (marketplace , nft, listingID  ,  "activity"   );
 
 
- // console.log( "gridData = " , gridData);
+  
 
 
       setNewDataList(gridData);

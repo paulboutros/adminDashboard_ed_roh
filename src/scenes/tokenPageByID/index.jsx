@@ -1,22 +1,13 @@
+ 
 
 import {  TextField ,   Box,   Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
 
  import {CountdownTimerWithArg} from "../../components/CountdownTimer.jsx"
 import  { convertSecondsToDateString,   addressShortened  } from "../../utils.js"
 //https://chakra-ui.com/docs/components/button
-import {   ThirdwebNftMedia, Web3Button, useContract,
-    
-     useContractEvents 
-  
-    
-   } from "@thirdweb-dev/react";
+import {   ThirdwebNftMedia, Web3Button, useContract,useContractEvents } from "@thirdweb-dev/react";
 
-
-import {  
-  Button as ChakraButton,
-   Flex,
-   
-} from "@chakra-ui/react";
+import { Button as ChakraButton, Flex} from "@chakra-ui/react";
 
 import {  CustomLinkWithLocalIcon  } from "../../components/LinkTextButton.jsx"
 import {  
@@ -90,13 +81,22 @@ useEffect(() => {
       console.error('Error fetching NFT:', error);
     }
   };
-
-  
+ 
   // Call the fetch functions when component mounts
   fetchUSDrate();
    
 }, []);
    
+const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+ 
+  useEffect(() => {
+     const handleResize = () => { setScreenWidth(window.innerWidth);};
+     window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
 
  useEffect(() => {
@@ -127,28 +127,12 @@ useEffect(() => {
  }, [contractAddress, tokenId]);
  
           const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
- 
-           /*
-           const { data: directListing, isLoading: loadingDirectListing } = 
-           useValidDirectListings(marketplace, {
-               tokenContract: contractAddress, 
-               tokenId: tokenId,// nft?.metadata.id,
-           });
-          */
-           /*
-           const { data: auctionListing, isLoading: loadingAuction } =
-           // useValidEnglishAuctions(marketplace, {
-            useEnglishAuctions(marketplace, {
-               tokenContract: contractAddress,
-               tokenId: tokenId,// nft?.metadata.id,
-           });
-          */
-
+            
           const [bidValue, setBidValue] = useState();
  
            useEffect(() => {
 
-            console.log(' USEEFTTECT   auctionListing', auctionListing ,  " for tokenId" , tokenId );
+        //    console.log(' USEEFTTECT   auctionListing', auctionListing ,  " for tokenId" , tokenId );
              if (!auctionListing)return;
             const fetchNFT = async () => {
             
@@ -159,6 +143,9 @@ useEffect(() => {
                     if (element.id === auctionId ){
                        
                         setAuctionData(element);
+
+                        console.log("auctionData      =   "   ,  element);
+
                     }
                    });
                  // 
@@ -177,23 +164,23 @@ useEffect(() => {
 //=======================================================================
           useEffect(() => {
 
-            console.log(' USEEFTTECT   listingData', directListings ,  " for tokenId" , tokenId );
+          //  console.log(' USEEFTTECT   listingData', directListings ,  " for tokenId" , tokenId );
             if (!directListings)return;
            const fetchNFT = async () => {
            
              try {
               
               directListings.forEach(element => {
-                console.log(' element.id  ', element.id ,  "listingId", listingId);      
+             //   console.log(' element.id  ', element.id ,  "listingId", listingId);      
                    if (element.id === listingId ){
                     
                       setListingData(element);
 
-                      console.log(' MATCH listingData', listingData);
-                      
+                     // console.log(' MATCH listingData', listingData);
+                     console.log("listingData      =   "   ,  listingData); 
                    }
                   });
-                // 
+                  
         
              } catch (error) {
                console.error('Error fetching NFT:', error);
@@ -229,8 +216,7 @@ useEffect(() => {
        let txResult;
 
 
-         console.log("auctionData      =   "   ,  auctionData);
-         console.log("listingData      =   "   ,  listingData);
+       
 
        //Add for auction section
        if (auctionData !== null ) {
@@ -322,7 +308,85 @@ useEffect(() => {
      return result ;
  }
  
+ if ( screenWidth < 600   ){
+    if(!nft  ){
+      return (<div></div>)
+
+    }else{
+
+
+      return (
+
+      <React.Fragment>
+          <BasicScrollable>
+              <Container maxWidth="lg">
+        {
+        
+        auctionData || listingData || listingType === "not_for_sale" ? ( 
+
+        <div>
+            <Box display="flex" flexDirection="column" gap={  mainContainerPagePad }  padding={ mainContainerPagePad }>
+      
+            <Box display="flex" flexDirection="row" gap={mainContainerPagePad}>
+                <Box flex="1" flexDirection="column"  >
+                  <Box flex="1">
+              
+                  <DisplayNFTimage nft={nft} />
+                  </Box>
+        
+                      <VerticalSpace space={2}/>
+                      <IDBox colors = {colors}  tokenId = {tokenId}/> 
+                       
+              
+                </Box>
+           </Box>
+
+
+
+
+           {/* ========================================================================== */}
+           {/* ========================================================================== */}
+
+            <NFTInfoBlock 
+            
+               theme={theme} tokenId={tokenId} listingData={listingData} colors={colors} auctionData={auctionData} 
+               SalesEndText={SalesEndText} 
+               currentListing={currentListing} ethToUsdRate={ethToUsdRate} 
+               setBidValue={setBidValue} bidValue={bidValue} createBidOffer={createBidOffer}
+               buyListing={buyListing} navigate={navigate} nft={ nft } listingId={listingId} auctionId={auctionId}
+               screenWidth={screenWidth}
+
+          />
+
+
+            {/* ========================================================================== */}
+            {/* ========================================================================== */}
+
+
+
+
+
+         </Box>
   
+ 
+ 
+
+       </div>
+        ):(
+          <p> Token listing loading </p>
+        )
+          }
+                      </Container>
+                        </BasicScrollable>
+                </React.Fragment>
+        ) 
+
+      }
+ }
+
+ if ( screenWidth > 599   ){
+
+  // non mobile
    if(!nft  ){
        return (<div></div>)
 
@@ -331,16 +395,14 @@ useEffect(() => {
     
        return (
 
-        <React.Fragment>
-            <BasicScrollable>
-               <Container maxWidth="lg">
-          {
-        // !loadingDirectListing && !loadingAuction ? (
+        <React.Fragment>   <BasicScrollable>   <Container maxWidth="lg">
+         {
+         
          auctionData || listingData || listingType === "not_for_sale" ? ( 
 
           <div>
-             <Box display="flex" flexDirection="column" gap={  mainContainerPagePad }  padding={ mainContainerPagePad }>
-       {/* Nested Flex Container for First Two Blocks */}
+           <Box display="flex" flexDirection="column" gap={  mainContainerPagePad }  padding={ mainContainerPagePad }>
+        {/* Nested Flex Container for First Two Blocks */}
        <Box display="flex" flexDirection="row" gap={  mainContainerPagePad }>
           {/* First Block (40%) */}
 
@@ -351,25 +413,34 @@ useEffect(() => {
            <DisplayNFTimage nft={nft} />
         </Box>
         <VerticalSpace space={2}/>
-        <Box flex="1"   >
+
+
+          {/* ================================================================== */}
+          <Box flex="1"   >
           <RoundedBox  backgroundColor= {colors.primary[600]}>
 
           <Box padding={_mainBoxPadding}  > 
            <VerticalStackAlignLeft>
  
              <Typography variant = "h5"  fontWeight={600} >#{ tokenId}</Typography>
-             <Typography variant = "h5"  fontWeight={600} >#{ tokenId}</Typography>
+            
 
           </VerticalStackAlignLeft>
+            </Box>
+           </RoundedBox>
+        </Box>
 
-           </Box>
-          </RoundedBox>
-       </Box>
+        {/* ========================================================================== */}
 
         </Box>
 
- {/* Nested Flex Container for Second and Third Blocks */}
-     <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
+
+
+ {/* ========================================================================== */}
+  {/* ========================================================================== */}
+
+         {/* Nested Flex Container for Second and Third Blocks */}
+          <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
 
 
         {/* right title block 1 title */}
@@ -381,15 +452,38 @@ useEffect(() => {
               <VerticalSpace space={1}/>
         
                 <RowChildrenAlignLeft>
-                  <Typography color={colors.grey[ text2.color ]} >listing ID</Typography>
+                 
+                  {listingData ? (  
+                      <Typography color={colors.grey[ text2.color ]} > listing ID </Typography>
+                   ):(
+                    <Typography color={colors.grey[ text2.color ]} > Auction ID </Typography>
+                   )}
+                    
                   <HorizontalSpace space={1}/> 
-                  <Typography> {listingData?.id}</Typography>
+                  {listingData ? (  
+                       <Typography> {listingData?.id}</Typography>
+                   ):(
+                        <Typography> {auctionData?.id}</Typography>
+                   )}
+                
         
                   <HorizontalSpace space={1}/> 
-                  <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography>
-                  <HorizontalSpace space={1}/> 
-                  <Typography color={colors.grey[ text2.color ]} > {`Supply: ${listingData?.quantity}`}</Typography>
                   
+                  
+                  {listingData ? (  
+                         <React.Fragment>
+                          {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
+                          <HorizontalSpace space={1}/> 
+                          <Typography color={colors.grey[ text2.color ]} > {`Supply: ${listingData?.quantity}`}</Typography>
+                        </React.Fragment>
+                       
+                   ):(
+                      <React.Fragment>
+                        {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
+                        <HorizontalSpace space={1}/> 
+                        <Typography color={colors.grey[ text2.color ]} > {`Supply: ${auctionData?.quantity}`}</Typography>
+                      </React.Fragment>
+                   )}
 
                   </RowChildrenAlignLeft>
         
@@ -398,7 +492,13 @@ useEffect(() => {
         
                 <Typography variant ="h5"> Current Owner </Typography>
                 <HorizontalSpace space={1} /> 
-                <CustomLinkWithLocalIcon   to={`/profile/${nft.owner}`} text= { addressShortened(nft.owner) }   tooltipText={"visit owner's profile"}/>
+                
+                {listingData ? (  
+                  <CustomLinkWithLocalIcon   to={`/profile/${listingData?.creatorAddress}`} text= { addressShortened(listingData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
+                ):(
+                   <CustomLinkWithLocalIcon   to={`/profile/${auctionData?.creatorAddress}`} text= { addressShortened(auctionData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
+                  )}
+                
                 </RowChildrenAlignLeft>   
         
                 </VerticalStackAlignLeft>
@@ -409,7 +509,7 @@ useEffect(() => {
 
      <VerticalSpace space={2}/> 
  
-    {/* sale price part  */}
+      {/* sale price part  */}
         <Box flex="1"  > 
         <RoundedBox  backgroundColor= {colors.primary[600]}>
      
@@ -431,7 +531,9 @@ useEffect(() => {
       <VerticalStackAlign padding={_mainBoxPadding}  expand={true} >
         <NftPriceBlock listingData={listingData}  auctionData={auctionData} ethToUsdRate={ethToUsdRate}  />
          <VerticalSpace space={2}/>
-                   
+
+         
+
             { auctionData ? (
                 <RowChildrenAlignLeft expand={true}>
                   <TextField onChange={(e) => setBidValue(e.target.value)}
@@ -453,11 +555,7 @@ useEffect(() => {
                         Place Bid
                     </Web3Button>
                     <HorizontalSpace space={1}/>
-                     
-
-
-
-
+                    
 
                     <Web3Button 
  
@@ -479,27 +577,11 @@ useEffect(() => {
 
  >
       Buy at asking price
- </Web3Button>
+       </Web3Button>
+   
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                </RowChildrenAlignLeft>
-            ):(
+       </RowChildrenAlignLeft>
+             ):(
                 
                 <RowChildrenAlignTop>  
 
@@ -546,10 +628,10 @@ useEffect(() => {
                     Make Offer
                     </Web3Button>  
                 </RowChildrenAlignTop>     
-         )}     
+            )}     
 
-        </VerticalStackAlign>
-    </RowChildrenAlignLeft>
+   </VerticalStackAlign>
+      </RowChildrenAlignLeft>
    
         </RoundedBox>
         </Box>
@@ -565,6 +647,23 @@ useEffect(() => {
  
            </Box>
           </Box>
+
+
+ 
+
+
+{/* ========================================================================== */}
+{/* ========================================================================== */}
+
+
+
+
+
+
+
+
+
+
          </Box>
  
           <Box>
@@ -577,15 +676,364 @@ useEffect(() => {
             <p> Token listing loading </p>
          )
            }
-                </Container>
-            </BasicScrollable>
-         </React.Fragment>
-         ) 
+                        </Container>
+                    </BasicScrollable>
+             </React.Fragment>
+        ) 
+ 
+   }
+
+
+  }
+
+  };
+
+
+ export function MainButtonAndPriceField (  { 
+  setBidValue, auctionData, bidValue, createBidOffer, colors,
+  buyListing,  listingData,
+
+  screenWidth
+
+}  ){
+     
+   return(
+
+
+      <React.Fragment>    
+            
+                  
+
+     { auctionData ? (
+
+       <React.Fragment> 
+       {screenWidth < 600 ? (  
+                    <VerticalStackAlign  >
+
+                  <TextField onChange={(e) => setBidValue(e.target.value)}
+                      style={{ minWidth: '50px',height: buttonStyle._buttonHeight }} variant="outlined" label="Minimum Bid" type="number" value={bidValue}  
+                  />  
+                    <VerticalSpace space={1}/>
+
+                    
+
+                    <RowChildrenAlignLeft expand={true}>
+                    <HorizontalSpace space={1}/>
+                    <ButtonCreateBidOffer  
+                      colors = {colors} listingType = {auctionData} createBidOffer = {createBidOffer} buttonText={"Place Bid"} 
+                    /> 
+                  <HorizontalSpace space={1}/>
+                  <ButtonAuctionBuy  colors = {colors}  buyListing = {buyListing}  auctionData = {auctionData} /> 
+                  </RowChildrenAlignLeft>
+
+                  </VerticalStackAlign  >
+         
+
+           ):(
+            <RowChildrenAlignLeft expand={true}>
+            <TextField onChange={(e) => setBidValue(e.target.value)}
+              style={{ minWidth: '50px',height: buttonStyle._buttonHeight }} variant="outlined" label="Minimum Bid" type="number" value={bidValue}  
+            /> 
+            <HorizontalSpace space={1}/>
+            <ButtonCreateBidOffer  
+              colors = {colors} listingType = {auctionData} createBidOffer = {createBidOffer} buttonText={"Place Bid"} 
+            /> 
+          <HorizontalSpace space={1}/>
+          <ButtonAuctionBuy  colors = {colors}  buyListing = {buyListing}  auctionData = {auctionData} /> 
+          </RowChildrenAlignLeft>
+                
+            
+            ) 
+        }
+        </React.Fragment> 
+
+        ):(
+            
+            <RowChildrenAlignTop>  
+               <ButtonListingBuy/>
+ 
+                <HorizontalSpace space={1}/>   
+                <ButtonCreateBidOffer  
+                  colors = {colors}  
+                  listingType = {listingData} 
+                  createBidOffer = {createBidOffer} 
+                  buttonText={"Make Offer"}
+                /> 
+                
+            </RowChildrenAlignTop>     
+        )}     
+          
+
+          
+           
+      </React.Fragment>
+
+
+   )
+
+ }
+
+ 
+ function ButtonListingBuy (   {colors,   buyListing, listingData   }){
+
+  const navigate = useNavigate ();
+   
+  return (
+
+     <React.Fragment>  
+                 <Web3Button 
+
+
+className="tw-web3button--connect-wallet"
+style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
+contractAddress={MARKETPLACE_ADDRESS}
+action={async () => buyListing()}
+
+onSuccess={async (txResult) => {
+  // should to "NFT OWNED " page  
+  navigate(`/sell`);
+  
+}}
+
+
+
+isDisabled={( !listingData) }
+
+>
+    Buy at asking price
+</Web3Button>
+        
+           
+     </React.Fragment>
+
+  )
+ }
+ function ButtonAuctionBuy (   {colors,   buyListing, auctionData   }){
+
+  const navigate = useNavigate ();
+   
+  return (
+
+     <React.Fragment>  
+                 <Web3Button 
+ 
+                      className="tw-web3button--connect-wallet"
+                      style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
+                      contractAddress={MARKETPLACE_ADDRESS}
+                      action={async () => buyListing()}
+
+                      onSuccess={async (txResult) => {
+                      // should to "NFT OWNED " page  
+                      navigate(`/sell`);
+
+                      }}
+ 
+                      isDisabled={( !auctionData) }
+
+                      >
+                      Buy at asking price
+                </Web3Button>
+        
+           
+     </React.Fragment>
+
+  )
+ }
+
+
  
 
+ function ButtonCreateBidOffer({colors, listingType, createBidOffer  ,  buttonText 
 
-     }
-  };
+  
+
+  }){
+
+
+    return (
+      <Web3Button
+                  
+      contractAddress={MARKETPLACE_ADDRESS} 
+      action={async () => await createBidOffer()}  isDisabled={!listingType}
+
+      className="tw-web3button--connect-wallet" 
+      style={{ backgroundColor:colors.blueAccent[buttonStyle.colorBlue], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
+
+      
+  >
+      {buttonText}
+  </Web3Button>
+
+    )
+ }
+
+  function NFTInfoBlock( {
+    theme, tokenId, listingData, colors, auctionData, SalesEndText,
+    currentListing, ethToUsdRate, setBidValue, bidValue, createBidOffer,
+    buyListing ,navigate, nft , listingId, auctionId , screenWidth 
+  
+  } ){
+ 
+     return ( 
+
+                <React.Fragment>  
+                     <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
+          
+{/* right title block 1 title */}
+<Box flex="1" >
+
+ <Box  padding={mainContainerPagePad}>
+ 
+ <VerticalStackAlignLeft>
+
+
+     <Typography variant = "h2"  fontWeight={600} >#{ tokenId}</Typography>
+         <VerticalSpace space={1}/>
+         <RowChildrenAlignLeft>
+         
+           {listingData ? (  
+               <Typography color={colors.grey[ text2.color ]} > listing ID </Typography>
+           ):(
+             <Typography color={colors.grey[ text2.color ]} > Auction ID </Typography>
+           )}
+           <HorizontalSpace space={1}/> 
+           {listingData ? (  
+               <Typography> {listingData?.id}</Typography>
+           ):(
+                 <Typography> {auctionData?.id}</Typography>
+           )}
+
+           <HorizontalSpace space={1}/> 
+           
+           {listingData ? (  
+                 <React.Fragment>
+                   {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
+                   <HorizontalSpace space={1}/> 
+                   <Typography color={colors.grey[ text2.color ]} > {`Supply: ${listingData?.quantity}`}</Typography>
+                 </React.Fragment>
+           ):(
+               <React.Fragment>
+                 {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
+                 <HorizontalSpace space={1}/> 
+                 <Typography color={colors.grey[ text2.color ]} > {`Supply: ${auctionData?.quantity}`}</Typography>
+               </React.Fragment>
+           )}
+           </RowChildrenAlignLeft>
+
+           <RowChildrenAlignLeft>
+
+         <Typography variant ="h5"> Current Owner </Typography>
+         <HorizontalSpace space={1} /> 
+         
+         {listingData ? (  
+           <CustomLinkWithLocalIcon   to={`/profile/${listingData?.creatorAddress}`} text= { addressShortened(listingData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
+         ):(
+           <CustomLinkWithLocalIcon   to={`/profile/${auctionData?.creatorAddress}`} text= { addressShortened(auctionData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
+           )}
+         
+           </RowChildrenAlignLeft>   
+
+</VerticalStackAlignLeft>
+</Box>
+</Box>
+
+
+{/* right title block 1 title */}
+<VerticalSpace space={2}/> 
+
+{/* sale price part  */}
+<Box flex="1"  > 
+<RoundedBox backgroundColor= {colors.primary[600]}  padding={ mainContainerPagePad } >
+
+<Box padding={_mainBoxPadding}  >
+<div>
+
+<Typography color={colors.grey[ text2.color ]} variant ="h4">    { SalesEndText() }    </Typography>
+<VerticalSpace space={1}/>
+<CountdownTimerWithArg  startTime={ currentListing().startTimeInSeconds}  endTime={ currentListing().endTimeInSeconds} color={colors.grey[ text2.color ]}/> 
+</div>
+
+</Box>
+
+<VerticalSpace space={0.5}/>
+<Divider orientation="horizontal" style={{ height: "1px", width: '100%' }} />
+
+
+<RowChildrenAlignLeft>
+<VerticalStackAlign padding={_mainBoxPadding}  expand={true} >
+<NftPriceBlock listingData={listingData}  auctionData={auctionData} ethToUsdRate={ethToUsdRate}  />
+<VerticalSpace space={2}/>
+
+       
+     
+    <MainButtonAndPriceField    
+         setBidValue ={setBidValue}  auctionData ={auctionData}  bidValue={bidValue}
+         createBidOffer={createBidOffer} colors={colors}
+         buyListing={buyListing} navigate={navigate} listingData={listingData}
+         screenWidth={screenWidth}
+       
+      />  
+      
+  
+
+
+
+
+</VerticalStackAlign>
+</RowChildrenAlignLeft>
+
+</RoundedBox>
+</Box>
+
+<VerticalSpace space={2}/> 
+<Box    > 
+
+{listingData ? (
+<ShowAuction nft={ nft }   listingId={listingId}  title = {"Direct listing"}  />
+):(
+<ShowAuction nft={ nft }   auctionId={auctionId}  title = {"Auction"}  />
+)}
+
+</Box>
+</Box>
+                      
+ 
+                </React.Fragment>
+
+
+       )
+
+  }
+
+  export function IDBox( {colors ,tokenId }){
+
+
+    // const theme = useTheme();
+    // const colors = tokens(theme.palette.mode);
+
+      return (  
+
+          <React.Fragment>  
+                <Box flex="1"   >
+                <RoundedBox  backgroundColor= {colors.primary[600]}>
+                  <Box padding={_mainBoxPadding}  > 
+                <VerticalStackAlignLeft>
+      
+                  <Typography variant = "h5"  fontWeight={600} >#{ tokenId}</Typography>
+                  
+
+                </VerticalStackAlignLeft>
+                  </Box>
+                </RoundedBox>
+              </Box>
+
+              
+               
+
+          </React.Fragment>   
+      )
+
+  }
 
 export default TokenDetailsByID;
 
@@ -600,7 +1048,7 @@ function NftPriceBlock (   {
         
        <Typography color={colors.grey[ text2.color ]} >Current price: </Typography>
    
-          {listingData ? (
+          {listingData ? ( 
 
         <RowChildrenAlignLeftBottom>
            <Typography color={colors.grey[ text1.color ]}

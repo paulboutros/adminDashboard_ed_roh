@@ -2,8 +2,12 @@
 import  { addressShortened, hexToDaysAgo, hexToReadableTimestamp
 } from "../utils.js"
 import { convertEthToUsd } from "../data/API.js";
+import {ABI} from "../data/marketPlaceABI.js";
+import { ethers } from "ethers";
+import { MARKETPLACE_ADDRESS  } from "../const/addresses.ts"
 
- 
+
+
 let ethToUsdRate;
   function GetFromVAlue( element , eventName  ){
     let amountHex;
@@ -163,7 +167,25 @@ export async function  GetContractName (contract , nft, auctionIdArg ,listingId,
    // auctionIdArg=1;
     const events = await contract.events.getAllEvents();
     //const eventNames = events.map(event => event.eventName);
-    
+     
+
+
+    /*
+    // sometimes Thirdweb SDK has issues, in that case use ether library....
+    const contractEE = new ethers.Contract(MARKETPLACE_ADDRESS, ABI); //<< this works
+    const events = await contract.getPastEvents('Transfer', { // << this is untested
+      fromBlock: 12345678, // start from this block number
+      toBlock: 'latest', // go up to the latest block
+    });
+    */
+
+
+    // Process the events
+    events.forEach((event) => {
+     // console.log(`Event: ${event.event}, data: ${JSON.stringify(event.args)}`);
+    });
+
+    //console.log( "events = " , events);
      
     // to make sure it is defined once
     if (ethToUsdRate === undefined){
@@ -179,17 +201,17 @@ export async function  GetContractName (contract , nft, auctionIdArg ,listingId,
    
     for (let i = 0; i < events.length; i++) {
         const element = events[i];
-        const eventName = element.eventName;
+        let eventName = element.eventName;
        
        // const ethValue = GetEtherValue(element , eventName); 
         const cellData = GetFromVAlue(element , eventName); 
        // const USDPrice = ethValue * ethToUsdRate; 
          
      //   const bidder = addressShortened(element.data.bidder) ;
-         
+     if ( eventName === ""){eventName ="wrong network"}    
         const data ={
             id:index,
-            eventName: `${element.eventName} [${index}]`,// eventName, 
+            eventName: `${eventName} [${index}]`,// eventName, 
             
             from : cellData.from,
             to   : cellData.to,

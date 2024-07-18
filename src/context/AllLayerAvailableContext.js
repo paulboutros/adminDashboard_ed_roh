@@ -207,7 +207,8 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
 
      const ownedNFT =ownedNftData[i];
       if  ( !ownedNFT.metadata.attributes ){  
-        // console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  "); continue; 
+        // console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  ");
+         continue; 
         
         }
      
