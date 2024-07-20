@@ -1,26 +1,19 @@
  
 
-import {  TextField ,   Box,   Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
+import {    Box,   Divider,  Typography, useTheme /*, Skeleton */ } from "@mui/material";
 
- import {CountdownTimerWithArg} from "../../components/CountdownTimer.jsx"
+import {CountdownTimerWithArg} from "../../components/CountdownTimer.jsx"
 import  { convertSecondsToDateString,   addressShortened  } from "../../utils.js"
 //https://chakra-ui.com/docs/components/button
-import {   ThirdwebNftMedia, Web3Button, useContract,useContractEvents } from "@thirdweb-dev/react";
+import {     useContract,useContractEvents } from "@thirdweb-dev/react";
 
-import { Button as ChakraButton, Flex} from "@chakra-ui/react";
+//import { Button as ChakraButton, Flex} from "@chakra-ui/react";
 
 import {  CustomLinkWithLocalIcon  } from "../../components/LinkTextButton.jsx"
 import {  
     
-    VerticalStackAlignLeft,  RowChildrenAlignTop,VerticalStackAlign,
-    
-    RowChildrenAlignLeft,RowChildrenAlignLeftBottom,
-    
-    VerticalSpace,
-     RoundedBox,
-     
-     HorizontalSpace, 
-     BasicScrollable
+    VerticalStackAlignLeft,   VerticalStackAlign, RowChildrenAlignLeft, VerticalSpace, RoundedBox,HorizontalSpace,
+      
       
    } from "../../components/Layout.jsx"  
 
@@ -28,7 +21,7 @@ import {
    MARKETPLACE_ADDRESS,
    
 } from "../../const/addresses.ts";
- import {text2, text1, tokens, buttonStyle, mainContainerPagePad } from "../../theme.js";
+ import {text2,   tokens,  mainContainerPagePad } from "../../theme.js";
   import { getSDK_fromPrivateKey, convertEthToUsd } from "../../data/API.js";
  import ShowAuction from "../../components/TokenPageBoards/ShowAuction.jsx";
  import Activity from "../../components/TokenPageBoards/Activity.jsx"
@@ -36,12 +29,14 @@ import {
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams } from 'react-router-dom';
   
-import styles from "../../styles/NFT.module.css";
+//import styles from "../../styles/NFT.module.css";
 import { useAllListingsContext } from "../../context/AllListingContext.js";
 import Container from "../../components/Container/Container.jsx";
+import { ButtonLarge, DisplayNFTimage, MainButtonAndPriceField, NftPriceBlock } from "./MarketListingButtons.jsx";
+import { Flex } from "@chakra-ui/react";
 
 
-
+  const screenWidthThreshold =1050;
  const _mainBoxPadding = 3;
  const TokenDetailsByID =  ({  propContractAddress,  propTokenId,  displayMode  } ) => {
 
@@ -63,8 +58,7 @@ import Container from "../../components/Container/Container.jsx";
  
 
  const { directListings, auctionListing } = useAllListingsContext(); 
-   
-
+ 
   
  const [ ethToUsdRate, setEthToUsdRate ] = useState(0); 
 useEffect(() => {
@@ -81,8 +75,7 @@ useEffect(() => {
       console.error('Error fetching NFT:', error);
     }
   };
- 
-  // Call the fetch functions when component mounts
+   // Call the fetch functions when component mounts
   fetchUSDrate();
    
 }, []);
@@ -199,39 +192,20 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
            const { data: transferEvents, isLoading: loadingTransferEvents } =
            
            useContractEvents(marketplace, "NewBid", {
-        //   useContractEvents(nftCollection, "Transfer", {
-               queryFilter: {
-               filters: {
-                   tokenId: nft?.metadata.id,
-               },
-               order: "desc",
-               },
+                queryFilter: { filters: { tokenId: nft?.metadata.id,  }, order: "desc",},
+                
            });           
-
-
-
-
+ 
     
    async function buyListing() {
        let txResult;
-
-
-       
+ 
 
        //Add for auction section
        if (auctionData !== null ) {
-
-        console.log("     auctionData.id  =   "    ,  auctionData.id   );
-
-
-           txResult = await marketplace?.englishAuctions.buyoutAuction(
-               auctionData.id
-           );
-           
-
-           console.log("   auctionData.id   >>>>>>>  txResult         =   "   ,    txResult );
-
-
+ 
+           txResult = await marketplace?.englishAuctions.buyoutAuction(  auctionData.id );
+ 
        } else if (listingData){
            txResult = await marketplace?.directListings.buyFromListing(
                listingData.id,
@@ -240,11 +214,7 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
        } else {
            throw new Error("No listing found");
        }
-
-
-       console.log(">>>>>>>   =   "   , txResult);
-
-
+ 
        return txResult;
    }
  
@@ -302,13 +272,14 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     }else{
 
       result =  "Sales ends" +  convertSecondsToDateString(  currentListing().endTimeInSeconds )  ;
-
-    }
+     }
     
      return result ;
  }
  
- if ( screenWidth < 600   ){
+ if ( screenWidth < screenWidthThreshold   ){
+
+    let mainPadding = "2px";
     if(!nft  ){
       return (<div></div>)
 
@@ -318,31 +289,25 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
       return (
 
       <React.Fragment>
-          <BasicScrollable>
+          
               <Container maxWidth="lg">
         {
         
         auctionData || listingData || listingType === "not_for_sale" ? ( 
 
         <div>
-            <Box display="flex" flexDirection="column" gap={  mainContainerPagePad }  padding={ mainContainerPagePad }>
+            <Box display="flex" flexDirection="column" gap={  mainPadding }  padding={ mainPadding }>
       
-            <Box display="flex" flexDirection="row" gap={mainContainerPagePad}>
-                <Box flex="1" flexDirection="column"  >
-                  <Box flex="1">
-              
-                  <DisplayNFTimage nft={nft} />
-                  </Box>
-        
-                      <VerticalSpace space={2}/>
-                      <IDBox colors = {colors}  tokenId = {tokenId}/> 
-                       
-              
+                <Box display="flex" flex="1" flexDirection="column"  >
+                  
+                       <DisplayNFTimage nft={nft} />
                 </Box>
-           </Box>
+           
 
 
-
+            <NFTInfoBlock0
+              theme={theme} tokenId={tokenId} listingData={listingData} colors={colors} auctionData={auctionData} 
+              /> 
 
            {/* ========================================================================== */}
            {/* ========================================================================== */}
@@ -356,20 +321,17 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
                buyListing={buyListing} navigate={navigate} nft={ nft } listingId={listingId} auctionId={auctionId}
                screenWidth={screenWidth}
 
+               _padding="0"
+
           />
 
 
             {/* ========================================================================== */}
             {/* ========================================================================== */}
-
-
-
-
+ 
 
          </Box>
   
- 
- 
 
        </div>
         ):(
@@ -377,14 +339,14 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
         )
           }
                       </Container>
-                        </BasicScrollable>
+                        
                 </React.Fragment>
         ) 
 
       }
  }
 
- if ( screenWidth > 599   ){
+ if ( screenWidth > screenWidthThreshold-1   ){
 
   // non mobile
    if(!nft  ){
@@ -395,7 +357,7 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     
        return (
 
-        <React.Fragment>   <BasicScrollable>   <Container maxWidth="lg">
+        <React.Fragment>     <Container maxWidth="lg">
          {
          
          auctionData || listingData || listingType === "not_for_sale" ? ( 
@@ -428,7 +390,7 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
           </VerticalStackAlignLeft>
             </Box>
            </RoundedBox>
-        </Box>
+         </Box>
 
         {/* ========================================================================== */}
 
@@ -439,72 +401,13 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
  {/* ========================================================================== */}
   {/* ========================================================================== */}
 
-         {/* Nested Flex Container for Second and Third Blocks */}
-          <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
+      {/* Nested Flex Container for Second and Third Blocks */}
+      <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
 
 
-        {/* right title block 1 title */}
-        <Box flex="1"    >
-           
-              <Box  padding={0}  >
-              <VerticalStackAlignLeft>
-              <Typography variant = "h2"  fontWeight={600} >#{ tokenId}</Typography>
-              <VerticalSpace space={1}/>
-        
-                <RowChildrenAlignLeft>
-                 
-                  {listingData ? (  
-                      <Typography color={colors.grey[ text2.color ]} > listing ID </Typography>
-                   ):(
-                    <Typography color={colors.grey[ text2.color ]} > Auction ID </Typography>
-                   )}
-                    
-                  <HorizontalSpace space={1}/> 
-                  {listingData ? (  
-                       <Typography> {listingData?.id}</Typography>
-                   ):(
-                        <Typography> {auctionData?.id}</Typography>
-                   )}
-                
-        
-                  <HorizontalSpace space={1}/> 
-                  
-                  
-                  {listingData ? (  
-                         <React.Fragment>
-                          {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
-                          <HorizontalSpace space={1}/> 
-                          <Typography color={colors.grey[ text2.color ]} > {`Supply: ${listingData?.quantity}`}</Typography>
-                        </React.Fragment>
-                       
-                   ):(
-                      <React.Fragment>
-                        {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
-                        <HorizontalSpace space={1}/> 
-                        <Typography color={colors.grey[ text2.color ]} > {`Supply: ${auctionData?.quantity}`}</Typography>
-                      </React.Fragment>
-                   )}
-
-                  </RowChildrenAlignLeft>
-        
-        
-                <RowChildrenAlignLeft>
-        
-                <Typography variant ="h5"> Current Owner </Typography>
-                <HorizontalSpace space={1} /> 
-                
-                {listingData ? (  
-                  <CustomLinkWithLocalIcon   to={`/profile/${listingData?.creatorAddress}`} text= { addressShortened(listingData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
-                ):(
-                   <CustomLinkWithLocalIcon   to={`/profile/${auctionData?.creatorAddress}`} text= { addressShortened(auctionData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
-                  )}
-                
-                </RowChildrenAlignLeft>   
-        
-                </VerticalStackAlignLeft>
-                
-            </Box>
-         </Box>
+      <NFTInfoBlock0
+              theme={theme} tokenId={tokenId} listingData={listingData} colors={colors} auctionData={auctionData} 
+        /> 
  
 
      <VerticalSpace space={2}/> 
@@ -533,102 +436,10 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
          <VerticalSpace space={2}/>
 
          
-
-            { auctionData ? (
-                <RowChildrenAlignLeft expand={true}>
-                  <TextField onChange={(e) => setBidValue(e.target.value)}
-                  style={{ minWidth: '50px',  height: buttonStyle._buttonHeight }} 
-                      variant="outlined"  label="Minimum Bid" type="number" value={bidValue}  
-                    /> 
-                      <HorizontalSpace space={1}/>
-                      
-                    <Web3Button
-                      
-                        contractAddress={MARKETPLACE_ADDRESS} 
-                        action={async () => await createBidOffer()}  isDisabled={!auctionData}
-
-                        className="tw-web3button--connect-wallet" 
-                        style={{ backgroundColor:colors.blueAccent[buttonStyle.colorBlue], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
- 
-                        
-                    >
-                        Place Bid
-                    </Web3Button>
-                    <HorizontalSpace space={1}/>
-                    
-
-                    <Web3Button 
- 
-
- className="tw-web3button--connect-wallet"
- style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
- contractAddress={MARKETPLACE_ADDRESS}
- action={async () => buyListing()}
-
- onSuccess={async (txResult) => {
-   // should to "NFT OWNED " page  
-   navigate(`/sell`);
-    
- }}
-
-
-
- isDisabled={( !auctionData) }
-
- >
-      Buy at asking price
-       </Web3Button>
-   
-
-       </RowChildrenAlignLeft>
-             ):(
-                
-                <RowChildrenAlignTop>  
-
-                    <Web3Button 
- 
-
-                    className="tw-web3button--connect-wallet"
-                    style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-                    contractAddress={MARKETPLACE_ADDRESS}
-                    action={async () => buyListing()}
-
-                    onSuccess={async (txResult) => {
-                      // should to "NFT OWNED " page  
-                      navigate(`/sell`);
-                       
-                    }}
-  
-
-
-                    isDisabled={( !listingData) }
- 
-                    >
-                         Buy at asking price
-                    </Web3Button>
-
-
-
-
-
-
-                     <HorizontalSpace space={1}/>    
-                    <Web3Button
-                    contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!listingData}
-                    className="tw-web3button--connect-wallet" 
-                    style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-              
-                      onSuccess={async (txResult) => {
-                        // should to "NFT OWNED " page  
-                        navigate(`/sell`);
-                         
-                      }}
-              
-                   >
-                    Make Offer
-                    </Web3Button>  
-                </RowChildrenAlignTop>     
-            )}     
+        <ButtonLarge 
+            auctionData={auctionData} setBidValue = {setBidValue}  bidValue ={bidValue} buyListing ={buyListing}listingData={listingData}
+             createBidOffer={createBidOffer}
+          />
 
    </VerticalStackAlign>
       </RowChildrenAlignLeft>
@@ -636,38 +447,23 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
         </RoundedBox>
         </Box>
 
-        <VerticalSpace space={2}/> 
-        <Box    > 
+             <VerticalSpace space={2}/> 
+                
             
-       {listingData ? (
-          <ShowAuction nft={ nft }   listingId={listingId}  title = {"Direct listing"}  />
-       ):(
-          <ShowAuction nft={ nft }   auctionId={auctionId}  title = {"Auction"}  />
-       )}
+              {listingData ? (
+                  <ShowAuction nft={ nft }   listingId={listingId}  title = {"Direct listing"}  />
+              ):(
+                  <ShowAuction nft={ nft }   auctionId={auctionId}  title = {"Auction"}  />
+              )}
  
-           </Box>
+           
           </Box>
-
-
- 
-
-
-{/* ========================================================================== */}
-{/* ========================================================================== */}
-
-
-
-
-
-
-
-
-
+   
 
          </Box>
  
           <Box>
-           <Activity nft={ nft } listingID={listingId}  /> 
+             <Activity nft={ nft } listingID={listingId}  /> 
           </Box>
           </Box>
  
@@ -677,7 +473,7 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
          )
            }
                         </Container>
-                    </BasicScrollable>
+                   
              </React.Fragment>
         ) 
  
@@ -689,261 +485,103 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   };
 
 
- export function MainButtonAndPriceField (  { 
-  setBidValue, auctionData, bidValue, createBidOffer, colors,
-  buyListing,  listingData,
 
-  screenWidth
+ function NFTInfoBlock0( {
+  theme, tokenId, listingData, colors, auctionData
 
-}  ){
-     
-   return(
+} ){
+
+   return ( 
+
+       <React.Fragment>  
+              <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
+        
+         
+        <Box flex="1" >
+
+        {/* <Box  padding={mainContainerPagePad}> */}
+        <Box padding="20px 20px 0 20px">
+        <VerticalStackAlignLeft>
 
 
-      <React.Fragment>    
-            
+               <Typography variant = "h2"  fontWeight={600} >#{tokenId}</Typography>
+                   <VerticalSpace space={1}/>
+                   <RowChildrenAlignLeft>
+                
+                  {listingData ? (  
+                      <Typography color={colors.grey[ text2.color ]} > listing ID </Typography>
+                  ):(
+                    <Typography color={colors.grey[ text2.color ]} > Auction ID </Typography>
+                  )}
+                  <HorizontalSpace space={1}/> 
+                  {listingData ? (  
+                      <Typography> {listingData?.id}</Typography>
+                  ):(
+                        <Typography> {auctionData?.id}</Typography>
+                  )}
+
+                  <HorizontalSpace space={1}/> 
                   
-
-     { auctionData ? (
-
-       <React.Fragment> 
-       {screenWidth < 600 ? (  
-                    <VerticalStackAlign  >
-
-                  <TextField onChange={(e) => setBidValue(e.target.value)}
-                      style={{ minWidth: '50px',height: buttonStyle._buttonHeight }} variant="outlined" label="Minimum Bid" type="number" value={bidValue}  
-                  />  
-                    <VerticalSpace space={1}/>
-
-                    
-
-                    <RowChildrenAlignLeft expand={true}>
-                    <HorizontalSpace space={1}/>
-                    <ButtonCreateBidOffer  
-                      colors = {colors} listingType = {auctionData} createBidOffer = {createBidOffer} buttonText={"Place Bid"} 
-                    /> 
-                  <HorizontalSpace space={1}/>
-                  <ButtonAuctionBuy  colors = {colors}  buyListing = {buyListing}  auctionData = {auctionData} /> 
+                      {listingData ? (  
+                          <React.Fragment>
+                          {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
+                          <HorizontalSpace space={1}/> 
+                          <Typography color={colors.grey[ text2.color ]} > {`Supply: ${listingData?.quantity}`}</Typography>
+                          </React.Fragment>
+                      ):(
+                      <React.Fragment>
+                        {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
+                        <HorizontalSpace space={1}/> 
+                        <Typography color={colors.grey[ text2.color ]} > {`Supply: ${auctionData?.quantity}`}</Typography>
+                      </React.Fragment>
+                      )}
                   </RowChildrenAlignLeft>
 
-                  </VerticalStackAlign  >
-         
+                  <RowChildrenAlignLeft>
 
-           ):(
-            <RowChildrenAlignLeft expand={true}>
-            <TextField onChange={(e) => setBidValue(e.target.value)}
-              style={{ minWidth: '50px',height: buttonStyle._buttonHeight }} variant="outlined" label="Minimum Bid" type="number" value={bidValue}  
-            /> 
-            <HorizontalSpace space={1}/>
-            <ButtonCreateBidOffer  
-              colors = {colors} listingType = {auctionData} createBidOffer = {createBidOffer} buttonText={"Place Bid"} 
-            /> 
-          <HorizontalSpace space={1}/>
-          <ButtonAuctionBuy  colors = {colors}  buyListing = {buyListing}  auctionData = {auctionData} /> 
-          </RowChildrenAlignLeft>
+                <Typography variant ="h5">Owned by</Typography>
+                <HorizontalSpace space={1} /> 
                 
-            
-            ) 
-        }
-        </React.Fragment> 
-
-        ):(
-            
-            <RowChildrenAlignTop>  
-               <ButtonListingBuy/>
- 
-                <HorizontalSpace space={1}/>   
-                <ButtonCreateBidOffer  
-                  colors = {colors}  
-                  listingType = {listingData} 
-                  createBidOffer = {createBidOffer} 
-                  buttonText={"Make Offer"}
-                /> 
+                {listingData ? (  
+                  <CustomLinkWithLocalIcon   to={`/profile/${listingData?.creatorAddress}`} text= { addressShortened(listingData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
+                ):(
+                  <CustomLinkWithLocalIcon   to={`/profile/${auctionData?.creatorAddress}`} text= { addressShortened(auctionData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
+                  )}
                 
-            </RowChildrenAlignTop>     
-        )}     
-          
+                  </RowChildrenAlignLeft>   
 
-          
-           
-      </React.Fragment>
-
-
-   )
-
- }
-
+        </VerticalStackAlignLeft>
+        </Box>
+        </Box>
  
- function ButtonListingBuy (   {colors,   buyListing, listingData   }){
+ 
+     </Box>
+ 
+                    
 
-  const navigate = useNavigate ();
-   
-  return (
-
-     <React.Fragment>  
-                 <Web3Button 
-
-
-className="tw-web3button--connect-wallet"
-style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-contractAddress={MARKETPLACE_ADDRESS}
-action={async () => buyListing()}
-
-onSuccess={async (txResult) => {
-  // should to "NFT OWNED " page  
-  navigate(`/sell`);
-  
-}}
-
-
-
-isDisabled={( !listingData) }
-
->
-    Buy at asking price
-</Web3Button>
-        
-           
      </React.Fragment>
-
-  )
- }
- function ButtonAuctionBuy (   {colors,   buyListing, auctionData   }){
-
-  const navigate = useNavigate ();
-   
-  return (
-
-     <React.Fragment>  
-                 <Web3Button 
  
-                      className="tw-web3button--connect-wallet"
-                      style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-                      contractAddress={MARKETPLACE_ADDRESS}
-                      action={async () => buyListing()}
+ )
 
-                      onSuccess={async (txResult) => {
-                      // should to "NFT OWNED " page  
-                      navigate(`/sell`);
+}
 
-                      }}
- 
-                      isDisabled={( !auctionData) }
-
-                      >
-                      Buy at asking price
-                </Web3Button>
-        
-           
-     </React.Fragment>
-
-  )
- }
-
-
- 
-
- function ButtonCreateBidOffer({colors, listingType, createBidOffer  ,  buttonText 
-
-  
-
-  }){
-
-
-    return (
-      <Web3Button
-                  
-      contractAddress={MARKETPLACE_ADDRESS} 
-      action={async () => await createBidOffer()}  isDisabled={!listingType}
-
-      className="tw-web3button--connect-wallet" 
-      style={{ backgroundColor:colors.blueAccent[buttonStyle.colorBlue], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-
-      
-  >
-      {buttonText}
-  </Web3Button>
-
-    )
- }
 
   function NFTInfoBlock( {
-    theme, tokenId, listingData, colors, auctionData, SalesEndText,
+    theme,  listingData, colors, auctionData, SalesEndText,
     currentListing, ethToUsdRate, setBidValue, bidValue, createBidOffer,
-    buyListing ,navigate, nft , listingId, auctionId , screenWidth 
+    buyListing ,navigate, nft , listingId, auctionId , screenWidth  
   
   } ){
  
      return ( 
 
-                <React.Fragment>  
-                     <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
-          
-{/* right title block 1 title */}
-<Box flex="1" >
-
- <Box  padding={mainContainerPagePad}>
- 
- <VerticalStackAlignLeft>
-
-
-     <Typography variant = "h2"  fontWeight={600} >#{ tokenId}</Typography>
-         <VerticalSpace space={1}/>
-         <RowChildrenAlignLeft>
-         
-           {listingData ? (  
-               <Typography color={colors.grey[ text2.color ]} > listing ID </Typography>
-           ):(
-             <Typography color={colors.grey[ text2.color ]} > Auction ID </Typography>
-           )}
-           <HorizontalSpace space={1}/> 
-           {listingData ? (  
-               <Typography> {listingData?.id}</Typography>
-           ):(
-                 <Typography> {auctionData?.id}</Typography>
-           )}
-
-           <HorizontalSpace space={1}/> 
+      <React.Fragment>  
+          <Box flex="1" flexDirection="column" gap={ theme.mainContainerPagePad }>
            
-           {listingData ? (  
-                 <React.Fragment>
-                   {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
-                   <HorizontalSpace space={1}/> 
-                   <Typography color={colors.grey[ text2.color ]} > {`Supply: ${listingData?.quantity}`}</Typography>
-                 </React.Fragment>
-           ):(
-               <React.Fragment>
-                 {/* <Typography color={colors.grey[ text2.color ]} > {listingType}</Typography> */}
-                 <HorizontalSpace space={1}/> 
-                 <Typography color={colors.grey[ text2.color ]} > {`Supply: ${auctionData?.quantity}`}</Typography>
-               </React.Fragment>
-           )}
-           </RowChildrenAlignLeft>
-
-           <RowChildrenAlignLeft>
-
-         <Typography variant ="h5"> Current Owner </Typography>
-         <HorizontalSpace space={1} /> 
-         
-         {listingData ? (  
-           <CustomLinkWithLocalIcon   to={`/profile/${listingData?.creatorAddress}`} text= { addressShortened(listingData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
-         ):(
-           <CustomLinkWithLocalIcon   to={`/profile/${auctionData?.creatorAddress}`} text= { addressShortened(auctionData?.creatorAddress) }   tooltipText={"visit owner's profile"}/>
-           )}
-         
-           </RowChildrenAlignLeft>   
-
-</VerticalStackAlignLeft>
-</Box>
-</Box>
-
-
-{/* right title block 1 title */}
-<VerticalSpace space={2}/> 
 
 {/* sale price part  */}
 <Box flex="1"  > 
-<RoundedBox backgroundColor= {colors.primary[600]}  padding={ mainContainerPagePad } >
+<RoundedBox backgroundColor= {colors.primary[600]}  >
 
 <Box padding={_mainBoxPadding}  >
 <div>
@@ -964,21 +602,15 @@ isDisabled={( !listingData) }
 <NftPriceBlock listingData={listingData}  auctionData={auctionData} ethToUsdRate={ethToUsdRate}  />
 <VerticalSpace space={2}/>
 
-       
-     
+      
     <MainButtonAndPriceField    
          setBidValue ={setBidValue}  auctionData ={auctionData}  bidValue={bidValue}
          createBidOffer={createBidOffer} colors={colors}
          buyListing={buyListing} navigate={navigate} listingData={listingData}
-         screenWidth={screenWidth}
+         screenWidth={screenWidth}  screenWidthThreshold={screenWidthThreshold}
        
       />  
-      
-  
-
-
-
-
+ 
 </VerticalStackAlign>
 </RowChildrenAlignLeft>
 
@@ -996,21 +628,22 @@ isDisabled={( !listingData) }
 
 </Box>
 </Box>
-                      
- 
+
+
+<Box>
+             <Activity nft={ nft } listingID={listingId}  /> 
+          </Box>
+
+
+  
                 </React.Fragment>
-
-
+ 
        )
 
   }
 
   export function IDBox( {colors ,tokenId }){
-
-
-    // const theme = useTheme();
-    // const colors = tokens(theme.palette.mode);
-
+ 
       return (  
 
           <React.Fragment>  
@@ -1036,100 +669,4 @@ isDisabled={( !listingData) }
   }
 
 export default TokenDetailsByID;
-
-function NftPriceBlock (   { 
-  listingData, auctionData, ethToUsdRate }  ){
  
-   const theme = useTheme();
-   const colors = tokens(theme.palette.mode);
-
-   return (
-       <Box  >
-        
-       <Typography color={colors.grey[ text2.color ]} >Current price: </Typography>
-   
-          {listingData ? ( 
-
-        <RowChildrenAlignLeftBottom>
-           <Typography color={colors.grey[ text1.color ]}
-           // sx={{  position: 'relative', top:"-5px"  }}
-           variant="h1" fontWeight="50">
-            {`${listingData?.currencyValuePerToken.displayValue} ${listingData.currencyValuePerToken.symbol}`}
-           
-           </Typography>
-
-            <HorizontalSpace space={1}/>  
-            <Typography variant="h4"  color= {colors.grey[ text2.color]}  
-                style={{  position: 'relative', bottom:"5px" }}  >
-            {` $${(listingData?.currencyValuePerToken.displayValue * ethToUsdRate ).toFixed(2) }`}  
-            </Typography>
-           </RowChildrenAlignLeftBottom>
-
-       ) : auctionData ? (
-         
-        <RowChildrenAlignLeftBottom>
-          
-           <Typography variant="h1" fontWeight={600} >
-           {`${auctionData?.buyoutCurrencyValue.displayValue} ${auctionData?.buyoutCurrencyValue.symbol}`}
-           </Typography>
-
-             <HorizontalSpace space={1}/>  
-           <Typography variant="h4"  color= {colors.grey[ text2.color]}  
-               style={{  position: 'relative', bottom:"5px" }}  >
-            {` $${ (auctionData.buyoutCurrencyValue.displayValue * ethToUsdRate ).toFixed(2) }`}  
-           </Typography>
-         
-        </RowChildrenAlignLeftBottom>
-     
-       ) : (
-           <Typography  variant="h1" fontWeight="bold"
-            color= {colors.primary[500]} 
-           >
-           Not for sale
-           </Typography>
-       )}
-       
-       
-       { auctionData && (
-           <Flex direction="column">
-           <Typography color="darkgray">Bids starting from</Typography>
-           <Typography fontSize="3xl" fontWeight="bold">
-               {`${auctionData?.minimumBidCurrencyValue.displayValue} ${auctionData?.minimumBidCurrencyValue.symbol}`}
-           </Typography>
-          
-           </Flex>
-       )}
-      
-     </Box>
-
-   )
- }
-  
-  
- export function DisplayNFTimage( {nft}){
-
-  return(
-    <div > 
-   {/* className={stylesBuy.nftContainer}  style={{ height: '600px', width: '600px' }}  */}
-         
-      <RoundedBox>   
-          <RoundedBox padding = "8px">
-                <ThirdwebNftMedia metadata={nft.metadata}  className={styles.largeImage}  />
-            </RoundedBox> 
-      </RoundedBox> 
-        
-                
-        {/* </Box> */}
-   
-  </div>
-   )
-
- 
-
- }
-
- 
- 
-
- 
-  

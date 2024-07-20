@@ -10,13 +10,16 @@ import {  ThirdwebNftMedia,  useContract,useValidDirectListings, useValidEnglish
  import {   useParams } from 'react-router-dom';
 import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
 import { AddressCopyBlock  } from '../BlockLink/BlockLinks';
+ 
+
+
 const NFTListed =  ({ propContractAddress, propTokenId,
-  
+  address,
   AlllistingData, AuctionListingData , NFT   } ) => {   // ,  NFT_CONTRACT
    
     let {  contractAddress,   tokenId } = useParams();
  
-     //NFT_CONTRACT  can be  TOOLS_ADDRESS or CUSTOM_PACK
+     
     
    //if prop undefined it means it is NOT called from url (so we get props from url param)
    if( propContractAddress !==undefined && propTokenId !==undefined  ){
@@ -33,9 +36,11 @@ const NFTListed =  ({ propContractAddress, propTokenId,
  //const colors = tokens(theme.palette.mode);
  
 
-  const { infoMap} = useAllLayersContext(); 
- const [nft, setNFT] = useState();
+  const [nft, setNFT] = useState();
  //const [contractMetadata, setContractMetadata] = useState(); 
+
+  
+ 
 
  useEffect(() => {
    // Function to fetch NFT data
@@ -46,57 +51,28 @@ const NFTListed =  ({ propContractAddress, propTokenId,
        let contract;
         let nftResult;
 
-        // BE very careful, when using NFT (predifined) as it will not be up to date data.
-        /* for example, make sure you reload NFT if you switch contract LAYER nft > to > Pack nft  for example
-        
-        for example when we had 5 packs, then switching contract to layer NFT, it  would only show 5 layers
-         so if a confusion happens again, watch around here...
-        */
-       //  if (!NFT){
-
-
-           
+       
+            
             const sdk  = getSDK_fromPrivateKey(); 
             contract   = await sdk.getContract(NFT_CONTRACT);
             nftResult  = await contract.erc1155.get(tokenId);
-
-          
          
+            // console.log( "  >>>  address   " ,     address   );
+             var BalanceToken =  await contract.call("balanceOf",[address,tokenId]);
+             const bigNumber =     BalanceToken._hex ;
+             amountOwned =   parseInt(  bigNumber , 16);
 
-            var BalanceToken = await contract.erc1155.balance(  tokenId  );
-            const bigNumber =     BalanceToken._hex ;
-         
-            amountOwned =   parseInt(  bigNumber , 16);
-          
- 
+/*
+            console.log( "  >>>>>>>>>>>>>>>>>>>>> nftResult " ,     nftResult  );
+            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>address   bigNumber" ,     bigNumber  );
+            
+            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>address   amountOwned" , amountOwned); // Output: 2
+ */
             nftResult.amountOwned = amountOwned;
               
           
       try {
-  
-
-        // one way to do it but it may be resource intensive for each NFT
-              /*
-            var BalanceToken = await contract.erc1155.balance(  tokenId  );
-            const bigNumber =     BalanceToken._hex ;
-            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   bigNumber" ,     bigNumber  );
-            amountOwned =   parseInt(  bigNumber , 16);
-            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   regularNumber" , amountOwned); // Output: 2
-            // appening daata
-            nftResult.amountOwned = amountOwned;
-            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   nftResult" , nftResult); // Output: 2
-            */
-
-
-       // appening  quantityOwned  to nftResult
-  // it is dangerous to cache owned NFT, because after i buy or a sell we need to make sure it is updated immidiately
-
-          nftResult.amountOwned =     infoMap[tokenId ].quantityOwned;
-        //  nftResult.supply      =     infoMap[tokenId ].supply;
-         
-       //   console.log(  `  >>>  nftResult token ID [${tokenId}    ` ); // Output: 2
-      //    console.log(  "  >>>  nftResult " ,nftResult  ); // Output: 2
-         
+          
        setNFT(nftResult);
 
      } catch (error) {
@@ -107,11 +83,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
    
    
    fetchNFT();
-
-   //AlllistingData ={null}
-   //AuctionListingData = {listing}
-   //console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   AlllistingData   " ,      AlllistingData   );
-   //console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   AuctionListingData   " ,      AuctionListingData   );
+    
     
  }, [contractAddress, tokenId ]); // NFT added
 

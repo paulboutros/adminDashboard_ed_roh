@@ -268,9 +268,7 @@ export default function SaleInfo({ nft }) { // : Props
                console.log(" sucess here is last listing: " , lastListing );
                navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${lastListing?.id}/NAN`);
               
-              // router.push(
-              //   `/token/${TOOLS_ADDRESS}/${nft.metadata.id}`
-              // );
+               
             }}
           >
             Create Direct Listing
@@ -331,7 +329,7 @@ export default function SaleInfo({ nft }) { // : Props
               return await handleSubmitAuction(handleSubmissionAuction)();
             }}
             onError={(error) => {
-              toast(`Listed Failed! Reason: ${error.cause}`, {
+              toast(`Listed Failed! Reason: ${error}`, {
                 icon: "❌",
                 style: toastStyle,
                 position: "bottom-center",

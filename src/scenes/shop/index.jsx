@@ -14,24 +14,20 @@ import Tab from '@mui/material/Tab';
  
 
 import stylesProfile from "../../styles/Profile.module.css";
- 
-
-
-import randomColor from "../../util/randomColor";
-
+  
 
 import {useEffect, useState} from "react";
 import { useContract, 
     ConnectWallet,  useAddress    } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDRESS  } from "../../const/addresses";
  
-
+import {NFTGridMarketData} from "../../components/NFTGrid.jsx";
 import ConnectWalletPage from "../../components/ConnectWalletPage.jsx";
 import Container from "../../components/Container/Container";
 import NFTListed from "../../components/FARMER/NFTlisted.jsx"; 
  
  
-import { Box, Typography, useTheme } from '@mui/material'; // Update this import
+import { Box, Grid, Typography, useTheme } from '@mui/material'; // Update this import
 import { BasicScrollable  } from "../../components/Layout";
 import { tokens } from "../../theme";
 import { useNavigate } from "react-router";
@@ -111,11 +107,7 @@ import { useNavigate } from "react-router";
  
 
   function linkPath( NFT_CONTRACT, nft,  allList  ){
-
-
-     
-   
-  
+ 
 
     if ( allList.bidBufferBps ){ // AuctionListingData
       return  `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/${allList?.id}`;
@@ -125,6 +117,8 @@ import { useNavigate } from "react-router";
 
     }
   }
+
+  
  
 
       if (!address){
@@ -166,55 +160,21 @@ import { useNavigate } from "react-router";
 
 
          </Box>
-  
-{/* 
-          <div  className={`${  tab === "nfts" ? stylesBuy.nftGridContainer : "" }`} > 
-                 
-            {loadingDirectListings || loadingAuction ? (  
-              <p>Loading direct and auction...</p>
-            ) : tab !== "nfts" || (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
-              <p></p>
-            ) : (
- 
-                   <AllNFTWrapper allNFTsWithListing={allNFTsWithListing}  NFT_CONTRACT={NFT_CONTRACT} />
-                 
-            
-            )}
-          
-           </div>
-  */}
-        
+   
     
           <div className={`${ tab === "listings" ? stylesProfile.activeTabContent : stylesProfile.tabContent }`}>
-          
-            {loadingDirectListings ? (
-              <p>Loading...</p>
-            ) : directListings && directListings.length === 0 ? (
-              <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
-            ) : (
+           
 
-              
-              directListings?.map((listing) => (
-                 <Box sx={theme.nftContainer}
 
-                    key={listing.id} // key is mendatory and should be added somewhere in a map loop
-                    onClick={() => {
-                       const selectedNFT = NFTdata.find((nft) => nft.metadata.id === listing.tokenId);
-                       navigate( linkPath( NFT_CONTRACT, selectedNFT, listing  )  )
-                    }
-                   }
-                 >
-                         <NFTListed
-                            propContractAddress = {listing.assetContractAddress}
-                            propTokenId = {listing.tokenId}
-                            AlllistingData ={listing}
-                            AuctionListingData ={null}
-                         /> 
-                  </Box>
- 
-                     
-              ))
-            )}
+          <NFTGridMarketData  
+               address={address}
+               NFTdata ={NFTdata}
+              directListings={directListings}
+              loadingDirectListings={loadingDirectListings}
+           />
+         
+
+
           </div>
     
            <div
@@ -222,14 +182,18 @@ import { useNavigate } from "react-router";
               tab === "auctions" ? stylesProfile.activeTabContent : stylesProfile.tabContent
             }`}
             >
- 
+
+                
+        
+        <Grid container spacing={1}  > 
             {loadingAuction ? (
               <p>Loading...</p>
             ) : auctionListing && auctionListing.length === 0 ? (
               <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
             ) : (
-                auctionListing?.map((listing) => (
-                // <ListingWrapper listing={listing} key={listing.id} />
+       
+                auctionListing?.map((listing, index ) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={index} >
                  <Box sx={theme.nftContainer}
 
                 key={listing.id}  
@@ -239,25 +203,24 @@ import { useNavigate } from "react-router";
                     }
                 }
                > 
-
-               
-                 <NFTListed
+                  <NFTListed
                     key={listing.id}
                     propContractAddress = {listing.assetContractAddress}
                     propTokenId = {listing.tokenId}
 
                    AlllistingData ={null}
                    AuctionListingData = {listing}
-                 /> 
+                    /> 
+                   </Box> 
 
-
-
-
-
-                  </Box> 
-
+                </Grid>
               ))
+
+
+
             )}
+
+         </Grid> 
           </div>
         </Container>
           </BasicScrollable>
@@ -265,6 +228,8 @@ import { useNavigate } from "react-router";
     );
     
 };
+
+
 
 
 export function AllNFTWrapper( {  allNFTsWithListing, NFT_CONTRACT  } ){
@@ -276,6 +241,9 @@ export function AllNFTWrapper( {  allNFTsWithListing, NFT_CONTRACT  } ){
 
    function linkPath( NFT_CONTRACT, nft,  allList  ){
  
+
+    
+
   // if clicked on Not for sale NFT
     if (!allList){
        return  `/tokenByListingID/${NFT_CONTRACT}/${nft.metadata.id}/NAN/NAN`;

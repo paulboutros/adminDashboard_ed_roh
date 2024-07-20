@@ -3,20 +3,15 @@
  import { useLocation, useNavigate } from 'react-router-dom';
  import {useEffect, useState} from "react";
  import { Box } from "@mui/material";
- //import dotenv from "dotenv";
- 
-  import NFTGrid from "../../components/NFTGrid";
-  import ComposedCharacter from "../../components/ComposedCharacter";
+  
+   import ComposedCharacter from "../../components/ComposedCharacter";
  
  
-  import stylesBuy from "../../styles/Buy.module.css";
- import { TOOLS_ADDRESS } from "../../const/addresses";
+  import { TOOLS_ADDRESS } from "../../const/addresses";
  import { useContract, useNFTs } from "@thirdweb-dev/react";
-import { BasicScrollable } from '../../components/Layout';
-import Container from '../../components/Container/Container';
+ import Container from '../../components/Container/Container';
 import { useAllListingsContext } from '../../context/AllListingContext';
-import { AllNFTWrapper } from '../shop';
-import {   getCookie, removeCookie } from '../../data/API';
+ import {   getCookie, removeCookie } from '../../data/API';
 import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
  
   
@@ -28,14 +23,9 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
  const cookieName = "tempRedirect"; 
  const redirectCookie = getCookie(cookieName);//GetCookieRedirectURL();
  
- 
-
-    const { contract } = useContract(TOOLS_ADDRESS);
-    const { data, isLoading } = useNFTs(contract);
-    //const { data: allNFTs } = useNFTs(contract); // get all neft
+      //const { data: allNFTs } = useNFTs(contract); // get all neft
     const { NFTdata } = useAllLayersContext();
-    const { allNFTsWithListing  } = useAllListingsContext();
-    
+     
       
   
   if (redirectCookie){ 
@@ -87,6 +77,9 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
 
      {/* this shows all listing  START*/}
 
+
+
+{/*  
           <div className={ stylesBuy.nftGridContainer } > 
           
             {isLoading ? (
@@ -94,12 +87,15 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
             ) : (allNFTsWithListing && allNFTsWithListing.length === 0) ? (
               <p></p>
             ) : (
-                //  <p>  allNFTsWithListing.length  = {allNFTsWithListing?.length} </p>
+                 
                   <AllNFTWrapper allNFTsWithListing={allNFTsWithListing} NFT_CONTRACT={TOOLS_ADDRESS} />
                 
             )}
          
-            </div>
+            </div> */}
+ 
+
+
        
  {/* this shows all listing ENDS HERE */}
 

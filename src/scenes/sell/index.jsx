@@ -14,15 +14,12 @@ import {
 
   //import { NFT as NFTType } from "@thirdweb-dev/sdk";
   import SaleInfo from "../../components/SaleInfo/SaleInfo";
-import { BasicScrollable, RoundedBox } from "../../components/Layout";
+import {   RoundedBox } from "../../components/Layout";
 import { Typography, useTheme } from "@mui/material";
 import { tokens, mainContainerPagePad } from "../../theme";
 import ConnectWalletPage from "../../components/ConnectWalletPage";
 import { getSDK_fromPrivateKey } from "../../data/API";
-import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
-
-
-
+ 
    
   export default function Sell() {
     // Load all of the NFTs from the NFT Collection
@@ -30,9 +27,7 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
     const   address = useAddress();
     const { data, isLoading } = useOwnedNFTs(contract, address);
     const [selectedNft, setSelectedNft] = useState();
-
-
-
+ 
 
     //const { allLayers} = useAllLayersContext(); 
 
@@ -52,12 +47,7 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
       
  }, [ selectedNft ]);
 
-
-   
-
-  
-  
-  
+ 
   
     return (
       <React.Fragment>
@@ -67,9 +57,8 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
                <ConnectWalletPage/>
               
         ):(
-
-
-           <BasicScrollable>
+ 
+           
                   <Container maxWidth="lg">
 
 
@@ -79,7 +68,7 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
             
             <Typography sx={ theme.titleDescription }  >Select which NFT you&rsquo;d like to sell below.</Typography>
              <NFTGrid
- 
+                address={address}
                 isLoading={isLoading}
                
                 NFT_contract={TOOLS_ADDRESS}
@@ -93,16 +82,13 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
                   const contract = await sdk.getContract(TOOLS_ADDRESS);
                   //const nftResult = await contract.erc721.get(tokenId);
                   const nftResult = await contract.erc1155.get( nft.metadata.id );
-
-                 
-
+ 
                      setSelectedNft(nftResult); 
 
                 }
                 
              }
               
-             
             />
           </>
         ) : (
@@ -128,10 +114,7 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
                 />
             </RoundedBox> 
       </RoundedBox>     
-
-
-
-
+ 
                 <button
                   onClick={() => {
                     setSelectedNft(undefined);
@@ -143,11 +126,7 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
               </div>
             </div>  
      
-
-    
-        
- 
-          
+           
           
             <div className={tokenPageStyles.listingContainer}>
               <p>You&rsquo;re about to list the following item for sale.</p>
@@ -165,7 +144,7 @@ import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
           </div>
         )}
                   </Container>
-           </BasicScrollable>
+           
       )}
      </React.Fragment>
 
