@@ -393,13 +393,7 @@ export const BootstrapTooltip = styled(({ className, ...props }) => (
    } 
  
   }));
-
-
-
-
-
-
-
+ 
 
   export const StyledConnectWallet2 = styled ( ({ className, ...props }) => (
     <ConnectWallet {...props}

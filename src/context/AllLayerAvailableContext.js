@@ -42,18 +42,7 @@ export function AllLayersProvider({ children }) {
       const sdk = getSDK_fromPrivateKey(); 
       const contract = await sdk.getContract(TOOLS_ADDRESS);  // , "edition"
       const nfts = await contract.erc1155.getAll();
-
-
-
-
-       
-       console.log( " ============  >>>>>>>>>>>>>>>>>>>>>>>>>>>>.  ======== nfts       "   ,  nfts  );
-
-
-
-
-
-
+ 
       setNFTdata(nfts);
     }
   useEffect(() => {

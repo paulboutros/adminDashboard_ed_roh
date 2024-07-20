@@ -35,18 +35,7 @@ import { getSDK_fromPrivateKey } from "../../data/API";
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-  
-    useEffect(()=>{
-      console.log( ">>  => contract = ", TOOLS_ADDRESS    );
-      console.log( ">>  => address = ", address    );
-      console.log( ">>  => ownedNfts = ", data    );
-   }, [data]);
-
-   useEffect(()=>{
-    console.log( ">>  => selectedNft is now set  = ",  selectedNft      );
-      
- }, [ selectedNft ]);
-
+    
  
   
     return (

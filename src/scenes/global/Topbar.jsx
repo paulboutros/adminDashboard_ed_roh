@@ -3,7 +3,7 @@
   //web3
   //  full connect button customization tutorial here
    // https://youtu.be/7IxMbJD6eQ0?t=2468
-     
+ 
 
   import * as React from 'react';
    
@@ -17,25 +17,23 @@
    
 
 import {   ethers } from "ethers";
-import {darkTheme,   ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet } from "@thirdweb-dev/react";
 import { useContract, useContractRead, useAddress } from "@thirdweb-dev/react";
-import { TOOLS_ADDRESS , REWARDS_ADDRESS, PACK_ADDRESS } from "../../const/addresses";
+import { TOOLS_ADDRESS , REWARDS_ADDRESS } from "../../const/addresses";
  
-import { Box, IconButton, useTheme ,   Button, Typography } from "@mui/material";
+import { Box, IconButton, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {   useContext,  useState  } from "react";
-import { ColorModeContext, tokens,  StyledConnectWallet, allCSS, StyledExternalLink, basicRoundedBox1, cool_orange  } from "../../theme";
+import { ColorModeContext, tokens,  StyledConnectWallet, cool_orange  } from "../../theme";
  
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
  
- import { RowChildrenAlignCenter,
+ import { RowChildrenAlignCenter  } from "../../components/Layout"
     
     
-   RoundedBox,
-   HorizontalSpace,
     
-  } from "../../components/Layout"
+ 
 
    
  import stylesProfile from "../../styles/Profile.module.css"; 
@@ -85,6 +83,7 @@ const Topbar = () => {
        setScreenWidth(window.innerWidth);
      };
  
+ 
      window.addEventListener('resize', handleResize);
  
      return () => {
@@ -93,10 +92,16 @@ const Topbar = () => {
    }, []);
 
 
+   
+   useEffect(() => {
+      
+    console.log( "  >>  address  changed    " ,      address     );
 
 
+  }, [address]);
 
-
+  let currentSigner;
+ 
 
     const OpenPage = ( route, setTab, tabName ) => {
     
