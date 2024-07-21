@@ -204,6 +204,7 @@ import { useNavigate } from "react-router";
                 }
                > 
                   <NFTListed
+                     address ={address}
                     key={listing.id}
                     propContractAddress = {listing.assetContractAddress}
                     propTokenId = {listing.tokenId}

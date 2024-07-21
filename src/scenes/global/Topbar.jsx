@@ -4,7 +4,7 @@
   //  full connect button customization tutorial here
    // https://youtu.be/7IxMbJD6eQ0?t=2468
  
-
+   
   import * as React from 'react';
    
   import SpeedDial from '@mui/material/SpeedDial';
@@ -16,7 +16,7 @@
   import ShareIcon from '@mui/icons-material/Share';
    
 
-import {   ethers } from "ethers";
+import {  providers, ethers } from "ethers";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { useContract, useContractRead, useAddress } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS , REWARDS_ADDRESS } from "../../const/addresses";
@@ -41,6 +41,7 @@ import AccountMenu from "../../components/AccountMenu";
 
 import styled from 'styled-components';
 import { useEffect } from 'react';
+import { addorupdateWalletuser } from '../../data/API';
 
 export const StyledDiv = styled('div')({
   color: 'blue',
@@ -71,20 +72,12 @@ const Topbar = () => {
    const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
    const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
    
-  
-
-
+   
    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-
-
-   useEffect(() => {
-     const handleResize = () => {
-       setScreenWidth(window.innerWidth);
-     };
  
- 
-     window.addEventListener('resize', handleResize);
+      useEffect(() => {     const handleResize = () => {setScreenWidth(window.innerWidth);   };
+  
+       window.addEventListener('resize', handleResize);
  
      return () => {
        window.removeEventListener('resize', handleResize);
@@ -94,9 +87,8 @@ const Topbar = () => {
 
    
    useEffect(() => {
-      
-    console.log( "  >>  address  changed    " ,      address     );
-
+      if (!address) return;
+     addorupdateWalletuser(address);
 
   }, [address]);
 
@@ -244,140 +236,7 @@ const Topbar = () => {
     </React.Fragment>
 
 )
-
-  // v0
-    return (
-
-        <React.Fragment> 
-           <Box display="flex" justifyContent="space-between"    padding="0px 20px 0px 20px" height={"46px"}
-      
-
-                // borderBottom={`1px solid ${colors.primary[100]}`}
-                style={{
-                  position: "fixed",
-                  top: 0,
-                  left: 0,
-                  
-
-                   width: "100vw",
-
-                  zIndex: 1000, // Ensure it's above other content
-                  backgroundColor:  theme.palette.background.default
-
-                
-
-                }}
-              >
-         
  
-        
-                              
-        
-                     
-
-                                    {screenWidth < 600 ?  (
-                                                  
-                                                  <></>
-                                    
-                                      ):( 
-
-
-                              <RowChildrenAlignCenter>  
-                                    <div className={stylesProfile.toptabs}>
-                                      
-                                      <h3 className={`${stylesProfile.toptab} ${tab === "Buy" ? stylesProfile.topactiveTab : ""}`}
-                                        onClick={() => OpenPage(`shop/${TOOLS_ADDRESS}/`, setTab, "Buy"  ) }
-                                      >
-                                        Buy
-                                     </h3>
-
-                                      <h3
-                                        className={`${stylesProfile.toptab}  ${tab === "Sell" ? stylesProfile.topactiveTab : ""}`}
-                                        onClick={() => OpenPage("sell", setTab, "Sell"  ) }
-                                      >
-                                        Sell
-                                      </h3>
-
-                                      <h3
-                                        className={`${stylesProfile.toptab}  ${tab === "Main" ? stylesProfile.topactiveTab : ""}`}
-                                        onClick={() => OpenPage("", setTab, "Main"  ) }
-                                      >
-                                        Main
-                                      </h3>
-
-
-                                    </div>
-                              </RowChildrenAlignCenter>
-                            
-                          ) }
-
-
-
-
-                            
-                                {screenWidth < 600 ?  (
-                            
-                                              <></>
-                                
-                                  ):( 
-                                        <IconButton onClick={colorMode.toggleColorMode}>
-                                        {theme.palette.mode === "dark" ? (
-                                          <DarkModeOutlinedIcon color = {colors.grey[200]}  />
-                                        ) : (
-                                          <LightModeOutlinedIcon color = {colors.grey[200]} />
-                                        )}
-                                      </IconButton>  
-
-                                  ) }
-        
-      
-                      <ShowRewardBalance rewardBalance={rewardBalance}/>   
-                    
-                    <RowChildrenAlignCenter>
-
-                            { address ? (
-
-                        <ConnectWallet
-                        theme={theme.palette.mode}  modalSize={"wide"}
-                            style={{  height: '40px'   }}
-                                
-                            welcomeScreen={{
-                            title: "Get it at to Wuli.rocks",
-                            subtitle: "Just connect to get started",
-                          }}
-                            modalTitleIconUrl={""}
-
-
-                        />
-                        ):(
-                        <StyledConnectWallet />
-                        )}
-                  
-                    
-
-                      
-                  {screenWidth < 600 &&  (
-                        <AccountMenu/> 
-                  )}
-
-            
-                      </RowChildrenAlignCenter>
-
-            
-            
-       
-       
-           </Box>
-
-
-           
-
-        </React.Fragment>
-
-    )
-   
-  
-
   
 };
 

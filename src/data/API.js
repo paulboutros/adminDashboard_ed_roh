@@ -420,6 +420,22 @@ return resultsPostJson.data;
 
 
 
+
+export async function addorupdateWalletuser(   address ){
+  
+
+
+  const dataToSend={ 
+     wallet   : address
+  }
+
+const endpoint = `${process.env.REACT_APP_API_URL}addorupdateWalletuser`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
+
+console.log(" addorupdateWalletuser data response :" ,   resultsPostJson.data );
+
+return resultsPostJson.data;
+}
 export async function addorupdate( user , address ){
   
 

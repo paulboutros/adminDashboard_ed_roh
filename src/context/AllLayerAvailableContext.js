@@ -1,8 +1,9 @@
 import {createContext, useContext,  useState, useEffect } from "react";
 
-import { getAllLayersAvailable , GetAllNFTfromSDK, getSDK_fromPrivateKey   } from "../data/API.js";
-//import { Add_owning_and_otherLayerInfo  } from "../data/API.js";
-// import { useUserContext } from './UserContext.js'; // to get user data from context provider
+import {   getSDK_fromPrivateKey   } from "../data/API.js";
+ 
+
+
 
 import { TOOLS_ADDRESS } from "../const/addresses.ts";
 import { useContract,  useOwnedNFTs, useAddress  } from "@thirdweb-dev/react";
@@ -15,16 +16,8 @@ export function useAllLayersContext() { return useContext(AllLayersContext);}
  
 export function AllLayersProvider({ children }) {
   
-   // const { user } = useUserContext();
-
     const { contract } = useContract(TOOLS_ADDRESS);
-   
-     
-     
-     
-    
- 
- 
+  
     const address = useAddress(); 
     const { data, isLoading } = useOwnedNFTs(contract, address);
 
@@ -53,14 +46,10 @@ export function AllLayersProvider({ children }) {
 //================================================================================================================
 
 
-
-/*
-    useEffect(()=>{
-       
-    console.log( "allNFTs" , NFTdata);
-
-    }, [  NFTdata  ]);
-*/
+// Later in your code...
+window.ethereum.on('accountsChanged', (accounts) => {
+  // Time to reload your interface with accounts[0]!
+});
  
    
     const [ownedNftData, setOwnedNfts] = useState(null);
@@ -79,7 +68,7 @@ export function AllLayersProvider({ children }) {
       for (let e = 0; e < data.length; e++ ){
  
         infoMapTempX[ data[e].metadata.id ] = {  supply:  data[e].supply   ,  quantityOwned:   data[e].quantityOwned   }; 
-        //console.log( "  e.metadata        "   , data[e].metadata  );
+         
       }
      
      
@@ -105,10 +94,7 @@ export function AllLayersProvider({ children }) {
         // cretae basic layers available to choos efrom in the app
         const initialize = async ()=>{
              const layers  = await Create_Initial_layerToChooseFrom( NFTdata, ownedNftData );
-
-
-       
-
+ 
              setAllLayers(layers); 
         }
         initialize();

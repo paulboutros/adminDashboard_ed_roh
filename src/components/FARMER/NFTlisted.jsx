@@ -8,8 +8,7 @@ import {  ThirdwebNftMedia,  useContract,useValidDirectListings, useValidEnglish
  import { getSDK_fromPrivateKey  } from "../../data/API.js";
  import {useEffect, useState} from "react";
  import {   useParams } from 'react-router-dom';
-import { useAllLayersContext } from "../../context/AllLayerAvailableContext";
-import { AddressCopyBlock  } from '../BlockLink/BlockLinks';
+ import { AddressCopyBlock  } from '../BlockLink/BlockLinks';
  
 
 
@@ -61,13 +60,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
              var BalanceToken =  await contract.call("balanceOf",[address,tokenId]);
              const bigNumber =     BalanceToken._hex ;
              amountOwned =   parseInt(  bigNumber , 16);
-
-/*
-            console.log( "  >>>>>>>>>>>>>>>>>>>>> nftResult " ,     nftResult  );
-            console.log( "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>address   bigNumber" ,     bigNumber  );
-            
-            console.log(  "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>address   amountOwned" , amountOwned); // Output: 2
- */
+ 
             nftResult.amountOwned = amountOwned;
               
           
