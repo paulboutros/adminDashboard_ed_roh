@@ -21,6 +21,8 @@ import TokenPageByID from "./scenes/tokenPageByID/index.jsx";
 
 import ProfileWallet from "./scenes/profileWallet/index.jsx";
  
+
+ 
 // provider
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
@@ -204,12 +206,19 @@ const testThirdWeb = false;
                  
    
                  {/* this is more like a personal profil tab .. */}
+
+                
+ 
+ 
+                 {/* 
+                 
+                    <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
                  <Route path="/profileWallet/:initialTabIndex" element={<ProfileWallet/>} />
-                 <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
+                 
                  <Route path="/profileWallet/:address/:initialTabIndex" element={<ProfileWallet/>} />
                  
-               
-                  
+                  */}
+               <Route path="/profile/:address" element={<ProfileWallet/>}/>
                  
                 
                  <Route path="/allLayerImage" element={<AllLayerImage />} />

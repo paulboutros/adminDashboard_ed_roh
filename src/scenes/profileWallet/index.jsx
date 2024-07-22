@@ -1,6 +1,6 @@
 
  
-import React, {   useState } from 'react';
+import React, {   useEffect, useState } from 'react';
  
 
 //import * as React from 'react';
@@ -12,56 +12,49 @@ import Tab from '@mui/material/Tab';
 import Container from '../../components/Container/Container';
 import {  VerticalSpace } from '../../components/Layout';
  
+import {useAllLayersContext }from '../../context/AllLayerAvailableContext.js';
+
 //==============================================================
   
 import {
   
  
   
-   useContract
+   useContract,
+   useOwnedNFTs
 } from "@thirdweb-dev/react";
 import MyPacks from '../myPacks/index';
  
 
-  
- import { useParams } from 'react-router';
+import {   useParams } from 'react-router-dom';
+ //import { useParams } from 'react-router';
 import RewardTokenTab from '../RewardTokenTab/index.jsx';
-
-  
-
- import { Discord_tokenLess_stakinContract } from '../../const/addresses.ts';
  
+ import { Discord_tokenLess_stakinContract ,TOOLS_ADDRESS } from '../../const/addresses.ts';
   
-  
- 
 //import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
-import { useDISTContext } from '../../context/DISTstakingContext.js';
+ 
 import { CustomTabPanel, a11yProps } from '../../components/TabSubcomponent.jsx';
+import { getSDK_fromPrivateKey } from '../../data/API';
+import NFTGrid from '../../components/NFTGrid';
   
 // horizontal space between  elements of the badges
-  const sp = [20];
+  
 
   export const myPacksIdx = 0;
   export const referralRewardTabIndex =1;
 
 export default function BasicTabs() {
  
- 
-  const tabInfo = [
-     {name: "My Packs",        index:0},
-     {name: "Referal Reward",  index:1},
-     {name: "Token",           index:2}
-     
-  ]
-
    
-  //const {distStakedAmount,   distReward  } = useDISTContext();
-     
-
+ 
+  
      const theme = useTheme();
      
-   
-    let {   initialTabIndex } = useParams();
+    const { contract } = useContract(TOOLS_ADDRESS);
+    let {   initialTabIndex , address  } = useParams();
+    const { data, isLoading } = useOwnedNFTs(contract,  address );
+
     if (initialTabIndex){
       initialTabIndex = Number(initialTabIndex);
     }else{
@@ -70,72 +63,73 @@ export default function BasicTabs() {
     }
    
     const { contract: dist_tokenLessContract, isLoading: loading_dist_tokenLess } = useContract( Discord_tokenLess_stakinContract );
-    
-
-
- // TO DO: we could use address from useParams().. especially if you want other user to see other people profile
-    
+     
 
   const [value, setValue] = useState( initialTabIndex );
  
   const handleChange = (event, newValue) => { setValue(newValue); };
-   
+    
+ 
+
+ 
+  useEffect(() => {  
+
+    if (  data){
+
+
+
+      console.log(`data >>>>>>>  = ${data}  `);
+
+    } 
+      
+    }, [ data ]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     let amountOwned = 0;
+  //     let contract;
+  //     const sdk = getSDK_fromPrivateKey();
+  //     contract = await sdk.getContract(TOOLS_ADDRESS);
+  //     let request = 0;
+  //     for (let i = 0; i < 55; i++) {
+  //       var BalanceToken = await contract.call("balanceOf", [address, i]);
+  //       const bigNumber = BalanceToken._hex;
+  //       amountOwned = parseInt(bigNumber, 16);
+  //      // console.log(`token page >>>>>>>>>>>>>>>. tokenId = ${i}  owned = ${amountOwned}    request   ${request}`);
+  //       request++;
+  //     }
+  //   };
+  
+  //   fetchData();
+  // }, []);
+    
+
 
   return (
-    //<Box sx={{ width: '100%' }}>
-    < >
-     <Container maxWidth="lg">   
+    <React.Fragment>
 
-                      
-        <Box >
- 
-         <Tabs value={value} onChange={handleChange}  aria-label="basic tabs example" sx={theme.tabsStyle}>
-                       
-            {/* <Tab label="My NFTs"   {...a11yProps(0)}  disableRipple  sx={  theme.tabStyle }   /> */}
-           <Tab label= { tabInfo[0].name }     {...a11yProps(   tabInfo[0].index   )}  disableRipple  sx={  theme.tabStyle }   />  
-           <Tab label= { tabInfo[1].name }     {...a11yProps(   tabInfo[1].index   )}  disableRipple  sx={ theme.tabStyle }    />
-           {/* <Tab label= { tabInfo[2].name }     {...a11yProps(   tabInfo[2].index   )}  disableRipple  sx={ theme.tabStyle }    />   */}
- 
-        </Tabs>
-         
-      </Box>
-      {/* <CustomTabPanel value={value} index={0}>  Item One  </CustomTabPanel> */}
-      
-     
-        <CustomTabPanel value={value} index={tabInfo[0].index}> {<MyPacks/>  } </CustomTabPanel>
-     
-      <CustomTabPanel value={value} index={tabInfo[1].index}>
-       
+    <Container maxWidth="lg">
+      {!isLoading && (
+        <NFTGrid
+          address={address}
+          isLoading={isLoading}
+          NFT_contract={TOOLS_ADDRESS}
+          NFTdata={data}
+          emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
+          // overrideOnclickBehavior={(nft) => { setSelectedNft(nft); }}
+        />
+      )}
 
-        {/*   TO DO, add a server join reward status (show if user is a member of not)
-         since we have direct access to bot. see if we can access message and content in some channel...
-        */}
-
-        
-
-          {/* 
-           There was a lot of EarnBadge code here remove because of disabling Discord and User requirement
-           */}
- 
-          <VerticalSpace space={1}/>
-          {/* <DebugPanel DISTstakedAmount={distStakedAmount} /> */}
-      
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={ tabInfo[2].index }>
-       
-       
-       <RewardTokenTab/>
-
-       </CustomTabPanel>
+    </Container>
 
 
-
-     </Container>
-
-     
-         
-    </ >
+    </React.Fragment>
+   
   );
+ 
+
+
+ 
 }
 
 

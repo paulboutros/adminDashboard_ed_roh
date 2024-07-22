@@ -36,8 +36,6 @@ const NFTListed =  ({ propContractAddress, propTokenId,
  
 
   const [nft, setNFT] = useState();
- //const [contractMetadata, setContractMetadata] = useState(); 
-
   
  
 

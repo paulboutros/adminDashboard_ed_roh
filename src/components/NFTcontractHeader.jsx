@@ -2,22 +2,14 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {Button, Box,  Divider,  Typography, useTheme   } from "@mui/material";
 
 
-import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
- //https://chakra-ui.com/docs/components/button
+  //https://chakra-ui.com/docs/components/button
  import { MediaRenderer  } from "@thirdweb-dev/react";
-import { Avatar, 
-   // Container,
-   
-} from "@chakra-ui/react";
-
+ 
 import { CustomLinkWithIcon } from "./LinkTextButton.jsx"
 import { RowChildrenAlignCenter,
-     VerticalStackAlignCenter ,
-     VerticalStackAlignLeft,VerticalStackAlignTopLeft, RowChildrenAlignTop,
-     VerticalSpace,
-      RoundedBox,
-      BoxWithTopBar,
-      HorizontalSpace
+     
+     VerticalStackAlignLeft, 
+     
     } from "./Layout.jsx"  
 
 
@@ -80,7 +72,7 @@ import { Link, useParams } from 'react-router-dom';
    }else{
     return (
         <div>
-       <VerticalStackAlignLeft>
+           <VerticalStackAlignLeft>
           
            <RowChildrenAlignCenter>
               
@@ -128,59 +120,7 @@ import { Link, useParams } from 'react-router-dom';
     
     return (
         <div>
-
-      {/* backgroundColor={colors.blueAccent[buttonStyle.colorBlue ]} */}
-
-
-           <RowChildrenAlignCenter> 
-           {/* <VerifiedUserOutlinedIcon  
-            style={{
-                color:  colors.greenAccent[buttonStyle.colorBlue-200 ] ,
-                //  color:  colors.blueAccent[buttonStyle.colorBlue-200 ] ,
-                 position: 'relative', bottom: '4px', right:"1px"
-                }}
-             />  */}
-            <Typography
-              
-              style={{
-                
-                //  color:  colors.blueAccent[buttonStyle.colorBlue-200 ] ,
-                 position: 'relative' , right:"2px"
-                }}
-
-
-             marginBottom={1} variant='h3' fontWeight={"bold"}>{contractMetadata.name}</Typography>
-            </RowChildrenAlignCenter> 
-
-            <Typography color={colors.grey[text2.color]} variant="h7" fontWeight= {text2.fontWeight} >
-             Wulirocks Layers to use in Compo Reward.
-            </Typography>
-
-
-
-
-
-            {/* TOOLS_ADDRESS */}
-
-            {/* <CustomLinkWithIcon   to={`/profile/${nft.owner}`} color={colors.grey[200]} >
-            {`${nft.owner.slice(0, 6)}...${nft.owner.slice(-4)}`}
-            </CustomLinkWithIcon>
-            <Link backgroundColor={colors.grey[400]} 
-            to={`/profile/${nft.owner}`}>
-            </Link> */}
-  {/* https://sepolia.etherscan.io/address/ */}
-
-           <CustomLinkWithIcon  
  
-            to={`https://seoplia.etherscan.io/address/${TOOLS_ADDRESS}`} 
-            text={`${TOOLS_ADDRESS.slice(0, 6)}...${TOOLS_ADDRESS.slice(-4)}`}
-            color={colors.grey[200]} 
-            tooltipText={"vist sepolia.etherscan"}
-          >
-
-           </CustomLinkWithIcon>
-
-           
 
          </div>
     )

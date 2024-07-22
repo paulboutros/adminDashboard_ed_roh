@@ -25,10 +25,16 @@ export function AllLayersProvider({ children }) {
     // we are replacing, because it seems (useNFTs) loads every 1 minute... which trigger many other useEffect
     const [NFTdata, setNFTdata] = useState(null); // what is the difference betwwen NFTdata & allLayers (this is unclear)
     const [allLayers, setAllLayers] = useState(null);
-    //const { data: NFTdata }   = useNFTs(contract);    // get all neft
+     
    
     const [infoMap, setInfoMap] = useState(null);
      
+
+
+  
+    
+
+
 // get all Layer once, makre SURE it load ONCE 
 //================================================================================================================
     async function getAllNFTs(){
@@ -36,6 +42,10 @@ export function AllLayersProvider({ children }) {
       const contract = await sdk.getContract(TOOLS_ADDRESS);  // , "edition"
       const nfts = await contract.erc1155.getAll();
  
+
+      
+
+
       setNFTdata(nfts);
     }
   useEffect(() => {
@@ -45,13 +55,7 @@ export function AllLayersProvider({ children }) {
   }, []);
 //================================================================================================================
 
-
-// Later in your code...
-window.ethereum.on('accountsChanged', (accounts) => {
-  // Time to reload your interface with accounts[0]!
-});
- 
-   
+    
     const [ownedNftData, setOwnedNfts] = useState(null);
 
 
@@ -70,13 +74,10 @@ window.ethereum.on('accountsChanged', (accounts) => {
         infoMapTempX[ data[e].metadata.id ] = {  supply:  data[e].supply   ,  quantityOwned:   data[e].quantityOwned   }; 
          
       }
-     
-     
+      
  
       setInfoMap( infoMapTempX  );
-
-
-
+ 
 
      setOwnedNfts (data);
 
@@ -147,6 +148,7 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
        initialLayerToChooseFrom[category] = JSON.parse(JSON.stringify(baseObject));
     }
 
+    
 //================================================================================
 //console.log("XXX   snapshotBeforeModification: ",  initialLayerToChooseFrom );
  //const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
