@@ -1,17 +1,13 @@
  // React Component for the Referred User
  
  import { useLocation, useNavigate } from 'react-router-dom';
- import {useEffect, useState} from "react";
+ import {useEffect } from "react";
  import { Box } from "@mui/material";
   
    import ComposedCharacter from "../../components/ComposedCharacter";
- 
- 
-  import { TOOLS_ADDRESS } from "../../const/addresses";
- import { useContract, useNFTs } from "@thirdweb-dev/react";
+    
  import Container from '../../components/Container/Container';
-import { useAllListingsContext } from '../../context/AllListingContext';
- import {   getCookie, removeCookie } from '../../data/API';
+  import {   getCookie, removeCookie } from '../../data/API';
 import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
  
   
@@ -88,7 +84,7 @@ import { useAllLayersContext } from '../../context/AllLayerAvailableContext';
               <p></p>
             ) : (
                  
-                  <AllNFTWrapper allNFTsWithListing={allNFTsWithListing} NFT_CONTRACT={TOOLS_ADDRESS} />
+                  <AllNFTWrapper allNFTsWithListing={allNFTsWithListing} NFT_CONTRACT={  addressesByNetWork[selectedChain].LAYER_ADDRESS   } />
                 
             )}
          

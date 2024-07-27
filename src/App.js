@@ -1,11 +1,19 @@
+
+
+
+
 import { useState } from "react";
  import { BrowserRouter as Router,
    Routes, Route  } from "react-router-dom";
 
 
 import Topbar from "./scenes/global/Topbar.jsx";
-import Sidebar from "./scenes/global/Sidebar.jsx";
  
+import ChainSelection from  "./scenes/chainSelection/index.jsx"; 
+import DebugPage from "./scenes/DebugPage/index.jsx";
+import ClaimWulies from "./scenes/ClaimWuliesERC1155/index.jsx";
+import ClaimWuliesERC721 from "./scenes/ClaimWuliesERC721/index.jsx";
+//import ClaimLayerDropERC1155 from "./scenes/ClaimLayerDropERC1155/index.jsx";
  
 //import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import AllLayerImage from "./scenes/allLayerImage/index.jsx";
@@ -26,27 +34,14 @@ import ProfileWallet from "./scenes/profileWallet/index.jsx";
 // provider
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme.js";
-
-import styles from "./styles/Buy.module.css";  
-
-
-
-
+ 
 // Context
 import { AllListingsProvider } from "./context/AllListingContext.js";
 // import { UserProvider } from './context/UserContext.js';    user_disabled
 import { AllLayersProvider }  from './context/AllLayerAvailableContext.js';
 import { NotificationProvider }  from './context/NotificationContext.js'; 
 import { DropTimeProvider }  from './context/DropTimeContext.js'; 
-import { DiscordProvider }  from './context/DiscordContext.js';
-
-import { AppLinkProvider }from './context/AppLinkContext.js'; 
-import { DiscordInviteProvider } from "./context/DiscordInviteContext.js";
-
-import { DebugModeProvider } from "./context/DebugModeContext.js";
-
-
- 
+  
   
 //web 3 market plce component:
 //import './App.css';
@@ -57,52 +52,21 @@ import Sell from "./scenes/sell/index.jsx";
 import Shop from"./scenes/shop/index.jsx";
     
 import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { Sepolia } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
+import { Sepolia, Base } from "@thirdweb-dev/chains"; // PolygonZkevmTestnet
 
 import { ChakraProvider } from "@chakra-ui/react";
-import { TOOLS_ADDRESS, PACK_ADDRESS } from "./const/addresses.ts";
-import { DISTProvider } from "./context/DISTstakingContext.js";
+import {   PACK_ADDRESS } from "./const/addresses.ts";
 
+import { addressesByNetWork } from "./scenes/chainSelection/index.jsx";
 
- 
+ import ChainContext from "./context/Chain.js";
+
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
-
-
-const testThirdWeb = false;
-  if ( testThirdWeb === true  ){
-
-    return (  
-     
-      <ThirdwebProvider  activeChain={Sepolia} clientId={process.env.REACT_APP_THIRDWEB_CLIENT_ID} >
-      <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-      {/* <ChakraProvider> */}
-
-         <NavBar/>  
-         <Routes>
-          <Route path="/" element={<FarmerPage/>} />
-          <Route path="/shop" element={<Shop display_mode="list"/>} />
-         </Routes>
-      
-     {/* </ChakraProvider> */}
-  
-
-    </ThemeProvider>
-    </ColorModeContext.Provider>
-    
-    </ThirdwebProvider>
-    
-
-
-
-    )
-  }
-
-   
+  const [selectedChain, setSelectedChain] = useState("sepolia");
  
-
+ 
   
   if ( process.env.REACT_APP_MAINTENANCE === "true"  ){
 
@@ -129,40 +93,23 @@ const testThirdWeb = false;
   }
     
  
-  const heavyVersion = false;
-     if (  heavyVersion === true ){ 
-       return (
-
-      <></>
-
-    ); 
- 
-   }else{
-
-
     return (
-    <ThirdwebProvider activeChain={Sepolia}>
-    <ChakraProvider>  
-          {/* <UserProvider> */}
-            {/* <DiscordProvider> */}
-               {/* <DISTProvider> */}
-              {/* <DebugModeProvider> */}
-   
-           {/* <DiscordInviteProvider>  */}
-           {/* <AppLinkProvider> */}
-      
+ 
+      <ChainContext.Provider value={{ selectedChain, setSelectedChain }}>
+       <ThirdwebProvider activeChain={ selectedChain === "sepolia" ? Sepolia : Base }>
+      <ChakraProvider>  
+       
          <DropTimeProvider>
          <NotificationProvider>
    
-        <AllLayersProvider>
-           {/* <AllListingsProvider>   */}
+         <AllLayersProvider>
+           
    
         <ColorModeContext.Provider value={colorMode}>
          <ThemeProvider theme={theme}>
            <CssBaseline />
            <div className="app">  
-           {/* <Sidebar  className= { styles.Sidebar  }    isSidebar={isSidebar} /> */}
-           {/* <Sidebar  isSidebar={isSidebar} /> */}
+       
              <main 
                className="content"
             >
@@ -170,21 +117,19 @@ const testThirdWeb = false;
    
              {/* <Router> */}
                <Routes>
-                 
                 
-                  
                  
                  <Route path="/farmerPage" element={<FarmerPage/>} />
                
              
                  <Route path="/"                       element={
-                   <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
+                   <AllListingsProvider  NFT_CONTRACT={  addressesByNetWork[selectedChain].LAYER_ADDRESS     } >
                       <AllLayerImage />
                   </AllListingsProvider>
                     
                  }/>
                  <Route path="/shop/:NFT_CONTRACT"      element={ 
-                    <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
+                    <AllListingsProvider  NFT_CONTRACT={ addressesByNetWork[selectedChain].LAYER_ADDRESS } >
                         <Shop key="1" itemType={"nfts"} />
                     </AllListingsProvider>
                   }/>    
@@ -199,7 +144,7 @@ const testThirdWeb = false;
                    <Route path="/sell" element={<Sell/>} />
                     <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
                     <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={
-                      <AllListingsProvider  NFT_CONTRACT={TOOLS_ADDRESS} >
+                      <AllListingsProvider  NFT_CONTRACT={ addressesByNetWork[selectedChain].LAYER_ADDRESS } >
                        <TokenPageByID/>
                      </AllListingsProvider>
                     } />
@@ -211,26 +156,27 @@ const testThirdWeb = false;
  
  
                  {/* 
+                      <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
+                     <Route path="/profileWallet/:initialTabIndex" element={<ProfileWallet/>} />
+                     <Route path="/profileWallet/:address/:initialTabIndex" element={<ProfileWallet/>} />
                  
-                    <Route path="/profileWallet/:address" element={<ProfileWallet/>} />
-                 <Route path="/profileWallet/:initialTabIndex" element={<ProfileWallet/>} />
-                 
-                 <Route path="/profileWallet/:address/:initialTabIndex" element={<ProfileWallet/>} />
-                 
-                  */}
+                */}
+
+
+               <Route path="/claimWuliesERC721" element={<ClaimWuliesERC721/>}/>
+               <Route path="/claimWulies" element={<ClaimWulies/>}/>
+               {/* <Route path="/claimLayerDropERC1155" element={<ClaimLayerDropERC1155/>}/> */}
+
+               
+               <Route path="/chainSelection" element={<ChainSelection/>}/>
+               <Route path="/debugPage" element={<DebugPage/>}/>
                <Route path="/profile/:address" element={<ProfileWallet/>}/>
                  
-                
-                 <Route path="/allLayerImage" element={<AllLayerImage />} />
-                 
-                
-                 <Route path="/form" element={<Form />} />
-                 
-                 
-                 
-                 <Route path="/myPacks" element={<MyPacks/>} />
-                   
-                 
+               <Route path="/allLayerImage" element={<AllLayerImage />} />
+               <Route path="/form" element={<Form />} />
+                  
+               <Route path="/myPacks" element={<MyPacks/>} />
+                  
                </Routes>
             {/* </Router> */}
    
@@ -246,21 +192,15 @@ const testThirdWeb = false;
    
         </NotificationProvider>
         </DropTimeProvider>
-        
-        {/* </AppLinkProvider>  */}
-           {/* </DiscordInviteProvider> */}
-        
-            {/* </DebugModeProvider> */}
-   
-            {/* </DISTProvider> */}
-       {/* </DiscordProvider> */}
-          {/* </UserProvider> */}
+       
        </ChakraProvider>
        </ThirdwebProvider>
-     
-                  );
 
-   } 
+        </ChainContext.Provider>
+ 
+      );
+
+   
 
 
    

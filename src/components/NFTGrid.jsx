@@ -1,24 +1,18 @@
 
- import {useEffect } from "react";
+ import {useContext, useEffect } from "react";
   
 
 import {useNotificationContext }   from '../context/NotificationContext.js'; // to get user data from context provider
-  
- 
- import { Grid,  useTheme, Box  } from "@mui/material";
- 
-    
-     
+  import { Grid,  useTheme, Box  } from "@mui/material";
+      
 import {   useNavigate } from 'react-router-dom';
   
- import NFTListed from "./FARMER/NFTlisted.jsx";
-import { TOOLS_ADDRESS } from "../const/addresses.ts";
+ import NFTListed from "./NFTCARD/NFTlisted.jsx";
  
-/*
- Called from 
- 1) All layer image
- 2) Sell NFT
-*/
+ import { addressesByNetWork } from '../scenes/chainSelection';
+ import ChainContext from "../context/Chain.js";
+   
+
    //  NFTGrid used to show NFT from ERC1155 collection NOT from marketpace data
 const NFTGrid = ({ 
                   address,
@@ -32,15 +26,13 @@ const NFTGrid = ({
 }  ) => {
  
   const theme = useTheme();
-  //const colors = tokens(theme.palette.mode);
-
- // const { user } = useUserContext();
-    
+     
  const navigate = useNavigate();
 //==========================================================================
 // pb added to fetch data
 //const [dataMap, setDataMap] = useState({}); 
  
+
 const { notification, setNotification } = useNotificationContext();
   
 useEffect(() => {
@@ -153,16 +145,14 @@ export const NFTGridMarketData = ({
 }  ) => {
 
 const theme = useTheme();
-//const colors = tokens(theme.palette.mode);
-
-// const { user } = useUserContext();
+const { selectedChain, setSelectedChain } = useContext(ChainContext);
 
 const navigate = useNavigate();
 //==========================================================================
 // pb added to fetch data
 //const [dataMap, setDataMap] = useState({}); 
 
-const { notification, setNotification } = useNotificationContext();
+//const { notification, setNotification } = useNotificationContext();
  
 
 
@@ -187,7 +177,7 @@ return (
 
                       
                            const selectedNFT = NFTdata.find((nft) => nft.metadata.id === listing.tokenId);
-                          navigate( linkPath( TOOLS_ADDRESS, selectedNFT, listing  )  )
+                          navigate( linkPath( addressesByNetWork[selectedChain].LAYER_ADDRESS , selectedNFT, listing  )  )
                     }
                    }
                  >

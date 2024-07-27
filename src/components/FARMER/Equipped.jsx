@@ -1,21 +1,26 @@
 import { MediaRenderer, Web3Button, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../../const/addresses";
+import { STAKING_ADDRESS } from "../../const/addresses";
 import { ethers } from "ethers";
 
  
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
  import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
-
-/*
-interface EquippedProps {
-    tokenId: number;
-};
-*/
+ 
 
 
 export const Equipped = (props ) => {
+
+    const { selectedChain, setSelectedChain } = useContext(ChainContext);
+    
     const address = useAddress();
 
-    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
+    const { contract: toolContract } = useContract(  addressesByNetWork[selectedChain].LAYER_ADDRESS );
     const { data: nft } = useNFT(toolContract, props.tokenId);
 
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);

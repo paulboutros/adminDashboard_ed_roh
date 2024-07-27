@@ -1,6 +1,6 @@
 import { Card,   Stack     } from "@chakra-ui/react";
 import { useAddress, useContract, useTokenBalance } from "@thirdweb-dev/react";
-import { REWARDS_ADDRESS , Discord_invite_stake_token , Discord_tokenLess_stakinContract  } from "../const/addresses";
+import { Discord_invite_stake_token    } from "../const/addresses";
 import { Box, Skeleton, Typography  } from "@mui/material";
 import { BootstrapTooltip, tokens } from "../theme";
 import { useTheme } from "@emotion/react";

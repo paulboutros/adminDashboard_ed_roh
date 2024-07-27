@@ -1,24 +1,15 @@
 
-import { ethers } from "ethers";
-import FavoriteIcon from '@mui/icons-material/Favorite';
+ 
 import {useEffect, useState} from "react";
-import { Box , Typography, useTheme } from "@mui/material";
+import { Box ,   useTheme } from "@mui/material";
 import { DataGrid  } from "@mui/x-data-grid";
 
 import {GetContractName} from "../../util/GetMarketContractEventData.js"   
 import DataGridHeader from "../DataGridHeader.jsx"
-
-
-import {  RowChildrenAlignLeft } from "../../components/Layout.jsx"  
-  
+ 
  
 
-
-
-
- 
-
-import { text1, tokens ,DataGridStyle } from "../../theme";
+import {  tokens ,DataGridStyle } from "../../theme";
   
 import {  useContract,
     
@@ -26,7 +17,7 @@ import {  useContract,
    } from "@thirdweb-dev/react";    
 import { 
     MARKETPLACE_ADDRESS,
-    TOOLS_ADDRESS 
+   
  } from "../../const/addresses.ts";  
    
  
@@ -38,11 +29,7 @@ const Activity = ( { nft ,listingID,  isDashboard = false }  ) => {
   const colors = tokens(theme.palette.mode);
    
 
-
-
-  const { contract } = useContract(TOOLS_ADDRESS);
-  //const { data: nft, isLoading, error } = useNFT(contract, tokenId);
-
+ 
   
   
   const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 

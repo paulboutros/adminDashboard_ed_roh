@@ -4,6 +4,16 @@ import {   getSDK_fromPrivateKey  } from "../data/API.js";
 import { ethers } from "ethers";
 import { Discord_tokenLess_stakinContract } from "../const/addresses.ts";
 
+
+
+//=======
+import ChainContext from "../context/Chain.js";
+import { addressesByNetWork } from "../scenes/chainSelection/index.jsx";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
 export const DISTStakeInfo ="DISTStakeInfo";
 export const DISTStakeInfoGeneral ="DISTStakeInfoGeneral";
 
@@ -19,6 +29,7 @@ export function useDISTContext() {
 
 export function DISTProvider({ children }) {
 
+  const { selectedChain } = useContext(ChainContext);
   const [timeRemaining, setTimeRemaining] = useState(1000);
   const address = useAddress();
 
@@ -47,7 +58,7 @@ export function DISTProvider({ children }) {
     try {
       
       let res;
-        const sdk = getSDK_fromPrivateKey();  
+        const sdk = getSDK_fromPrivateKey(selectedChain);  
         const dist_tokenLessContract = await sdk.getContract(   Discord_tokenLess_stakinContract  );
         const stake_Info = await dist_tokenLessContract.call("getStakeInfo",[ address]);
  

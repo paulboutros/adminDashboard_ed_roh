@@ -12,27 +12,36 @@ import { ConnectWallet, MediaRenderer, useAddress,
  
  
   } from "@thirdweb-dev/react";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, DROP_ADDRESS } from "../../const/addresses.ts";
+import { FARMER_ADDRESS,   STAKING_ADDRESS,  DROP_ADDRESS } from "../../const/addresses.ts";
 import { ClaimFarmer } from "../../components/FARMER/ClaimFarmer";
 import { Equipped } from "../../components/FARMER/Equipped";
 import { Inventory } from "../../components/FARMER/Inventory";
  
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from 'react';
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
   
 import { BigNumber, ethers } from "ethers";
 import { Text, Box, Card, Container, Flex, Heading, SimpleGrid, Spinner, Skeleton } from "@chakra-ui/react";
  
 
 // Your smart contract address
-const contractAddress = TOOLS_ADDRESS ;//"{{contract_address}}";
+ 
 
 const FarmerPage2 = () => {
-
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
   const amount = 1;
   //const {amount, setAmount }  = useState(); 
   const address = useAddress();
 // here, these hook return an object
  
-  const { contract } = useContract(contractAddress);
+  const { contract } = useContract(  addressesByNetWork[selectedChain].LAYER_ADDRESS );
   const {
     mutateAsync: setClaimConditions,
     isLoading,
@@ -41,7 +50,7 @@ const FarmerPage2 = () => {
 
   return (
     <Web3Button
-      contractAddress= {contractAddress}
+      contractAddress= { addressesByNetWork[selectedChain].LAYER_ADDRESS }
       action={() =>
         setClaimConditions({
           phases: [
@@ -71,28 +80,27 @@ const FarmerPage2 = () => {
  
 const FarmerPage = () => {
 
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
+  
+
+
+
   const amount = 1;
   //const {amount, setAmount }  = useState(); 
   const address = useAddress();
 // here, these hook return an object
   const { contract: farmercontract } = useContract(FARMER_ADDRESS);
-  const {  contract:toolsContract } = useContract(TOOLS_ADDRESS);
+  const {  contract:toolsContract } = useContract(  addressesByNetWork[selectedChain].LAYER_ADDRESS );
   const {  contract:stakingContract } = useContract(STAKING_ADDRESS);
-  const {  contract:rewardContract } = useContract(REWARDS_ADDRESS);
+  const {  contract:rewardContract } = useContract( addressesByNetWork[selectedChain].WUCOIN);
 
 
    
-  //const {  contract:rewardContract } = useContract(REWARDS_ADDRESS);
-  const tokenDropContract = useContract( DROP_ADDRESS, "token-drop").contract;
+   const tokenDropContract = useContract( DROP_ADDRESS, "token-drop").contract;
   const { data: tokenSupply} = useTokenSupply(tokenDropContract);
  
  const { mutate: claimTokens, isLoading } = useClaimToken(tokenDropContract);
-  console.log( "  >>>>   tokenDrop",tokenDropContract);
-// this was just to test the SDK
-  //getContract();
-  //getSDKSigner(    address  );
  
-
 
   const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
@@ -160,11 +168,11 @@ const FarmerPage = () => {
                     <p>{ethers.utils.formatUnits(rewardBalance, 18)}</p>
                   )}
                    {/* <input type ="number" value={amount} onChange={e=> setAmount(e.target.value)  } ></input> */}
-                    {/* <input type ="number" value={amount} onChange={e=> transfert()  } ></input> */}
+                    {/* <input type ="number" value={amount} onChange={e=> transfert(selectedChain)  } ></input> */}
 
 
                  <button  
-                 onClick={  () => transfert() }
+                 onClick={  () => transfert(selectedChain) }
                  disabled ={isLoading}
                  >
                     transfet
@@ -223,10 +231,10 @@ const FarmerPage = () => {
 
 
 
-async function transfert( ){
+async function transfert( selectedChain ){
   
   const signer = new ethers.Wallet(process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY  ); // "{{private_key}}"
-   const sdk = await ThirdwebSDK.fromSigner(signer, process.env.REACT_APP_ETH_NETWORK, {
+   const sdk = await ThirdwebSDK.fromSigner(signer, selectedChain , {
     clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID , // Use client id if using on the client side, get it from dashboard settings
     secretKey: process.env.REACT_APP_THIRDWEB_SECRET_KEY, // Use secret key if using on the server, get it from dashboard settings. Do NOT expose your secret key to the client-side
   });
@@ -246,23 +254,4 @@ await contract.erc20.transfer(toAddress, amount);
 
 
 //https://portal.thirdweb.com/typescript/sdk.thirdwebsdk.fromsigner
-async function  getSDKSigner(   address  ){
-  // An example of a signer using the ethers library
- const signer = new ethers.Wallet(process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY  ); // "{{private_key}}"
-
-const sdk = await ThirdwebSDK.fromSigner(signer, process.env.REACT_APP_ETH_NETWORK, {
-  clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID , // Use client id if using on the client side, get it from dashboard settings
-  secretKey: process.env.REACT_APP_THIRDWEB_SECRET_KEY, // Use secret key if using on the server, get it from dashboard settings. Do NOT expose your secret key to the client-side
-});
-
-
-
-const contract = await sdk.getContract( DROP_ADDRESS );
-
- 
-console.log( " >>>>>>>>>>>>>>>>>>     address"  ,  address  );
-//console.log( " >>>>>>>>>>>>>>>>>>    sdk contract"  , contract  );
-const tx = await contract.erc20.claim(address, 100.50);
-  
-}
  

@@ -1,22 +1,27 @@
 import {createContext, useContext,  useState, useEffect, useRef } from "react";
-import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS  } from "../const/addresses.ts";
-import { useContract,     useEnglishAuctions,     useValidDirectListings, useValidEnglishAuctions  } from "@thirdweb-dev/react";
+ 
+import { useContract   } from "@thirdweb-dev/react";
 import { getSDK_fromPrivateKey } from "../data/API.js";
 import { useAllLayersContext } from "./AllLayerAvailableContext.js";
 import { listingStatus } from "../const/various.js";
   
+//=======
+import ChainContext from "../context/Chain.js";
+import { addressesByNetWork } from "../scenes/chainSelection/index.jsx";
+ 
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
 const AllListingsContext = createContext();
 
 export function useAllListingsContext() { return useContext(AllListingsContext);}
  
  
 export function AllListingsProvider({ children , NFT_CONTRACT }) {
- 
-
-   
-   // const address = useAddress();
-   // const { data: owned, isLoading: ownedLoadin } = useOwnedNFTs(contract, address);
-   
+     
+  const { selectedChain  } = useContext(ChainContext);
 const { contract } = useContract( NFT_CONTRACT );
        
 
@@ -30,7 +35,8 @@ const { contract } = useContract( NFT_CONTRACT );
  const [allNFTsWithListing, setAllNFTsWithListing] = useState(null);
  // it can be the basci layers, but it can be the pak as well (both are ERC1155)
   
-const { contract: marketplace, isLoading: loadingMarketplace, } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
+const { contract: marketplace, isLoading: loadingMarketplace, } =
+ useContract( addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS , "marketplace-v3");
  
 
 /*
@@ -63,8 +69,8 @@ const [directListings, setDirectListing] = useState(null);
 
  // English auction   loading  ======================================================
  async function englishAuctions(){
-   const sdk = getSDK_fromPrivateKey(); 
-   const contract = await sdk.getContract( MARKETPLACE_ADDRESS );  // , "edition"
+   const sdk = getSDK_fromPrivateKey(selectedChain); 
+   const contract = await sdk.getContract(  addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS );  // , "edition"
   
   let auctions = await contract.englishAuctions.getAll();
 
@@ -88,8 +94,8 @@ async function directListingCall(){
 
 
 
-  const sdk = getSDK_fromPrivateKey(); 
-  const contract = await sdk.getContract( MARKETPLACE_ADDRESS );  // , "edition"
+  const sdk = getSDK_fromPrivateKey(selectedChain); 
+  const contract = await sdk.getContract(  addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS  );  // , "edition"
  
  let directs = await contract.directListings.getAll();
 
@@ -116,9 +122,9 @@ async function directListingCall(){
   console.log( "Hello WORLD!!! "    );
 
   directListingCall();
-  englishAuctions();
+  englishAuctions(  );
   
-}, []);
+}, [  selectedChain    ]);
 
 useEffect(() => {
 

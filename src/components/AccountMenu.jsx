@@ -3,33 +3,39 @@
 
 https://mui.com/material-ui/react-menu/ 
 */
-
+//import ListItemIcon from '@mui/material/ListItemIcon';
+//import Divider from      '@mui/material/Divider';
+//import Typography from   '@mui/material/Typography';
+//import PersonAdd from    '@mui/icons-material/PersonAdd';
+//import Settings from     '@mui/icons-material/Settings';
+//import Logout from       '@mui/icons-material/Logout';
 
 import * as React from 'react';
 import Box from          '@mui/material/Box';
 import Avatar from       '@mui/material/Avatar';
 import Menu from         '@mui/material/Menu';
 import MenuItem from     '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from      '@mui/material/Divider';
-import IconButton from   '@mui/material/IconButton';
-import Typography from   '@mui/material/Typography';
-import Tooltip from      '@mui/material/Tooltip';
-import PersonAdd from    '@mui/icons-material/PersonAdd';
-import Settings from     '@mui/icons-material/Settings';
-import Logout from       '@mui/icons-material/Logout';
 
+import IconButton from   '@mui/material/IconButton';
+import Tooltip from      '@mui/material/Tooltip';
 
 //pb added
 import {   useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAddress } from '@thirdweb-dev/react';
-import { TOOLS_ADDRESS } from "../const/addresses";
+ 
 import {  tokens  } from "../theme";
 import { useTheme } from '@emotion/react';
+import ChainContext from '../context/Chain';
+import { addressesByNetWork } from '../scenes/chainSelection';
+import { useContext } from 'react';
 
 
 export default function AccountMenu() {
+
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
+   
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -46,7 +52,8 @@ export default function AccountMenu() {
   const address = useAddress();
 
   const openSellPage =() =>{ 
-  
+    
+
     handleClose(); 
    
     //if ( address ){ 
@@ -69,11 +76,7 @@ export default function AccountMenu() {
   
        
    };
-
-
-
-
-
+ 
 
   return (
     <React.Fragment>
@@ -132,7 +135,7 @@ export default function AccountMenu() {
           <Avatar /> Home
         </MenuItem>
 
-        <MenuItem  onClick={() => OpenPage(`shop/${TOOLS_ADDRESS}/`, setTab, "Buy"  ) } >
+        <MenuItem  onClick={() => OpenPage(`shop/${ addressesByNetWork[selectedChain].LAYER_ADDRESS }/`, setTab, "Buy"  ) } >
           <Avatar /> Buy
         </MenuItem>
 

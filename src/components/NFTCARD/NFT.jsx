@@ -1,53 +1,45 @@
  
-import {  Web3Button,   useContract,ThirdwebNftMedia, useValidDirectListings, useValidEnglishAuctions
+import {   useContract,ThirdwebNftMedia, useValidDirectListings, useValidEnglishAuctions
   
 } from "@thirdweb-dev/react";
-import { TOOLS_ADDRESS , MARKETPLACE_ADDRESS  } from "../../const/addresses";
-import {evolve} from "../../util/updateMetadata"
-
-import { MediaRenderer   } from "@thirdweb-dev/react";
-
-import {VerticalStackAlignCenter ,
-   RoundedBox,
-   RoundedBoxInfo,
-   RowChildrenAlignCenter,RowChildrenAlignLeft,
-   VerticalStackAlignLeft
-
-} from "../../components/Layout.jsx"
- 
-import { Box, Typography ,CardContent  ,Card , Grid, CardMedia  } from '@mui/material'; // Update this import
-
-//import  Skeleton from '@material-ui/lab/Skeleton'
-
-import { ethers } from "ethers";
-import { Button, background } from "@chakra-ui/react";
-import styles    from "../../styles/NFT.module.css";
-//import stylesBuy from "../../styles/Buy.module.css";
-/* 
-type Props = {
-    nft: NFT;
-};*/
-
-import {text2, text1, tokens } from "../../theme.js";
+import {   MARKETPLACE_ADDRESS  } from "../../const/addresses.js";
+  
+import styles from "../../styles/NFT.module.css";
 import {   useTheme  } from "@mui/material";
+
+
+
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
 
 export default function NFTComponent({ nft } ) {
 
+
+  
+
+
+  const { selectedChain  } = useContext(ChainContext);
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  
 
   const  {contract: marketplace, isLoading: loadingMarketplace } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
 
   const { data: directListing, isLoading: loadingDirectListing } = 
       useValidDirectListings(marketplace, {
-          tokenContract: TOOLS_ADDRESS,
+          tokenContract: addressesByNetWork[selectedChain].LAYER_ADDRESS,
           tokenId: nft.metadata.id,
       });
 
   //Add for auciton section
   const { data: auctionListing, isLoading: loadingAuction} = 
       useValidEnglishAuctions(marketplace, {
-          tokenContract: TOOLS_ADDRESS,
+          tokenContract: addressesByNetWork[selectedChain].LAYER_ADDRESS,
           tokenId: nft.metadata.id,
       });
 

@@ -1,17 +1,22 @@
-//import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-//import { NFT } from "@thirdweb-dev/react";
-import { TOOLS_ADDRESS,  REWARDS_ADDRESS, PACK_ADDRESS, MARKETPLACE_ADDRESS  } from "../const/addresses";
+ import { createThirdwebClient  } from "thirdweb";
+  
+import {
+   
+   
+   PACK_ADDRESS,
+   MARKETPLACE_ADDRESS ,
+   
+   wuCharacterDropAddress,
+   wuCharacterDropAddress_721 } from "../const/addresses";
+
+
 import {CreateBundlePackWEB2, getSDK_fromPrivateKey} from "../data/API";  
 
+import {
+  NATIVE_TOKEN_ADDRESS
+} from "@thirdweb-dev/sdk";
 
-
-
-
-
-
-
-
-
+ 
 
 
 const urlBase = "https://wulibuild.s3.eu-west-3.amazonaws.com/WulirocksLayerNFTimages/"
@@ -24,9 +29,9 @@ export async function gainExp(
     nftTokenId//: string,
 ){
     try {
-        const sdk = getSDK_fromPrivateKey();
+         
 
-        //const contract = await sdk.getContract(TOOLS_ADDRESS);
+         
 
         var updatedExp = await parseInt(exp) + 50;
      //   var updatedLvl = await parseInt(level);
@@ -66,9 +71,11 @@ export async function gainExp(
 };
 
 export async function evolve(
-    nft,//: NFT,
-    level,//: string,
-    nftTokenId //: string,
+    nft, 
+    level, 
+    nftTokenId, 
+    LAYER_ADDRESS
+
 ){
     try {
         const category ="kn"; 
@@ -79,7 +86,7 @@ export async function evolve(
           // console.log( " >>>>>    resultNumber" + resultNumber);
         const sdk = getSDK_fromPrivateKey();
 
-     //   const contract = await sdk.getContract(TOOLS_ADDRESS);
+     //   const contract = await sdk.getContract( LAYER_ADDRESS );
  
        
             const metadata = {
@@ -95,42 +102,14 @@ export async function evolve(
                      }
                     
                 ],
-                   
-                
+                 
             };
 
 
           //  const data = await sdk.storage.downloadJSON(nft.metadata.uri);
-
-      //  console.log("data json = " , data);
+      
            const newUri = await sdk.storage.upload(metadata);
-
-     // this upldate the contract name and description not the nft inside of it
-       /*
-            const txResult = await contract.metadata.update({
-                name: "WuliRocks Layers",
-                description: "Layer to get combo reward",
-                index: 0 // Specify the index of the NFT you want to update
-               // image: "/path/to/image.jpg", // URL, URI, or File object
-               // external_link: "https://myapp.com",
-            });*/
- 
-          //   const dd = await use_SetClaimConditions(contract, REWARDS_ADDRESS);
-   
-
-         // const txResult = await contract.erc1155.burn(0, 2);
-           
-        /*
-         const updateNFT = await contract.call(
-            "setTokenURI",
-            [
-                nftTokenId,
-                newUri,
-            ]
-        );
-              */
- 
-      //  }
+       
 
         return;
     } catch (error) {
@@ -138,8 +117,8 @@ export async function evolve(
     }
 }
 
-
-export async function CreateListingPack(){
+ 
+export async function CreateListingPack( WUCOIN ){
 
    
   const sdk =  getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
@@ -156,7 +135,7 @@ export async function CreateListingPack(){
       assetContractAddress: PACK_ADDRESS, // Required - smart contract address of NFT to sell
       tokenId:0,// 5 , // Required - token ID of the NFT to sell
       pricePerToken: "0.076", // Required - price of each token in the listing
-      currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
+      currencyContractAddress: WUCOIN , // Optional - smart contract address of the currency to use for the listing
       isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
       quantity: 55 ,  //  fianl real case is 11 
       startTimestamp: new Date(), // Optional - when the listing should start (default is now)
@@ -168,22 +147,22 @@ export async function CreateListingPack(){
     console.log(">>>>>>    CreateListing    PACK     "   , txResult); 
 }
 
-export async function CreateListing(){
+export async function CreateListing( LAYER_ADDRESS, WUCOIN  ){
 
    
     const sdk =  getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
    
      const marketContract = await sdk.getContract(MARKETPLACE_ADDRESS,"marketplace-v3" );
- 
+   
   // https://portal.thirdweb.com/typescript/sdk.englishauctions
 
   // auction listing a layer
      const txResult = await marketContract.englishAuctions.createAuction({
-      assetContractAddress: TOOLS_ADDRESS, // Required - smart contract address of NFT to sell
+      assetContractAddress: LAYER_ADDRESS, // Required - smart contract address of NFT to sell
       tokenId: 40, // Required - token ID of the NFT to sell
       buyoutBidAmount:"0.09", // Required - amount to buy the NFT and close the listing
       minimumBidAmount:"0.01", // Required - Minimum amount that bids must be to placed
-      currencyContractAddress: REWARDS_ADDRESS, // Optional - smart contract address of the currency to use for the listing
+      currencyContractAddress: WUCOIN, // Optional - smart contract address of the currency to use for the listing
       quantity: 1, // Optional - number of tokens to sell (1 for ERC721 NFTs)
       startTimestamp: new Date(), // Optional - when the listing should start (default is now)
       endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // Optional - when the listing should end (default is 7 days from now)
@@ -195,10 +174,10 @@ export async function CreateListing(){
     // direct listing a layer
    /*
      const txResult = await marketContract.directListings.createListing({
-      assetContractAddress: TOOLS_ADDRESS, // Required - smart contract address of NFT to sell
+      assetContractAddress: LAYER_ADDRESS, // Required - smart contract address of NFT to sell
       tokenId: 40 , // Required - token ID of the NFT to sell
       pricePerToken: "0.076", // Required - price of each token in the listing
-      currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
+      currencyContractAddress: WUCOIN , // Optional - smart contract address of the currency to use for the listing
       isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
       quantity: 1 ,  //  fianl real case is 11 
       startTimestamp: new Date(), // Optional - when the listing should start (default is now)
@@ -206,13 +185,13 @@ export async function CreateListing(){
     });
 */
   // direct listing a pack
-    console.log("CreateListing         ");
+     
     /*
     const txResult = await marketContract.directListings.createListing({
         assetContractAddress: PACK_ADDRESS, // Required - smart contract address of NFT to sell
         tokenId: 5 , // Required - token ID of the NFT to sell
         pricePerToken: "0.076", // Required - price of each token in the listing
-        currencyContractAddress: REWARDS_ADDRESS , // Optional - smart contract address of the currency to use for the listing
+        currencyContractAddress: WUCOIN , // Optional - smart contract address of the currency to use for the listing
         isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
         quantity: 55 ,  //  fianl real case is 11 
         startTimestamp: new Date(), // Optional - when the listing should start (default is now)
@@ -236,7 +215,7 @@ export async function UpdateListing (){
         assetContractAddress:  PACK_ADDRESS , // Required - smart contract address of NFT to sell
         tokenId: 0, // Required - token ID of the NFT to sell
         pricePerToken: "0.05", // Required - price of each token in the listing
-        currencyContractAddress: REWARDS_ADDRESS, // Optional - smart contract address of the currency to use for the listing
+        currencyContractAddress: WUCOIN, // Optional - smart contract address of the currency to use for the listing
         isReservedListing: false, // Optional - whether or not the listing is reserved (only specific wallet addresses can buy)
         quantity: 11, // Optional - number of tokens to sell (1 for ERC721 NFTs)
         startTimestamp: new Date(), // Optional - when the listing should start (default is now)
@@ -307,7 +286,7 @@ export async function UpdatePackMetaData(){
   return packs;
 }
 
-export async function createBundle(  ){
+export async function createBundle(  LAYER_ADDRESS  ){
            /*
   const generatedData = generateData();
 
@@ -329,7 +308,7 @@ console.log( "packs" , packs );
   const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
 
   const packAddress = PACK_ADDRESS;
-  const cardAddress = TOOLS_ADDRESS;  
+  const cardAddress = LAYER_ADDRESS;  
 
   const pack = await sdk.getContract(packAddress, "pack");
 
@@ -358,13 +337,13 @@ console.log( "packs" , packs );
 }
  
 
- export async function createBundle_smallTest(  ){
+ export async function createBundle_smallTest( LAYER_ADDRESS  ){
            
     
     const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
   
     const packAddress = PACK_ADDRESS;
-    const cardAddress = TOOLS_ADDRESS; // "0xdA637F0BAA8CB69e7e23926915F6Cec5b248B3B4" ;//"0xF810082B4FaC42d65156Da88D5212dfAA75D0117";
+    const cardAddress = LAYER_ADDRESS;    
   
     const pack = await sdk.getContract(packAddress, "pack");
   
@@ -407,14 +386,14 @@ console.log( "packs" , packs );
   
   }
 
-  export async function UpdateAllNFTLayers(
+  export async function UpdateAllNFTLayers( LAYER_ADDRESS ){
     
-){
+
     try {
   
         const sdk =   getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
-        const cardAddress = TOOLS_ADDRESS;
-     //const contract = await sdk.getContract(TOOLS_ADDRESS);
+        const cardAddress =  LAYER_ADDRESS;
+     //const contract = await sdk.getContract( LAYER_ADDRESS);
         const contract = await sdk.getContract(cardAddress, "edition");
         const nfts = await contract.erc1155.getAll();
 
@@ -494,7 +473,7 @@ console.log( "packs" , packs );
                // external_link: "https://myapp.com",
             });*/
  
-          //   const dd = await use_SetClaimConditions(contract, REWARDS_ADDRESS);
+          //   const dd = await use_SetClaimConditions(contract, WUCOIN);
    
 
          // const txResult = await contract.erc1155.burn(0, 2);
@@ -506,6 +485,202 @@ console.log( "packs" , packs );
         console.log(error);
     }
 }
+
+
+
+export async function claimToButton( to , amount ){
+/*
+  const client = getClientV5();
+  const contract = getContract({ 
+    client, 
+    chain: defineChain(111 5   51 1 1), 
+    address: wuCharacterDropAddress_721
+    });
+
+  const transaction = claimTo({
+    contract,
+    to,
+    amount
+  });
+  
+   */
+
+}
+ 
+
+export async function getClientV5( ){
+  // create the client with your clientId, or secretKey if in a server environment
+const client = createThirdwebClient({ 
+clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID
+});
+ return client;
+
+}
+
+export async function getContractV5(){
+
+
+   /*
+const client = createThirdwebClient({ 
+clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID
+});
+
+// connect to your contract
+const contract = getContract({ 
+client, 
+chain: defineChain(111  5511  1), 
+address: wuCharacterDropAddress_721
+});
+
+console.log(  " data result = "   ,  contract  );
+ 
+const contract_URI = await readContract({ 
+  contract, 
+  method: "function contractURI() view returns (string)", 
+  params: [] 
+})
+
+const nextTokenIdToMint = await readContract({ 
+  contract, 
+  method: "function nextTokenIdToMint() view returns (uint256)", 
+  params: [] 
+})
+
+
+ 
+const getActiveCondition = await readContract({ 
+  contract, 
+  method: "function getClaimConditionById(uint256 _conditionId) view returns ((uint256 startTimestamp, uint256 maxClaimableSupply, uint256 supplyClaimed, uint256 quantityLimitPerWallet, bytes32 merkleRoot, uint256 pricePerToken, address currency, string metadata) condition)", 
+  params: [0] 
+})
+
+console.log(  "  getActiveCondition  = "   ,   getActiveCondition  );
+
+  
+
+const b = convertToInteger( nextTokenIdToMint.toString() )
+console.log(  "  b  = "   ,   b  );
+
+
+const obj = {
+
+  contract: contract,
+  client:client,
+  chain: defineChain(111  55111),
+  nextTokenIdToMint: nextTokenIdToMint.toString() ,
+  getActiveCondition: getActiveCondition, 
+
+
+
+  contractURI : contract_URI 
+
+
+
+}
+*/
+
+    return null;// obj;
+
+}
+
+//=================================
+function convertToInteger(input) {
+  // Remove the trailing 'n' character
+  const numberString = input.slice(0, -1);  // .replace('n', '')
+  
+  // Convert the string to an integer
+  const number = parseInt(numberString, 10);
+  
+  // Check if the conversion is successful
+  if (isNaN(number)) {
+      throw new Error("Invalid input: not a number");
+  }
+  
+  return number;
+}
+
+
+
+export async function testReadcontract(){
+
+/*
+
+     // create the client with your clientId, or secretKey if in a server environment
+const client = createThirdwebClient({ 
+  clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID
+ });
+
+// connect to your contract
+const contract = getContract({ 
+  client, 
+  chain: defineChain(11155    111), 
+  address: wuCharacterDropAddress_721
+});
+  
+console.log(  " data result = "   ,  contract  );
+
+
+
+
+
+const getActiveClaimConditionId = await readContract({ 
+  contract, 
+  method: "function getActiveClaimConditionId() view returns (uint256)", 
+  params: [] 
+})
+
+console.log(  " getActiveClaimConditionId= "   ,  getActiveClaimConditionId  );
+
+
+
+const totalSupply = await readContract({ 
+  contract, 
+  method: "function totalSupply() view returns (uint256)", 
+  params: [] 
+})
+
+ 
+console.log(  " totalSupply = "   ,  totalSupply  );
+
+const claimCondition = await readContract({ 
+  contract, 
+  method: "function claimCondition() view returns (uint256 currentStartId, uint256 count)", 
+  params: [] 
+})
+
+console.log(  " claimCondition = "   ,  claimCondition  );
+
+*/
+}
+
+//=================================
+
+
+export async function SetClaimConditions( WUCOIN ){
+ 
+    try {
+  
+        const sdk = getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
+       // if you test on base
+       // use wuLayerDropERC1155BASE  and make sure you change chain ID to Base
+        //wuCharacterDropAddress
+        const contract = await sdk.getContract(wuCharacterDropAddress  );
+  
+       const dd = await use_SetClaimConditions(contract, WUCOIN);
+    
+
+       console.log(  " use_SetClaimConditions result = "   ,  dd  );
+
+        return;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+
+
 
 
   export async function mintToCollection(){
@@ -545,32 +720,50 @@ console.log( "packs" , packs );
 
 async function  use_SetClaimConditions( contract , currencyAdress){
 
+
+   // base contract 0x590b1670CD6b1d1aBeEc7b59BEE72EF8e40b695C
+
     const txResult = await contract.erc1155.claimConditions.set(
-          0 , // ID of the token to set the claim conditions for
-        [
-          {
+          10 , // ID of the token to set the claim conditions for
+         [
+          { 
             metadata: {
-              name: "Phase 1", // The name of the phase
+              name: "Entry Phase 1", // The name of the phase
             },
-            currencyAddress: currencyAdress, // The address of the currency you want users to pay in
-            price: 500, // The price of the token in the currency specified above
-            maxClaimablePerWallet: 5, // The maximum number of tokens a wallet can claim
-            maxClaimableSupply: 25, // The total number of tokens that can be claimed in this phase
-            startTime: new Date(), // When the phase starts (i.e. when users can start claiming tokens)
+           // currencyAddress: NATIVE_TOKEN_ADDRESS, // currencyAdress, // The address of the currency you want users to pay in
+          //  price: 0.005, // The price of the token in the currency specified above
+          //  maxClaimablePerWallet: 2, // The maximum number of tokens a wallet can claim
+          //  maxClaimableSupply: 5, // The total number of tokens that can be claimed in this phase
+          //  startTime: new Date(), // When the phase starts (i.e. when users can start claiming tokens)
             waitInSeconds: 60 * 60 * 1   //(one hour) The period of time users must wait between repeat claims
             
           },
+          /*
+          {
+            metadata: {
+              name: "Entry Phase 2", // price doubles here
+            },
+            currencyAddress: NATIVE_TOKEN_ADDRESS, // currencyAdress, // The address of the currency you want users to pay in
+            price: 0.01, // The price of the token in the currency specified above
+            maxClaimablePerWallet: 1, // The maximum number of tokens a wallet can claim
+            maxClaimableSupply: 5, // The total number of tokens that can be claimed in this phase
+            startTime: new Date(Date.UTC(2023, 6, 25, 12, 24, 0)) , // July 25th, 2023, 7:24 PM EST, 
+            waitInSeconds: 60 * 60 * 1   //(one hour) The period of time users must wait between repeat claims
+            
+          },*/
+
+
         ],
         false, // Whether to resetClaimEligibilityForAll (i.e. reset state of claims for previous claimers)
       );
 
 
-
+      return txResult;
  }
 
 
  
- function generateData(  ){
+ function generateData( LAYER_ADDRESS ){
 
      
   const cardData = [];
@@ -583,7 +776,7 @@ async function  use_SetClaimConditions( contract , currencyAdress){
     // const totalRewards = NFTs[ tokenId ].supply;
   
     cardData.push({
-      contractAddress: TOOLS_ADDRESS,
+      contractAddress: LAYER_ADDRESS,
       tokenId: tokenId,
       quantityPerReward: 1,
       totalRewards: totalRewards,

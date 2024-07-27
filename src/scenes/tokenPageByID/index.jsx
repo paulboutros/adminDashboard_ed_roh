@@ -33,12 +33,22 @@ import {useNavigate, useParams } from 'react-router-dom';
 import { useAllListingsContext } from "../../context/AllListingContext.js";
 import Container from "../../components/Container/Container.jsx";
 import { ButtonLarge, DisplayNFTimage, MainButtonAndPriceField, NftPriceBlock } from "./MarketListingButtons.jsx";
-import { Flex } from "@chakra-ui/react";
-
+ import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
 
   const screenWidthThreshold =1050;
  const _mainBoxPadding = 3;
  const TokenDetailsByID =  ({  propContractAddress,  propTokenId,  displayMode  } ) => {
+
+
+ //=======
+
+ //const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+  
+
 
   const navigate = useNavigate ();
   // we may need to change contractAddress param name as it could be confused with web3 button parameter
@@ -80,6 +90,8 @@ useEffect(() => {
    
 }, []);
    
+const { selectedChain, setSelectedChain } = useContext(ChainContext);
+
 const [screenWidth, setScreenWidth] = useState(window.innerWidth);
  
   useEffect(() => {
@@ -96,7 +108,7 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
    // Function to fetch NFT data
    const fetchNFT = async () => {
 
-       const sdk = getSDK_fromPrivateKey(); 
+       const sdk = getSDK_fromPrivateKey( selectedChain ); 
        const contract = await sdk.getContract(contractAddress);
        //const nftResult = await contract.erc721.get(tokenId);
        const nftResult = await contract.erc1155.get(tokenId);

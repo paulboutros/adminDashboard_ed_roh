@@ -16,11 +16,10 @@
   import ShareIcon from '@mui/icons-material/Share';
    
 
-import {  providers, ethers } from "ethers";
+import {   ethers } from "ethers";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { useContract, useContractRead, useAddress } from "@thirdweb-dev/react";
-import { TOOLS_ADDRESS , REWARDS_ADDRESS } from "../../const/addresses";
- 
+  
 import { Box, IconButton, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {   useContext,  useState  } from "react";
@@ -29,15 +28,22 @@ import { ColorModeContext, tokens,  StyledConnectWallet, cool_orange  } from "..
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
  
- import { RowChildrenAlignCenter  } from "../../components/Layout"
+import { RowChildrenAlignCenter  } from "../../components/Layout"
     
     
-    
+//=======
+  import ChainContext from "../../context/Chain.js";
+  import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+  //const { selectedChain, setSelectedChain } = useContext(ChainContext);
+  //addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
  
 
    
  import stylesProfile from "../../styles/Profile.module.css"; 
 import AccountMenu from "../../components/AccountMenu";
+
+import ChainDropDown from '../../scenes/chainSelection/index.jsx';
 
 import styled from 'styled-components';
 import { useEffect } from 'react';
@@ -61,6 +67,8 @@ const actions = [
 
 const Topbar = () => {
 
+
+   const { selectedChain  } = useContext(ChainContext);
    const [tab, setTab] = useState("Main");
    const theme = useTheme();
    const navigate = useNavigate();
@@ -69,8 +77,16 @@ const Topbar = () => {
     
    const address = useAddress();
 
-   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
+   const { contract: rewardContract } = useContract( addressesByNetWork[selectedChain].WUCOIN);
    const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
+   
+
+   useEffect(() => {
+      if (!selectedChain) return;
+      console.log( "selectedChain  = ", selectedChain  );
+
+    }, [ selectedChain]);
+
    
    
    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -92,9 +108,7 @@ const Topbar = () => {
 
   }, [address]);
 
-  let currentSigner;
  
-
     const OpenPage = ( route, setTab, tabName ) => {
     
   
@@ -147,7 +161,7 @@ const Topbar = () => {
                                 <div className={stylesProfile.toptabs}>
                                   
                                   <h3 className={`${stylesProfile.toptab} ${tab === "Buy" ? stylesProfile.topactiveTab : ""}`}
-                                    onClick={() => OpenPage(`shop/${TOOLS_ADDRESS}/`, setTab, "Buy"  ) }
+                                    onClick={() => OpenPage(`shop/${addressesByNetWork[selectedChain].LAYER_ADDRESS}/`, setTab, "Buy"  ) }
                                   >
                                     Buy
                                  </h3>
@@ -165,6 +179,9 @@ const Topbar = () => {
                                   >
                                     Main
                                   </h3>
+
+                                  <ChainDropDown/>
+                                
 
 
                                 </div>
@@ -218,7 +235,11 @@ const Topbar = () => {
 
                   
               {screenWidth < 600 &&  (
-                    <AccountMenu/> 
+                    <>
+                  <ChainDropDown/>
+                    <AccountMenu/>
+                    </>   
+                  
               )}
 
         

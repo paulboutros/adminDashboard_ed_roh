@@ -23,17 +23,26 @@ import {
   } from "@thirdweb-dev/react";
   import {
     Discord_tokenLess_stakinContract,
-    REWARDS_ADDRESS,
+     
     
     Discord_invite_stake_token,
   } from "../../const/addresses";
-  import React, { useEffect, useState } from "react";
+  import React, {  useState } from "react";
   import { ethers } from "ethers";
 import { useTheme } from "@emotion/react";
 import {    tokens } from "../../theme";
  import { CustWeb3Button } from "../Buttons/buttons";
  
 import RewardToken from "./RewardToken";
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
 
  //let timeRemaining;
   const _boxHeight ="270px";
@@ -42,17 +51,22 @@ import RewardToken from "./RewardToken";
 
  
   export default function Stake() {
+
+    const { selectedChain, setSelectedChain } = useContext(ChainContext);
+    
+   
+
     const address = useAddress();
     
  
      
-
+    // this should be probably replace by character token  (charcter ninted as combo rewards)
     const { contract: stakeTokenContract } = useContract(
         Discord_invite_stake_token,
       "token"
     );
     const { contract: rewardTokenContract } = useContract(
-        REWARDS_ADDRESS,
+      addressesByNetWork[selectedChain].WUCOIN,
       "token"
     );
     const { contract: stakeContract } = useContract(
@@ -111,7 +125,7 @@ import RewardToken from "./RewardToken";
  
 
  function StakeToken(){
-    
+  const { selectedChain  } = useContext(ChainContext);
     const address = useAddress();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -122,7 +136,7 @@ import RewardToken from "./RewardToken";
       "token"
     );
     const { contract: rewardTokenContract } = useContract(
-        REWARDS_ADDRESS,
+      addressesByNetWork[selectedChain].WUCOIN,
       "token"
     );
     const { contract: stakeContract } = useContract(

@@ -10,7 +10,18 @@ import {
   useCreateDirectListing,
   Web3Button,
 } from "@thirdweb-dev/react";
-  import {MARKETPLACE_ADDRESS, TOOLS_ADDRESS, REWARDS_ADDRESS  } from "../../const/addresses";
+  
+
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
 
 //import { useRouter } from "next/router";
 import {  useNavigate  } from 'react-router-dom';
@@ -22,29 +33,9 @@ import toastStyle from "../../util/toastConfig";
 import { tokens, themeSettings, buttonStyle } from "../../theme";
 import { useTheme } from "@mui/material";
 
+ 
 
-/*
-type Props = {
-  nft: NFTType;
-};
 
-type AuctionFormData = {
-  nftContractAddress: string;
-  tokenId: string;
-  startDate: Date;
-  endDate: Date;
-  floorPrice: string;
-  buyoutPrice: string;
-};
-
-type DirectFormData = {
-  nftContractAddress: string;
-  tokenId: string;
-  price: string;
-  startDate: Date;
-  endDate: Date;
-};
-*/
 
 export default function SaleInfo({ nft }) { // : Props
 
@@ -54,9 +45,9 @@ export default function SaleInfo({ nft }) { // : Props
   const theme = useTheme();
   const colors =  tokens(theme.palette.mode);
   const element = themeSettings(theme.palette.mode);
-
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
   // Connect to marketplace contract
-  const { contract: marketplace } = useContract( MARKETPLACE_ADDRESS,  "marketplace-v3" );
+  const { contract: marketplace } = useContract(  addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS,  "marketplace-v3" );
     
    
  
@@ -64,7 +55,7 @@ export default function SaleInfo({ nft }) { // : Props
   // useContract is a React hook that returns an object with the contract key.
   // The value of the contract key is an instance of an NFT_COLLECTION on the blockchain.
   // This instance is created from the contract address (NFT_COLLECTION_ADDRESS)
-  const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
+  const { contract: nftCollection } = useContract(  addressesByNetWork[selectedChain].LAYER_ADDRESS  );
 
   // Hook provides an async function to create a new auction listing
   const { mutateAsync: createAuctionListing } =
@@ -81,9 +72,9 @@ export default function SaleInfo({ nft }) { // : Props
   const { register: registerAuction, handleSubmit: handleSubmitAuction } =
     useForm({  // <AuctionFormData>
       defaultValues: {
-        nftContractAddress: TOOLS_ADDRESS,
+        nftContractAddress: addressesByNetWork[selectedChain].LAYER_ADDRESS,
         tokenId: nft.metadata.id,
-        currency: REWARDS_ADDRESS ,
+        currency:  addressesByNetWork[selectedChain].WUCOIN ,
 
 
         startDate: new Date(),
@@ -98,13 +89,13 @@ export default function SaleInfo({ nft }) { // : Props
     // Check if approval is required
     const hasApproval = await nftCollection?.call("isApprovedForAll", [
       nft.owner,
-      MARKETPLACE_ADDRESS,
+      addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS,
     ]);
 
     // If it is, provide approval
     if (!hasApproval) {
       const txResult = await nftCollection?.call("setApprovalForAll", [
-        MARKETPLACE_ADDRESS,
+        addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS,
         true,
       ]);
 
@@ -124,9 +115,9 @@ export default function SaleInfo({ nft }) { // : Props
   const { register: registerDirect, handleSubmit: handleSubmitDirect } =
     useForm ({
       defaultValues: {
-        nftContractAddress: TOOLS_ADDRESS,
+        nftContractAddress: addressesByNetWork[selectedChain].LAYER_ADDRESS,
         tokenId: nft.metadata.id,
-        currency: REWARDS_ADDRESS,
+        currency:  addressesByNetWork[selectedChain].WUCOIN,
 
         startDate: new Date(),
         endDate: new Date(),
@@ -139,7 +130,7 @@ export default function SaleInfo({ nft }) { // : Props
     const txResult = await createAuctionListing({
       assetContractAddress: data.nftContractAddress,
       tokenId: data.tokenId,
-      currencyContractAddress: REWARDS_ADDRESS ,//data.currency,
+      currencyContractAddress:  addressesByNetWork[selectedChain].WUCOIN ,//data.currency,
 
 
       buyoutBidAmount: data.buyoutPrice,
@@ -156,7 +147,7 @@ export default function SaleInfo({ nft }) { // : Props
     const txResult = await createDirectListing({
       assetContractAddress: data.nftContractAddress,
       tokenId: data.tokenId,
-      currencyContractAddress: REWARDS_ADDRESS ,//data.currency,
+      currencyContractAddress:  addressesByNetWork[selectedChain].WUCOIN ,//data.currency,
 
 
       pricePerToken: data.price,
@@ -237,7 +228,7 @@ export default function SaleInfo({ nft }) { // : Props
           />
 
           <Web3Button
-            contractAddress={MARKETPLACE_ADDRESS}
+            contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
 
             className="tw-web3button--connect-wallet" 
             style={{ backgroundColor: colors.blueAccent[  buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
@@ -266,7 +257,7 @@ export default function SaleInfo({ nft }) { // : Props
                 let lastListing;
                if ( allListings ) { lastListing =  allListings[  (allListings.length-1 ) ];}
                console.log(" sucess here is last listing: " , lastListing );
-               navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/${lastListing?.id}/NAN`);
+               navigate(`/tokenByListingID/${  addressesByNetWork[selectedChain].LAYER_ADDRESS }/${nft.metadata.id}/${lastListing?.id}/NAN`);
               
                
             }}
@@ -324,7 +315,7 @@ export default function SaleInfo({ nft }) { // : Props
           />
 
           <Web3Button
-            contractAddress={MARKETPLACE_ADDRESS}
+            contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
             action={async () => {
               return await handleSubmitAuction(handleSubmissionAuction)();
             }}
@@ -348,7 +339,7 @@ export default function SaleInfo({ nft }) { // : Props
               let lastAuction;
                if ( allAuctions ) {lastAuction =  allAuctions[  (allAuctions.length-1 ) ];}
                console.log(" sucess here is last listing: " , lastAuction );
-              navigate(`/tokenByListingID/${TOOLS_ADDRESS}/${nft.metadata.id}/NAN/${lastAuction?.id}`);
+              navigate(`/tokenByListingID/${ addressesByNetWork[selectedChain].LAYER_ADDRESS }/${nft.metadata.id}/NAN/${lastAuction?.id}`);
 
               /*
               http://localhost:3000/tokenByListingID/0x06a33CD093aDD0C6A8F685888f1B3E0C119b2461/2/NAN/5
@@ -356,7 +347,7 @@ export default function SaleInfo({ nft }) { // : Props
 
 
               // router.push(
-              //   `/token/${TOOLS_ADDRESS}/${nft.metadata.id}`
+               
               // );
             }}
           >

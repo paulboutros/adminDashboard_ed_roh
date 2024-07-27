@@ -4,39 +4,45 @@ import {
     useContract,
     useOwnedNFTs,
   } from "@thirdweb-dev/react";
-  import React, {useEffect, useState } from "react";
+  import React, { useState } from "react";
   import Container from "../../components/Container/Container";
   import NFTGrid from "../../components/NFTGrid";
-  import { TOOLS_ADDRESS } from "../../const/addresses";
+  
   import tokenPageStyles from "../../styles/Token.module.css";
   import stylesNFT from "../../styles/NFT.module.css";
-
-
+ 
   //import { NFT as NFTType } from "@thirdweb-dev/sdk";
   import SaleInfo from "../../components/SaleInfo/SaleInfo";
 import {   RoundedBox } from "../../components/Layout";
 import { Typography, useTheme } from "@mui/material";
-import { tokens, mainContainerPagePad } from "../../theme";
+import {   mainContainerPagePad } from "../../theme";
 import ConnectWalletPage from "../../components/ConnectWalletPage";
 import { getSDK_fromPrivateKey } from "../../data/API";
  
    
+
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+ 
   export default function Sell() {
+
+
+    const { selectedChain  } = useContext(ChainContext);
+    //addressesByNetWork[selectedChain].LAYER_ADDRESS
+
     // Load all of the NFTs from the NFT Collection
-    const { contract } = useContract(TOOLS_ADDRESS);
+    const { contract } = useContract(addressesByNetWork[selectedChain].LAYER_ADDRESS);
     const   address = useAddress();
     const { data, isLoading } = useOwnedNFTs(contract, address);
     const [selectedNft, setSelectedNft] = useState();
- 
-
-    //const { allLayers} = useAllLayersContext(); 
-
   
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-
-    
- 
+     
   
     return (
       <React.Fragment>
@@ -60,15 +66,15 @@ import { getSDK_fromPrivateKey } from "../../data/API";
                 address={address}
                 isLoading={isLoading}
                
-                NFT_contract={TOOLS_ADDRESS}
+                NFT_contract={addressesByNetWork[selectedChain].LAYER_ADDRESS}
                 NFTdata={data} 
                 emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
                 // overrideOnclickBehavior={(nft) => { setSelectedNft(nft); }}
                  overrideOnclickBehavior={ async (nft) => {
 
 
-                  const sdk = getSDK_fromPrivateKey(); 
-                  const contract = await sdk.getContract(TOOLS_ADDRESS);
+                  const sdk = getSDK_fromPrivateKey(selectedChain); 
+                  const contract = await sdk.getContract(addressesByNetWork[selectedChain].LAYER_ADDRESS);
                   //const nftResult = await contract.erc721.get(tokenId);
                   const nftResult = await contract.erc1155.get( nft.metadata.id );
  

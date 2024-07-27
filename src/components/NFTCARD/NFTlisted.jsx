@@ -6,10 +6,18 @@ import {  ThirdwebNftMedia,  useContract,useValidDirectListings, useValidEnglish
   
  //import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import { getSDK_fromPrivateKey  } from "../../data/API.js";
- import {useEffect, useState} from "react";
+ import {useContext, useEffect, useState} from "react";
  import {   useParams } from 'react-router-dom';
- import { AddressCopyBlock  } from '../BlockLink/BlockLinks';
+ import { AddressCopyBlock  } from '../BlockLink/BlockLinks.jsx';
  
+
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
 
 
 const NFTListed =  ({ propContractAddress, propTokenId,
@@ -32,7 +40,8 @@ const NFTListed =  ({ propContractAddress, propTokenId,
  //const { user } = useUserContext();
 
  const theme = useTheme();
- //const colors = tokens(theme.palette.mode);
+ const { selectedChain  } = useContext(ChainContext);
+ //const { contract } = useContract(addressesByNetWork[selectedChain].LAYER_ADDRESS);
  
 
   const [nft, setNFT] = useState();
@@ -50,7 +59,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
 
        
             
-            const sdk  = getSDK_fromPrivateKey(); 
+            const sdk  = getSDK_fromPrivateKey( selectedChain); 
             contract   = await sdk.getContract(NFT_CONTRACT);
             nftResult  = await contract.erc1155.get(tokenId);
          

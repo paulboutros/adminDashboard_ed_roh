@@ -1,17 +1,26 @@
- import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../../const/addresses';
+ import { STAKING_ADDRESS } from '../../const/addresses';
  //import Link from 'next/link';
  import { Link } from 'react-router-dom';
 
 
-import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
-import { NFT } from '@thirdweb-dev/sdk';
-import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
+ import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
+ import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
 
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from 'react';
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
  
 
 export function Inventory({ nft }) {
+
+    const { selectedChain  } = useContext(ChainContext);
+
     const address = useAddress();
-    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
+    const { contract: toolContract } = useContract(  addressesByNetWork[selectedChain].LAYER_ADDRESS );
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);
 
     async function stakeNFT(id) {

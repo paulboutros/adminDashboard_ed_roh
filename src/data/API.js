@@ -6,12 +6,19 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import metadataList from "../metadata/nftmetadata.json"
  
 import { referralRewardTabIndex } from "../scenes/profileWallet/index.jsx";
-import { TOOLS_ADDRESS } from "../const/addresses.ts"
  
-export function getSDK_fromPrivateKey() {
+
+ 
+export function getSDK_fromPrivateKey(   selectedChain  ) {
    
-        const chain =process.env.REACT_APP_ETH_NETWORK;
-      const sdk =   ThirdwebSDK.fromPrivateKey(
+  if (selectedChain == null) {  // Check for both undefined and null
+    throw new Error("getSDK_fromPrivateKey: selectedChain is required and cannot be undefined or null");
+  }
+ 
+
+
+        const chain = selectedChain ; 
+         const sdk =   ThirdwebSDK.fromPrivateKey(
           process.env.REACT_APP_THIRDWEB_WALLET_PRIVATE_KEY,
           chain,
           {
@@ -23,63 +30,7 @@ export function getSDK_fromPrivateKey() {
       return sdk;
   };
    
-export async function GetAllNFTfromSDK( ownedNft  /*address*/ ){
-       
-  const sdk = getSDK_fromPrivateKey(); 
-  const contract = await sdk.getContract(TOOLS_ADDRESS);
-
-    let nfts;
-    if ( ownedNft ){
-       nfts = ownedNft;
-     }else{
-       nfts = await contract.erc1155.getAll();
-     //  console.log( " >>>>  contract.erc1155.getAll() =" , nfts    );
-     
-     }
-   
-
-     if (   !nfts  ){
-        console.log( " >>>>null    nfts=" , nfts    );
-          return;
-     }
- 
-   //console.log( " >>>>>>>>>>>>>>>      address=" , address   );
-   const allNfts =[];
-    
-   if (ownedNft){
-    for (let i = 0; i < nfts.length; i++) {
-      // const elementFound = metadataList.find(metadata => metadata.id === i.toString());
-       const elementFound = metadataList.find(metadata => metadata.metadata.id === i.toString() );
-       
-       //if (elementFound && elementFound.metadata) {
-         if ( !nfts[i] || !nfts[i].metadata || !elementFound || typeof elementFound !== 'object' || !elementFound.metadata  ) {
-           console.warn(`No metadata found for id ${i}`);
-       } else {
-         nfts[i].metadata = elementFound.metadata;
-       
-       }
-
-      // console.log( "elementFound " , elementFound );
-        allNfts.push(nfts[i]);
-      // You can append more properties as needed
-      }
-    }else{
-      for (let i = 0; i < nfts.length; i++) {
-         nfts[i].metadata = metadataList[i].metadata;
-         allNfts.push(nfts[i]);
-         // You can append more properties as needed
-        }
- 
-    }
-   
-   
-
-    return allNfts ;
- 
-  //  setNFT(nfts);
-   
   
-  }   
 
 
 export async function  authorize   () {

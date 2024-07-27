@@ -143,14 +143,7 @@ useEffect(() => {
     <Box margin="0 8px 20px 8px" >
    
     <div>
-       { (  /*user &&*/
-           debugMode && 
-           address &&
-         ( address === OWNER || address === OWNER2) 
-          
-          
-          ) && ( // address && address === OWNER?
-        <div><EditorButton/></div>)  }
+      
          
  
     </div> 
@@ -798,59 +791,5 @@ const RewardDisplay = ( {RewardPrice} )=>{
     );
 };
 
-  function EditorButton(){
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-
-    return (
-        <div> 
-                        
-            <Button variant="contained" 
-              sx={{backgroundColor: theme.debugModeColor }}
-                onClick={() => createBundle() } >   
-                 create Bundle web 2
-            </Button> 
- 
-            <Button variant="contained" 
-              sx={{backgroundColor: theme.debugModeColor  }}
-                onClick={() => mintToCollection() } >   
-                  mintToCollection
-            </Button> 
- 
-            <Button variant="contained" 
-              sx={{backgroundColor: theme.debugModeColor  }}
-                onClick={() => UpdateListing() } >   
-                  UpdateListing
-            </Button>
-
-            <Button variant="contained" 
-              sx={{backgroundColor: theme.debugModeColor }}
-                onClick={() => UpdatePackMetaData() } >   
-                  UpdatePackMetaData
-            </Button>
-            
-            
-            <Button variant="contained" 
-              sx={{backgroundColor: theme.debugModeColor  }}
-                onClick={() =>  CreateListing() } >   
-                  CreateListing
-            </Button>
-
-            <Button variant="contained" 
-              sx={{backgroundColor: colors.redAccent[500]  }}
-                onClick={() =>  CreateListingPack() } >   
-                  CreateListingPack
-            </Button>
-            
-            
-            <Button variant="contained" 
-              sx={{backgroundColor: colors.redAccent[500]  }}
-                onClick={() =>  UpdateAllNFTLayers() } >   
-                  UpdateAllNFTLayers
-            </Button> 
- 
-        </div>
-
-    )
-  }
+  
  

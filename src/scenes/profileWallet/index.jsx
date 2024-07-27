@@ -1,57 +1,36 @@
 
- 
 import React, {   useEffect, useState } from 'react';
- 
-
-//import * as React from 'react';
-
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-
- import {Box, useTheme} from '@mui/material';
+import {  useTheme} from '@mui/material';
 import Container from '../../components/Container/Container';
-import {  VerticalSpace } from '../../components/Layout';
- 
-import {useAllLayersContext }from '../../context/AllLayerAvailableContext.js';
-
-//==============================================================
-  
-import {
-  
- 
-  
-   useContract,
-   useOwnedNFTs
-} from "@thirdweb-dev/react";
-import MyPacks from '../myPacks/index';
- 
-
+import {useContract, useOwnedNFTs} from "@thirdweb-dev/react";
 import {   useParams } from 'react-router-dom';
- //import { useParams } from 'react-router';
-import RewardTokenTab from '../RewardTokenTab/index.jsx';
- 
- import { Discord_tokenLess_stakinContract ,TOOLS_ADDRESS } from '../../const/addresses.ts';
   
-//import { DebugPanel } from '../../components/Debug/DebugPanel.jsx';
- 
-import { CustomTabPanel, a11yProps } from '../../components/TabSubcomponent.jsx';
-import { getSDK_fromPrivateKey } from '../../data/API';
+import { Discord_tokenLess_stakinContract   } from '../../const/addresses.ts';
+  
 import NFTGrid from '../../components/NFTGrid';
-  
-// horizontal space between  elements of the badges
-  
+ 
+
+
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
+
 
   export const myPacksIdx = 0;
   export const referralRewardTabIndex =1;
 
 export default function BasicTabs() {
- 
    
- 
-  
+     const { selectedChain, setSelectedChain } = useContext(ChainContext);
      const theme = useTheme();
      
-    const { contract } = useContract(TOOLS_ADDRESS);
+    const { contract } = useContract(  addressesByNetWork[selectedChain].LAYER_ADDRESS );
     let {   initialTabIndex , address  } = useParams();
     const { data, isLoading } = useOwnedNFTs(contract,  address );
 
@@ -89,7 +68,7 @@ export default function BasicTabs() {
   //     let amountOwned = 0;
   //     let contract;
   //     const sdk = getSDK_fromPrivateKey();
-  //     contract = await sdk.getContract(TOOLS_ADDRESS);
+  //     contract = await sdk.getContract(TOO LS_ADDRE SS);
   //     let request = 0;
   //     for (let i = 0; i < 55; i++) {
   //       var BalanceToken = await contract.call("balanceOf", [address, i]);
@@ -113,7 +92,7 @@ export default function BasicTabs() {
         <NFTGrid
           address={address}
           isLoading={isLoading}
-          NFT_contract={TOOLS_ADDRESS}
+          NFT_contract={  addressesByNetWork[selectedChain].LAYER_ADDRESS }
           NFTdata={data}
           emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
           // overrideOnclickBehavior={(nft) => { setSelectedNft(nft); }}

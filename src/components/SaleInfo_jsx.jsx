@@ -1,23 +1,26 @@
 import React from "react";
-import { NFT as NFTType } from "@thirdweb-dev/sdk";
-
-import { useNavigate  } from 'react-router-dom';
- //import { useRouter } from "next/router";
-
+ import { useNavigate  } from 'react-router-dom';
+ 
 import { useForm } from "react-hook-form";
 import { Web3Button, useContract, useCreateAuctionListing, useCreateDirectListing } from "@thirdweb-dev/react";
-import { MARKETPLACE_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
-import { Box, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
  
+import { Box, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 
+//=======
+import ChainContext from "../context/Chain.js";
+import { addressesByNetWork } from "../scenes/chainSelection/index.jsx";
+
+import { useContext } from "react";
+ 
 export default function SaleInfo({ nft } ) {
 
     const navigate = useNavigate ();
-   // const router = useRouter();
+   
+   const { selectedChain } = useContext(ChainContext);
 
-    const { contract: marketplace } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
+    const { contract: marketplace } = useContract( addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS, "marketplace-v3");
 
-    const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
+    const { contract: nftCollection } = useContract( addressesByNetWork[selectedChain].LAYER_ADDRESS );
 
     const { mutateAsync: createDirectListing } = useCreateDirectListing(marketplace);
 
@@ -25,13 +28,13 @@ export default function SaleInfo({ nft } ) {
         const hasApproval = await nftCollection?.call(
             "isApprovedForAll",
             nft.owner,
-            MARKETPLACE_ADDRESS
+            addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS
         );
 
         if (!hasApproval) {
             const txResult = await nftCollection?.call(
                 "setApprovalForAll",
-                MARKETPLACE_ADDRESS,
+                addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS,
                 true
             );
 
@@ -48,7 +51,7 @@ export default function SaleInfo({ nft } ) {
 
     const { register: registerDirect, handleSubmit: handleSubmitDirect } = useForm({
         defaultValues: {
-            nftContractAddress: TOOLS_ADDRESS,
+            nftContractAddress:  addressesByNetWork[selectedChain].LAYER_ADDRESS,
             tokenId: nft.metadata.id,
             price: "0",
             startDate: new Date(),
@@ -81,7 +84,7 @@ export default function SaleInfo({ nft } ) {
     const { register: registerAuction, handleSubmit: handleSubmitAuction } =
     useForm ({
       defaultValues: {
-        nftContractAddress: TOOLS_ADDRESS,
+        nftContractAddress:  addressesByNetWork[selectedChain].LAYER_ADDRESS,
         tokenId: nft.metadata.id,
         startDate: new Date(),
         endDate: new Date(),
@@ -140,15 +143,15 @@ export default function SaleInfo({ nft } ) {
                             />
                         </Box>
                         <Web3Button
-                            contractAddress={MARKETPLACE_ADDRESS}
+                            contractAddress={addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
                             action={async () => {
                                  
 
                                 await handleSubmitDirect(handleSubmissionDirect)();
                             }}
                             onSuccess={(txResult) => {
-                                navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
-                              //  router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                                navigate.push(`/token/${ addressesByNetWork[selectedChain].LAYER_ADDRESS }/${nft.metadata.id}`);
+                              
                             }}
                         >Create Direct Listing</Web3Button>
                     </Stack>
@@ -190,13 +193,13 @@ export default function SaleInfo({ nft } ) {
                             />
                         </Box>
                         <Web3Button
-                            contractAddress={MARKETPLACE_ADDRESS}
+                            contractAddress={addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
                             action={async () => {
                                 return await handleSubmitAuction(handleSubmissionAuction)();
                             }}
                             onSuccess={(txResult) => {
-                                navigate.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
-                             //  router.push(`/token/${TOOLS_ADDRESS}/${nft.metadata.id}`);
+                                navigate.push(`/token/${  addressesByNetWork[selectedChain].LAYER_ADDRESS }/${nft.metadata.id}`);
+                            
                             }}
                         >Create Auction Listing</Web3Button>
                     </Stack>

@@ -2,7 +2,7 @@
 import {useToast, } from "@chakra-ui/react";
   
  
-import { Typography, Skeleton,Box, Divider } from '@mui/material';
+import {  Box, Divider } from '@mui/material';
    
  
   import {
@@ -14,33 +14,38 @@ import { Typography, Skeleton,Box, Divider } from '@mui/material';
   } from "@thirdweb-dev/react";
   import {
     Discord_tokenLess_stakinContract,
-    REWARDS_ADDRESS,
+  
     
     Discord_invite_stake_token,
   } from "../../const/addresses";
   import React, { useEffect, useState } from "react";
-  import { ethers } from "ethers";
-import { useTheme } from "@emotion/react";
-import {  cool_orange, text2, tokens } from "../../theme";
+ import { useTheme } from "@emotion/react";
+import {    text2, tokens } from "../../theme";
  import { CountdownEndTime  } from "../CountdownTimer";
-import { CustWeb3Button } from "../Buttons/buttons";
-import { useDISTContext } from "../../context/DISTstakingContext";
+ import { useDISTContext } from "../../context/DISTstakingContext";
  
 import { EtherScanLinkBlock, ContractBalance  }  from "../BlockLink/BlockLinks";
 import { HorizontalSpace } from "../Layout";
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
 
- 
- const _boxHeight ="270px";
- 
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+   
 
  export default function StakeRewardToolTip(){
+
+
+  const { selectedChain  } = useContext(ChainContext);
+
     const address = useAddress();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    const {distStakedAmount,   distReward , 
-         setReFetch , stakeInfo ,
-         DISTStakeInfoGeneral ,
+    const { 
           stakeGetTimeUnit,
           timeRemaining,
          stakersVar
@@ -48,7 +53,7 @@ import { HorizontalSpace } from "../Layout";
         } = useDISTContext();
 
      const { contract: stakeTokenContract }   = useContract( Discord_invite_stake_token,"token");
-     const { contract: rewardTokenContract }  = useContract( REWARDS_ADDRESS,"token");
+     const { contract: rewardTokenContract }  = useContract(  addressesByNetWork[selectedChain].WUCOIN ,"token");
      const { contract: stakeContract }        = useContract(Discord_tokenLess_stakinContract,"custom");
      
      

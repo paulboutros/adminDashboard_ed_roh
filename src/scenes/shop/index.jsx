@@ -24,7 +24,7 @@ import { MARKETPLACE_ADDRESS  } from "../../const/addresses";
 import {NFTGridMarketData} from "../../components/NFTGrid.jsx";
 import ConnectWalletPage from "../../components/ConnectWalletPage.jsx";
 import Container from "../../components/Container/Container";
-import NFTListed from "../../components/FARMER/NFTlisted.jsx"; 
+import NFTListed from "../../components/NFTCARD/NFTlisted.jsx"; 
  
  
 import { Box, Grid, Typography, useTheme } from '@mui/material'; // Update this import

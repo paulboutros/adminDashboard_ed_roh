@@ -14,7 +14,7 @@ import { Typography, Skeleton,Box } from '@mui/material';
   } from "@thirdweb-dev/react";
   import {
     Discord_tokenLess_stakinContract,
-    REWARDS_ADDRESS,
+     
     
     Discord_invite_stake_token,
   } from "../../const/addresses";
@@ -25,22 +25,30 @@ import {  text2, tokens } from "../../theme";
  import { CountdownEndTime  } from "../CountdownTimer";
 import { CustWeb3Button } from "../Buttons/buttons";
 import { useDISTContext } from "../../context/DISTstakingContext";
- 
+ //=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
 
- //let timeRemaining;
- let startTime;
- let myInterval;
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
+ 
  const _boxHeight ="270px";
  
 
  export default function RewardToken(){
+
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
+
     const address = useAddress();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    const {distStakedAmount,   distReward , 
-         setReFetch , stakeInfo ,
-         DISTStakeInfoGeneral ,
+    const {  stakeInfo ,
+        
           stakeGetTimeUnit,
           timeRemaining,
          stakersVar
@@ -48,7 +56,7 @@ import { useDISTContext } from "../../context/DISTstakingContext";
         } = useDISTContext();
 
      const { contract: stakeTokenContract }   = useContract( Discord_invite_stake_token,"token");
-     const { contract: rewardTokenContract }  = useContract( REWARDS_ADDRESS,"token");
+     const { contract: rewardTokenContract }  = useContract(  addressesByNetWork[selectedChain].WUCOIN,"token");
      const { contract: stakeContract }        = useContract(Discord_tokenLess_stakinContract,"custom");
      
      

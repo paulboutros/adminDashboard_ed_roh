@@ -1,7 +1,7 @@
 
 import {
   
-   TOOLS_ADDRESS ,
+   
    BURN_TO_CLAIM,
  
 } 
@@ -17,18 +17,27 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
   
 import {  tokens } from "../theme";
-  import {     ERC20claim   } from "../data/API";
+import {     ERC20claim   } from "../data/API";
 
 import {  Box ,Button,      Typography, useTheme  } from "@mui/material";
+ import LayerBaseInfo from  "./LayerBaseInfo";
  
  
-import LayerBaseInfo from  "./LayerBaseInfo";
-    
+
+//=======
+import ChainContext from "../context/Chain.js";
+import { addressesByNetWork } from "../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
     
  
 const PopupButton =  ({ text, style , selectedImages   }) => {
  
-  
+  const { selectedChain  } = useContext(ChainContext);
 
 const address = useAddress();
 
@@ -82,7 +91,7 @@ const address = useAddress();
 
   //=====================================================================================
   //burn to claim:
-   const { contract: wulirockLayerContract } = useContract(TOOLS_ADDRESS);
+   const { contract: wulirockLayerContract } = useContract( addressesByNetWork[selectedChain].LAYER_ADDRESS );
 
       const mintMutantNft = async (maycContract ) => {
     // 1. Check the approval of the mayc contract to burn the user's serum tokens
@@ -95,13 +104,9 @@ const address = useAddress();
     if (!hasApproval) {
       // Set approval   THIS CAN ONLY BE DONE FROM CLIENT
       await wulirockLayerContract?.call("setApprovalForAll", [  maycContract?.getAddress(),  true,   ])  ;
-       
-       
-   
+    
     }
-
-        
-           
+            
             await  ERC20claim( filteredImages ,  address  ) 
           //  await maycContract?.call("burnAndClaim", [address, tokenIdsToBurn ]);
 
@@ -126,9 +131,7 @@ const address = useAddress();
       </Button>
 
       <Dialog open={open} onClose={handleClose} >
-        
-      
-      
+       
        <div  sx={{  margin: "0px 0px 90px 0px"  }} ></div>
         
 
@@ -183,7 +186,6 @@ const address = useAddress();
             colors ={colors}
             />
  
-
 
               </Box>  
 

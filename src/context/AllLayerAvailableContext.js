@@ -4,9 +4,19 @@ import {   getSDK_fromPrivateKey   } from "../data/API.js";
  
 
 
-
-import { TOOLS_ADDRESS } from "../const/addresses.ts";
+ 
 import { useContract,  useOwnedNFTs, useAddress  } from "@thirdweb-dev/react";
+
+//=======
+import ChainContext from "../context/Chain.js";
+import { addressesByNetWork } from "../scenes/chainSelection/index.jsx";
+ //const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
+
+
+
 
 const maxLayers = 11;
 const AllLayersContext = createContext();
@@ -16,7 +26,8 @@ export function useAllLayersContext() { return useContext(AllLayersContext);}
  
 export function AllLayersProvider({ children }) {
   
-    const { contract } = useContract(TOOLS_ADDRESS);
+    const { selectedChain  } = useContext(ChainContext);
+    const { contract } = useContract(addressesByNetWork[selectedChain].LAYER_ADDRESS);
   
     const address = useAddress(); 
     const { data, isLoading } = useOwnedNFTs(contract, address);
@@ -38,8 +49,8 @@ export function AllLayersProvider({ children }) {
 // get all Layer once, makre SURE it load ONCE 
 //================================================================================================================
     async function getAllNFTs(){
-      const sdk = getSDK_fromPrivateKey(); 
-      const contract = await sdk.getContract(TOOLS_ADDRESS);  // , "edition"
+      const sdk = getSDK_fromPrivateKey(selectedChain); 
+      const contract = await sdk.getContract(addressesByNetWork[selectedChain].LAYER_ADDRESS);  // , "edition"
       const nfts = await contract.erc1155.getAll();
  
 

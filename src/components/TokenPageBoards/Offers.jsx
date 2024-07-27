@@ -1,10 +1,9 @@
-import { convertEthToUsd } from "../../data/API.js";
-import { ethers } from "ethers";
+ 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import {useEffect, useState} from "react";
 import { Box , Typography, useTheme } from "@mui/material";
 import { DataGrid  } from "@mui/x-data-grid";
-import { text1, tokens, DataGridStyle } from "../../theme";
+import {   tokens, DataGridStyle } from "../../theme";
  import DataGridHeader from "../DataGridHeader.jsx"
 
 import {   useContract,
@@ -14,29 +13,36 @@ import {   useContract,
    } from "@thirdweb-dev/react";    
 import { 
     MARKETPLACE_ADDRESS,
-    TOOLS_ADDRESS 
+    
  } from "../../const/addresses.ts";  
    
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+
+import { useContext } from "react";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
  
-  
-const grid_gap ="20px";
-  
+   
 
 const Offers = ( { nft , isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-   
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
 
 
 
-  const { contract } = useContract(TOOLS_ADDRESS);
+  const { contract } = useContract( addressesByNetWork[selectedChain].LAYER_ADDRESS );
  // const { data: nft, isLoading, error } = useNFT(contract, tokenId);
 
   
   
   const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
 
-       //    const { contract: nftCollection } = useContract(TOOLS_ADDRESS);
+       
              // Load historical transfer events: TODO - more event types like sale
              const { data: transferEvents, isLoading: loadingTransferEvents } =
            
@@ -72,15 +78,7 @@ useEffect (()=>{
 useEffect(() => {
   
 }, [nft]);
-  
-
-/*
-            eventName: eventName, 
-            ethValue: ethValue,
-            USDPrice: USDPrice,
-            bidder:bidder
- 
-*/
+   
 const columns = [
  
   {
@@ -146,10 +144,7 @@ const columns = [
           rows={newDataList}
           columns={columns}
           toolbar={false}  
-    
-
-          // components={{ Toolbar: GridToolbar }}
-          // {...(!isDashboard && { components: { Toolbar: GridToolbar } })}
+            
           rowHeight={_rowHeight} // Set the row height to 40 pixels
            headerHeight={_headerHeight}   
            footerHeight={_footerHeight}   
@@ -173,19 +168,7 @@ const columns = [
 };
 
 export default Offers;
-
-function GetLegendColor(  type){    
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-
-    if (type === "message"){
-
-      return colors.grey[500];
-    }
-
-     return  null;
-
-}
+ 
 
 const RenderCellA = ({ debugMode , colors , data }) => {
   return (
