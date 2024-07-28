@@ -100,7 +100,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@craco/craco": "^7.1.0",
     "@types/node": "^18.11.11",
     "@types/react": "^18",
     "assert": "^2.1.0",
