@@ -1,5 +1,4 @@
- import { createThirdwebClient  } from "thirdweb";
-  
+   
 import {
    
    
@@ -507,15 +506,7 @@ export async function claimToButton( to , amount ){
 
 }
  
-
-export async function getClientV5( ){
-  // create the client with your clientId, or secretKey if in a server environment
-const client = createThirdwebClient({ 
-clientId: process.env.REACT_APP_THIRDWEB_CLIENT_ID
-});
- return client;
-
-}
+ 
 
 export async function getContractV5(){
 
