@@ -88,7 +88,7 @@ export function AllLayersProvider({ children }) {
          
       }
       
- 
+    // this is used by ImageSeelctor legend: sh 1, he 2, we 0 etc...
       setInfoMap( infoMapTempX  );
  
 
@@ -98,7 +98,7 @@ export function AllLayersProvider({ children }) {
 
 
 //==============================================================================================================
- 
+ /*
     useEffect( ()=>{
   
        // nothing is going to load if wallet is not connected
@@ -116,7 +116,7 @@ export function AllLayersProvider({ children }) {
     }, [  // user,// this will need to re-run when the user logout for example 
          NFTdata, ownedNftData  // we get the supply from contract now, no more from Mongo
     ]); 
-
+*/
       
 
     return (
@@ -139,84 +139,7 @@ NO API call for this
  
 //if address is not connected, ownedNftData will be NULL, so "we" or the "user" owns nothing
 async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
-  
-
-    const initialLayerToChooseFrom = {};
- 
-    const categories = ['he', 'sh', 'we', 'be', 'kn'];
-    const layerCount = maxLayers;
-    const baseObject = Array.from({ length: layerCount }, (_, index) => ({
-       layerName: index , 
-       tokenID:0  , 
-      
-      // will be overriden
-      owning:0,// Math.floor(Math.random() * 11), 
-      supply:0,// Math.floor(Math.random() * 11),
-         
-    }));
-
-    for (const category of categories) {
-       // use  the follow to create a DEEp copy of base object so they are independant copies
-        
-       initialLayerToChooseFrom[category] = JSON.parse(JSON.stringify(baseObject));
-    }
-
-    
-//================================================================================
-//console.log("XXX   snapshotBeforeModification: ",  initialLayerToChooseFrom );
- //const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
-  
- 
- console.log(  "AllAvailable Layer attribute  :" ,  NFTdata  );
- for ( let i = 0 ; i < NFTdata.length; i++  ){ 
- 
-      const nft  =  NFTdata[i];
-   
-       if  ( !nft.metadata.attributes.attributes  ){ console.log(  "  attribute of  :" ,  i , " is  undefined  "); continue; }
-  
-      console.log(  "  nft.metadata.attributes :" ,  nft.metadata.attributes );
-      
-      console.log(  " nft.metadata.attributes[0]:" , nft.metadata.attributes.attributes[0] );
-      
-
-            const layerNumber  = nft.metadata.attributes.attributes[0].value ;   
-            const category     = nft.metadata.attributes.attributes[0].trait_type ;
-            const supply       = nft.supply;
-  
-          
-             let numberValue = parseInt(layerNumber);
-             initialLayerToChooseFrom[category][  numberValue ].supply = supply;
-             initialLayerToChooseFrom[category][  numberValue ].tokenID = nft.metadata.id ;
-          
-          
-
-           
-  };
-
-   const sssss = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
-  
-    
-  //ownedNftData will be NULL is address is not conencted, so [meta.value].owning will keep initial value of 0
-  if (ownedNftData ){
-    for ( let i = 0 ; i < ownedNftData.length; i++  ){ 
-
-     const ownedNFT =ownedNftData[i];
-      if  ( !ownedNFT.metadata.attributes ){  
-        // console.log(  " ownedNFT attribute of  :" ,  i , " is  undefined  ");
-         continue; 
-        
-        }
-     
-       const meta = ownedNFT.metadata.attributes[0];
-      initialLayerToChooseFrom[ meta.trait_type][meta.value].owning = ownedNFT.quantityOwned;
-       
-      };
-  } 
-   
-//=====================================================================================
- 
-
-    return initialLayerToChooseFrom;
+    // the code was moved to  ImageSeelctor.cs 
 
 }
   

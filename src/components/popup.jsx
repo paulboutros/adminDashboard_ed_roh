@@ -229,10 +229,10 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address, missin
   
   }
   
-  if(!user) {
-    return("To go further, Login with Discord");
+  // if(!user) {
+  //   return("To go further, Login with Discord");
   
-  }
+  // }
 
 
 
