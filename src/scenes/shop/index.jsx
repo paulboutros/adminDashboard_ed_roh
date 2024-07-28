@@ -3,7 +3,7 @@ shop/buy Thirdweb tuto
 https://www.youtube.com/watch?v=8FRm_efm99o&t=1503s
 starts at 27:00min
 */
-
+//import {createContext, useContext,  useState, useEffect, useRef } from "react";
 import * as React from 'react';
  
 import Tabs from '@mui/material/Tabs';
@@ -16,7 +16,7 @@ import Tab from '@mui/material/Tab';
 import stylesProfile from "../../styles/Profile.module.css";
   
 
-import {useEffect, useState} from "react";
+import {useEffect, useState,  createContext, useContext,   useRef    } from "react";
 import { useContract, 
     ConnectWallet,  useAddress    } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDRESS  } from "../../const/addresses";
@@ -40,6 +40,13 @@ import { useNavigate } from "react-router";
  import { useAllListingsContext } from '../../context/AllListingContext.js';  
  
  
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+//const { selectedChain, setSelectedChain } = useContext(ChainContext);
+//addressesByNetWork[selectedChain].LAYER_ADDRESS
+//=======
+
  
 // display mode, list for shop page, grid for composePage (more simple display)
  export default function Shop( {itemType} ) {
@@ -63,9 +70,18 @@ import { useNavigate } from "react-router";
      }
 
   }
+  const { selectedChain  } =  useContext(ChainContext);
+
+  const [directListings, setDirectListing] = useState(null);   
+  const [auctionListing, setAuctionListing] = useState(null);   
+  
+
+
+  const [value, setValue] =  useState(displayData.initialState);
+
+
 
   const [tab, setTab] = useState(   displayData.tabsNames[  displayData.initialState ] );   
-  const [value, setValue] = React.useState(displayData.initialState);
 
   const handleChange = (event, newValue) => {
        setValue(newValue);
@@ -75,16 +91,39 @@ import { useNavigate } from "react-router";
   };
  
 
-  let { directListings, auctionListing, allNFTsWithListing, 
-    loadingDirectListings, loadingAuction, NFT_CONTRACT  } = useAllListingsContext();
+  let { /*directListings, auctionListing,*/ allNFTsWithListing, UpdateAllMarketData,
+    loadingDirectListings, loadingAuction, NFT_CONTRACT ,
+  
+    Set_englishAuctions , Set_DirectListing
+  } = useAllListingsContext();
   //const { contract } = useContract(NFT_CONTRACT);
  
 
   useEffect(()=>{
+   
+    const updateMarketInfo = async () => { 
+
+      const dl = await Set_DirectListing(); 
+      setDirectListing(dl );
+      
+      const al = await Set_englishAuctions(); 
+      setAuctionListing(al);
+      
+
+      console.log( selectedChain,  ">> SHOP.js =>  directListings ",  dl    );
+      console.log( selectedChain,  ">> SHOP.js =>  auction listing ",  al    );
+     // console.log( selectedChain,   ">> SHOP.js =>    allNFTsWithListing  ",     allNFTsWithListing );
+      // Set_englishAuctions();
+     // await Set_DirectListing();
+    }
+
      
-    console.log( ">> SHOP => itemType",itemType  , "allNFTsWithListing  " , allNFTsWithListing );
     
- }, [ itemType , allNFTsWithListing ]);
+    
+
+      updateMarketInfo();
+    //UpdateAllMarketData();
+ }, [   /* itemType , allNFTsWithListing,*/ selectedChain ]);
 
 
 
@@ -164,14 +203,14 @@ import { useNavigate } from "react-router";
     
           <div className={`${ tab === "listings" ? stylesProfile.activeTabContent : stylesProfile.tabContent }`}>
            
-
-
-          <NFTGridMarketData  
+     
+          
+            <NFTGridMarketData  
                address={address}
                NFTdata ={NFTdata}
               directListings={directListings}
-              loadingDirectListings={loadingDirectListings}
-           />
+              // loadingDirectListings={loadingDirectListings}
+           />  
          
 
 
@@ -183,45 +222,14 @@ import { useNavigate } from "react-router";
             }`}
             >
 
-                
-        
-        <Grid container spacing={1}  > 
-            {loadingAuction ? (
-              <p>Loading...</p>
-            ) : auctionListing && auctionListing.length === 0 ? (
-              <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
-            ) : (
-       
-                auctionListing?.map((listing, index ) => (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={index} >
-                 <Box sx={theme.nftContainer}
+<NFTGridMarketData  
+               address={address}
+               NFTdata ={NFTdata}
+              auctionListings={auctionListing}
+              // loadingDirectListings={loadingDirectListings}
+           />  
+         
 
-                key={listing.id}  
-                onClick={() => {
-                   const selectedNFT = NFTdata.find((nft) => nft.metadata.id === listing.tokenId);
-                   navigate( linkPath( NFT_CONTRACT, selectedNFT, listing   )  )
-                    }
-                }
-               > 
-                  <NFTListed
-                     address ={address}
-                    key={listing.id}
-                    propContractAddress = {listing.assetContractAddress}
-                    propTokenId = {listing.tokenId}
-
-                   AlllistingData ={null}
-                   AuctionListingData = {listing}
-                    /> 
-                   </Box> 
-
-                </Grid>
-              ))
-
-
-
-            )}
-
-         </Grid> 
           </div>
         </Container>
           </BasicScrollable>

@@ -83,7 +83,7 @@ export default function NFTComponent({ nft } ) {
               <div className={styles.nftPriceContainer}     >
                 <div>
                   <p className={styles.nftPriceLabel} >Price</p>
-                  <p className={styles.nftPriceValue} >Not for sale</p>
+                  <p className={styles.nftPriceValue} >Not AAAA for sale</p>
                 </div>
               </div>
             )}

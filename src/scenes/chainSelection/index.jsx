@@ -20,28 +20,28 @@ import { useAddress } from '@thirdweb-dev/react';
  
 import {  tokens  } from "../../theme.js";
 import { useTheme } from '@emotion/react';
-    
+    import { updateChain } from '../../data/API.js';
 
 export const addressesByNetWork = {
   sepolia: {
-     LAYER_ADDRESS :"0x06a33CD093aDD0C6A8F685888f1B3E0C119b2461", // edition
-     MARKETPLACE_ADDRESS :"0x032453F4Eb720280230AE123E3262234f21b0323",
-     WUCOIN : "0x7b9e863B9BDF4aa08686C531ceA6353f363E9d57",
+     LAYER_ADDRESS        :"0x06a33CD093aDD0C6A8F685888f1B3E0C119b2461", // edition
+     MARKETPLACE_ADDRESS  :"0x032453F4Eb720280230AE123E3262234f21b0323",
+     WUCOIN               : "0x7b9e863B9BDF4aa08686C531ceA6353f363E9d57",
 
 
      BURN_TO_CLAIM :"0x4CD62243e1A3255A8ff27F4A164d011246f8b7F1", 
               
-      wuLayerDropERC1155 :"0x1360AA380702be406d7161A965EfB23652082653",
-     wuCharacterDropAddress :"0x0895911D31783d1C0FaE1aF5Db448F0A8cb623d8",
+     wuLayerDropERC1155         :"0x1360AA380702be406d7161A965EfB23652082653",
+     wuCharacterDropAddress     :"0x0895911D31783d1C0FaE1aF5Db448F0A8cb623d8",
      wuCharacterDropAddress_721 :"0x90411665549f2bDA86b0EbbDC94c81b95DB8febd" 
   },
   base: {
     //0x590b1670CD6b1d1aBeEc7b59BEE72EF8e40b695C on chain 1115511
-    LAYER_ADDRESS :"0x590b1670CD6b1d1aBeEc7b59BEE72EF8e40b695C", // copied from BASE (DROP so claimable as well)
-    MARKETPLACE_ADDRESS :"0xFFFb9a956e7c0418430CeD739c43B0c06f55C359", // copied from BASE
-    WUCOIN : "0xD6c1B4501C9FDFD016a62A43aEa1ab6D9A590B30", // copied from BASE
+    LAYER_ADDRESS       : "0x590b1670CD6b1d1aBeEc7b59BEE72EF8e40b695C", // copied from BASE (DROP so claimable as well)
+    MARKETPLACE_ADDRESS : "0xFFFb9a956e7c0418430CeD739c43B0c06f55C359", // copied from BASE
+    WUCOIN              : "0xD6c1B4501C9FDFD016a62A43aEa1ab6D9A590B30", // copied from BASE
 
-    BURN_TO_CLAIM :"0x4CD62243e1A3255A8ff27F4A164d011246f8b7F1",          
+    BURN_TO_CLAIM :"0x25FdB281f565971d6377e1f49B987F03725Ad602",          
 
     wuLayerDropERC1155 :"0x1360AA380702be406d7161A965EfB23652082653",
      wuCharacterDropAddress :"0x0895911D31783d1C0FaE1aF5Db448F0A8cb623d8",
@@ -156,7 +156,16 @@ export default function ChainDropDown() {
 
        
 
-        <MenuItem  onClick={() =>   setSelectedChain("sepolia")  }>
+        <MenuItem  onClick={() => 
+          {
+
+            updateChain (address ,"sepolia")
+           
+            setSelectedChain("sepolia") 
+          }
+          
+          
+          }>
               
           
           <Avatar /> Sepolia
@@ -164,7 +173,13 @@ export default function ChainDropDown() {
 
 
 
-        <MenuItem  onClick={() =>   setSelectedChain("base")  }>
+        <MenuItem  onClick={() =>   {
+
+            updateChain (address ,"base")
+            setSelectedChain("base") 
+        }
+          
+             }>
           <Avatar /> Base
         </MenuItem>
 

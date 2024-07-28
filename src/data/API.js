@@ -370,12 +370,23 @@ return resultsPostJson.data;
 }
 
 
+export async function updateChain( address ,chain ){
+ 
+  const dataToSend={
+     wallet : address,
+     chain :chain
+    }
+ 
+const endpoint = `${process.env.REACT_APP_API_URL}updateChain`; 
+const resultsPostJson = await axios.post(endpoint, dataToSend);
 
+console.log(" addorupdateWalletuser data response :" ,   resultsPostJson.data );
 
-export async function addorupdateWalletuser(   address ){
-  
+return resultsPostJson.data;
+}
 
-
+export async function addorupdateWalletuser( address ){
+ 
   const dataToSend={ 
      wallet   : address
   }
@@ -449,6 +460,24 @@ export async function myDiscordInvite(user_ID){
 } 
 
 
+export async function GetChain (wallet){
+     
+
+  // we do not want to regenrate an invite as it will override previous one
+  // so we check first if one exist
+  // referralcode is an array, but for now we only use 1 element. 1 code per user.
+  const endpointG = `${process.env.REACT_APP_API_URL}GetChain?wallet=${wallet}`; // make it specific (filter to twitter fields)
+   const resultG = await fetch(endpointG);
+   let resultsJson = await resultG.json();
+     
+
+
+  // will be the one that exist or the one geenrate by the postrequest it it initially does not exist
+    return resultsJson;
+} 
+
+
+
 export async function myAppLink (user_ID){
      
 
@@ -464,6 +493,8 @@ export async function myAppLink (user_ID){
    // will be the one that exist or the one geenrate by the postrequest it it initially does not exist
      return resultsJson;
 } 
+
+
 
 
 export async function GetRewardPrice( dataToSend ){

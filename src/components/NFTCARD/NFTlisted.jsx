@@ -2,7 +2,7 @@ import {  useTheme /*, Skeleton */ } from "@mui/material";
  //https://chakra-ui.com/docs/components/button
 import {  ThirdwebNftMedia,  useContract,useValidDirectListings, useValidEnglishAuctions ,  useContractEvents } from "@thirdweb-dev/react";
  import styles from "../../styles/NFT.module.css";
- import { MARKETPLACE_ADDRESS } from "../../const/addresses.ts";
+ //import { MARKETPLACE_ADDRESS } from "../../const/addresses.ts";
   
  //import { useUserContext } from '../../context/UserContext.js'; // to get user data from context provider
  import { getSDK_fromPrivateKey  } from "../../data/API.js";
@@ -37,11 +37,10 @@ const NFTListed =  ({ propContractAddress, propTokenId,
 
  const NFT_CONTRACT = contractAddress;
 
- //const { user } = useUserContext();
-
+ 
  const theme = useTheme();
  const { selectedChain  } = useContext(ChainContext);
- //const { contract } = useContract(addressesByNetWork[selectedChain].LAYER_ADDRESS);
+  
  
 
   const [nft, setNFT] = useState();
@@ -63,7 +62,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
             contract   = await sdk.getContract(NFT_CONTRACT);
             nftResult  = await contract.erc1155.get(tokenId);
          
-            // console.log( "  >>>  address   " ,     address   );
+            
              var BalanceToken =  await contract.call("balanceOf",[address,tokenId]);
              const bigNumber =     BalanceToken._hex ;
              amountOwned =   parseInt(  bigNumber , 16);
@@ -88,16 +87,15 @@ const NFTListed =  ({ propContractAddress, propTokenId,
  }, [contractAddress, tokenId ]); // NFT added
 
 
-          const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
+          const { contract: marketplace, isLoading: loadingMarketplace } =  useContract( addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
  
-           const { data: directListing, isLoading: loadingDirectListing } = 
-           useValidDirectListings(marketplace, {tokenContract: NFT_CONTRACT, tokenId: nft?.metadata.id,});
-            
-           //Add these for auction section
-           const [bidValue, setBidValue] = useState();
+          const [bidValue, setBidValue] = useState();
 
-           const { data: auctionListing, isLoading: loadingAuction } =
-           useValidEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT,tokenId: nft?.metadata.id, });
+          //  const { data: directListing, isLoading: loadingDirectListing } = 
+          //  useValidDirectListings(marketplace, {tokenContract: NFT_CONTRACT, tokenId: nft?.metadata.id,});
+ 
+          //  const { data: auctionListing, isLoading: loadingAuction } =
+          //  useValidEnglishAuctions(marketplace, { tokenContract: NFT_CONTRACT,tokenId: nft?.metadata.id, });
    
            const { data: transferEvents, isLoading: loadingTransferEvents } =
            
@@ -170,9 +168,9 @@ const NFTListed =  ({ propContractAddress, propTokenId,
                    
             
                   <div className={styles.priceContainer}  style={{ background : theme.palette.nftImage  }} >
-                    {loadingMarketplace || loadingDirectListing || loadingAuction ? (
+                    {loadingMarketplace? (
                        <div> loading  </div>   // <Skeleton width="100%" height="100%" />
-                    ) : directListing && AlllistingData ? (
+                    ) : AlllistingData ? (
                       <div className={styles.nftPriceContainer}>
                         <div>
                           <p className={styles.nftPriceLabel}>Price</p>
@@ -182,7 +180,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
                           </p>
                         </div>
                       </div>
-                    ) : auctionListing && AuctionListingData ? (
+                    ) :  AuctionListingData ? (
                       <div className={styles.nftPriceContainer}>
                         <div>
                           <p className={styles.nftPriceLabel}>Minimum Bid</p>
@@ -196,7 +194,7 @@ const NFTListed =  ({ propContractAddress, propTokenId,
                       <div className={styles.nftPriceContainer}>
                         <div>
                           <p className={styles.nftPriceLabel}>Price</p>
-                          <p className={styles.nftPriceValue}>Not for sale</p>
+                          <p className={styles.nftPriceValue}>Not X for sale</p>
                         </div>
                       </div>
                     )}

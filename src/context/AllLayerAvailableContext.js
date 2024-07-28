@@ -54,11 +54,13 @@ export function AllLayersProvider({ children }) {
       const nfts = await contract.erc1155.getAll();
  
 
-      
+    
 
 
       setNFTdata(nfts);
     }
+
+
   useEffect(() => {
      
     getAllNFTs();
@@ -103,7 +105,7 @@ export function AllLayersProvider({ children }) {
        if (address && !ownedNftData){return;}
        if (!NFTdata){ return;} 
  
-        // cretae basic layers available to choos efrom in the app
+        // cretae basic layers available to choose from in the app
         const initialize = async ()=>{
              const layers  = await Create_Initial_layerToChooseFrom( NFTdata, ownedNftData );
  
@@ -165,15 +167,20 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
  //const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
   
  
- 
+ console.log(  "AllAvailable Layer attribute  :" ,  NFTdata  );
  for ( let i = 0 ; i < NFTdata.length; i++  ){ 
  
       const nft  =  NFTdata[i];
    
-      //  if  ( !nft.metadata.attributes  ){ console.log(  "  attribute of  :" ,  i , " is  undefined  "); continue; }
+       if  ( !nft.metadata.attributes.attributes  ){ console.log(  "  attribute of  :" ,  i , " is  undefined  "); continue; }
   
-            const layerNumber  = nft.metadata.attributes[0].value ;   
-            const category     = nft.metadata.attributes[0].trait_type ;
+      console.log(  "  nft.metadata.attributes :" ,  nft.metadata.attributes );
+      
+      console.log(  " nft.metadata.attributes[0]:" , nft.metadata.attributes.attributes[0] );
+      
+
+            const layerNumber  = nft.metadata.attributes.attributes[0].value ;   
+            const category     = nft.metadata.attributes.attributes[0].trait_type ;
             const supply       = nft.supply;
   
           

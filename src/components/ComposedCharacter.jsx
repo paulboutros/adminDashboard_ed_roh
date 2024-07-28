@@ -9,7 +9,7 @@ import { BiCoinStack } from "react-icons/bi";
  
 import {  GetRewardPrice, convertEthToUsd   } from "../data/API.js"
 
-  
+  import ImageSelector from './ImageSelector.jsx';
 
 import { BootstrapTooltip,   cool_orange,   tokens  } from "../theme.js";
  
@@ -19,15 +19,11 @@ import styles from "../styles/Buy.module.css";
 import LayerBaseInfo from "./LayerBaseInfo.jsx";
   
  import PopupButton  from "./popup.jsx"
- import { CreateListing,CreateListingPack, UpdateAllNFTLayers, UpdateListing, UpdatePackMetaData, createBundle, mintToCollection } from '../util/updateMetadata.js';
-import { BURN_TO_CLAIM, OWNER, OWNER2 } from '../const/addresses.ts';
-import { HorizontalSpace, RoundedBox,   VerticalSpace } from './Layout.jsx';
+ import {   RoundedBox,   VerticalSpace } from './Layout.jsx';
  
 import { AddressBlock } from './Badges/AddressBlock.jsx';
-import { color } from 'framer-motion';
-   
-const debugMode = false;
- const MainBlock = (  {queryId="" }  ) => {
+    
+  const MainBlock = (  {queryId="" }  ) => {
 
  // const { user } = useUserContext();
   //const {debugMode,  } = useDebugModeContext();
@@ -40,8 +36,8 @@ useEffect(() => {
     try {
     
         const result = await convertEthToUsd();
-        setEthToUsdRate(result);  
-    //  }
+     //   setEthToUsdRate(result);  
+    
 
     } catch (error) {
       console.error('Error fetching NFT:', error);
@@ -74,12 +70,7 @@ useEffect(() => {
      
 
      const GetRewardPriceApp = async ( ) => {
-
-    
-
-
-
-
+ 
       
         const kn = selectedImages["kn"][0].layerName;
         const he = selectedImages["he"][0].layerName;
@@ -163,20 +154,7 @@ useEffect(() => {
                    
                    </Box>
                   
-                     {/* ROW 3  ImageSelector  */}
-
-                      {/*
-                      
-                          <Box className= {styles.ImageSelector}>
-                                <Box display="flex"  flexDirection="column"  alignItems="center" mt="5px">
-                                <div> 
-                                
-                                <ImageSelector setSelectedImages={setSelectedImages}  selectedImages={selectedImages}  />
-                                </div>
-                              </Box>
-                          </Box> 
-                      
-                      */}
+                    
           </Box>
 
 
@@ -477,118 +455,7 @@ const Medium =( {  selectedImages, RewardPrice, legendItems  })=>{
 )
 }
 
- 
-
-/*
-  return(
-
-
-    <RoundedBox>
-    <Box margin = {"8px"} 
-    
-    backgroundColor = {colors.primary[400]}   
-    borderRadius = {"10px"}  > 
-
-    <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="69px" gap="0">
   
-      <Box gridColumn="span 8" gridRow="span 1"  style={{  display: "flex",  marginLeft :"30px", alignItems: "center",justifyContent: "flex-start"} }  //  "center"
-      >
-      
-     
-
-    </Box>
-
-
-    <Box gridColumn="span 4" gridRow="span 1"    >
-    <Box  display="flex" justifyContent="flex-end" alignItems="center" height="100%">
-      
-      
-
-    <HorizontalSpace space={2}/>
-    { selectedImages ? (
-      
-        <PopupButton
-            text = {`CLAIM $WU`}     
-
-              style={{
-                  color: '#b4a770', //cool_orange,// '#b4a770',
-                  borderColor:   '#f0c435',
-                  height: '25px',// '50px',
-                  width: '100px',
-                  borderWidth: '2px',
-                  textTransform: 'none',
-                  marginRight: "50px"
-                
-              }}
-          selectedImages ={ selectedImages}
-      />
-    ):(
-      <p></p>
-    )}
-
-  
-  </Box>
-  </Box>
-
-  <Box gridColumn="span 8" gridRow="span 8" >
-      <Box>  <ComposedCharacter images={selectedImages}/>  </Box>  
-  </Box>
-
-
-  <Box    className= {styles.RewardDisplay  }   >  <Box>
-    
-  
-      <div style={{  color: colors.grey[400], fontWeight:"450", display: 'flex', alignItems: 'center' }}>  
-        <RewardDisplay RewardPrice={RewardPrice} />
-      </div> 
-
-        <HorizontalSpace space={1}/> 
-      <div style={{ display: "flex",  flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <HorizontalSpace space={1}/> 
-      </div>
-  
-      <Stack   >
-            <Box  sx={ {    width :"100px",borderRadius:"5px",}}> 
-                  <CustomLegend2 legendItems={legendItems} selectedImages={selectedImages} />
-            </Box>
-      </Stack>
- </Box>
- 
-    
-</Box>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <Box gridColumn="span 4" gridRow="span 2"   >
-
-  
-
-
-  </Box>
-
-  </Box>
-  </Box>
-</RoundedBox>
-
-
-
-
-)
-
-
-*/
 const RewardDisplay = ( {RewardPrice} )=>{
 
     
@@ -668,6 +535,9 @@ const RewardDisplay = ( {RewardPrice} )=>{
  
 // get all layers from user, and update to add owning, and supply info for
 // also update selected image so they match the default character combination
+
+
+/*
   const ImageSelector = ({   setSelectedImages, selectedImages  }) => {
  
  
@@ -675,11 +545,13 @@ const RewardDisplay = ( {RewardPrice} )=>{
     const { allLayers} = useAllLayersContext(); 
  
 
+    
+
    const _layerSelectorScrollareaHeight =520;
    
   // getlayer supply should only change when a new layer is given away
    useEffect( ()=>{
-
+    console.log(  " ImageSelector allLayers  =====  " , allLayers  );
      
       if (!allLayers || allLayers.lenght === 0)return;
       if ( allLayers.he === null ) return;
@@ -791,5 +663,5 @@ const RewardDisplay = ( {RewardPrice} )=>{
     );
 };
 
-  
+  */
  

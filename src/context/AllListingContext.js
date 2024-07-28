@@ -68,7 +68,7 @@ const [directListings, setDirectListing] = useState(null);
 
 
  // English auction   loading  ======================================================
- async function englishAuctions(){
+ async function Set_englishAuctions(){
    const sdk = getSDK_fromPrivateKey(selectedChain); 
    const contract = await sdk.getContract(  addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS );  // , "edition"
   
@@ -83,17 +83,15 @@ const [directListings, setDirectListing] = useState(null);
 
   setEnglishAuctions(filteredAuctions);
   setloadingAuction(false);
+
+
+  return filteredAuctions;
+
 }
-
-
-
-
-async function directListingCall(){
-
  
+async function Set_DirectListing(){
 
-
-
+  
   const sdk = getSDK_fromPrivateKey(selectedChain); 
   const contract = await sdk.getContract(  addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS  );  // , "edition"
  
@@ -109,94 +107,111 @@ async function directListingCall(){
  setDirectListing(filteredDirect);
  setLoadingDirectListings(false);
 
-
+  return filteredDirect;
  
 }
 
+
+async function UpdateAllMarketData(){
+      
+
+
+  if ( loadingAuction || loadingDirectListings ) return;
+
+  if ( NFTdata && auctionListing  && directListings ){
+ 
+   // I think we are adding ot appending some new properties here...
+  NFTdata.forEach((nft) => {
+ //    nft.listing   = [] ;
+ //   nft.auction    = [] ;
+
+    nft.allListing = [] ; // auction and direct listing in one array
+   
+  });
+
+
+    
+     
+     auctionListing.forEach( auction => {
+         // is auction is active 
+        
+              const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === auction.tokenId);
+             if (selectedNFTIndex !== -1) { NFTdata[selectedNFTIndex].allListing.push(auction); }
+          
+     });
+     directListings.forEach( listing => {
+       const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === listing.tokenId);
+       if (selectedNFTIndex !== -1) {NFTdata[selectedNFTIndex].allListing.push(listing); }
+
+      });
+     
+       
+      
+      if (directListings !== prevDirectListings) {
+      //  console.log('directListings has changed');
+      }
+  
+      if (auctionListing !== prevAuctionListing) {
+       // console.log('propB has changed');
+      }
+  
+      // Your side effect code here
+  
+      // Update previous values after the effect runs
+      prevDirectListings.current = directListings;
+      prevAuctionListing.current = auctionListing;
+     
+
+
+      // console.log( " allListing Context.js: setAllNFTsWithListing     =    "    ,   NFTdata     );
+
+
+      setAllNFTsWithListing(NFTdata);
+ }
+
+
+
+
+
+ 
+   
+    
+
+
+}
 
 
 
 
  useEffect(() => {
 
-  console.log( "Hello WORLD!!! "    );
+ // console.log( " selectedChain changed "    );
 
-  directListingCall();
-  englishAuctions(  );
+ // Set_DirectListing();
+ // Set_englishAuctions(  );
   
 }, [  selectedChain    ]);
 
 useEffect(() => {
+    UpdateAllMarketData();
 
-
-
-
-
-  if ( loadingAuction || loadingDirectListings ) return;
-
-      if ( NFTdata && auctionListing  && directListings ){
-     
-       // I think we are adding ot appending some new properties here...
-      NFTdata.forEach((nft) => {
-     //    nft.listing   = [] ;
-     //   nft.auction    = [] ;
-
-        nft.allListing = [] ; // auction and direct listing in one array
-       
-      });
-    
-
-      
-        
-
-        
-         
-         auctionListing.forEach( auction => {
- 
-            // is auction is active 
-            
-                  const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === auction.tokenId);
-                 if (selectedNFTIndex !== -1) { NFTdata[selectedNFTIndex].allListing.push(auction); }
-              
-         });
-         directListings.forEach( listing => {
-           const selectedNFTIndex =  NFTdata.findIndex((nft) => nft.metadata.id === listing.tokenId);
-           if (selectedNFTIndex !== -1) {NFTdata[selectedNFTIndex].allListing.push(listing); }
- 
-          });
-         
-           
-          
-          if (directListings !== prevDirectListings) {
-            console.log('directListings has changed');
-          }
-      
-          if (auctionListing !== prevAuctionListing) {
-            console.log('propB has changed');
-          }
-      
-          // Your side effect code here
-      
-          // Update previous values after the effect runs
-          prevDirectListings.current = directListings;
-          prevAuctionListing.current = auctionListing;
-         
-          setAllNFTsWithListing(NFTdata);
-     }
-
-
-
-
-    console.log( "directListings     =    "    , directListings);
-
+}, [ directListings , auctionListing , NFTdata, NFT_CONTRACT  ]);
    
-}, [ directListings , auctionListing , NFTdata, NFT_CONTRACT ]);
-    
+
+
+
+
+
+
+
 
     return (
       <AllListingsContext.Provider value={{
          directListings, auctionListing, allNFTsWithListing,
-         loadingDirectListings, loadingAuction, NFT_CONTRACT 
+         loadingDirectListings, loadingAuction, NFT_CONTRACT,  UpdateAllMarketData,
+         
+         Set_DirectListing , Set_englishAuctions
+         
          }}>
         {children}
       </AllListingsContext.Provider>

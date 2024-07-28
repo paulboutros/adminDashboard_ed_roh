@@ -17,7 +17,9 @@ import ClaimWuliesERC721 from "./scenes/ClaimWuliesERC721/index.jsx";
  
 //import AllLayerGrid from "./scenes/allLayerGrid/index.jsx";
 import AllLayerImage from "./scenes/allLayerImage/index.jsx";
- 
+import ComposedCharacter from "./components/ComposedCharacter.jsx";   
+
+
  import Form from "./scenes/form/index.jsx";
   
   
@@ -41,7 +43,7 @@ import { AllListingsProvider } from "./context/AllListingContext.js";
 import { AllLayersProvider }  from './context/AllLayerAvailableContext.js';
 import { NotificationProvider }  from './context/NotificationContext.js'; 
 import { DropTimeProvider }  from './context/DropTimeContext.js'; 
-  
+  import ImageSelector from "./components/ImageSelector.jsx";
   
 //web 3 market plce component:
 //import './App.css';
@@ -59,14 +61,38 @@ import {   PACK_ADDRESS } from "./const/addresses.ts";
 
 import { addressesByNetWork } from "./scenes/chainSelection/index.jsx";
 
- import ChainContext from "./context/Chain.js";
+import { GetChain } from "./data/API.js";
+
+
+
+import ChainContext from "./context/Chain.js";
+import { useEffect } from "react";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
-  const [selectedChain, setSelectedChain] = useState("sepolia");
- 
- 
+
+
+  const [selectedChain, setSelectedChain] = useState("base");// "sepolia"
+  
+
+
+
+  /*
+  useEffect(() => {
+    const fetchDefaultChain = async () => {
+      try {
+        const response = await GetChain()
+        const data = await response.json();
+        setSelectedChain(data.defaultChain);
+      } catch (error) {
+        console.error('Error fetching default chain:', error);
+      }
+    };
+
+    fetchDefaultChain();
+  }, []);
+*/
   
   if ( process.env.REACT_APP_MAINTENANCE === "true"  ){
 
@@ -91,8 +117,8 @@ function App() {
     
     )
   }
-    
  
+
     return (
  
       <ChainContext.Provider value={{ selectedChain, setSelectedChain }}>
@@ -103,7 +129,9 @@ function App() {
          <NotificationProvider>
    
          <AllLayersProvider>
-           
+            
+
+
    
         <ColorModeContext.Provider value={colorMode}>
          <ThemeProvider theme={theme}>
@@ -118,6 +146,8 @@ function App() {
              {/* <Router> */}
                <Routes>
                 
+
+               
                  
                  <Route path="/farmerPage" element={<FarmerPage/>} />
                
@@ -141,7 +171,7 @@ function App() {
    
                   
               
-                   <Route path="/sell" element={<Sell/>} />
+                    <Route path="/sell" element={<Sell/>} />
                     <Route path="/token/:contractAddress/:tokenId" element={<TokenPage/>} />
                     <Route path="/tokenByListingID/:contractAddress/:tokenId/:listingId/:auctionId" element={
                       <AllListingsProvider  NFT_CONTRACT={ addressesByNetWork[selectedChain].LAYER_ADDRESS } >
@@ -187,6 +217,11 @@ function App() {
         </ColorModeContext.Provider>
    
          {/* </AllListingsProvider>   */}
+
+
+         
+
+
        </AllLayersProvider>
    
    

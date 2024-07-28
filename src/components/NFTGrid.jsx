@@ -135,17 +135,17 @@ export const NFTGridMarketData = ({
   NFT_contract,
   NFTdata,
   overrideOnclickBehavior,
-  emptyText = "No NFTs found" 
+  emptyText = "No NFTs found" ,
 
-
-  ,directListings ,
+  auctionListings ,
+  directListings ,
   loadingDirectListings 
   
 
 }  ) => {
 
 const theme = useTheme();
-const { selectedChain, setSelectedChain } = useContext(ChainContext);
+const { selectedChain  } = useContext(ChainContext);
 
 const navigate = useNavigate();
 //==========================================================================
@@ -154,13 +154,29 @@ const navigate = useNavigate();
 
 //const { notification, setNotification } = useNotificationContext();
  
+ 
+ 
+  useEffect(()=>{
+   
+    console.log( "directListings  ======   "  , directListings);
+    //UpdateAllMarketData();
+ }, [  directListings   ]);
+
+ useEffect(()=>{
+  console.log( "auctionListings  ======   "  , auctionListings);
+ 
+  //UpdateAllMarketData();
+}, [   auctionListings  ]);
+
+
+
 
 
 return (
 // <SimpleGrid columns={5} spacing={6} w={"100%"} padding={2.5} my={5}>
 <div  > 
-<Grid container spacing={1}  > 
-            {loadingDirectListings ? (
+        <Grid container spacing={1}  > 
+            {!directListings ? (
               <p>Loading...</p>
             ) : directListings && directListings.length === 0 ? (
               <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
@@ -194,6 +210,43 @@ return (
               ))
             )}
          </Grid> 
+
+         <Grid container spacing={1}  > 
+            {!auctionListings ? (
+              <p>Loading...</p>
+            ) : auctionListings && auctionListings.length === 0 ? (
+              <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
+            ) : (
+
+              
+              auctionListings?.map((listing, index) => (
+
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index} >
+                 <Box sx={theme.nftContainer}
+
+                    key={listing.id} // key is mendatory and should be added somewhere in a map loop
+                    onClick={() => {
+
+                      
+                           const selectedNFT = NFTdata.find((nft) => nft.metadata.id === listing.tokenId);
+                          navigate( linkPath( addressesByNetWork[selectedChain].LAYER_ADDRESS , selectedNFT, listing  )  )
+                    }
+                   }
+                 >
+                         <NFTListed
+                            address={address}
+                            propContractAddress = {listing.assetContractAddress}
+                            propTokenId = {listing.tokenId}
+                            AlllistingData ={null}
+                            AuctionListingData ={listing}
+                         /> 
+                   </Box>
+              </Grid>
+                     
+              ))
+            )}
+         </Grid> 
+
 
 </div>  
 
