@@ -270,15 +270,36 @@ async function Create_Initial_layerToChooseFrom( NFTdata, ownedNftData ){
  //const snapshotBeforeModification = JSON.parse(JSON.stringify(initialLayerToChooseFrom));
   
  
- console.log(  " Image Selector attribute of  :" ,  NFTdata  );
+ 
  for ( let i = 0 ; i < NFTdata.length; i++  ){ 
  
       const nft  =  NFTdata[i];
    
       if  ( !nft.metadata.attributes  ){ console.log(  "  attribute of  :" ,  i , " is  undefined  "); continue; }
-  
-            const layerNumber  = nft.metadata.attributes.attributes[0].value ;   
-            const category     = nft.metadata.attributes.attributes[0].trait_type ;
+  /*
+         let attributes = nft.metadata.attributes?.attributes[0];
+         if (  !attributes ){
+          attributes = nft.metadata.attributes[0];
+
+         }*/
+          let attributes = null;
+
+          if (Array.isArray(nft.metadata.attributes)) {
+            // First check if 'attributes' is an array directly
+            attributes = nft.metadata.attributes[0];
+            console.log(  " attributes struct 1 : attributes "    );
+          } else if (nft.metadata.attributes?.attributes && Array.isArray(nft.metadata.attributes.attributes)) {
+            // Then check if 'attributes' has a nested 'attributes' array
+            attributes = nft.metadata.attributes.attributes[0];
+            console.log(  " attributes struct 2 : attributes.attributes "    );
+          }
+
+
+
+   
+
+            const layerNumber  = attributes.value ;   
+            const category     = attributes.trait_type ;
             const supply       = nft.supply;
   
           
