@@ -19,10 +19,10 @@ export const Discord_invite_stake_token = "0x87b875631cA5f598A7e2a7a90bebA2e5B69
 //==============================================================================================================================
 //==============================================================================================================================
 
- export const TOOLS_ADDRESS ="0x06a33CD093aDD0C6A8F685888f1B3E0C119b2461";// sepolia
- export const MARKETPLACE_ADDRESS ="0x032453F4Eb720280230AE123E3262234f21b0323" //sepolia
- export const REWARDS_ADDRESS = "0x7b9e863B9BDF4aa08686C531ceA6353f363E9d57"; //sepolia
- export const BURN_TO_CLAIM ="0x4CD62243e1A3255A8ff27F4A164d011246f8b7F1";//"0x07da5c0d89B560c53CE43F8E466426319CF9BE75";         
+ //export const TOOLS_ADDRESS ="0x06a33CD093aDD0C6A8F685888f1B3E0C119b2461";// sepolia
+ //export const MARKETPLACE_ADDRESS ="0x032453F4Eb720280230AE123E3262234f21b0323" //sepolia
+ //export const REWARDS_ADDRESS = "0x7b9e863B9BDF4aa08686C531ceA6353f363E9d57"; //sepolia
+ //export const BURN_TO_CLAIM ="0x4CD62243e1A3255A8ff27F4A164d011246f8b7F1";//"0x07da5c0d89B560c53CE43F8E466426319CF9BE75";         
 
  export const wuLayerDropERC1155 ="0x1360AA380702be406d7161A965EfB23652082653";// sepolia
     

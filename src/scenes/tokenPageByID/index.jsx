@@ -17,10 +17,9 @@ import {
       
    } from "../../components/Layout.jsx"  
 
- import { 
-   MARKETPLACE_ADDRESS,
-   
-} from "../../const/addresses.ts";
+  
+
+
  import {text2,   tokens,  mainContainerPagePad } from "../../theme.js";
   import { getSDK_fromPrivateKey, convertEthToUsd } from "../../data/API.js";
  import ShowAuction from "../../components/TokenPageBoards/ShowAuction.jsx";
@@ -90,7 +89,7 @@ useEffect(() => {
    
 }, []);
    
-const { selectedChain, setSelectedChain } = useContext(ChainContext);
+const { selectedChain } = useContext(ChainContext);
 
 const [screenWidth, setScreenWidth] = useState(window.innerWidth);
  
@@ -131,7 +130,7 @@ const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     
  }, [contractAddress, tokenId]);
  
-          const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
+          const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
             
           const [bidValue, setBidValue] = useState();
  

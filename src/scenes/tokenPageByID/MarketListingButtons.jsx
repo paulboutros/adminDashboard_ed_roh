@@ -16,8 +16,7 @@ import {   Flex} from "@chakra-ui/react";
        
    } from "../../components/Layout.jsx"  
 
- import {   MARKETPLACE_ADDRESS } from "../../const/addresses.ts";
- 
+  
    
 
  import {text2, text1, tokens, buttonStyle } from "../../theme.js";
@@ -28,6 +27,14 @@ import {useNavigate  } from 'react-router-dom';
   
 import styles from "../../styles/NFT.module.css";
  
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+ //const { selectedChain, setSelectedChain } = useContext(ChainContext);
+ //addressesByNetWork[selectedChain].LAYER_ADDRESS
+ //=======
+
 
  
 export const  ButtonLarge  =  ({  
@@ -36,6 +43,18 @@ export const  ButtonLarge  =  ({
 
   } ) => {
     
+
+    
+ 
+ const {selectedChain} = useContext(ChainContext);
+ // 
+ //=======
+
+  
+
+
+
+
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -56,7 +75,7 @@ export const  ButtonLarge  =  ({
                             
                             <Web3Button
                             
-                                contractAddress={MARKETPLACE_ADDRESS} 
+                                contractAddress={  addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS} 
                                 action={async () => await createBidOffer()}  isDisabled={!auctionData}
 
                                 className="tw-web3button--connect-wallet" 
@@ -74,7 +93,7 @@ export const  ButtonLarge  =  ({
 
                     className="tw-web3button--connect-wallet"
                     style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-                    contractAddress={MARKETPLACE_ADDRESS}
+                    contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
                     action={async () => buyListing()}
 
                     onSuccess={async (txResult) => {
@@ -102,7 +121,7 @@ export const  ButtonLarge  =  ({
 
                             className="tw-web3button--connect-wallet"
                             style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-                            contractAddress={MARKETPLACE_ADDRESS}
+                            contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
                             action={async () => buyListing()}
 
                             onSuccess={async (txResult) => {
@@ -122,7 +141,7 @@ export const  ButtonLarge  =  ({
 
                             <HorizontalSpace space={1}/>    
                             <Web3Button
-                            contractAddress={MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!listingData}
+                            contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}  action={async () => await createBidOffer()}  isDisabled={!listingData}
                             className="tw-web3button--connect-wallet" 
                             style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
                     
@@ -231,7 +250,9 @@ export const  ButtonLarge  =  ({
   
    
    function ButtonListingBuy (   {colors,   buyListing, listingData   }){
-  
+
+
+    const { selectedChain  } = useContext(ChainContext);
     const navigate = useNavigate ();
      
     return (
@@ -242,7 +263,7 @@ export const  ButtonLarge  =  ({
    
                       className="tw-web3button--connect-wallet"
                       style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-                      contractAddress={MARKETPLACE_ADDRESS}
+                      contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
                       action={async () => buyListing()}
   
                       onSuccess={async (txResult) => {
@@ -264,7 +285,7 @@ export const  ButtonLarge  =  ({
    function ButtonAuctionBuy (   {colors,   buyListing, auctionData   }){
   
     const navigate = useNavigate ();
-     
+    const { selectedChain  } = useContext(ChainContext);
     return (
   
        <React.Fragment>  
@@ -272,7 +293,7 @@ export const  ButtonLarge  =  ({
    
                         className="tw-web3button--connect-wallet"
                         style={{ backgroundColor:colors.blueAccent[ buttonStyle.colorBlue  ], flex: 1,  width: '100%', height: buttonStyle._buttonHeight }}
-                        contractAddress={MARKETPLACE_ADDRESS}
+                        contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS}
                         action={async () => buyListing()}
   
                         onSuccess={async (txResult) => {
@@ -295,11 +316,11 @@ export const  ButtonLarge  =  ({
    
   
    function ButtonCreateBidOffer({colors, listingType, createBidOffer  ,  buttonText }){
-   
+    const { selectedChain} = useContext(ChainContext);
       return (
         <Web3Button
                     
-        contractAddress={MARKETPLACE_ADDRESS} 
+        contractAddress={ addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS} 
         action={async () => await createBidOffer()}  isDisabled={!listingType}
   
         className="tw-web3button--connect-wallet" 

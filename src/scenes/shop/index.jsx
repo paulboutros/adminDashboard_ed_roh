@@ -19,7 +19,7 @@ import stylesProfile from "../../styles/Profile.module.css";
 import {useEffect, useState,  createContext, useContext,   useRef    } from "react";
 import { useContract, 
     ConnectWallet,  useAddress    } from "@thirdweb-dev/react";
-import { MARKETPLACE_ADDRESS  } from "../../const/addresses";
+// import { MARKETPLACE_ADDRESS  } from "../../const/addresses";
  
 import {NFTGridMarketData} from "../../components/NFTGrid.jsx";
 import ConnectWalletPage from "../../components/ConnectWalletPage.jsx";
@@ -142,7 +142,7 @@ import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
  //const colors = tokens(theme.palette.mode);
  const navigate = useNavigate();
 
- const { contract: marketplace, isLoading: loadingMarketplace, } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
+ //const { contract: marketplace, isLoading: loadingMarketplace, } = useContract(MARKETPLACE_ADDRESS, "marketplace-v3");
  
 
   function linkPath( NFT_CONTRACT, nft,  allList  ){

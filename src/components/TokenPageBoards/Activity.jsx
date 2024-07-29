@@ -15,12 +15,17 @@ import {  useContract,
     
     
    } from "@thirdweb-dev/react";    
-import { 
-    MARKETPLACE_ADDRESS,
-   
- } from "../../const/addresses.ts";  
-   
  
+ 
+//=======
+import ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+ //const { selectedChain, setSelectedChain } = useContext(ChainContext);
+ //addressesByNetWork[selectedChain].LAYER_ADDRESS
+ //=======
+
+
   
    
 
@@ -28,11 +33,11 @@ const Activity = ( { nft ,listingID,  isDashboard = false }  ) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
    
-
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
  
   
   
-  const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
+  const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
  
    
 //==========================================================================

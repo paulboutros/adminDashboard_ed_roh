@@ -1,15 +1,6 @@
-
-import {
   
-   
-   BURN_TO_CLAIM,
  
-} 
-
-from "../const/addresses";
- 
-import styles from "../styles/Buy.module.css";  
- import { useContract, useAddress, Web3Button } from "@thirdweb-dev/react";
+  import { useContract, useAddress, Web3Button } from "@thirdweb-dev/react";
  
 import React, { useState , useEffect } from 'react';
  
@@ -17,36 +8,26 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
   
 import {  tokens } from "../theme";
-import {     ERC20claim   } from "../data/API";
+import {     ERC20claim  } from "../data/API";
 
-import {  Box ,Button,      Typography, useTheme  } from "@mui/material";
+ import {  Box ,Button,      Typography, useTheme  } from "@mui/material";
  import LayerBaseInfo from  "./LayerBaseInfo";
  
- 
-
 //=======
 import ChainContext from "../context/Chain.js";
 import { addressesByNetWork } from "../scenes/chainSelection/index.jsx";
 import { useContext } from "react";
-//const { selectedChain, setSelectedChain } = useContext(ChainContext);
-//addressesByNetWork[selectedChain].LAYER_ADDRESS
-//=======
-
-
-    
+import { useAllLayersContext } from "../context/AllLayerAvailableContext.js";
  
-const PopupButton =  ({ text, style , selectedImages   }) => {
  
-  const { selectedChain  } = useContext(ChainContext);
-
-const address = useAddress();
-
-    
-
-
+  const PopupButton =  ({ text, style , selectedImages   }) => {
+   const { infoMap} = useAllLayersContext(); 
   
-    // const { user } = useUserContext();
-    const theme = useTheme();
+
+   const { selectedChain  } = useContext(ChainContext);
+   const address = useAddress();
+   
+     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
 
@@ -54,44 +35,50 @@ const address = useAddress();
     const [filteredImages, setFilteredImages] = useState([]);
      
     const [open, setOpen] = useState(false);
-   
+    
+
    useEffect(()=>{
      
         if (!address) return;
-      
-        
+        // console.log( "popup :>>>>  selectedImages =", selectedImages )
         let filteredIm = GetfilteredImages(selectedImages);
         setFilteredImages(filteredIm);
-
          
-       
-        const missingCateg =[];
-        for (const category in filteredImages) {
-            if (filteredImages[category][0].owning === 0) { missingCateg.push(category);}
-       }
-      setMissingCategories(missingCateg);
-
-       //====
-        console.log( ">>>>      missingCateg =", missingCateg)
-  
-     
+       // console.log( ">>>>      missingCateg =", missingCateg)
+      
    }, [ open , selectedImages ]); // selectedImages  // selectedImages // selectedImages
+
+
+
+   useEffect(()=>{
+      
+   // console.log( ">>>>      filteredImages =",  filteredImages)
+    const missingCateg =[];
+    for (var key in filteredImages) {
+      if (filteredImages.hasOwnProperty(key)) {
+        var tokenID = filteredImages[key][0].tokenID;
+        var quantityOwned = infoMap?.[tokenID].quantityOwned;
+
+        if (quantityOwned === 0) { missingCateg.push(tokenID);}
+        
+      }
+    }
+    setMissingCategories(missingCateg);
+    //console.log( "popup :>>>>    missingCateg      =",  missingCateg )
+
+  }, [ filteredImages   ]); // selectedImages  // selectedImages // selectedImages 
  
-  const handleOpen = () => {
-     setOpen(true); 
-    
  
-    // sendTracking(user , "category", "image" , "Claim" ,  "ComposedCharacter jsx")   ;
+  const handleOpen = () => {  setOpen(true);  };
      
-    
-    };
+   
  
   const handleClose = () => {setOpen(false);};
     
 
   //=====================================================================================
   //burn to claim:
-   const { contract: wulirockLayerContract } = useContract( addressesByNetWork[selectedChain].LAYER_ADDRESS );
+   const { contract: wulirockLayerContract } = useContract( addressesByNetWork[selectedChain].BURN_TO_CLAIM );
 
       const mintMutantNft = async (maycContract ) => {
     // 1. Check the approval of the mayc contract to burn the user's serum tokens
@@ -107,7 +94,15 @@ const address = useAddress();
     
     }
             
-            await  ERC20claim( filteredImages ,  address  ) 
+            await  ERC20claim( filteredImages ,  address, 
+               
+              addressesByNetWork[selectedChain].BURN_TO_CLAIM,
+              addressesByNetWork[selectedChain].WUCOIN,
+              selectedChain,
+              addressesByNetWork[selectedChain].LAYER_ADDRESS
+            
+                
+              ) 
           //  await maycContract?.call("burnAndClaim", [address, tokenIdsToBurn ]);
 
   };
@@ -148,7 +143,7 @@ const address = useAddress();
             <NotEnoughtLayerMessage
              status={2} 
              filteredImages={filteredImages} 
-         //     user={user}
+          
                address={address} 
               missingCateg ={ missingCategories }
               />
@@ -160,7 +155,7 @@ const address = useAddress();
 
 
                <Web3Button
-                  contractAddress={BURN_TO_CLAIM}  
+                  contractAddress={ addressesByNetWork[selectedChain].BURN_TO_CLAIM}  
                   isDisabled ={
                      // !user ||  
                       !address ||
@@ -178,16 +173,9 @@ const address = useAddress();
  
             </div>
   
-                   <Box > 
-
-                  <LayerBaseInfo   
-           layerToChooseFrom={ filteredImages}  
-             handleImageSelect ={handleImageSelect} 
-            colors ={colors}
-            />
- 
-
-              </Box>  
+               <Box > 
+                   <LayerBaseInfo  layerToChooseFrom={ filteredImages} colors ={colors} />
+               </Box>  
 
              
  
@@ -199,7 +187,7 @@ const address = useAddress();
 };
 
 
-export function GetfilteredImages( selectedImages ){
+export function GetfilteredImages( selectedImages , selectedChain, NFT_CONTRACT, address   ){
  
   const excludedKeys = ["forearn", "bo", "collar"];
   const filteredImages = Object.keys(selectedImages).reduce((result, key) => {
@@ -208,10 +196,7 @@ export function GetfilteredImages( selectedImages ){
     }
     return result;
   }, {});
-
-
-
-  console.log( "real name filteredImages  = " , filteredImages);
+  
   return filteredImages;
  
 }
@@ -228,14 +213,7 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address, missin
     return("missingCateg");
   
   }
-  
-  // if(!user) {
-  //   return("To go further, Login with Discord");
-  
-  // }
-
-
-
+   console.log( "CCCCCCCCCCCC    missingCateg   = "  ,  missingCateg); 
  
     switch (status) {
       case 1:
@@ -250,7 +228,7 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address, missin
         fontWeight="100" 
         sx={{padding: "20px 20px 0px 20px",   color: colors.grey[300]}} > 
 
-        { CheckComBoValidity(filteredImages /* ,user ,*/, address, missingCateg ) } 
+        { CheckComBoValidity(filteredImages , address, missingCateg ) } 
         
          <br />  
          
@@ -271,33 +249,20 @@ function NotEnoughtLayerMessage( {status ,filteredImages, user , address, missin
 export default PopupButton;
 
 
- 
-
-
-
-
-const handleImageSelect = (category, obj   ) => {
-    // empty function just to have something to pass in the composant props..
-    // may be use full later
-    
-   };
-
+  
 
    
 
-  function CheckComBoValidity(filteredImages,  /*user,*/ address, missingCateg ){
-    
-    
-
-        /*  user_requirement_removed 
-            if(!user) {
-                 return("To go further, Login with Discord");
-               
-            }
-         */
+  function CheckComBoValidity( filteredImages , address, missingCateg ){
+     
   
 
     const missingCount =  missingCateg.length;
+
+
+    console.log("missingCount    >>>>>>>>>>>    "   , missingCount);
+
+
         switch (missingCount) {
           case 5:
             return ("Welcome to the claiming section. In order To claim the reward,"+ 
@@ -306,9 +271,8 @@ const handleImageSelect = (category, obj   ) => {
             case 4:case 3:
               return ( `Very Nice!
                You already own ${5-missingCount} of the NFT required to claim this reward combo,
-               but you still need the ${missingCount} NFTs marked with this icon:`+
-               `You current Wu Balance can certainly buy the missing NFTs` );
-           //  return ( `To claim the reward, you must own the ${missingCount} layers marked with this icon:` );
+               but you still need the ${missingCount} NFTs marked with this icon:` );
+           
             case 1:case 2:
               return ( 
                  `You are so close! Only ${missingCount} left to own, and the reward is yours! Great job!`

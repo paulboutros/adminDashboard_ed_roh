@@ -106,18 +106,27 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
    }
 
 
-   export function CustomLegend3 ( { legendItems, selectedImages,  orientation = 'vertical'  } ){ 
+   export function CustomLegend3 ( {   selectedImages  } ){ 
      
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
  
     const { infoMap} = useAllLayersContext(); 
+  
+
+
     const [ filteredImages, setFilteredImages] = useState();
     
     useEffect(() => {
       if (!selectedImages )return;
  
-      let temp = GetfilteredImages(selectedImages);  setFilteredImages(temp);   }, [ selectedImages ]);
+      let temp = GetfilteredImages(selectedImages);  
+      setFilteredImages(temp);  
+
+       console.log( " >>>>>>>>>>>>>>>>>>   selectedImages   temp  = " , temp );
+
+
+     }, [ selectedImages ]);
  
 
 
@@ -130,7 +139,7 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
                 {Object.keys(filteredImages).map((key, index) => (
                   <Box key={index}>
 
-                    {/* <Box sx={{   color: colors.grey[500] }}> */}
+                   
 
                     <Box sx={{   display: 'flex', justifyContent: 'space-between', color: colors.grey[500] }}>
                       <span>{GetLayerReadableName(key)}</span> {/* if you hide the name, the space between will have an interesting effect */}
@@ -140,7 +149,7 @@ const CustomLegend = ({ legendItems, orientation = 'vertical' }) => (
                       
                       >
                         
-                        {filteredImages[key][0].tokenID}</span>]: {infoMap?.[filteredImages[key][0].tokenID].quantityOwned}
+                        {filteredImages[key][0].tokenID}</span>]: { infoMap?.[filteredImages[key][0].tokenID].quantityOwned  }
                     </Box>
 
                   </Box>

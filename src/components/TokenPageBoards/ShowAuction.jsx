@@ -8,21 +8,25 @@ import {GetContractName} from "../../util/GetMarketContractEventData.js"
 
 import {  useContract, useContractEvents} from "@thirdweb-dev/react";  
 import DataGridHeader from "../DataGridHeader.jsx"
-   
-     
-    
-     
-import { 
-    MARKETPLACE_ADDRESS 
-    
- } from "../../const/addresses.ts";  
-   
- 
-  
- ;
+
+  //=======
+import   ChainContext from "../../context/Chain.js";
+import { addressesByNetWork } from "../../scenes/chainSelection/index.jsx";
+import { useContext } from "react";
+
+ //const { selectedChain, setSelectedChain } = useContext(ChainContext);
+ //addressesByNetWork[selectedChain].LAYER_ADDRESS
+ //======= 
+      
   
 
 const ShowAuction = ( { nft , auctionId, listingId, title, isDashboard = false }  ) => {
+
+  const { selectedChain } = useContext(ChainContext);
+
+
+
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   
@@ -35,7 +39,7 @@ const ShowAuction = ( { nft , auctionId, listingId, title, isDashboard = false }
  const _footerHeight = isDashboard ?  20: 40 ;
 //const maxRowsPerPage = 5;          
   
-  const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
+  const { contract: marketplace, isLoading: loadingMarketplace } =  useContract(addressesByNetWork[selectedChain].MARKETPLACE_ADDRESS, "marketplace-v3"  ); 
         
              const { data: transferEvents, isLoading: loadingTransferEvents } =
            

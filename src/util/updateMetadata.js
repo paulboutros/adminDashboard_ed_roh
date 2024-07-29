@@ -3,7 +3,7 @@ import {
    
    
    PACK_ADDRESS,
-   MARKETPLACE_ADDRESS ,
+  
    
    wuCharacterDropAddress,
    wuCharacterDropAddress_721 } from "../const/addresses";
@@ -117,7 +117,7 @@ export async function evolve(
 }
 
  
-export async function CreateListingPack( WUCOIN ){
+export async function CreateListingPack( WUCOIN  , MARKETPLACE_ADDRESS  ){
 
    
   const sdk =  getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
@@ -146,7 +146,7 @@ export async function CreateListingPack( WUCOIN ){
     console.log(">>>>>>    CreateListing    PACK     "   , txResult); 
 }
 
-export async function CreateListing( LAYER_ADDRESS, WUCOIN  ){
+export async function CreateListing( LAYER_ADDRESS, WUCOIN  , MARKETPLACE_ADDRESS   ){
 
    
     const sdk =  getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
@@ -202,7 +202,7 @@ export async function CreateListing( LAYER_ADDRESS, WUCOIN  ){
       console.log(">>>>>>    CreateListing         "   , txResult); 
 }
 
-export async function UpdateListing (){
+export async function UpdateListing (    MARKETPLACE_ADDRESS ){
 
      const sdk =  getSDK_fromPrivateKey();  //ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
    

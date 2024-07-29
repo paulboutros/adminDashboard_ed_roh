@@ -2,29 +2,38 @@ import   React, { useEffect , useState } from 'react';
 
 import {  useAddress } from '@thirdweb-dev/react'
  
-import {  Box, Button,   Typography, useTheme, colors, Stack, SpeedDialAction   } from "@mui/material";
+import {  Box,  Typography, useTheme, colors    } from "@mui/material";
 import { BiCoinStack } from "react-icons/bi";
 
- import { CustomLegend2, CustomLegend3 } from './Legend.jsx';
+ import {  CustomLegend3 } from './Legend.jsx';
  
 import {  GetRewardPrice, convertEthToUsd   } from "../data/API.js"
 
   import ImageSelector from './ImageSelector.jsx';
 
-import { BootstrapTooltip,   cool_orange,   tokens  } from "../theme.js";
+import { BootstrapTooltip,    tokens  } from "../theme.js";
  
-import { useAllLayersContext } from '../context/AllLayerAvailableContext.js'; 
-
+ 
 import styles from "../styles/Buy.module.css";  
-import LayerBaseInfo from "./LayerBaseInfo.jsx";
-  
+   
  import PopupButton  from "./popup.jsx"
  import {   RoundedBox,   VerticalSpace } from './Layout.jsx';
  
-import { AddressBlock } from './Badges/AddressBlock.jsx';
-    
+
+
+//=======
+import ChainContext from "../context/Chain.js";
+import { addressesByNetWork } from "../scenes/chainSelection/index.jsx";
+import {  useOwnedNFTs } from "@thirdweb-dev/react";
+import { useContext } from 'react';
+  //const { selectedChain, setSelectedChain } = useContext(ChainContext);
+ // addressesByNetWork[selectedChain].LAYER_ADDRESS
+ //=======
+
+     
   const MainBlock = (  {queryId="" }  ) => {
 
+    const { selectedChain, setSelectedChain } = useContext(ChainContext);
  // const { user } = useUserContext();
   //const {debugMode,  } = useDebugModeContext();
 
@@ -85,16 +94,17 @@ useEffect(() => {
         const weData = selectedImages["we"][0];
         const beData = selectedImages["be"][0];
 
-        let layerCombo ={
+        let dataToSend ={
           kn: {  layerNumber: knData.layerName , tokenID: knData.tokenID } ,
           he: {  layerNumber: heData.layerName , tokenID: heData.tokenID } ,
 
           sh:{  layerNumber: shData.layerName , tokenID: shData.tokenID } ,
           we: {  layerNumber: weData.layerName , tokenID: weData.tokenID } ,
-          be: {  layerNumber: beData.layerName , tokenID: beData.tokenID }  
-        
-        
-     
+          be: {  layerNumber: beData.layerName , tokenID: beData.tokenID } ,
+          
+          wuLayersAddress : addressesByNetWork[selectedChain].LAYER_ADDRESS, 
+          chain:selectedChain
+      
        } 
    
     console.log("selectedImages  for price  =" ,selectedImages);
@@ -103,7 +113,7 @@ useEffect(() => {
       try {
         
         
-        const rewardPrizeObject = await GetRewardPrice( layerCombo);  // he,sh,we,be,kn
+        const rewardPrizeObject = await GetRewardPrice( dataToSend);  // he,sh,we,be,kn
         
 
         // console.log("  >>>>>>  rewardPrizeObject" , rewardPrizeObject );
@@ -278,6 +288,8 @@ if ( screenWidth > 960 &&   screenWidth <  1279    ) {
  
 
                        <Box  > 
+
+                       
                             <CustomLegend3 legendItems={legendItems} selectedImages={selectedImages} />
                         </Box>
               
